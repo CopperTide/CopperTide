@@ -1,4 +1,4 @@
-# Installs Sculptured's runner for this Windows user and connects this computer to your account.
+# Installs CopperTide's runner for this Windows user and connects this computer to your account.
 #   $env:SCULPTURED_KEY="<one-time key from the Computers page>"; irm __ORIGIN__/install.ps1 | iex
 # Downloads the Windows build, checks its SHA-256, installs it to %LOCALAPPDATA%\Programs\Sculptured
 # (no admin rights), then runs `sculptured connect __ORIGIN__ --install-service --key <key>`: it

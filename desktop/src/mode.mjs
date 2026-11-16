@@ -1,5 +1,5 @@
-// Which Sculptured this window shows: "local" (the workspace on this computer, as before) or
-// "account" (your Sculptured account on the web, with this computer connected to it).
+// Which CopperTide this window shows: "local" (the workspace on this computer, as before) or
+// "account" (your CopperTide account on the web, with this computer connected to it).
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 

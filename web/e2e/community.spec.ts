@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 /**
- * Community on this computer, against the stub Sculptured server (`fake-community`, started by
+ * Community on this computer, against the stub CopperTide server (`fake-community`, started by
  * crates/e2e-server on RIG_E2E_COMMUNITY_PORT). No test reaches a real server.
  * Set SHOTS=<dir> to also save a screenshot at the end of each test.
  */

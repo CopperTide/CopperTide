@@ -3,7 +3,7 @@
   "productName": "Sculptured",
   "version": "0.1.0",
   "private": true,
-  "description": "Sculptured desktop app: design, run and watch teams of agents performing complex tasks",
+  "description": "CopperTide desktop app: design, run and watch teams of agents performing complex tasks",
   "main": "main.mjs",
   "scripts": {
     "start": "electron .",

@@ -4,6 +4,9 @@ All notable changes to Sculptured are listed here. The format follows [Keep a Ch
 
 ## [Unreleased]
 
+### Changed
+- Renamed to CopperTide. Commands, settings and data locations are unchanged for now.
+
 ### Fixed
 - Raising a budget or resetting its plan window no longer resumes an agent paused by the operator, or restarts a team set to stop. Budget continuations coordinate with team controls and recheck them before continuing; use Resume to end an operator pause.
 - Resume now acquires the team's control lock before clearing a stop and rechecks whether a pause arrived meanwhile. A concurrent pause uses session Resume, and a busy team keeps its stop recorded for retry.

@@ -1,5 +1,5 @@
 #!/bin/sh
-# Installs Sculptured's `sculptured` for this user and connects this computer to your account.
+# Installs CopperTide's `sculptured` for this user and connects this computer to your account.
 #   curl -fsSL __ORIGIN__/install.sh | sh -s -- --key <one-time key from the Computers page>
 # Downloads the build for this OS and processor, checks its SHA-256, installs it to ~/.local/bin
 # (no sudo), then runs `sculptured connect __ORIGIN__ --install-service <your args>`: it connects,

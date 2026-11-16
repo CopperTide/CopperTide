@@ -13,5 +13,5 @@ cp -R "$here/package.json" "$here/ISSUES.md" "$here/src" "$here/test" "$dest/"
 cd "$dest"
 git init -q -b main
 git add -A
-git -c user.name="Sculptured showcase" -c user.email="showcase@localhost" commit -q -m "corner-shop: starting point for the coding-hospital showcase"
+git -c user.name="CopperTide showcase" -c user.email="showcase@localhost" commit -q -m "corner-shop: starting point for the coding-hospital showcase"
 echo "Ready: $dest (branch main, $(git rev-list --count HEAD) commit). Run 'npm test' there; it passes with 8 todo tests."

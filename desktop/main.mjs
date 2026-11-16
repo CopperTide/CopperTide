@@ -1,8 +1,8 @@
-// Sculptured desktop. Two modes, chosen on first launch and remembered (menu: Switch mode…):
+// CopperTide desktop. Two modes, chosen on first launch and remembered (menu: Switch mode…):
 // - On this computer: a window on the local workspace. It starts the bundled `sculptured serve` (which
 //   starts the agent runner) unless one already answers on the port. Agents keep running when the
 //   window closes; the runner owns them. Community stays off until it is turned on in the app.
-// - Sculptured account: the account's site, with this computer connected by the bundled runner
+// - CopperTide account: the account's site, with this computer connected by the bundled runner
 //   (`sculptured connect`), approved in this window, and stopped when the app quits.
 // Teams and settings are not synced between the two (later).
 import { app, BrowserWindow, dialog, ipcMain, Menu, shell } from 'electron';
@@ -32,7 +32,7 @@ function resources() {
   };
 }
 
-/** True when a Sculptured workspace already answers on the port. */
+/** True when a CopperTide workspace already answers on the port. */
 async function answering() {
   try {
     const res = await fetch(`${ORIGIN}/api/teams`, { signal: AbortSignal.timeout(1500) });
@@ -91,7 +91,7 @@ function openWindow(allowed, start) {
   window.loadURL(start).catch((e) => fail(e.message));
 }
 
-/** First launch: ask how to use Sculptured; resolves with the saved choice. */
+/** First launch: ask how to use CopperTide; resolves with the saved choice. */
 function choose() {
   return new Promise((resolve) => {
     const w = new BrowserWindow({
