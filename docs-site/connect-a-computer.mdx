@@ -238,7 +238,7 @@ CopperTide then copies the runner to `~/.sculptured/bin` on the login node, writ
 ### Set up a cluster yourself
 
 1. Install CopperTide on the login node and run `sculptured doctor`. Under **This computer** it says whether the runner keeps running after you log out, whether the node reaches your CopperTide account, Anthropic and OpenAI, and which proxy settings are set (names only).
-2. If user services don't run there (common on clusters), keep the runner in tmux, where your site allows it: `tmux new -d -s sculptured 'sculptured connect <your Sculptured address>'`. Some sites offer scheduled jobs for this instead, such as NERSC's `scrontab`.
+2. If user services don't run there (common on clusters), keep the runner in tmux, where your site allows it: `tmux new -d -s sculptured 'sculptured connect <your CopperTide address>'`. Some sites offer scheduled jobs for this instead, such as NERSC's `scrontab`.
 3. Give the agent that runs there what it needs to know about the scheduler: add Slurm or PBS skills with **Add from a catalog** (an HPC centre's catalog, or any GitHub repository of skills), or an existing Slurm or PBS MCP server with **From the MCP Registry**. The agent then submits and watches jobs itself (`sbatch`, `squeue`, `sacct`, or `qsub`, `qstat`), and every call shows in its timeline.
 
 Compute nodes often have no internet; an agent can run only where the node reaches Anthropic or OpenAI.

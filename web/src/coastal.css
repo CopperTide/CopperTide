@@ -1,6 +1,5 @@
 /* The CopperTide mark and brand lockups. Colours come from tokens.css. */
 /* The mark is inline SVG drawn with the brand tokens, so it follows each look and mode. */
-:root { --brand-ink: var(--text); --brand-copper: #ee7a3a; }
 .coastal-mark {
   display: inline-flex;
   flex: none;

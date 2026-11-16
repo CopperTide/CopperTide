@@ -35,7 +35,7 @@ pub(super) enum Cmd {
         /// Hosted beta: serve one user behind the gateway (needs SCULPTURED_GATEWAY_SECRET); no local agent runner.
         #[arg(long)]
         hosted: bool,
-        /// The Sculptured server Community goes through once it is turned on (not when hosted).
+        /// The CopperTide server Community goes through once it is turned on (not when hosted).
         #[arg(long, env = "SCULPTURED_COMMUNITY_ORIGIN", default_value = controld::community::DEFAULT_ORIGIN)]
         community_origin: String,
     },
@@ -57,7 +57,7 @@ pub(super) enum Cmd {
     /// The agent tools server a CLI starts for its agent (stdio). Not for people.
     #[command(hide = true)]
     SeatTools,
-    /// Link this computer to a Sculptured account and run its agents here.
+    /// Link this computer to a CopperTide account and run its agents here.
     Connect {
         /// The account's address, e.g. <https://app.example.com>.
         origin: String,

@@ -19,6 +19,10 @@
 :root {
   color-scheme: dark;
 
+  /* ── Brand mark (CopperTide copper is fixed on every look) ── */
+  --brand-ink: var(--text);
+  --brand-copper: #ee7a3a;
+
   /* ── Surfaces, back to front ── */
   --bg: #111b22;            /* app canvas behind panels */
   --panel: #17232b;         /* panels, sheets, menus */
