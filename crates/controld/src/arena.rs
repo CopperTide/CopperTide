@@ -123,7 +123,7 @@ fn unreachable_arena() -> ApiError {
     ApiError::new(
         StatusCode::SERVICE_UNAVAILABLE,
         "arena_unreachable",
-        "the arena engine (arenad) is not answering",
+        "the Shakedown engine (arenad) is not answering",
     )
 }
 
