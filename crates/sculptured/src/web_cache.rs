@@ -51,7 +51,10 @@ mod tests {
         // Vite copies web/public into the served web/dist, so a file here is a file at /brand/.
         let brand = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../web/public/brand");
         for file in ["coppertide-mark-256.png", "coppertide-favicon.svg"] {
-            assert!(brand.join(file).is_file(), "web/public/brand/{file} is missing");
+            assert!(
+                brand.join(file).is_file(),
+                "web/public/brand/{file} is missing"
+            );
         }
     }
 }
