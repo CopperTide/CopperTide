@@ -52,6 +52,8 @@ main() {
   got=$(sha256 "$tmp/$asset")
   [ "$want" = "$got" ] || die "checksum mismatch for $asset (expected $want, got $got). Nothing was installed."
   tar -xzf "$tmp/$asset" -C "$tmp"
+  # A build packaged before the rename holds the same program as `sculptured`.
+  [ -f "$tmp/coppertide" ] || mv "$tmp/sculptured" "$tmp/coppertide" 2>/dev/null || die "$asset holds no runner. Nothing was installed."
   bin="$HOME/.local/bin"
   mkdir -p "$bin"
   cp "$tmp/coppertide" "$bin/coppertide.new"

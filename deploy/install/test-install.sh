@@ -81,4 +81,14 @@ tar -tzf "$work/rel/coppertide-$target.tar.gz" | grep -qx sculptured || fail "th
 mkdir -p "$work/old" && tar -xzf "$work/rel/coppertide-$target.tar.gz" -C "$work/old"
 cmp -s "$work/old/sculptured" "$work/old/coppertide" || fail "the old name is not the same build"
 
+# 8. A build packaged before the rename (only `sculptured` inside) still installs as coppertide.
+mkdir -p "$work/pre" "$work/prerel"
+cp "$work/bin/coppertide" "$work/pre/sculptured"
+tar -czf "$work/prerel/coppertide-$target.tar.gz" -C "$work/pre" sculptured
+sum=$( (sha256sum "$work/prerel/coppertide-$target.tar.gz" 2>/dev/null || shasum -a 256 "$work/prerel/coppertide-$target.tar.gz") | cut -d' ' -f1)
+printf '%s  %s\n' "$sum" "coppertide-$target.tar.gz" > "$work/prerel/coppertide-$target.tar.gz.sha256"
+sed -e "s#__ORIGIN__#https://app.test#" -e "s#__RELEASES__#file://$work/prerel#" "$repo/deploy/install/install.sh" > "$work/install-pre.sh"
+HOME="$work/h8" sh "$work/install-pre.sh" > "$work/out8" 2>&1 || { cat "$work/out8"; fail "a build packaged before the rename did not install"; }
+[ -x "$work/h8/.local/bin/coppertide" ] || fail "a build packaged before the rename: not installed"
+
 echo "install.sh: all checks passed"

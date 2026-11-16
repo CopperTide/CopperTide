@@ -25,6 +25,11 @@ try {
   tar -xzf "$tmp\$asset" -C $tmp
   $ErrorActionPreference = 'Stop'
   if ($LASTEXITCODE -ne 0) { Fail "could not unpack $asset. Nothing was installed." }
+  # A build packaged before the rename holds the same programs under their old names.
+  if (-not (Test-Path "$tmp\coppertide.exe")) {
+    Move-Item "$tmp\sculptured.exe" "$tmp\coppertide.exe" -ErrorAction SilentlyContinue
+    Move-Item "$tmp\sculptured-background.exe" "$tmp\coppertide-background.exe" -ErrorAction SilentlyContinue
+  }
   $bin = Join-Path $env:LOCALAPPDATA 'Programs\CopperTide'
   # Where installs from before the rename put the runner.
   $oldBin = Join-Path $env:LOCALAPPDATA 'Programs\Sculptured'
