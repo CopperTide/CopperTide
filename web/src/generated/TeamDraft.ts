@@ -53,7 +53,7 @@ protection?: Protection,
  */
 safety?: Array<SafetyRule>, 
 /**
- * Components this team adds to CopperTide's built-in ones (from Community, or written by hand).
+ * Components this team adds to Sculptured's built-in ones (from Community, or written by hand).
  */
 components?: Array<Component>, 
 /**
@@ -61,7 +61,7 @@ components?: Array<Component>,
  */
 budget?: RunBudget, 
 /**
- * The rules a change its agents propose (`propose_change`) must meet, and whether CopperTide
+ * The rules a change its agents propose (`propose_change`) must meet, and whether Sculptured
  * approves one that meets them. Absent = every proposed change waits for a person.
  */
 mandate?: Mandate, 

@@ -71,6 +71,6 @@ model_observed: string | null,
  */
 stalled: Stall | null, 
 /**
- * The latest check CopperTide ran for this agent (its design's check command); None before the first.
+ * The latest check Sculptured ran for this agent (its design's check command); None before the first.
  */
 check?: SeatCheck, };

@@ -3,7 +3,7 @@ import type { PlanWindow } from "./PlanWindow";
 
 /**
  * A CLI's report of how much of the signed-in plan is used. Account-wide: it counts use from
- * outside CopperTide too.
+ * outside Sculptured too.
  */
 export type PlanUsage = { 
 /**

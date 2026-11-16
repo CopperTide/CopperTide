@@ -23,6 +23,6 @@ guard?: Guard,
  */
 copies?: CopiesMode, 
 /**
- * CopperTide runs this command at start and its output is the batch (no dispatcher agent).
+ * Sculptured runs this command at start and its output is the batch (no dispatcher agent).
  */
 dispatch?: WorkflowDispatch, };

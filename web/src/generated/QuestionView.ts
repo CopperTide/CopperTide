@@ -12,7 +12,7 @@ export type QuestionView = { id: string, seat: string, rig: string, source: Ques
  */
 late_answer: Answer | null, decision: DecisionView | null, withdrawn_reason: string | null, acknowledged: boolean, 
 /**
- * Permission prompts: what CopperTide's reading of the tool call says it would do (≈ heuristic). Empty when none found.
+ * Permission prompts: what Sculptured's reading of the tool call says it would do (≈ heuristic). Empty when none found.
  */
 consequence: Array<RiskFlag>, 
 /**

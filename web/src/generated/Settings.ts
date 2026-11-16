@@ -3,7 +3,7 @@ import type { PermissionPosture } from "./PermissionPosture";
 
 export type Settings = { 
 /**
- * The CopperTide server Community goes through (C5); None: Community is off.
+ * The Sculptured server Community goes through (C5); None: Community is off.
  */
 sculptured_origin?: string, 
 /**
