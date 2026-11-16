@@ -59,9 +59,9 @@ it('says plainly when the dispatch command made no work, and runs it again on re
   expect(onRetried).toHaveBeenCalled();
 });
 
-it('labels work made by the command as Sculptured running it, with no retry', () => {
+it('labels work made by the command as CopperTide running it, with no retry', () => {
   render(<DispatchNotice team="t" start={7} record={{ command: 'c', at_ms: 1, dispatched: true, evidence: 'exit 0' }} running={false} active onRetried={() => {}} />);
   expect(screen.getByRole('status')).toHaveTextContent('✓ Work made by the dispatch command');
-  expect(screen.getByText(/Observed: Sculptured ran the command; the items are what it printed/)).toBeInTheDocument();
+  expect(screen.getByText(/Observed: CopperTide ran the command; the items are what it printed/)).toBeInTheDocument();
   expect(screen.queryByRole('button')).toBeNull();
 });

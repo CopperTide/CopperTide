@@ -5,7 +5,7 @@ import type { TeamDraft } from '../generated/TeamDraft';
 import KINDEX from './components/kindex.json';
 import SIGNET from './components/signet.json';
 
-/** Sculptured's built-in components (the same files the server reads). */
+/** CopperTide's built-in components (the same files the server reads). */
 export const BUILTIN: Component[] = [KINDEX as Component, SIGNET as Component];
 
 export const isBuiltin = (c: Component) => BUILTIN.some((b) => JSON.stringify(b) === JSON.stringify(c));

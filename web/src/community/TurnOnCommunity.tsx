@@ -50,7 +50,7 @@ function OptInText() {
   );
 }
 
-/** Another Sculptured server (self-hosted); left empty, the usual one. */
+/** Another CopperTide server (self-hosted); left empty, the usual one. */
 function ServerField({ value, onChange, problem, open }: { value: string; onChange: (v: string) => void; problem: string; open: boolean }) {
   return (
     <details className="cm-server" open={open || problem !== '' || undefined}>

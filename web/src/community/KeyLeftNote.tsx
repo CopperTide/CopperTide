@@ -19,7 +19,7 @@ export function KeyLeftNote() {
   return (
     <div className="cm-problem" role="note">
       <p>
-        Sculptured could not remove this computer’s Community sign-in from {host(origin)}. It may still work there: remove
+        CopperTide could not remove this computer’s Community sign-in from {host(origin)}. It may still work there: remove
         “Community access from …” on that account’s <a href={`${origin}/computers`} target="_blank" rel="noopener noreferrer">Computers page</a>.
       </p>
       <Btn size="sm" onClick={() => void dismiss()}>Dismiss</Btn>

@@ -43,7 +43,7 @@ export function SessionPreview({ found, busy, onImport, onCancel }: { found: Con
         </>
       )}
       {found.warnings.length > 0 && <ul aria-label="Warnings">{found.warnings.map((w) => <li key={w}>{w}</li>)}</ul>}
-      {p.unknown_lines > 0 && <p className="muted">{plural(p.unknown_lines, 'line')} Sculptured did not recognise were kept as raw evidence.</p>}
+      {p.unknown_lines > 0 && <p className="muted">{plural(p.unknown_lines, 'line')} CopperTide did not recognise were kept as raw evidence.</p>}
       <p className="muted">It opens in History, read-only, and as a team you can run.</p>
       <div className="import-actions">
         <Btn variant="primary" disabled={busy} onClick={onImport}>{p.missing.length > 0 ? 'Import anyway' : 'Import'}</Btn>

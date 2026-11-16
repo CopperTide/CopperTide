@@ -34,7 +34,7 @@ export function Question({ c, onAnswer }: { c: Cluster; onAnswer: (a: string[]) 
           <input type={p.echo ? 'text' : 'password'} autoComplete="one-time-code" value={answers[i] ?? ''} onChange={(e) => setAnswers((a) => a.map((x, j) => (j === i ? e.target.value : x)))} />
         </label>
       ))}
-      {push && <p className="muted">For a push, type 1 (or push) and approve on your phone; Sculptured waits up to {q.wait_after_answer ?? 120} s for the approval.</p>}
+      {push && <p className="muted">For a push, type 1 (or push) and approve on your phone; CopperTide waits up to {q.wait_after_answer ?? 120} s for the approval.</p>}
       <p className="muted">Used once to sign in, never kept.{left !== null && ` ${left} s left to answer.`}</p>
       <button type="submit" className="btn btn-primary">Send answer</button>
     </form>

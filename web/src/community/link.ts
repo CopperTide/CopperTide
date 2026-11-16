@@ -7,12 +7,12 @@ import type { CommunityPairStatus } from '../generated/CommunityPairStatus';
 import { useHosted } from '../hosted/HostedGate';
 import type { HostedSession } from '../hosted/session';
 
-/** Community for this app: the hosted app signs in to it with the Sculptured account itself. */
+/** Community for this app: the hosted app signs in to it with the CopperTide account itself. */
 export function communityFor(s: HostedSession): { available: boolean; signedIn: boolean } {
   return { available: s.kind !== 'local', signedIn: s.kind === 'signed-in' };
 }
 
-/** This computer's link to Community (C5), answered by Sculptured on this computer. */
+/** This computer's link to Community (C5), answered by CopperTide on this computer. */
 export const linkApi = {
   get: () => apiRequest<CommunityLinkView>('GET', '/api/community-link'),
   enable: (origin?: string) => apiRequest<CommunityLinkView>('POST', '/api/community-link/enable', origin ? { origin } : {}),

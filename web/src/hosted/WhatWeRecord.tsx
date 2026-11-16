@@ -34,7 +34,7 @@ export function WhatWeRecord() {
         </tbody>
       </table>
       <p className="muted">
-        Kept for 180 days, then only daily totals remain. Sculptured running on your own computer, outside the beta, records nothing. Every event is checked against this list
+        Kept for 180 days, then only daily totals remain. CopperTide running on your own computer, outside the beta, records nothing. Every event is checked against this list
         before it is stored; anything else is refused.
       </p>
     </main>

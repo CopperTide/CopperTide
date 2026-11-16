@@ -24,7 +24,7 @@ details.msg-card-result > summary { font-weight:var(--weight-regular); font-size
 .agent-copies code { font-size: var(--text-sm); overflow-wrap: anywhere; }
 .agent-copy-actions { margin-left: auto; display: flex; gap: 6px; }
 
-/* Checks: the command's own exit status, run by Sculptured. */
+/* Checks: the command's own exit status, run by CopperTide. */
 .check-mark { font-size: var(--text-xs); white-space: nowrap; border: 1px solid currentColor; border-radius: var(--radius-pill); padding: 0 6px; line-height: 16px; }
 .check-details { margin: 8px 0; padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--radius-md); }
 .check-line { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }

@@ -13,7 +13,7 @@ import {usePanZoom} from '../shell/viewport';
 import {DismissibleError} from '../shell/DismissibleError';
 import {WhereTokensWent} from './WhereTokensWent';
 const date=(ms:number|null)=>ms===null?'Unknown':new Date(ms).toLocaleString();
-const SOURCES:Record<string,string>={'sculptured':'Sculptured','imported:claude-code':'Claude Code','imported:codex':'Codex'};
+const SOURCES:Record<string,string>={'sculptured':'CopperTide','imported:claude-code':'Claude Code','imported:codex':'Codex'};
 const sourceName=(s:string)=>SOURCES[s]??s;
 const runLabel=(r:DeploymentRun)=>r.source?`Imported · ${sourceName(r.source)} · ${date(r.started_ms)}`:`${date(r.started_ms)} · #${r.start_seq}`;
 const label=(a:DeploymentAgent)=>a.name ?? `${a.id.split('@')[0]} (name not recorded)`;

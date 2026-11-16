@@ -54,7 +54,7 @@ describe('team Settings: export, the spec and more settings', () => {
     const { advanced, user } = await openAdvanced();
     await user.click(within(advanced).getByRole('button', { name: 'View as spec' }));
     const spec = await within(advanced).findByRole('region', { name: 'Team spec' });
-    expect(spec).toHaveTextContent('This is the OpenRig format Sculptured uses internally');
+    expect(spec).toHaveTextContent('This is the OpenRig format CopperTide uses internally');
     expect(spec.querySelector('pre')).toHaveTextContent('name: t');
     expect(spec.querySelector('textarea, input')).toBeNull();
     await user.click(within(spec).getByRole('button', { name: 'Copy' }));
@@ -112,7 +112,7 @@ describe('team Settings: export, the spec and more settings', () => {
     await user.click(within(advanced).getByText('More settings'));
     const most = within(advanced).getByRole('spinbutton', { name: 'Most agents, children included' });
     expect(most).toHaveValue(null);
-    expect(within(advanced).getByText(/Sculptured sets no limits of its own/)).toBeInTheDocument();
+    expect(within(advanced).getByText(/CopperTide sets no limits of its own/)).toBeInTheDocument();
     await user.type(most, '20');
     await user.type(within(advanced).getByRole('spinbutton', { name: 'Most levels of children' }), '3');
     await waitFor(() => expect(state.rec.draft.limits).toEqual({ max_agents: 20, max_child_levels: 3 }));
@@ -151,7 +151,7 @@ describe('team Settings: export, the spec and more settings', () => {
     vi.mocked(api.teamSpec).mockRejectedValue(new ApiError(500, 'internal', 'the store is locked'));
     const { advanced, user } = await openAdvanced();
     await user.click(within(advanced).getByRole('button', { name: 'View as spec' }));
-    expect(await within(advanced).findByRole('alert')).toHaveTextContent('Could not read the spec: Sculptured hit an internal problem.');
+    expect(await within(advanced).findByRole('alert')).toHaveTextContent('Could not read the spec: CopperTide hit an internal problem.');
     expect(clicked).toHaveLength(0);
   });
 });

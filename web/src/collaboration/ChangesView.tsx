@@ -32,7 +32,7 @@ function ChangeRow({ c, now }: { c: ProposedChangeRow; now: number }) {
       <p className={w.tone}><span aria-hidden="true">{w.mark} </span>{w.words}</p>
       <details>
         <summary>The change and its rules</summary>
-        <p className="muted">Proposed by the agent (agent-reported); the rules are checked by Sculptured.</p>
+        <p className="muted">Proposed by the agent (agent-reported); the rules are checked by CopperTide.</p>
         <ChangeFields payload={c.payload} />
         <RuleResults checks={c.checks ?? []} />
         {c.reason && <p><span className="muted">Its reason: </span><span data-raw-evidence>{c.reason}</span></p>}
@@ -43,7 +43,7 @@ function ChangeRow({ c, now }: { c: ProposedChangeRow; now: number }) {
 
 /**
  * Results → Changes: every change the team's agents proposed to a business system, newest first, with the
- * team's rules as Sculptured checked them and what became of it. Kept after the team stops.
+ * team's rules as CopperTide checked them and what became of it. Kept after the team stops.
  */
 export function ChangesView({ rig }: { rig: string }) {
   const { data, error } = usePolled(() => api.teamChanges(rig), CHANGES_POLL_MS, [rig]);

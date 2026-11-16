@@ -409,7 +409,7 @@ describe('Structure board: problems and Start', () => {
   // Hardening item 1: agent folders must sit inside home. The server's issues name the agent in plain words.
   it.each([
     ['folder-outside-home', '/etc/secret', "Builder's folder is outside your home folder", 'outside your home folder'],
-    ['folder-unreadable', '/home/me/locked', "Sculptured can't read Builder's folder: /home/me/locked", "can't be read"],
+    ['folder-unreadable', '/home/me/locked', "CopperTide can't read Builder's folder: /home/me/locked", "can't be read"],
     ['folder-bad-path', '/home/me/a/../b', "Builder's folder path can't be used: /home/me/a/../b", "path can't be used"],
   ])('%s shows in plain words on the agent card, its panel and Things to fix', async (code, folder, message, short) => {
     const rec = teamRecord({

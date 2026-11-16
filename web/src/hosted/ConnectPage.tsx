@@ -32,7 +32,7 @@ export function ConnectPage() {
 
 function Done({ how, community }: { how: 'allowed' | 'denied'; community: boolean }) {
   if (how === 'denied') return <p>Turned down. Nothing was connected; the computer shows that the sign-in was turned down.</p>;
-  return <p>{community ? 'Signed in. You can close this tab; Sculptured on your computer finishes on its own.' : 'Connected. You can close this tab; the computer finishes on its own.'}</p>;
+  return <p>{community ? 'Signed in. You can close this tab; CopperTide on your computer finishes on its own.' : 'Connected. You can close this tab; the computer finishes on its own.'}</p>;
 }
 
 /** What approving lets the device do, who asked and when, then Allow or Don't allow. */
@@ -64,8 +64,8 @@ function CommunityAccess({ device }: { device: Device }) {
   return (
     <>
       <p>Allow {device.label ?? `Community access from ‘${device.name}’`}?</p>
-      <p className="tone-amber" role="note"><strong>Only approve a code you just saw in Sculptured on your own computer.</strong> If someone sent you this link, don't approve it: they could publish and change your profile as you.</p>
-      <p className="muted">Sculptured on that computer can then use Community as you: browse, save, publish and report blocks, and change your profile. It cannot run agents, reach your computers, files or transcripts. You can remove it any time from Computers.</p>
+      <p className="tone-amber" role="note"><strong>Only approve a code you just saw in CopperTide on your own computer.</strong> If someone sent you this link, don't approve it: they could publish and change your profile as you.</p>
+      <p className="muted">CopperTide on that computer can then use Community as you: browse, save, publish and report blocks, and change your profile. It cannot run agents, reach your computers, files or transcripts. You can remove it any time from Computers.</p>
     </>
   );
 }

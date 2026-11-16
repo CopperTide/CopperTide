@@ -37,7 +37,7 @@ export function Review({ a, comparison, revisionChanged, onApprove, onInspect }:
       <ChangeList rows={rows} onInspect={onInspect} />
       {p.dropped.length > 0 && (
         <details className="da-dropped">
-          <summary>{plural(p.dropped.length, 'part')} Sculptured can't keep</summary>
+          <summary>{plural(p.dropped.length, 'part')} CopperTide can't keep</summary>
           <ul aria-label="Not kept">{p.dropped.map((d, i) => <li key={i}><code>{d.path}</code> {d.message}</li>)}</ul>
         </details>
       )}

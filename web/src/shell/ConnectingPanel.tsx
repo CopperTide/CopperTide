@@ -19,7 +19,7 @@ export function ConnectingPanel({ rig }: { rig: string }) {
     <Panel title={<span className="team-title">{rig}</span>} className="connecting">
       {stalled ? (
         <div role="alert" className="pad stall-note">
-          <p><strong>Live updates for {rig} aren't arriving.</strong> Sculptured keeps trying in the background. Your agents are not affected.</p>
+          <p><strong>Live updates for {rig} aren't arriving.</strong> CopperTide keeps trying in the background. Your agents are not affected.</p>
           <p className="muted">This is usually a dropped network connection, or a network that blocks live connections.</p>
           <p className="stall-actions">
             <button type="button" className="btn btn-primary" onClick={() => window.location.reload()}>Try again</button>

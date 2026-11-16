@@ -46,7 +46,7 @@ function FilesLine({ files, teamId }: { files: Files; teamId?: string }) {
       <p>
         <span className="ux-unknown">unknown</span>{' '}
         <span className="muted">
-          {files.state === 'no-folder' ? '(this team has no project folder to look in)' : files.state === 'known' ? '(the project folder is not a git repository)' : '(Sculptured could not read the project folder)'}
+          {files.state === 'no-folder' ? '(this team has no project folder to look in)' : files.state === 'known' ? '(the project folder is not a git repository)' : '(CopperTide could not read the project folder)'}
         </span>
       </p>
     );
@@ -62,7 +62,7 @@ function FilesLine({ files, teamId }: { files: Files; teamId?: string }) {
 
 /** What is verified, in one sentence; never more than the checks show. `anyCheck`: some agent has a check set. */
 export function verdict(verified: number, total: number, anyCheck = true): string {
-  if (verified > 0) return `Verified: ${verified} of ${plural(total, 'agent')} passed the check Sculptured ran. Everything else above is what the agents reported.`;
+  if (verified > 0) return `Verified: ${verified} of ${plural(total, 'agent')} passed the check CopperTide ran. Everything else above is what the agents reported.`;
   return anyCheck
     ? 'Verified: nothing. No agent has a passing check, so whether the work is right is unknown until you review it.'
     : 'Verified: nothing. No agent has a check set, so whether the work is right is unknown until you review it.';
@@ -87,7 +87,7 @@ function AgentLine({ a, onOpen }: { a: AgentRow; onOpen: (id: string) => void })
   );
 }
 
-/** Each agent's check: only one Sculptured ran and that passed is verified. Then the verdict, once. */
+/** Each agent's check: only one CopperTide ran and that passed is verified. Then the verdict, once. */
 function Checks({ agents }: { agents: AgentRow[] }) {
   const verified = agents.filter((a) => checkLine(a).verified).length;
   const any = agents.some((a) => !!a.seat?.check);
@@ -101,7 +101,7 @@ function Checks({ agents }: { agents: AgentRow[] }) {
             return (
               <li key={a.id} className={`ux-rf-check ${c.tone}`}>
                 <Icon name={c.icon} size={12} className="ux-rf-check-icon" /><strong>{a.name}</strong> {c.word}
-                {c.verified && <span className="ux-prov" title="Sculptured ran this command after the agent's turn; exit 0."> verified</span>}
+                {c.verified && <span className="ux-prov" title="CopperTide ran this command after the agent's turn; exit 0."> verified</span>}
               </li>
             );
           })}
@@ -132,7 +132,7 @@ function heading(agents: AgentRow[], finished: boolean): { title: string; line: 
 
 /**
  * The run summary: what each agent reported (its words, not verified), the files git sees changed,
- * and the check Sculptured ran for each (verified only when it passed); anything not known says unknown.
+ * and the check CopperTide ran for each (verified only when it passed); anything not known says unknown.
  */
 export function RunSummary({ rig, agents, teamId, folder, onOpen }: Props) {
   const finished = useSettled(allAgentsFinished(agents), SETTLE_MS);

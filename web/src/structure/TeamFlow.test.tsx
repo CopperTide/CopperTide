@@ -163,7 +163,7 @@ describe('New team: Start from…', () => {
     await waitFor(() => expect(where()).toBe('/p/imp/board?mode=design'));
   });
 
-  it('imports a MADL file (YAML or JSON) and lists what Sculptured could not keep', async () => {
+  it('imports a MADL file (YAML or JSON) and lists what CopperTide could not keep', async () => {
     renderAt('/');
     const gallery = await screen.findByRole('region', { name: 'New project' });
     const advanced = within(gallery).getByText(/^Advanced/).closest('details')!;
@@ -171,7 +171,7 @@ describe('New team: Start from…', () => {
     await user.click(within(advanced).getByText(/^Advanced/));
     vi.mocked(api.importMadl).mockResolvedValue({
       team: teamRecord({ draft: teamDraft({ id: 'imp', name: 'CAD review' }) }),
-      dropped: [{ path: '/channels/0', severity: 'warning', message: 'Sculptured does not use channels yet' }],
+      dropped: [{ path: '/channels/0', severity: 'warning', message: 'CopperTide does not use channels yet' }],
     });
     const box = within(advanced).getByRole('textbox', { name: 'Team file contents' });
     const text = 'madl: draft\nsystem: { id: cad, name: CAD review }\n';
@@ -182,7 +182,7 @@ describe('New team: Start from…', () => {
     expect(api.importMadl).toHaveBeenLastCalledWith(text, expect.any(String));
     expect(api.importTeam).not.toHaveBeenCalled();
     expect(done).toHaveTextContent('Imported CAD review. 1 part was not imported:');
-    expect(within(done).getByRole('list', { name: 'Not imported' })).toHaveTextContent('Sculptured does not use channels yet');
+    expect(within(done).getByRole('list', { name: 'Not imported' })).toHaveTextContent('CopperTide does not use channels yet');
     await user.clear(box);
     await user.click(box);
     await user.paste('{"madl":"draft","system":{"id":"cad","name":"CAD review"}}');
@@ -377,8 +377,8 @@ describe('Stop team', () => {
   });
 });
 
-describe('After Sculptured restarts', () => {
-  const REASON = "This agent's process ended when Sculptured restarted. Start the team again to relaunch it.";
+describe('After CopperTide restarts', () => {
+  const REASON = "This agent's process ended when CopperTide restarted. Start the team again to relaunch it.";
   const lost = () =>
     snapT({
       seats: [

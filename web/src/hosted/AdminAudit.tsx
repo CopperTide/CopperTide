@@ -16,7 +16,7 @@ function words(e: Entry): string {
     case 'user.admin_removed': return `removed ${who}'s admin rights`;
     case 'user.signed_out': return `signed ${who} out everywhere`;
     case 'device.revoked': return `revoked a computer of ${who}`;
-    case 'instance.stopped': return `stopped ${who}'s Sculptured`;
+    case 'instance.stopped': return `stopped ${who}'s CopperTide`;
     case 'ops.signed_in': return 'opened the ops tools';
     default: return e.action;
   }

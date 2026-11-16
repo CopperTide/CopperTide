@@ -33,7 +33,7 @@ export function ComponentBlockCard({ block }: { block: ComponentBlock }) {
 export function ComponentTeamActions({ component: c, className }: { component: Component; className: string }) {
   const [teams, setTeams] = useState<TeamSummary[] | null>(null);
   const [note, setNote] = useState<string | null>(null);
-  const pick = async () => { try { setTeams(await api.listTeams()); } catch { setNote('Open Sculptured to add it to a team.'); } };
+  const pick = async () => { try { setTeams(await api.listTeams()); } catch { setNote('Open CopperTide to add it to a team.'); } };
   return (
     <>
       <div className={className}>

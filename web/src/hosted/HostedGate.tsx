@@ -30,7 +30,7 @@ export function HostedGate({ children }: { children: ReactNode }) {
   }, [signedIn, loc.pathname, navigate]);
   if (down) return (
     <main className="hosted-page" role="alert">
-      <h1>Sculptured is not answering</h1>
+      <h1>CopperTide is not answering</h1>
       <p>This is usually brief. Your work is safe.</p>
       <button className="btn btn-primary" onClick={() => setAttempt((n) => n + 1)}>Try again</button>
     </main>

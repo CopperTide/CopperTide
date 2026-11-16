@@ -39,7 +39,7 @@ export function ModelConnections({ onWorking }: { onWorking?: (ok: boolean) => v
   return (
     <>
       <h3>Pay-per-use keys</h3>
-      <p className="muted">A key is kept sealed on the Sculptured server, handed to an agent only when it starts, and never shown again. Runs with a key are billed to your own Anthropic or OpenRouter account. Check asks the provider whether the key works and uses no tokens.</p>
+      <p className="muted">A key is kept sealed on the CopperTide server, handed to an agent only when it starts, and never shown again. Runs with a key are billed to your own Anthropic or OpenRouter account. Check asks the provider whether the key works and uses no tokens.</p>
       {list.length > 0 && (
         <ul className="setup-list" aria-label="Your model connections">
           {list.map((c) => <ConnectionRow key={c.id} c={c} check={checkOf(c)} busy={busy === c.id} onCheck={() => void check(c.id)} onDelete={() => void remove(c.id)} />)}

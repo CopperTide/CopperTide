@@ -16,7 +16,7 @@ export function CommunityCard() {
   return (
     <>
       <KeyLeftNote />
-      {link.enabled ? <CommunityOn link={link} refresh={refresh} /> : <p>Community is off on this computer; nothing is sent to Sculptured’s servers. <Link to="/community">Open Community</Link></p>}
+      {link.enabled ? <CommunityOn link={link} refresh={refresh} /> : <p>Community is off on this computer; nothing is sent to CopperTide’s servers. <Link to="/community">Open Community</Link></p>}
     </>
   );
 }

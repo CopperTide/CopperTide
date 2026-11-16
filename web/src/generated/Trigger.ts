@@ -3,7 +3,7 @@
 /**
  * An address another system calls (a webhook) to hand the team an event, such as a machine alarm or a
  * new order. Its body reaches `agent` after `message`; a team that is not running is started first
- * when `starts_team` is on. The address's secret is kept by Sculptured, never in the team's design.
+ * when `starts_team` is on. The address's secret is kept by CopperTide, never in the team's design.
  */
 export type Trigger = { id: string, agent: string, 
 /**

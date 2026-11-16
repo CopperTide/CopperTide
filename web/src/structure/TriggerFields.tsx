@@ -21,7 +21,7 @@ export function outcomeWords(e: TriggerEvent): string {
 
 /**
  * Settings → Events from other systems: each trigger's agent and instructions, its address (with the
- * secret Sculptured keeps), a new address when the old one leaked, and the latest events received.
+ * secret CopperTide keeps), a new address when the old one leaked, and the latest events received.
  */
 export function TriggerFields({ draft, edit, locked }: Props) {
   const list = draft.triggers ?? [];

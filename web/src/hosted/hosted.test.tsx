@@ -33,7 +33,7 @@ it('the join page shows who the invite is for and what is recorded, then joins w
   expect(await screen.findByText(/Invite for Ana/)).toBeInTheDocument();
   expect(screen.getByRole('link', { name: 'Continue with Google' })).toHaveAttribute('href', '/gw/api/join/tok/oidc/google');
   expect(screen.queryByRole('link', { name: 'Continue with GitHub' })).toBeNull();
-  expect(screen.getByText(/We record what you do in Sculptured/)).toBeInTheDocument();
+  expect(screen.getByText(/We record what you do in CopperTide/)).toBeInTheDocument();
   expect(screen.getByLabelText('Your name')).toHaveValue('Ana');
   expect(screen.getByLabelText('Email')).toHaveValue('ana@x.com');
   await userEvent.clear(screen.getByLabelText('Your name'));

@@ -80,7 +80,7 @@ export function AgentDesignGuide() {
       </dl>
       <h2>What goes wrong</h2>
       <ul>{PITFALLS.map((p) => <li key={p}>{p}</li>)}</ul>
-      <h2>In Sculptured</h2>
+      <h2>In CopperTide</h2>
       <ul>
         <li><strong>Hands work to</strong> arrows build pipelines; a group holds agents that share instructions.</li>
         <li>Give each agent a <strong>token limit</strong> (optionally including the agents it spawns) and set reviewers to <strong>Restricted</strong>.</li>

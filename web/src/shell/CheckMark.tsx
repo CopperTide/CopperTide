@@ -4,7 +4,7 @@ import { errorText } from '../errors';
 import type { SeatCheck } from '../generated/SeatCheck';
 import { Btn } from './ui';
 
-/** One word for the latest check, from the command's own exit status (Sculptured ran it). */
+/** One word for the latest check, from the command's own exit status (CopperTide ran it). */
 export function checkWords(c: SeatCheck): { word: string; tone: string; glyph: string } {
   if (c.passed === null) return { word: 'checking', tone: 'tone-amber', glyph: '◌' };
   if (c.passed) return { word: 'check passed', tone: 'tone-verified', glyph: '✓' };
@@ -15,7 +15,7 @@ const when = (c: SeatCheck) => new Date(c.at_ms).toLocaleTimeString([], { hour: 
 
 export function CheckMark({ check }: { check: SeatCheck }) {
   const w = checkWords(check);
-  const tip = `Sculptured ran “${check.command}” at ${when(check)}${check.exit_code !== null ? ` · exit ${check.exit_code}` : ''}`;
+  const tip = `CopperTide ran “${check.command}” at ${when(check)}${check.exit_code !== null ? ` · exit ${check.exit_code}` : ''}`;
   return <span className={`check-mark ${w.tone}`} title={tip} data-check={check.passed === null ? 'running' : check.passed ? 'passed' : 'failed'}><span aria-hidden="true">{w.glyph} </span>{w.word}</span>;
 }
 

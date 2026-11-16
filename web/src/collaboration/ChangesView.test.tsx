@@ -28,5 +28,5 @@ it('lists the team\'s changes, newest first, with their rules', async () => {
   const rows = items.filter((li) => li.classList.contains('change-row'));
   expect(rows.map((r) => r.querySelector('strong')?.textContent)).toEqual(['Second', 'First']);
   expect(rows[0]).toHaveTextContent("✓ Approved by the team's rules");
-  expect(within(rows[0]).getByRole('list', { name: "The team's rules (checked by Sculptured)" })).toHaveTextContent('amount is 4200, at most 5000');
+  expect(within(rows[0]).getByRole('list', { name: "The team's rules (checked by CopperTide)" })).toHaveTextContent('amount is 4200, at most 5000');
 });

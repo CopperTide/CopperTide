@@ -18,7 +18,7 @@ export function withLimit(d: TeamDraft, key: keyof TeamLimits, value: number | n
 
 const parse = (text: string) => (text.trim() === '' ? null : Math.max(0, Math.floor(Number(text) || 0)));
 
-/** A team's own limits on the agents its agents spawn. Blank = no limit; Sculptured sets none. */
+/** A team's own limits on the agents its agents spawn. Blank = no limit; CopperTide sets none. */
 export function TeamLimitsFields({ draft, edit, locked }: { draft: TeamDraft; edit: Edit; locked: boolean }) {
   return (
     <fieldset className="ta-limits">
@@ -31,7 +31,7 @@ export function TeamLimitsFields({ draft, edit, locked }: { draft: TeamDraft; ed
         </label>
       ))}
       <p className="fld-meta">
-        Sculptured sets no limits of its own. When a limit here is reached, the agent is told so and the Run board shows it.
+        CopperTide sets no limits of its own. When a limit here is reached, the agent is told so and the Run board shows it.
       </p>
     </fieldset>
   );

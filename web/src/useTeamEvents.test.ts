@@ -63,14 +63,14 @@ describe('useTeamEvents', () => {
     vi.mocked(api.latestSeatEvents).mockRejectedValue(new Error('controld unreachable'));
     const feed = { 'team.a@t': [turn(7, 'team.a@t')] };
     const { result } = renderHook(() => useTeamEvents(['team.a@t'], feed, 0));
-    await waitFor(() => expect(result.current.error).toBe('Could not reach Sculptured. Check that it is still running, then try again.'));
+    await waitFor(() => expect(result.current.error).toBe('Could not reach CopperTide. Check that it is still running, then try again.'));
     expect(result.current.events.map((e) => e.seq)).toEqual([7]);
   });
 
   it('reports a rejection that is not an Error in plain words', async () => {
     vi.mocked(api.latestSeatEvents).mockRejectedValue('socket closed');
     const { result } = renderHook(() => useTeamEvents(['team.a@t'], noFeed, 0));
-    await waitFor(() => expect(result.current.error).toBe('Could not reach Sculptured. Check that it is still running, then try again.'));
+    await waitFor(() => expect(result.current.error).toBe('Could not reach CopperTide. Check that it is still running, then try again.'));
   });
 
   it('drops history when the agents go away or one is removed', async () => {

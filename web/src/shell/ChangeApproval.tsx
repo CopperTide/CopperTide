@@ -14,11 +14,11 @@ export const isChange = (q: Pick<QuestionView, 'source'>) => q.source === 'appro
 
 const shown = (v: unknown) => (typeof v === 'string' ? v : JSON.stringify(v));
 
-/** The team's rules as Sculptured checked them: shape and words, never colour alone. */
+/** The team's rules as CopperTide checked them: shape and words, never colour alone. */
 export function RuleResults({ checks }: { checks: RuleResult[] }) {
   if (checks.length === 0) return <p className="muted">No team rule applies to this change, so a person decides.</p>;
   return (
-    <ul className="change-checks" aria-label="The team's rules (checked by Sculptured)">
+    <ul className="change-checks" aria-label="The team's rules (checked by CopperTide)">
       {checks.map((c) => (
         <li key={c.rule_id} className={c.passed ? 'tone-green' : 'tone-red'}>
           <span aria-hidden="true">{c.passed ? '✓ ' : '✗ '}</span>
@@ -51,7 +51,7 @@ export function ChangeDetails({ q }: { q: QuestionView }) {
   return (
     <div className="change-details">
       <p className="muted">
-        {q.prompt.tool ?? 'A change'}{c.system ? ` · ${c.system}` : ''} · proposed by the agent (agent-reported); the rules below are checked by Sculptured
+        {q.prompt.tool ?? 'A change'}{c.system ? ` · ${c.system}` : ''} · proposed by the agent (agent-reported); the rules below are checked by CopperTide
       </p>
       <ChangeFields payload={c.payload ?? {}} />
       <RuleResults checks={c.checks ?? []} />

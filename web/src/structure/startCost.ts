@@ -37,7 +37,7 @@ export function budgetNotes(d: TeamDraft, atOnce: number): string[] {
   const n = Math.max(1, Math.min(atOnce, b?.max_working ?? atOnce));
   return [
     `Run budget: ${parts.join('; ')}.`,
-    `Sculptured wraps up first and stops early by about one model call for each agent working (up to ${n} at once), so a run usually ends near each hard value. Usage is reported after each call, so it can pass a hard value by a little.`,
+    `CopperTide wraps up first and stops early by about one model call for each agent working (up to ${n} at once), so a run usually ends near each hard value. Usage is reported after each call, so it can pass a hard value by a little.`,
   ];
 }
 

@@ -87,10 +87,10 @@ describe('FolderPicker', () => {
     const { FOLDER_WORDS, folderError } = await import('./FolderPicker');
     for (const code of ['outside_home', 'folder_missing', 'not_a_folder', 'folder_unreadable', 'bad_path', 'bad_folder_name', 'folder_exists'])
       expect(folderError(new ApiError(400, code, 'server text'))).toBe(FOLDER_WORDS[code]);
-    expect(folderError(new ApiError(400, 'something_new', 'Server says so'))).toBe('Sculptured could not do that (error 400). Reload the page and try again.');
+    expect(folderError(new ApiError(400, 'something_new', 'Server says so'))).toBe('CopperTide could not do that (error 400). Reload the page and try again.');
   });
 
-  it('says how to allow a folder macOS keeps from Sculptured', async () => {
+  it('says how to allow a folder macOS keeps from CopperTide', async () => {
     const { folderError } = await import('./FolderPicker');
     expect(folderError(new ApiError(403, 'folder_unreadable', 'server text'))).toMatch(/Mac.*System Settings → Privacy & Security/);
   });

@@ -7,7 +7,7 @@ export function CommunityFrame() {
   return (
     <div className="cm-frame">
       <header className="topbar">
-        <a href="/" className="tb-brand" aria-label="Sculptured"><BrandMark /><span className="tb-brand-word">Sculptured</span></a>
+        <a href="/" className="tb-brand" aria-label="CopperTide"><BrandMark /><span className="tb-brand-word">CopperTide</span></a>
         <Link to="/community" className="tb-link">Community</Link>
         <span className="tb-spacer" />
         <a href="/login" className="btn btn-sm">Sign in</a>

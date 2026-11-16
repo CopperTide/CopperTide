@@ -9,7 +9,7 @@ import { StateMark } from './ui';
 const css = (name: string) => readFileSync(`${process.cwd()}/src/${name}`, 'utf8');
 
 // An agent saying "done" is reported complete, not verified (AGENTS.md). Green is reserved for a
-// check Sculptured ran that passed; reported done is grey, in every look.
+// check CopperTide ran that passed; reported done is grey, in every look.
 describe('reported done is never drawn as verified', () => {
   it('says "done (reported)" in the reported (grey) style, not the verified one', () => {
     const { container } = render(<StateMark state={agentState(seatView('a'), true)} pill />);

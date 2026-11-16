@@ -12,13 +12,13 @@ type Upload = { name: string; text: string };
 type Failure = { message: string; diagnostics: Diagnostic[] };
 type Left = { id: string; name: string; warnings: DraftIssue[] };
 
-/** A Sculptured run file (by name, or its first line naming the format); anything else is a Claude Code or Codex session. */
+/** A CopperTide run file (by name, or its first line naming the format); anything else is a Claude Code or Codex session. */
 const isRunFile = (f: Upload) => f.name.endsWith('.sculptured-session.jsonl') || (f.text.split('\n').find((l) => l.trim()) ?? '').includes('"format":"sculptured.session/v1"');
 
 const read = (list: FileList | null) => Promise.all([...(list ?? [])].map(async (f) => ({ name: f.name, text: await f.text() })));
 
 /**
- * Advanced: a past run opens read-only in History. A Sculptured run file imports as it is; a Claude Code or
+ * Advanced: a past run opens read-only in History. A CopperTide run file imports as it is; a Claude Code or
  * Codex session (plus its subagents folder) is converted first, and what was found is shown before anything
  * is created.
  */
@@ -43,7 +43,7 @@ export function ImportRun({ onCreated }: { onCreated: OnCreated }) {
   });
   return (
     <div className="import-form" aria-label="Import a past run" role="group">
-      <p className="muted">Import a past run: a Sculptured run file, or a Claude Code or Codex session (.jsonl, plus its subagents folder). It opens in History, read-only, and as a team you can run.</p>
+      <p className="muted">Import a past run: a CopperTide run file, or a Claude Code or Codex session (.jsonl, plus its subagents folder). It opens in History, read-only, and as a team you can run.</p>
       <Pickers busy={busy} canAddFolder={files.length > 0 && !isRunFile(files[0])} onFiles={(f) => void take(f)} onFolder={(f) => void take([...files, ...f])} />
       {found && <SessionPreview found={found} busy={busy} onImport={() => void attempt(() => importText(found.session))} onCancel={() => setFound(null)} />}
       {error && <Problems error={error} />}

@@ -5,7 +5,7 @@ import { FakeChannel } from '../workspace/testkit';
 
 /**
  * Test fixtures for simulated runs: run r1, branch b1 (Triage then Resolver, task 27) in a world of
- * retail, plant and a Sculptured approvals part (desk), and its fork b2. `/api/arena/*` is answered
+ * retail, plant and a CopperTide approvals part (desk), and its fork b2. `/api/arena/*` is answered
  * by `fetch` stubbed here; tests change `arenaFake` to vary the answers.
  */
 

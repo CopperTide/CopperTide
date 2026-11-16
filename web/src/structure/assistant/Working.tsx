@@ -30,7 +30,7 @@ export function WorkingCard({ a }: { a: DesignAssistantState }) {
       </div>
       <div className="da-progress" aria-hidden="true"><span /></div>
       <p className="muted">
-        Big changes can take several minutes{s >= 240 ? '; Sculptured waits up to about 10 minutes' : ''}. You can keep looking around: nothing changes until you approve.
+        Big changes can take several minutes{s >= 240 ? '; CopperTide waits up to about 10 minutes' : ''}. You can keep looking around: nothing changes until you approve.
       </p>
     </div>
   );

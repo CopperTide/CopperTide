@@ -24,7 +24,7 @@ it('converts a Claude Code session, shows what was found, then imports it', asyn
   await userEvent.upload(screen.getByLabelText('Session or run files'), main);
   expect(await screen.findByText(/Claude Code session · 1 main agent, 3 subagents/)).toBeInTheDocument();
   expect(screen.getByText(/Explore db: its file/)).toBeInTheDocument();
-  expect(screen.getByText(/2 lines Sculptured did not recognise/)).toBeInTheDocument();
+  expect(screen.getByText(/2 lines CopperTide did not recognise/)).toBeInTheDocument();
   expect(JSON.parse(calls[0].body)).toEqual({ files: [{ name: 'main.jsonl', text: expect.stringContaining('"sessionId"') }] });
   await userEvent.click(screen.getByRole('button', { name: 'Import anyway' }));
   expect(onCreated).toHaveBeenCalledWith('t1', { history: true });
@@ -46,7 +46,7 @@ it('cancelling the preview imports nothing', async () => {
   expect(calls.some((c) => c.endsWith('/api/runs/import'))).toBe(false);
 });
 
-it('still imports a Sculptured run file directly', async () => {
+it('still imports a CopperTide run file directly', async () => {
   vi.spyOn(globalThis, 'fetch').mockImplementation(() => reply({ team: { draft: { id: 't2', name: 'x' } }, run: { start_seq: -2 }, warnings: [] }));
   const onCreated = vi.fn();
   render(<ImportRun onCreated={onCreated} />);

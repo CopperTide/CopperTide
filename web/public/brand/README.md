@@ -1,11 +1,15 @@
-# App artwork
+# CopperTide artwork
 
-`sculptured-coastal-emblem.png` is the app's current artwork, supplied by the project owner
-and preserved unchanged. The CopperTide mark replaces it when the app's rebrand ships.
-Compact application marks frame its coastal symbol with CSS; the original wordmark
-remains in the source asset. The browser icon uses the complete artwork. The app loads smaller copies made from it
-(`sculptured-coastal-emblem-256.png` for the marks, `-64.png` for the browser icon), since the
-original is over 1 MB and is drawn at most about 83 pixels wide.
+The CopperTide brand files are copies of the finished artwork (the mark, the favicon and the
+lockups in light and dark). Do not redraw them.
 
-The application palette is defined in `web/src/coastal.css`. It retains separate
-status and agent-provider colors, as well as the existing text and shape indicators.
+- `coppertide-mark-256.png` is the mark for images and other sites; `coppertide-mark-64.png` is its small copy.
+- `coppertide-favicon.svg` is the browser icon.
+- `coppertide-lockup.svg` and `coppertide-lockup-dark.svg` are the mark with the wordmark, for light and dark pages.
+
+The app draws the mark and lockup inline (`web/src/shell/BrandMark.tsx`) from the tokens
+`--brand-ink` and `--brand-copper` in `web/src/coastal.css`, so they follow each look and mode.
+
+`sculptured-coastal-emblem*.png` are the previous artwork. The app no longer uses them; they stay
+so a gateway that still fetches the old path keeps working, and are removed in a later phase.
+Their palette notes still live in `web/src/coastal.css`.

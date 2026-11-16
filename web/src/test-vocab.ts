@@ -1,5 +1,7 @@
 const OPENRIG = /\b(rigs?|pods?|seats?|members?|edges?|runtimes?|rigspec|yaml|agent_ref|profiles?)\b/gi;
-const PRODUCT = /Sculptured/g;
+const PRODUCT = /CopperTide/g;
+/** The retired product name: banned from visible text (commands such as `sculptured connect` are lower case and pass). */
+const OLD_PRODUCT = /\bSculptured\b/g;
 
 /**
  * OpenRig words a user would see outside an Advanced disclosure. Raw events
@@ -19,5 +21,5 @@ export function openRigWords(root: HTMLElement, allow: readonly string[] = []): 
         texts.push(el.getAttribute(a) ?? '');
       }
   });
-  return texts.flatMap((t) => t.replace(PRODUCT, '').match(OPENRIG) ?? []).map((w) => w.toLowerCase()).filter((w) => !allow.includes(w));
+  return texts.flatMap((t) => [...(t.replace(PRODUCT, '').match(OPENRIG) ?? []), ...(t.match(OLD_PRODUCT) ?? [])]).map((w) => w.toLowerCase()).filter((w) => !allow.includes(w));
 }

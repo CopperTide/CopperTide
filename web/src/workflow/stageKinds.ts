@@ -9,7 +9,7 @@ export type StageType = StageKind | 'panel';
 
 export const STAGE_TYPES: { value: StageType; label: string }[] = [
   { value: 'agent', label: 'Agent' },
-  { value: 'check', label: 'Check (Sculptured runs a command)' },
+  { value: 'check', label: 'Check (CopperTide runs a command)' },
   { value: 'human', label: 'Person decides' },
   { value: 'merge', label: "Merge the item's branch" },
   { value: 'panel', label: 'Review panel' },

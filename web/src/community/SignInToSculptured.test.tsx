@@ -61,7 +61,7 @@ it('a turned-down code says so', async () => {
   expect(screen.getByRole('button', { name: 'Get a new code' })).toBeInTheDocument();
 });
 
-it('hides a sign-in link that points away from the Sculptured server', async () => {
+it('hides a sign-in link that points away from the CopperTide server', async () => {
   fakeFetch({
     'GET /api/community-link': () => [200, { enabled: true, origin: 'http://stub', signed_in: false, account: null }],
     'POST /api/community-link/pair': started('https://evil/x'),

@@ -36,7 +36,7 @@ describe('allAgentsFinished', () => {
     expect(allAgentsFinished([row('a'), row('b', { lifecycle: 'stopped' })])).toBe(false);
   });
 
-  it('calls a check verified only when Sculptured ran it and it passed', () => {
+  it('calls a check verified only when CopperTide ran it and it passed', () => {
     const check = (passed: boolean | null) => ({ command: 'npm test', passed, exit_code: passed ? 0 : 1, timed_out: false, output: '', at_ms: 1, duration_ms: 10 });
     expect(checkLine(row('a'))).toMatchObject({ verified: false, word: 'no check set · not verified' });
     expect(checkLine(row('a', { check: check(true) }))).toMatchObject({ verified: true, word: 'check passed: npm test' });
@@ -98,7 +98,7 @@ describe('Run summary (Results)', () => {
     const checks = screen.getByRole('region', { name: 'Checks' });
     expect(checks).toHaveTextContent('check passed: npm test');
     expect(checks).toHaveTextContent('no check set · not verified');
-    expect(checks).toHaveTextContent('Verified: 1 of 2 agents passed the check Sculptured ran.');
+    expect(checks).toHaveTextContent('Verified: 1 of 2 agents passed the check CopperTide ran.');
   });
 
   it('says files changed are unknown when the folder cannot be read', async () => {

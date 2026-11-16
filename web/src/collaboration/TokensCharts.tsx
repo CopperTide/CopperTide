@@ -8,7 +8,7 @@ const clock = (ms: number) => new Date(ms).toLocaleTimeString([], { hour: '2-dig
 
 /** Each plan window: what was used before the run, what the run added, and the budget's wrap-up and stop. */
 export function PlanWindows({ plan }: { plan: PlanSeries[] }) {
-  if (!plan.length) return <p className="muted">No plan reading came in during this run (Codex reports them; Claude Code reports them to Sculptured while agents run).</p>;
+  if (!plan.length) return <p className="muted">No plan reading came in during this run (Codex reports them; Claude Code reports them to CopperTide while agents run).</p>;
   const x = (p: number) => PAD.l + (Math.min(100, Math.max(0, p)) / 100) * (W - PAD.l - PAD.r);
   return <div className="tokens-plan">{plan.map((s) => {
     const [soft, hard] = s.budget ?? [null, null];

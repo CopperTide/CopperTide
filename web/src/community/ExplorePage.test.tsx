@@ -38,7 +38,7 @@ it('a Community that cannot be reached says so in plain words, and Retry tries a
   let n = 0;
   fakeFetch({ 'GET /api/community/blocks?q=&offset=0': () => (n++ === 0 ? [503, { error: { code: 'community_unavailable', message: 'x' } }] : [200, { blocks: [publication()] }]) });
   renderCommunity(<ExplorePage />, { path: '/community' });
-  expect(await screen.findByRole('alert')).toHaveTextContent('Community is not available on this Sculptured server right now.');
+  expect(await screen.findByRole('alert')).toHaveTextContent('Community is not available on this CopperTide server right now.');
   await userEvent.click(screen.getByRole('button', { name: 'Retry' }));
   expect(await screen.findByRole('link', { name: 'Review pair' })).toBeVisible();
 });

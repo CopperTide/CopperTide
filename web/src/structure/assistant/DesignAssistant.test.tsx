@@ -105,7 +105,7 @@ describe('Design assistant', () => {
     const panel = screen.getByRole('region', { name: 'Design assistant' });
     const box = within(panel).getByRole('textbox');
     await userEvent.type(box, 'Add a tester{Enter}');
-    expect(await within(panel).findByRole('alert')).toHaveTextContent('Claude Code took longer than Sculptured waits');
+    expect(await within(panel).findByRole('alert')).toHaveTextContent('Claude Code took longer than CopperTide waits');
     expect(box).toHaveValue('Add a tester');
     expect(within(panel).queryByRole('list', { name: 'Conversation' })).not.toBeInTheDocument();
   });

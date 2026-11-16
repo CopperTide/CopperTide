@@ -116,7 +116,7 @@ export const outcomeOf = (status: BranchStatus): Status => OUTCOME[status];
 export const DECIDED_BY_AGENTS = 'Changes in an Arena run are decided by its agents. To try another decision, fork with changed instructions.';
 const NOT_HERE: Availability = { ok: false, why: DECIDED_BY_AGENTS };
 
-/** The parts of the run's world that hold Sculptured's approvals (the `sculptured` integration). */
+/** The parts of the run's world that hold CopperTide's approvals (the `sculptured` integration). */
 export function approvalParts(b: BranchDetail): Set<string> {
   const start = b.events.find((e) => e.kind === 'run_start')?.payload as RunStartPayload | undefined;
   return new Set((start?.world ?? []).filter((w) => w.integration === 'sculptured').map((w) => w.part));
@@ -141,7 +141,7 @@ function approvalOf(c: ChangeDoc, agent: string | undefined): Approval {
 
 /**
  * The changes still waiting for a decision at the branch's latest step, from what the world's
- * Sculptured tools showed. None when the world has no Sculptured part.
+ * CopperTide tools showed. None when the world has no CopperTide part.
  */
 export function approvalsOf(b: BranchDetail): Approval[] {
   const parts = approvalParts(b);

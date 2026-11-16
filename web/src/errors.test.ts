@@ -42,7 +42,7 @@ describe('errorText: server errors in plain words', () => {
   it('a request from the wrong address says what to do, in plain words', () => {
     const text = errorText(new ApiError(403, 'forbidden_host', "requests must use this machine's sculptured address"));
     expect(text).toBe(
-      'Sculptured only answers pages opened at its own address on this computer. Open Sculptured from the address it printed when it started (for example http://127.0.0.1:4410).',
+      'CopperTide only answers pages opened at its own address on this computer. Open CopperTide from the address it printed when it started (for example http://127.0.0.1:4410).',
     );
     expect(text).not.toContain('sculptured address');
   });
@@ -55,7 +55,7 @@ describe('errorText: server errors in plain words', () => {
 
   it('keeps a host reason verbatim, as runtime evidence', () => {
     expect(errorText(new ApiError(502, 'host_unreachable', "Sculptured's agent runner is not connected"))).toBe(
-      "Sculptured could not reach this agent's host: Sculptured's agent runner is not connected",
+      "CopperTide could not reach this agent's host: Sculptured's agent runner is not connected",
     );
   });
 
@@ -69,16 +69,16 @@ describe('errorText: server errors in plain words', () => {
     for (const e of [new ApiError(418, 'something_new', raw), new ApiError(502, 'http_error', `<html>${raw}</html>`), new ApiError(500, 'internal', raw)]) {
       expect(errorText(e)).not.toContain(raw);
     }
-    expect(errorText(new ApiError(418, 'something_new', raw))).toBe('Sculptured could not do that (error 418). Reload the page and try again.');
+    expect(errorText(new ApiError(418, 'something_new', raw))).toBe('CopperTide could not do that (error 418). Reload the page and try again.');
   });
 
-  it('a failed fetch says Sculptured could not be reached', () => {
-    expect(errorText(new TypeError('Failed to fetch'))).toBe('Could not reach Sculptured. Check that it is still running, then try again.');
+  it('a failed fetch says CopperTide could not be reached', () => {
+    expect(errorText(new TypeError('Failed to fetch'))).toBe('Could not reach CopperTide. Check that it is still running, then try again.');
   });
 
   it('uses no OpenRig words in any mapped sentence', () => {
     const openRig = /\b(rigs?|pods?|seats?|members?|edges?|runtimes?|rigspec|yaml|agent_ref|profiles?)\b/i;
-    for (const words of Object.values(ERROR_WORDS)) expect(words.replace(/Sculptured/g, '')).not.toMatch(openRig);
+    for (const words of Object.values(ERROR_WORDS)) expect(words.replace(/CopperTide/g, '')).not.toMatch(openRig);
   });
 
   it('has plain words for every M2 error code', () => {

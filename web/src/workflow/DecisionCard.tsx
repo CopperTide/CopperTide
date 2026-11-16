@@ -8,7 +8,7 @@ import type { WorkflowStep } from '../generated/WorkflowStep';
 
 /** Who settled a step, in words: an agent's report is not verification. */
 export function provenance(h: WorkflowStep): string {
-  return h.by === 'check' ? 'verified check' : h.by === 'person' ? "person's decision" : h.by === 'sculptured' ? 'Sculptured' : 'agent-reported';
+  return h.by === 'check' ? 'verified check' : h.by === 'person' ? "person's decision" : h.by === 'sculptured' ? 'CopperTide' : 'agent-reported';
 }
 
 /** An item waiting at a human stage: the question, the latest evidence, one button per outcome. */

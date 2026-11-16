@@ -37,7 +37,7 @@ describe('useSimulatedSource', () => {
     expect(text(7)).toBe('Resolver used exchange_delivered_order_items and changed 1 row · saved plant, retail');
     expect(text(11)).toBe('The final check passed');
     expect(s.feed.find((i) => i.id === 's7')?.raw).toMatchObject({ seq: 7, kind: 'tool_call' });
-    // Approvals come from the world's Sculptured part: c2 was decided, c1 still waits.
+    // Approvals come from the world's CopperTide part: c2 was decided, c1 still waits.
     expect(s.approvals).toEqual([expect.objectContaining({ id: 'c1', agent: 'triage', title: 'Refund order #W1', kind: 'change', can: { ok: false, why: DECIDED_BY_AGENTS } })]);
     expect(s.approvals[0].detail).toBe('Action: refund · System: shop · Reason: Boots arrived damaged');
     // Tokens as each agent reported at its end; no dollar figure, since Resolver gave none.
@@ -55,7 +55,7 @@ describe('useSimulatedSource', () => {
     expect(arenaFake.calls.at(-1)?.url).toBe('/api/arena/branches/b1/rows?seq=7&keys=orders%2F%23W1&part=retail');
   });
 
-  it('has no approvals without a Sculptured part in its world', async () => {
+  it('has no approvals without a CopperTide part in its world', async () => {
     const b = branchB1();
     b.events[0] = ev(0, 0, null, 'run_start', { task_id: '27', world: [{ part: 'retail', integration: 'mongo' }] });
     arenaFake.branches.b1 = b;

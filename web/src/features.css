@@ -124,7 +124,7 @@
 .trigger-try pre, .trigger-events pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: var(--text-sm, 0.875rem); margin: 4px 0; }
 .trigger-events { list-style: none; padding: 0; margin: 0; font-size: var(--text-sm, 0.875rem); }
 
-/* A proposed change: its fields and the team's rules as Sculptured checked them. */
+/* A proposed change: its fields and the team's rules as CopperTide checked them. */
 .change-fields { border-collapse: collapse; margin: 8px 0; font-size: var(--text-sm, 0.875rem); }
 .change-fields th { text-align: left; font-weight: 500; color: var(--muted); padding: 2px 12px 2px 0; vertical-align: top; }
 .change-fields td { padding: 2px 0; overflow-wrap: anywhere; }

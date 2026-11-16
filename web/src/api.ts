@@ -122,7 +122,7 @@ export type TriggerEvent = { id: string; trigger: string; at_ms: number; body: u
 export type TeamTriggers = { triggers: { id: string; path: string }[]; received: TriggerEvent[] };
 export type TeamChanges = { changes: ProposedChangeRow[]; mandate: import('./generated/Mandate').Mandate | null };
 export type TeamStatus = {
-  /** The agent that writes it; `chosen` when a person picked it, else Sculptured's default. */
+  /** The agent that writes it; `chosen` when a person picked it, else CopperTide's default. */
   owner: { id: string; name: string; chosen: boolean } | null;
   page: StatusPage | null;
   versions: Omit<StatusPage, 'markdown'>[];
@@ -295,7 +295,7 @@ export const api = {
   /** Your own Claude Code / Codex proposes a change to the design; `proposal` continues from an earlier one. Nothing is saved. */
   designAssistant: (id: string, body: { options: { cli: 'claude' | 'codex'; model: string | null }; messages: AssistantTurn[]; proposal: string | null }) =>
     request<DesignProposal>('POST', `${teamUrl(id)}/assistant`, body),
-  /** A MADL file (YAML or JSON) as a new team, with what Sculptured could not keep. An older
+  /** A MADL file (YAML or JSON) as a new team, with what CopperTide could not keep. An older
    * `sculptured.team/v1` file is read too. */
   importMadl: (text: string, requestId = newRequestId()) => {
     track('import-team-file');

@@ -29,7 +29,7 @@ function serve(clusters: () => Cluster[], extra: (c: Call) => Promise<Response> 
   return calls;
 }
 
-it('adds a cluster with a key Sculptured makes and shows the exact authorized_keys line, after the login-node policy note', async () => {
+it('adds a cluster with a key CopperTide makes and shows the exact authorized_keys line, after the login-node policy note', async () => {
   let list: Cluster[] = [];
   const calls = serve(() => list, (c) => {
     if (c.url.endsWith('/gw/api/clusters') && c.method === 'POST') { list = [base]; return reply(200, base); }
@@ -101,7 +101,7 @@ it('lists the cluster’s audit log, its doctor report and states such as “Rec
   const card = await screen.findByRole('article', { name: 'Perlmutter' });
   expect(within(card).getByText('Reconnect needs your code')).toBeInTheDocument();
   expect(within(card).getByRole('button', { name: 'Reconnect Perlmutter' })).toBeInTheDocument();
-  const log = within(card).getByRole('list', { name: 'What Sculptured did on Perlmutter' });
+  const log = within(card).getByRole('list', { name: 'What CopperTide did on Perlmutter' });
   const items = within(log).getAllByRole('listitem');
   expect(items).toHaveLength(3);
   expect(items[0]).toHaveTextContent(/needs your code/);

@@ -5,13 +5,13 @@ export type HostedSession = { kind: 'local' } | { kind: 'signed-out' } | { kind:
 
 let csrf: string | null = null;
 
-/** Local Sculptured has no `/gw/api/me` (404); the hosted gateway answers 401 or the user. */
+/** Local CopperTide has no `/gw/api/me` (404); the hosted gateway answers 401 or the user. */
 export async function loadSession(): Promise<HostedSession> {
   const res = await fetch('/gw/api/me', { credentials: 'same-origin' });
   if (res.status === 404) return { kind: 'local' };
   if (res.status === 401) { csrf = null; setCsrf(null); return { kind: 'signed-out' }; }
-  if (!res.ok) throw new GwError(res.status, 'unavailable', 'Sculptured is not answering right now.');
-  // Local Sculptured answers this path with the app itself (not JSON): that is local mode.
+  if (!res.ok) throw new GwError(res.status, 'unavailable', 'CopperTide is not answering right now.');
+  // Local CopperTide answers this path with the app itself (not JSON): that is local mode.
   const body = await res.json().catch(() => null);
   if (!body?.user || !body.csrf) return { kind: 'local' };
   csrf = body.csrf; setCsrf(body.csrf);
@@ -34,4 +34,4 @@ export async function gw<T>(method: 'GET' | 'POST' | 'DELETE', path: string, bod
 export const providerHref = (purpose: { join: string } | 'login', provider: 'google' | 'github') =>
   purpose === 'login' ? `/gw/api/login/oidc/${provider}` : `/gw/api/join/${purpose.join}/oidc/${provider}`;
 
-export const RECORDED = 'We record what you do in Sculptured to improve the beta: pages and features you use and for how long, the shape of the teams you set up (how many agents, which kinds and models), runs, token totals and errors. We never record your prompts, messages, jobs, agent output, file names or file contents.';
+export const RECORDED = 'We record what you do in CopperTide to improve the beta: pages and features you use and for how long, the shape of the teams you set up (how many agents, which kinds and models), runs, token totals and errors. We never record your prompts, messages, jobs, agent output, file names or file contents.';

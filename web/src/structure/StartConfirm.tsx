@@ -83,7 +83,7 @@ export function startConfirmation(d: TeamDraft | undefined, home: string | null)
     d.agents.map((a) => ({ id: a.id, name: a.name.trim() || 'Unnamed agent', kind: a.kind === 'practice' ? 'other' : a.kind, folder: effectiveFolder(d, a) })),
     handsTo,
     home,
-    d.workflow?.dispatch && !d.workflow.dispatcher ? 'the dispatch command, which Sculptured runs to make the work' : undefined,
+    d.workflow?.dispatch && !d.workflow.dispatcher ? 'the dispatch command, which CopperTide runs to make the work' : undefined,
   );
   return c && { ...c, efficiency: efficiencyNotes(d, handsTo), limits: limitNotes(d), team: d.id };
 }

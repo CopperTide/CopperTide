@@ -18,7 +18,7 @@ const SYSTEMS: { os: Os; label: string; target: RegExp; open: string; paste: str
   { os: 'linux', label: 'Linux', target: /linux/, open: 'Open a terminal.', paste: 'paste it (Ctrl+Shift+V) and press Enter' },
 ];
 
-/** The command that installs Sculptured on `os`, connects it with a one-time `key`, and keeps it running. */
+/** The command that installs CopperTide on `os`, connects it with a one-time `key`, and keeps it running. */
 export function connectCommand(os: Os, origin: string, key: string): string {
   return os === 'windows'
     ? `$env:SCULPTURED_KEY="${key}"; irm ${origin}/install.ps1 | iex`
@@ -28,7 +28,7 @@ export function connectCommand(os: Os, origin: string, key: string): string {
 type Copied = { command: string; copied: boolean };
 
 /** Connect a computer: pick its system (yours is chosen), copy one command, paste it there. The command
- * carries a one-time key, so nothing needs approving; it installs Sculptured, lets agents work in your
+ * carries a one-time key, so nothing needs approving; it installs CopperTide, lets agents work in your
  * home folder, and keeps it running in the background. */
 export function ConnectComputer({ os: initial = detectOs() }: { os?: Os }) {
   const [os, setOs] = useState<Os>(initial);
@@ -47,9 +47,9 @@ export function ConnectComputer({ os: initial = detectOs() }: { os?: Os }) {
       </div>
       <div role="tabpanel" aria-label={sys.label} className="connect-panel">
         {releases.targets === null ? (
-          <p className="muted">Checking which systems Sculptured has builds for…</p>
+          <p className="muted">Checking which systems CopperTide has builds for…</p>
         ) : !available ? (
-          <p>There's no Sculptured build for {sys.label} yet. Connect a computer with another system for now.</p>
+          <p>There's no CopperTide build for {sys.label} yet. Connect a computer with another system for now.</p>
         ) : (
           <>
             {os === 'mac' && releases.macApp && <><MacAppSteps href={releases.macApp} /><h3 className="connect-or">Or use Terminal</h3></>}
@@ -105,7 +105,7 @@ function CopySteps({ sys, copied, busy, error, onCopy }: { sys: System; copied: 
           </button>
         </li>
         <li>{sys.open}</li>
-        <li>Then {sys.paste}. Sculptured installs (no admin rights), connects, and keeps running in the background, even after a restart.</li>
+        <li>Then {sys.paste}. CopperTide installs (no admin rights), connects, and keeps running in the background, even after a restart.</li>
       </ol>
       {copied && (
         <div className="connect-copied" role="status">

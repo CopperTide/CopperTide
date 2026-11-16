@@ -52,7 +52,7 @@ it('gives Windows its PowerShell command', async () => {
 it('says plainly when there is no build for a system yet', async () => {
   gateway();
   render(<ConnectComputer os="mac" />);
-  expect(await screen.findByText(/no Sculptured build for macOS yet/)).toBeInTheDocument();
+  expect(await screen.findByText(/no CopperTide build for macOS yet/)).toBeInTheDocument();
   expect(screen.queryByRole('button', { name: 'Copy connect command' })).toBeNull();
   await userEvent.click(screen.getByRole('tab', { name: 'Linux' }));
   expect(screen.getByRole('button', { name: 'Copy connect command' })).toBeInTheDocument();
@@ -71,11 +71,11 @@ it('offers Macs the app to download, and the Terminal command too', async () => 
   const dmg = 'https://example.com/Sculptured-mac-arm64.dmg';
   gateway(['aarch64-apple-darwin', 'x86_64-unknown-linux-gnu'], dmg);
   render(<ConnectComputer os="mac" />);
-  const link = await screen.findByRole('link', { name: 'Download Sculptured for Mac' });
+  const link = await screen.findByRole('link', { name: 'Download CopperTide for Mac' });
   expect(link).toHaveAttribute('href', dmg);
   const panel = screen.getByRole('tabpanel');
   expect(within(panel).getByText(/Open Anyway/)).toBeInTheDocument();
-  expect(within(panel).getByText(/Sculptured account/)).toBeInTheDocument();
+  expect(within(panel).getByText(/CopperTide account/)).toBeInTheDocument();
   expect(within(panel).getByRole('button', { name: 'Copy connect command' })).toBeInTheDocument();
 });
 
@@ -83,5 +83,5 @@ it('offers Macs only the Terminal command when there is no app', async () => {
   gateway(['aarch64-apple-darwin']);
   render(<ConnectComputer os="mac" />);
   expect(await screen.findByRole('button', { name: 'Copy connect command' })).toBeInTheDocument();
-  expect(screen.queryByRole('link', { name: 'Download Sculptured for Mac' })).toBeNull();
+  expect(screen.queryByRole('link', { name: 'Download CopperTide for Mac' })).toBeNull();
 });

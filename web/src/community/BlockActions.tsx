@@ -36,7 +36,7 @@ export function BlockActions({ pub, library }: { pub: Publication; library: Grou
     <div className="cm-actions">
       <Btn variant="primary" disabled={!copy || !workspace} onClick={() => { track('add-from-community'); setAdding(true); }}>{COMMUNITY_WORDS.addToProject}</Btn>
       {!workspace && <span className="muted">Sign in to add it to a project or your Library.</span>}
-      {!copy && <span className="muted">This block is not a group Sculptured can add.</span>}
+      {!copy && <span className="muted">This block is not a group CopperTide can add.</span>}
       {copy && library && <LibraryButton pub={pub} library={library} />}
       <SaveButton pub={pub} />
       {adding && copy && <AddToProject block={copy} onClose={() => setAdding(false)} />}

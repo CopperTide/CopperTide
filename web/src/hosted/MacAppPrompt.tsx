@@ -5,10 +5,10 @@ import { Icon } from '../shell/ui';
 
 const CHOSE_BROWSER = 'sculptured.mac-in-browser';
 
-/** A browser on a Mac: not the Sculptured app's own window (Electron), and not an iPad, whose Safari
+/** A browser on a Mac: not the CopperTide app's own window (Electron), and not an iPad, whose Safari
  * also says "Macintosh" but has a touch screen. */
 export function isMacBrowser(ua: string, touchPoints: number): boolean {
-  return /Macintosh/.test(ua) && !/Electron\/|Sculptured\//.test(ua) && touchPoints <= 1;
+  return /Macintosh/.test(ua) && !/Electron\/|Sculptured\/|CopperTide\//.test(ua) && touchPoints <= 1;
 }
 
 function choseBrowser(): boolean {
@@ -34,7 +34,7 @@ export function useMacApp(): { href: string | null; checking: boolean; chooseBro
 /** Instead of signing in on the web: the Mac app, where agents run on this Mac. */
 export function MacAppCard({ href, onBrowser }: { href: string; onBrowser: () => void }) {
   return (
-    <AuthCard title="Get Sculptured for Mac" lead="On a Mac, your agents run through the Sculptured app. Download it, then sign in there.">
+    <AuthCard title="Get CopperTide for Mac" lead="On a Mac, your agents run through the CopperTide app. Download it, then sign in there.">
       <MacAppSteps href={href} />
       <button type="button" className="auth-alt" onClick={onBrowser}>Continue in the browser</button>
     </AuthCard>
@@ -47,11 +47,11 @@ export function MacAppSteps({ href }: { href: string }) {
   return (
     <ol className="connect-steps">
       <li><span>Download the app (macOS 11 or later, Apple silicon or Intel).</span>
-        <a className="btn btn-primary" href={href}><Icon name="download" size={14} />Download Sculptured for Mac</a>
+        <a className="btn btn-primary" href={href}><Icon name="download" size={14} />Download CopperTide for Mac</a>
       </li>
-      <li>Open the download and drag Sculptured to Applications, then open it there.</li>
+      <li>Open the download and drag CopperTide to Applications, then open it there.</li>
       <li>The first time, macOS says it can't check the app. Open System Settings → Privacy & Security, scroll down, and choose Open Anyway.</li>
-      <li>In the app, under Sculptured account, choose Sign in to my account, then approve this computer. Agents run while the app is open.</li>
+      <li>In the app, under CopperTide account, choose Sign in to my account, then approve this computer. Agents run while the app is open.</li>
     </ol>
   );
 }

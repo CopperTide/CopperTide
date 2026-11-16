@@ -3,7 +3,7 @@ import './statusTile.css';
 
 /**
  * How a reading stands: its colour bar (and its glyph's hue) only repeat what the glyph and words say.
- * `verified` is a check Sculptured ran itself (DESIGN.md's green rule).
+ * `verified` is a check CopperTide ran itself (DESIGN.md's green rule).
  */
 export type TileTone = 'ok' | 'verified' | 'warn' | 'bad' | 'idle' | 'unknown' | 'plain';
 

@@ -3,7 +3,7 @@ import type { Layout, Step } from '../tests/model';
 import type { Branch, BranchDetail, Change, Comparison, ProviderStatus, RestoreMode, RestorePlan, WorldPartInfo } from '../tests/types';
 
 /**
- * What the Control panes read: one interface over a deployment (a Sculptured team running for real)
+ * What the Control panes read: one interface over a deployment (a CopperTide team running for real)
  * and a simulated deployment (an Arena run branch). Panes never call the server themselves.
  */
 

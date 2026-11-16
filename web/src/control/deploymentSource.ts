@@ -38,7 +38,7 @@ function useTeamView(team: string) {
 }
 
 /**
- * A Sculptured team as a ControlSource: the shell's live stream, recent events, questions, usage,
+ * A CopperTide team as a ControlSource: the shell's live stream, recent events, questions, usage,
  * the run budget, and the agent and team control routes.
  */
 export function useDeploymentSource(team: string): ControlSource {

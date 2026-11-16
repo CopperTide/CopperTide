@@ -2,6 +2,6 @@
 
 export type ContextReading = { at_ms: number, used_tokens: number, window_tokens: number | null, 
 /**
- * True when the CLI gave no per-call total and the fill is Sculptured's estimate.
+ * True when the CLI gave no per-call total and the fill is CopperTide's estimate.
  */
 estimated: boolean, };

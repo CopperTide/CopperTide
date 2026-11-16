@@ -100,7 +100,7 @@ function sentence(c: Ctx): Said {
 function plainText(who: string, b: EventBody): string | null {
   if (b.type === 'agent-text') return `${who} replied: “${short(b.text.split('\n')[0], 80)}”`;
   if (b.type === 'events-lost') return `${b.count} events were lost; the log has a gap`;
-  if (b.type === 'unrecognized') return `${who} sent something Sculptured does not recognise (kept in its Events)`;
+  if (b.type === 'unrecognized') return `${who} sent something CopperTide does not recognise (kept in its Events)`;
   return null;
 }
 

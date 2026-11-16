@@ -140,7 +140,7 @@ function AddComponent({ team, onAdd }: { team: Component[]; onAdd: (c: Component
   );
 }
 
-/** The team's components (Advanced): Sculptured's built-in ones, and the team's own, each with exactly
+/** The team's components (Advanced): CopperTide's built-in ones, and the team's own, each with exactly
  * what it runs or connects to. On a connected computer, one that is not built in runs only after the computer's
  * owner approves it there. */
 export function ComponentsSection({ draft, edit, locked }: { draft: TeamDraft; edit: Edit; locked: boolean }) {
@@ -160,7 +160,7 @@ export function ComponentsSection({ draft, edit, locked }: { draft: TeamDraft; e
   return (
     <fieldset className="fld-skills" aria-label="Components">
       <legend className="fld-label">Components</legend>
-      <p className="fld-hint muted">What agents can be given besides Sculptured's tools: MCP servers on their computers or at a web address, Claude plugins and tool hooks, and skill packs. Give one to an agent in its Advanced settings. Find more in <a href="/community">Community</a>, or add your own; a connected computer runs one that is not built in only after its owner approves it there (<code>sculptured approve-component</code>).</p>
+      <p className="fld-hint muted">What agents can be given besides CopperTide's tools: MCP servers on their computers or at a web address, Claude plugins and tool hooks, and skill packs. Give one to an agent in its Advanced settings. Find more in <a href="/community">Community</a>, or add your own; a connected computer runs one that is not built in only after its owner approves it there (<code>sculptured approve-component</code>).</p>
       <ul className="components-list">{BUILTIN.map((c) => row(c, true))}{own.map((c) => row(c, false))}</ul>
       {!locked && (making
         ? <NewComponent draft={draft} team={own} initial={making} onAdd={(c) => set([...own, c])} onClose={() => setMaking(null)} />

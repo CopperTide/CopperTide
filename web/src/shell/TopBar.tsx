@@ -5,7 +5,7 @@ import { teamStatus } from '../pages/status';
 import { StatusBadge } from '../pages/StatusBadge';
 import { DOCS_URL, projectPath } from '../paths';
 import { openAppearance } from './AppearanceControl';
-import { BrandMark } from './BrandMark';
+import { BrandLockup, BrandMark } from './BrandMark';
 import { SignInAlert } from './CliAccounts';
 import { CommandTrigger } from './CommandPalette';
 import { initials } from './initials';
@@ -24,9 +24,9 @@ type Props = {
 export function TopBar({ team, rows, onCommand, onHelp }: Props) {
   return (
     <header className="topbar">
-      <Link to="/" className="tb-brand" aria-label="Sculptured: all projects">
-        <BrandMark />
-        <span className="tb-brand-word">Sculptured</span>
+      <Link to="/" className="tb-brand" aria-label="CopperTide: all projects">
+        <span className="tb-brand-mark"><BrandMark /></span>
+        <BrandLockup className="tb-brand-lockup" />
       </Link>
       <ProjectSwitcher team={team} rows={rows} />
       <nav className="tb-nav" aria-label="Go to">

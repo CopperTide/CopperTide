@@ -38,8 +38,8 @@ export function BlockDetails({block}:{block:GroupBlock}) {
 
 /** Lead with the author's overview; keep provenance and operation notes one click away. */
 export function BlockDescription({text}:{text:string}) {
-  const formatted=text.replace(/\bRig Control\b/g,'Sculptured').replace(/Architecture reference: (.+?), slide (\d+): (https:\/\/[^\s]+?)(?:\.)? Original Sculptured instructions, not course-provided code or an endorsement\. Reports-to\/watch arrows describe intent; agents use managed messages to coordinate\. Imported blocks require a folder and review; no agents start on import\./g,
-    (_,title,slide,url)=>`**Architecture reference:** [${title} · slide ${slide}](${url.replace(/\.$/,'')})\n\nOriginal Sculptured instructions; the course did not supply this code or endorse it.\n\n- Reports-to and watch arrows describe intent. Agents coordinate through managed messages.\n- Choose a project folder and review instructions before starting.\n- Importing a block does not start agents.`);
+  const formatted=text.replace(/\bRig Control\b/g,'CopperTide').replace(/Architecture reference: (.+?), slide (\d+): (https:\/\/[^\s]+?)(?:\.)? Original (?:Sculptured|CopperTide) instructions, not course-provided code or an endorsement\. Reports-to\/watch arrows describe intent; agents use managed messages to coordinate\. Imported blocks require a folder and review; no agents start on import\./g,
+    (_,title,slide,url)=>`**Architecture reference:** [${title} · slide ${slide}](${url.replace(/\.$/,'')})\n\nOriginal CopperTide instructions; the course did not supply this code or endorse it.\n\n- Reports-to and watch arrows describe intent. Agents coordinate through managed messages.\n- Choose a project folder and review instructions before starting.\n- Importing a block does not start agents.`);
   const paragraphs=formatted.split(/\n\s*\n/).filter(Boolean);
   return <div className="block-description"><Markdown text={paragraphs[0]??''}/>{paragraphs.length>1&&<details><summary>Background, source & usage notes</summary>{paragraphs.slice(1).map((p,i)=><Markdown key={i} text={p}/>)}</details>}</div>;
 }

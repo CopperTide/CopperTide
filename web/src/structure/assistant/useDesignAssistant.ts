@@ -25,7 +25,7 @@ const QUIET: Talk = { turns: [], proposal: null, baseRevision: null, busy: false
 /** Why a request failed, in words that say what to do next (never "reload": the conversation would go). */
 function failure(e: unknown, cli: Cli): string {
   if (e instanceof ApiError && e.status === 504) {
-    return `${CLI_NAME[cli]} took longer than Sculptured waits (about 10 minutes). Try a smaller change, or ask for it in steps; your message is back in the box.`;
+    return `${CLI_NAME[cli]} took longer than CopperTide waits (about 10 minutes). Try a smaller change, or ask for it in steps; your message is back in the box.`;
   }
   return errorText(e);
 }

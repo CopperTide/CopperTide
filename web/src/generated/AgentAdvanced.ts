@@ -27,7 +27,7 @@ turn_limit?: SoftHard<number>,
  */
 minute_limit?: SoftHard<number>, 
 /**
- * A shell command Sculptured runs in the agent's folder after each turn it finishes (exit 0 =
+ * A shell command CopperTide runs in the agent's folder after each turn it finishes (exit 0 =
  * passed). None = no check.
  */
 check?: string, 

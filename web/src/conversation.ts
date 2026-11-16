@@ -285,8 +285,8 @@ export function conversationItems(events: EventRecord[]): Item[] {
         notice(e.seq, `${b.count} events lost — history has a gap`, undefined, true);
         break;
       case 'protection-applied':
-        // The refused call's own result says it too; this marks it as Sculptured's doing.
-        notice(e.seq, `Sculptured refused this call: ${b.reason.replace(/^Sculptured protection:\s*/, '')}`, b.reason);
+        // The refused call's own result says it too; this marks it as CopperTide's doing.
+        notice(e.seq, `CopperTide refused this call: ${b.reason.replace(/^(?:Sculptured|CopperTide) protection:\s*/, '')}`, b.reason);
         break;
       case 'stall-suspected':
         notice(e.seq, `May be stalled (heuristic): ${b.reason}`, b.reason);

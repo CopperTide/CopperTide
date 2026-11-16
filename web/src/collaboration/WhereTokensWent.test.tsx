@@ -44,7 +44,7 @@ it('links each agent to its page, and a subagent to its parent', async () => {
 });
 
 it('says plainly when the runner cannot make a report, and when it shows an older one', async () => {
-  vi.spyOn(api, 'teamReport').mockRejectedValue(new ApiError(409, 'runner_without_reports', "This computer's Sculptured runner is older than reports of where tokens went. Reinstall it from Computers."));
+  vi.spyOn(api, 'teamReport').mockRejectedValue(new ApiError(409, 'runner_without_reports', "This computer's CopperTide runner is older than reports of where tokens went. Reinstall it from Computers."));
   const { unmount } = show();
   expect(await screen.findByRole('alert')).toHaveTextContent('Reinstall it from Computers');
   unmount();

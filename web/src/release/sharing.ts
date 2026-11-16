@@ -8,14 +8,14 @@ export function sanitizeExport(input: GroupBlock): GroupBlock {
     !Array.isArray(b.draft.agents) ||
     b.draft.agents.length > 64
   )
-    throw Error("Choose a group export from Sculptured Library");
+    throw Error("Choose a group export from CopperTide Library");
   const d=b.draft,g=d.groups[0];
   const validString=(v:unknown)=>typeof v==='string'&&v.length<=200000;
   const ids=new Set(d.agents.map(a=>a?.id));
   if (!validString(b.id)||!validString(b.name)||!g||!validString(g.id)||!validString(g.label)||![g.x,g.y,g.w,g.h].every(Number.isFinite)||g.w<=0||g.h<=0
       ||ids.size!==d.agents.length||d.agents.some(a=>!a||!validString(a.id)||!validString(a.name)||!validString(a.job)||!['claude','codex','opencode','practice'].includes(a.kind)||a.group_id!==g.id||![a.x,a.y].every(Number.isFinite))
       ||!Array.isArray(d.connections)||d.connections.length>500||d.connections.some(c=>!c||!validString(c.id)||!ids.has(c.from)||!ids.has(c.to)||!['hands-work-to','reports-to','watches'].includes(c.kind)))
-    throw Error('Choose a valid group export from Sculptured Library');
+    throw Error('Choose a valid group export from CopperTide Library');
   if(d.workflow) checkWorkflow(d.workflow, ids, d.connections.length);
   b.revision = 0; b.boundary_notes = [];
   delete b.source; // where a Library copy came from stays on this computer

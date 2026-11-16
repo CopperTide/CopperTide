@@ -141,7 +141,7 @@ type SpecProps = { spec: TeamSpec; draft: TeamDraft; file: string; unsaved: bool
 function SpecView({ spec, draft, file, unsaved, copied, onCopy, pre }: SpecProps) {
   return (
     <section aria-label="Team spec" className="ta-spec">
-      <p className="ta-hint">This is the OpenRig format Sculptured uses internally. It is read-only here; names, jobs and positions are kept in the last comment line.</p>
+      <p className="ta-hint">This is the OpenRig format CopperTide uses internally. It is read-only here; names, jobs and positions are kept in the last comment line.</p>
       {unsaved && <p className="tone-amber">Your latest edits are not saved yet, so this is the last saved version.</p>}
       {!spec.valid && <p className="tone-amber ta-needs">{needsSentence(draft, spec.issues)}</p>}
       {spec.issues.length > 0 && (

@@ -39,7 +39,7 @@ export function StageAdvanced({ draft, stage: s, locked, update, change }: { dra
       {type === 'check' && <>
         <label>Command <input value={s.command ?? ''} maxLength={2000} onChange={(e) => update({ ...s, command: e.target.value })} /></label>
         <label>Time limit in seconds <input type="number" min={1} max={3600} placeholder="600" value={s.timeout_s ?? ''} onChange={(e) => update({ ...s, timeout_s: number(e.target.value) })} /></label>
-        <p className="muted">Sculptured runs it in the item's folder (or the project folder) and follows passed or failed.</p>
+        <p className="muted">CopperTide runs it in the item's folder (or the project folder) and follows passed or failed.</p>
       </>}
       {type === 'human' && <label>Question for the person <textarea maxLength={2048} value={s.prompt ?? ''} onChange={(e) => update({ ...s, prompt: e.target.value })} /></label>}
       {type === 'merge' && <label>Merge into branch <input placeholder="the current branch" value={s.into ?? ''} onChange={(e) => update({ ...s, into: e.target.value.trim() || undefined })} /></label>}

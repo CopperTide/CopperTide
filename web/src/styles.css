@@ -1,5 +1,5 @@
 /*
- * Sculptured: a dark desktop-app UI in the Coastal look. The UI face for the chrome; JetBrains
+ * CopperTide: a dark desktop-app UI in the Coastal look. The UI face for the chrome; JetBrains
  * Mono only where the text is code or terminal output (tool input and output, paths, ids, key
  * caps). Rounded surfaces with soft depth, spacing on a 4/8px rhythm. Every colour, size, radius
  * and shadow comes from tokens.css.
@@ -51,7 +51,7 @@ kbd, .kbd {
 .tone-red { color: var(--red); }
 .tone-green { color: var(--green); }
 /* Agent status goes through the --status-* tokens, so each look sets its own. Green means verified
-   (a check Sculptured ran passed); an agent saying it is done is reported, and grey. */
+   (a check CopperTide ran passed); an agent saying it is done is reported, and grey. */
 .tone-verified { color: var(--status-verified); }
 .tone-reported { color: var(--status-done); }
 .state.st-needs-you, .state.st-stuck { color: var(--status-needs-you); }

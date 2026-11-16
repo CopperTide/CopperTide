@@ -12,7 +12,7 @@ const when = (ms: number) => new Date(ms).toLocaleString();
 function Entry({ e, onConfirm, onHide }: { e: DecisionEntry; onConfirm: () => void; onHide: () => void }) {
   const lesson = isLearned(e);
   const kind = e.source === 'constraint' ? 'Constraint' : 'Lesson';
-  const by = e.source === 'claim-check' ? 'Claim check by Sculptured (heuristic: what the agent said against the tool calls captured)' : lesson ? `${kind} from ${e.author}` : `Decision by ${e.author}`;
+  const by = e.source === 'claim-check' ? 'Claim check by CopperTide (heuristic: what the agent said against the tool calls captured)' : lesson ? `${kind} from ${e.author}` : `Decision by ${e.author}`;
   return (
     <li className="kn-entry">
       <p>{e.text}</p>
@@ -79,7 +79,7 @@ function Maps({ k }: { k: Knowledge }) {
 
 /**
  * What the team's agents know: the lessons they recorded and the decisions you made, and the project
- * map Sculptured generated from their folders at the last start. Opened at leisure; never interrupts.
+ * map CopperTide generated from their folders at the last start. Opened at leisure; never interrupts.
  */
 export function KnowledgeView({ rig, onClose }: { rig: string; onClose: () => void }) {
   const [tick, setTick] = useState(0);

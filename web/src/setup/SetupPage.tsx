@@ -35,7 +35,7 @@ export function SetupPage() {
   return (
     <main className="setup-page">
       <div className="setup-top">
-        <h1>Set up Sculptured</h1>
+        <h1>Set up CopperTide</h1>
         <span className="tb-fill" />
         <Link to="/account">Account</Link>
         {setup.requiredDone && <Link to="/">Go to Projects</Link>}
@@ -113,7 +113,7 @@ function Step({ title, children }: { title: string; children: ReactNode }) {
 function Welcome({ setup, nav }: { setup: Setup; nav: Nav }) {
   return (
     <Step title="Welcome">
-      <p>Sculptured runs teams of AI agents, such as Claude Code and Codex, and lets you watch and steer them while they work.</p>
+      <p>CopperTide runs teams of AI agents, such as Claude Code and Codex, and lets you watch and steer them while they work.</p>
       {setup.mode === 'hosted'
         ? <p>Agents work on your own computers, so first you connect one, then give agents a way to reach a model.</p>
         : <p>Agents work on this computer, so the one thing to set up is a way for them to reach a model.</p>}

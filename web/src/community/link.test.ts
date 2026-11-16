@@ -8,7 +8,7 @@ import { fakeFetch } from './testing';
 
 afterEach(() => { vi.restoreAllMocks(); resetCommunityLink(); });
 
-it('the hosted app signs in to Community with the Sculptured account', () => {
+it('the hosted app signs in to Community with the CopperTide account', () => {
   expect(communityFor({ kind: 'signed-in', user: { id: 'u', name: 'Ana', email: 'a@x', role: 'member' }, csrf: 't' })).toEqual({ available: true, signedIn: true });
   expect(communityFor({ kind: 'signed-out' })).toEqual({ available: true, signedIn: false });
 });

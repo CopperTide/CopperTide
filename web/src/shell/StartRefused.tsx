@@ -35,7 +35,7 @@ export function StartRefused({ refusal, onClose, onAnyway, children }: { refusal
         <ul>{refusal.issues.map((i, n) => <li key={`${i.code}-${n}`}><span aria-hidden="true">{i.severity === 'error' ? '▲' : '△'} </span>{i.message}</li>)}</ul>
       )}
       {children}
-      {held && <p className="muted">Starting anyway uses the plan past Sculptured's hold, and paid credits where the plan has them.</p>}
+      {held && <p className="muted">Starting anyway uses the plan past CopperTide's hold, and paid credits where the plan has them.</p>}
       <div className="start-refused-actions">
         <Btn onClick={onClose}>{held ? 'Not now' : 'OK'}</Btn>
         {held && <Btn variant="primary" onClick={() => { onClose(); onAnyway(); }}>Start anyway</Btn>}

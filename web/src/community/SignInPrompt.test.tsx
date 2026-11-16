@@ -26,7 +26,7 @@ it('on this computer, signing in shows a code to approve right here', async () =
   render(<MemoryRouter><SignInPrompt why="Sign in to save it." /></MemoryRouter>);
   expect(screen.getByText(/Sign in to save it\./)).toBeInTheDocument();
   expect(screen.queryByRole('link', { name: 'Sign in' })).toBeNull();
-  fireEvent.click(screen.getByRole('button', { name: 'Sign in to Sculptured' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Sign in to CopperTide' }));
   expect(await screen.findByText('ABCD-EFGH')).toBeInTheDocument();
   resetCommunityLink();
 });

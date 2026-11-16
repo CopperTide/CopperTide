@@ -11,7 +11,7 @@ import { CliAccounts } from '../shell/CliAccounts';
 import { CommunityCard } from '../community/CommunityCard';
 import './account.css';
 
-/** Who you are (hosted beta) with Sign out, and your own use of Sculptured. */
+/** Who you are (hosted beta) with Sign out, and your own use of CopperTide. */
 export function AccountPage() {
   const s = useHosted();
   const [usage, setUsage] = useState<AccountUsage | null>(null);
@@ -23,7 +23,7 @@ export function AccountPage() {
       <p><Link to="/">← Projects</Link></p>
       <h1>Your account</h1>
       {s.kind === 'signed-in' ? <SignedIn name={s.user.name} email={s.user.email} admin={s.user.role === 'admin'} /> :
-        <p className="muted">Sculptured runs on this computer, so there is no account to sign in to. Your usage is below.</p>}
+        <p className="muted">CopperTide runs on this computer, so there is no account to sign in to. Your usage is below.</p>}
       {s.kind === 'local' && <p><Link to="/setup">Setup</Link> <span className="muted">· model sign-in and a first project with a short tour</span></p>}
       {s.kind === 'local' && <section aria-label="Community"><h2>Community</h2><CommunityCard /></section>}
       <section aria-label="Agent sign-in and plan usage">

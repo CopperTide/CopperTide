@@ -38,7 +38,7 @@ function RuleRow({ r, n, edit, locked }: { r: ChangeRule; n: number; edit: Edit;
 
 /**
  * Settings → Changes to business systems: the rules a change an agent proposes (`propose_change`) must
- * meet, checked by Sculptured itself, and whether a change that meets them is approved without asking.
+ * meet, checked by CopperTide itself, and whether a change that meets them is approved without asking.
  */
 export function MandateFields({ draft, edit, locked }: Props) {
   const ids = useId();

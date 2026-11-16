@@ -6,7 +6,7 @@ import './hosted.css';
 export function BackToApp() {
   return (
     <Link to="/" className="back-to-app">
-      <Icon name="arrow-left" size={15} />Back to Sculptured
+      <Icon name="arrow-left" size={15} />Back to CopperTide
     </Link>
   );
 }

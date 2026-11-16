@@ -39,7 +39,7 @@ function assignments(t: WorkflowTask): string[] {
   ];
 }
 
-/** Assignments an agent worked on (check, person and Sculptured steps use no tokens). */
+/** Assignments an agent worked on (check, person and CopperTide steps use no tokens). */
 function agentAssignments(t: WorkflowTask): string[] {
   const steps = t.history.flatMap((h) => (h.panel?.length ? h.panel.flatMap((r) => (r.assignment ? [r.assignment] : [])) : (h.by ?? 'agent') === 'agent' ? [h.assignment] : []));
   return [...steps, ...(t.assignment ? [t.assignment] : []), ...(t.reviews ?? []).flatMap((r) => (r.assignment ? [r.assignment] : []))];

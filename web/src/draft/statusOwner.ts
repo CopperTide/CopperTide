@@ -1,7 +1,7 @@
 import type { DraftAgent } from '../generated/DraftAgent';
 import type { TeamDraft } from '../generated/TeamDraft';
 
-/** `id` writes the team's status page (null: Sculptured chooses); at most one agent is chosen. */
+/** `id` writes the team's status page (null: CopperTide chooses); at most one agent is chosen. */
 export const setStatusOwner = (d: TeamDraft, id: string | null): TeamDraft => ({
   ...d,
   agents: d.agents.map((a) => {

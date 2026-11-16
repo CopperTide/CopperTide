@@ -35,7 +35,7 @@ mod tests {
             "public, max-age=31536000, immutable"
         );
         assert_eq!(
-            crate::web_cache::cache_control("/brand/sculptured-coastal-emblem-256.png"),
+            crate::web_cache::cache_control("/brand/coppertide-mark-256.png"),
             "public, max-age=86400"
         );
         assert_eq!(crate::web_cache::cache_control("/"), "no-cache");
@@ -44,5 +44,14 @@ mod tests {
             "no-cache",
             "a deep link serves the page"
         );
+    }
+
+    #[test]
+    fn the_brand_files_the_page_and_cloud_point_at_are_shipped() {
+        // Vite copies web/public into the served web/dist, so a file here is a file at /brand/.
+        let brand = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../web/public/brand");
+        for file in ["coppertide-mark-256.png", "coppertide-favicon.svg"] {
+            assert!(brand.join(file).is_file(), "web/public/brand/{file} is missing");
+        }
     }
 }

@@ -57,7 +57,7 @@ describe('the frame: one top bar, then a project tab row, then the page', () => 
   it('the top bar holds home, the project switcher, Library, Community, Account, Docs, Ctrl K and the app menu; no sidebar', async () => {
     await twoTeams('/rig/r');
     const bar = topBar();
-    expect(within(bar).getByRole('link', { name: 'Sculptured: all projects' })).toHaveAttribute('href', '/');
+    expect(within(bar).getByRole('link', { name: 'CopperTide: all projects' })).toHaveAttribute('href', '/');
     const nav = within(bar).getByRole('navigation', { name: 'Go to' });
     expect(within(nav).getByRole('link', { name: 'Library' })).toHaveAttribute('href', '/library/groups');
     expect(within(nav).getByRole('link', { name: 'Community' })).toHaveAttribute('href', '/community');

@@ -3,6 +3,6 @@ import type { ChangeRule } from "./ChangeRule";
 
 export type Mandate = { rules?: Array<ChangeRule>, 
 /**
- * A change every applicable rule passes is approved by Sculptured; otherwise a person decides.
+ * A change every applicable rule passes is approved by CopperTide; otherwise a person decides.
  */
 approve_within?: boolean, };

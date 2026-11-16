@@ -56,7 +56,7 @@ function Task({ t, run, active, draft, usage }: { t: WorkflowTask; run: Workflow
     <p className="workflow-context">{t.input.context}</p>{t.copy && <p>Item folder: <code>{t.copy}</code></p>}{t.problem && <p role="status">{t.problem}</p>}
     {t.input.id !== 'assembly' && <TopicExecution key={`${t.input.mode}:${t.input.depends_on?.join(',')}`} task={t} run={run} active={active} />}
     {t.assignment && <p>Assignment {t.assignment}. If delivery is unconfirmed, inspect the agent transcript before restarting; it is never silently sent twice.</p>}
-    <ol>{t.history.map(h => <li key={h.assignment}><strong>{h.stage} → {h.outcome}</strong> · {h.by === 'person' ? 'a person' : h.by === 'check' ? 'Sculptured ran the check' : h.by === 'sculptured' ? 'Sculptured' : h.agent === 'panel' ? 'review panel' : h.agent} · <time>{new Date(h.at_ms).toLocaleString()}</time> · {provenance(h)}{stepTokens(h, usage) != null && ` · ${stepTokens(h, usage)!.toLocaleString()} input + output tokens (CLI-reported)`}{stepCost(h, usage) && <span title={costTitle(stepCost(h, usage)!.sources)}>{` · ${costText(stepCost(h, usage)!.usd, false)} (estimate)`}</span>}{Object.keys(h.votes ?? {}).length > 0 && <p className="workflow-votes">{Object.entries(h.votes ?? {}).map(([a, o]) => `${a}: ${o}`).join(' · ')}</p>}<pre>{h.result}</pre>{h.evidence && <pre className="workflow-evidence">{h.evidence}</pre>}</li>)}</ol>
+    <ol>{t.history.map(h => <li key={h.assignment}><strong>{h.stage} → {h.outcome}</strong> · {h.by === 'person' ? 'a person' : h.by === 'check' ? 'CopperTide ran the check' : h.by === 'sculptured' ? 'CopperTide' : h.agent === 'panel' ? 'review panel' : h.agent} · <time>{new Date(h.at_ms).toLocaleString()}</time> · {provenance(h)}{stepTokens(h, usage) != null && ` · ${stepTokens(h, usage)!.toLocaleString()} input + output tokens (CLI-reported)`}{stepCost(h, usage) && <span title={costTitle(stepCost(h, usage)!.sources)}>{` · ${costText(stepCost(h, usage)!.usd, false)} (estimate)`}</span>}{Object.keys(h.votes ?? {}).length > 0 && <p className="workflow-votes">{Object.entries(h.votes ?? {}).map(([a, o]) => `${a}: ${o}`).join(' · ')}</p>}<pre>{h.result}</pre>{h.evidence && <pre className="workflow-evidence">{h.evidence}</pre>}</li>)}</ol>
     {active && t.status === 'blocked' && <button className="btn" onClick={() => void retry()}>Retry this stage after inspecting the issue</button>}{error && <DismissibleError>{error}</DismissibleError>}
   </details>;
 }
@@ -79,7 +79,7 @@ function GuardNotice({ run, active, onResumed }: { run: WorkflowRun; active: boo
   const resume = async () => { try { await api.resumeGuard(run.rig, run.start_seq); setError(''); onResumed(); } catch (e) { setError(errorText(e)); } };
   return <section className="guard-notice" aria-label="Guard">
     <strong role="status">{g.resumed_by_person ? 'Resumed by a person past a failing guard' : 'Paused: the guard failed'} at {new Date(g.at_ms).toLocaleTimeString()}</strong>
-    <p className="muted">Verified: Sculptured ran the guard command. Work already under way finishes; no new work goes out until it passes.</p>
+    <p className="muted">Verified: CopperTide ran the guard command. Work already under way finishes; no new work goes out until it passes.</p>
     <pre className="workflow-evidence">{g.evidence}</pre>
     {active && !g.resumed_by_person && <button className="btn" onClick={() => void resume()}>Resume anyway</button>}
     {error && <DismissibleError>{error}</DismissibleError>}

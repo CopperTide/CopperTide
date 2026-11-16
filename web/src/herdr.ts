@@ -250,7 +250,7 @@ export function chipText(c: ToolChip, now: number): string {
 }
 
 /**
- * Evidence tiers, as in dagr: `◆ observed` (seen by Sculptured in the agent's protocol, on
+ * Evidence tiers, as in dagr: `◆ observed` (seen by CopperTide in the agent's protocol, on
  * disk or in a captured tool result), `◆ verified` (an independent check), `◇ reported` (the
  * agent's own words), `≈ heuristic` (inferred). Missing provenance is unknown. An agent's
  * claim (`claim`) is never shown as observed or verified: what it says stays reported.

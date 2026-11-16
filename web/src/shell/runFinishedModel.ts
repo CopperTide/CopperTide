@@ -32,7 +32,7 @@ export function lastReply(a: AgentRow, max = 160): string | null {
   return flat.length > max ? `${flat.slice(0, max - 1)}…` : flat;
 }
 
-/** The check line for the summary: only a check Sculptured ran and that passed counts as verified. */
+/** The check line for the summary: only a check CopperTide ran and that passed counts as verified. */
 export function checkLine(a: AgentRow): { word: string; tone: string; icon: IconName; verified: boolean } {
   const c = a.seat?.check;
   if (!c) return { word: 'no check set · not verified', tone: 'muted', icon: 'circle', verified: false };

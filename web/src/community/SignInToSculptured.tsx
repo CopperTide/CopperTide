@@ -9,7 +9,7 @@ import './community.css';
 const W = COMMUNITY_WORDS.signIn;
 type Phase = { kind: 'starting' } | { kind: 'code'; started: CommunityPairStarted } | { kind: 'ended'; status: 'expired' | 'denied' } | { kind: 'done' } | { kind: 'failed'; error: unknown };
 
-/** Signing in from this computer: a code to approve on the Sculptured sign-in page, then who you are. */
+/** Signing in from this computer: a code to approve on the CopperTide sign-in page, then who you are. */
 export function SignInToSculptured({ onSignedIn }: { onSignedIn?: () => void }) {
   const { link, refresh } = useCommunityLink();
   const [phase, setPhase] = useState<Phase>({ kind: 'starting' });
@@ -63,7 +63,7 @@ function usePairPoll(waiting: boolean, setPhase: (p: Phase) => void, refresh: ()
   }, [waiting, setPhase, refresh]);
 }
 
-/** The code, large, and the sign-in page's link only when it is on the Sculptured server Community uses. */
+/** The code, large, and the sign-in page's link only when it is on the CopperTide server Community uses. */
 function CodePanel({ started, origin }: { started: CommunityPairStarted; origin: string | null }) {
   const ours = origin !== null && started.verify_url.startsWith(`${origin}/`);
   return (

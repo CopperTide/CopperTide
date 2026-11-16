@@ -54,13 +54,13 @@ export function AddCluster({ onDone }: { onDone: (added: boolean) => void }) {
       <label>Login node<input required value={a.f.host} onChange={a.set('host')} placeholder="login.cluster.example.edu" autoComplete="off" /></label>
       <label>Port<input inputMode="numeric" value={a.f.port} onChange={a.set('port')} /></label>
       <label>User name<input required value={a.f.username} onChange={a.set('username')} autoComplete="off" /></label>
-      <label>Name in Sculptured (optional)<input value={a.f.name} onChange={a.set('name')} placeholder="Like Perlmutter" /></label>
+      <label>Name in CopperTide (optional)<input value={a.f.name} onChange={a.set('name')} placeholder="Like Perlmutter" /></label>
       <label className="check"><input type="checkbox" checked={a.jump} onChange={(e) => a.setJump(e.target.checked)} />Reached through a jump host</label>
       {a.jump && <JumpFields f={a.f} set={a.set} />}
       <AuthFields f={a.f} set={a.set} auth={a.auth} setAuth={a.setAuth} />
       <label>Keep signed in for (hours)<input type="number" min={0} max={168} value={a.f.hold} onChange={a.set('hold')} /></label>
-      <p className="muted">After you answer a code once, Sculptured keeps that connection open (up to 7 days; 0 keeps none) and restarts the runner over it without asking again. Many sites limit how long a session may stay open, so it may end sooner.</p>
-      <p className="muted">Keys, certificates and passwords are kept encrypted on the server, are never shown again, and are deleted when you remove the cluster. If the cluster asks for a code at sign-in (Duo, OTP), Sculptured asks you here; the code is used once and not kept.</p>
+      <p className="muted">After you answer a code once, CopperTide keeps that connection open (up to 7 days; 0 keeps none) and restarts the runner over it without asking again. Many sites limit how long a session may stay open, so it may end sooner.</p>
+      <p className="muted">Keys, certificates and passwords are kept encrypted on the server, are never shown again, and are deleted when you remove the cluster. If the cluster asks for a code at sign-in (Duo, OTP), CopperTide asks you here; the code is used once and not kept.</p>
       <CannotWork />
       {a.error && <p className="tone-red" role="alert">{a.error}</p>}
       <div className="admin-actions">
@@ -98,8 +98,8 @@ function AuthFields({ f, set, auth, setAuth }: { f: Fields; set: Setter; auth: A
   );
   return <>
     <fieldset className="auth-options">
-      <legend>How Sculptured signs in</legend>
-      {choice('generated', 'Key Sculptured makes', 'You add one line to ~/.ssh/authorized_keys on the cluster; no password is kept.')}
+      <legend>How CopperTide signs in</legend>
+      {choice('generated', 'Key CopperTide makes', 'You add one line to ~/.ssh/authorized_keys on the cluster; no password is kept.')}
       {choice('password', 'Password', 'Your site password. Codes and Duo pushes are asked when you connect. Use this when the site takes no keys, like NCSA Delta.')}
       {choice('certificate', 'Certificate from your site', 'A private key and its -cert.pub, for example from NERSC sshproxy or step-ca.')}
       {choice('key', 'Your own private key', 'Paste a key that already signs in to the cluster.')}

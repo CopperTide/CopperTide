@@ -56,7 +56,7 @@ export function SettingsPage() {
       <General p={p} locked={locked} />
       <Group title="Default models" hint="Each agent uses these unless its group or its own setup picks another."><TeamModelFields {...c} /></Group>
       <Group title="Run budget"><BudgetFields {...c} /></Group>
-      <Group title="Changes to business systems" hint="Agents propose each change to an order, a schedule or another system before making it. Sculptured checks these rules itself."><MandateFields {...c} /></Group>
+      <Group title="Changes to business systems" hint="Agents propose each change to an order, a schedule or another system before making it. CopperTide checks these rules itself."><MandateFields {...c} /></Group>
       <Group title="Events from other systems" hint="Another system, such as an ERP, a maintenance system or a line's alarms, posts to a trigger's address to hand an agent an event."><TriggerFields {...c} /></Group>
       <Shortcuts p={p} />
       <MoreSettings p={p} locked={locked} />

@@ -11,7 +11,7 @@ export type CommunityLinkView = { enabled: boolean, origin: string | null, signe
  */
 suggested_origin?: string, 
 /**
- * A Sculptured server that may still accept a key this computer forgot, because revoking it
+ * A CopperTide server that may still accept a key this computer forgot, because revoking it
  * failed; the user can remove it on that account's Computers page. Absent otherwise.
  */
 key_left_on?: string, };

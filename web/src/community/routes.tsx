@@ -17,7 +17,7 @@ import { TurnOnCommunity } from './TurnOnCommunity';
 import { YoursPage } from './YoursPage';
 import { YourProfilePage } from './YourProfilePage';
 
-/** `/community/*`, the same pages in every build. The hosted app signs in with the Sculptured
+/** `/community/*`, the same pages in every build. The hosted app signs in with the CopperTide
  * account; on your own computer Community stays off (and silent) until you turn it on. */
 export function CommunitySection() {
   const s = useHosted();

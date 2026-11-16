@@ -28,7 +28,7 @@ function CheckRow({ c, n, list, a, edit, locked }: Props & { c: ResultCheck; n: 
 }
 
 /**
- * An agent's result checks: fields of the JSON block its result ends with, checked by Sculptured before
+ * An agent's result checks: fields of the JSON block its result ends with, checked by CopperTide before
  * its work is handed on. A result that fails is sent back to the agent.
  */
 export function ResultCheckFields({ a, edit, locked }: Props) {

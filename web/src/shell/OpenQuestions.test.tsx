@@ -105,7 +105,7 @@ it('a proposed change shows its fields and rule results, and is rejected with a 
   expect(await screen.findByText('Buyer proposes a change')).toBeInTheDocument();
   expect(screen.getByText('Order 2 SP-118 from Acme Hydraulics, $7300')).toBeInTheDocument();
   expect(screen.getByRole('table', { name: 'The change, as it would be written' })).toHaveTextContent('supplierAcme Hydraulics');
-  const rules = screen.getByRole('list', { name: "The team's rules (checked by Sculptured)" });
+  const rules = screen.getByRole('list', { name: "The team's rules (checked by CopperTide)" });
   expect(rules).toHaveTextContent('✗ fails: amount is 7300, at most 5000');
   expect(rules).toHaveTextContent('✓ passes: supplier is');
   expect(screen.getByText(/Not approved at .* if nobody answers/)).toBeInTheDocument();

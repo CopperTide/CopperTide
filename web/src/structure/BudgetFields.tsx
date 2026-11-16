@@ -71,10 +71,10 @@ function MaxWorking({ draft, edit, locked }: { draft: TeamDraft; edit: Edit; loc
 
 const NOTE = 'Soft: no new work starts and every agent wraps up with a summary. Hard: every agent is stopped at once, like Ctrl+C. '
   + 'A plan budget can instead pause the run at its hard value: agents save a note at the soft value, and the run continues by itself after the window resets. '
-  + 'Empty soft = 85% of hard. Plan percentages count all your use of that plan, including outside Sculptured. The Run board shows each budget as the run goes.';
+  + 'Empty soft = 85% of hard. Plan percentages count all your use of that plan, including outside CopperTide. The Run board shows each budget as the run goes.';
 
 
-/** What one run of the team may use. Blank = no budget; Sculptured sets none of its own. */
+/** What one run of the team may use. Blank = no budget; CopperTide sets none of its own. */
 export function BudgetFields({ draft, edit, locked }: { draft: TeamDraft; edit: Edit; locked: boolean }) {
   const b = draft.budget;
   const problems = budgetProblems(b);

@@ -86,7 +86,7 @@ describe('deployment source controls', () => {
     expect((caught as Error).message).toBe(ERROR_WORDS.team_not_running);
     // Not reachable at all: the plain words for that.
     vi.mocked(api.send).mockRejectedValue(new TypeError('Failed to fetch'));
-    await expect(result.current.message(A, 'hello').run()).rejects.toThrow('Could not reach Sculptured');
+    await expect(result.current.message(A, 'hello').run()).rejects.toThrow('Could not reach CopperTide');
   });
 
   it('messages are instructions, and Start asks the project bar when pressed', async () => {

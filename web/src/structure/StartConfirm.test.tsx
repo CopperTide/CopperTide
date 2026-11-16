@@ -182,7 +182,7 @@ describe('what a Start may cost', () => {
       'Up to 8 agents could work at the same time (Lead hands work to 8 at once); the run budget lets 4 work at once and the rest wait.',
       'Agents can start helpers without limit. Set Most agents and Levels of children in Settings → More settings.',
       'Run budget: Claude 5-hour: wrap up at 25.5%, stop at 30%; tokens: wrap up at 1.0M, stop at 2.0M.',
-      'Sculptured wraps up first and stops early by about one model call for each agent working (up to 4 at once), so a run usually ends near each hard value. Usage is reported after each call, so it can pass a hard value by a little.',
+      'CopperTide wraps up first and stops early by about one model call for each agent working (up to 4 at once), so a run usually ends near each hard value. Usage is reported after each call, so it can pass a hard value by a little.',
     ]);
   });
 

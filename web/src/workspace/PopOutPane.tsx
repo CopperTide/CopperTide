@@ -61,7 +61,7 @@ function ShownHere({ pane, type }: { pane: PaneRef; type: PaneType }) {
 function Popped({ pane, type }: { pane: PaneRef; type: PaneType }) {
   const { settings, setSettings } = useSettings(pane, type);
   const [editing, setEditing] = useState(false);
-  useEffect(() => { document.title = `${type.title} · Sculptured`; }, [type.title]);
+  useEffect(() => { document.title = `${type.title} · CopperTide`; }, [type.title]);
   const Form = type.Settings;
   return (
     <>

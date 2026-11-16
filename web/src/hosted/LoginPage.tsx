@@ -24,7 +24,7 @@ function LoginForm() {
     try { await gw('POST', '/login/password', form); window.location.assign('/'); } catch (err) { setError((err as Error).message); setBusy(false); }
   };
   return (
-    <AuthCard title="Sign in to Sculptured" lead="Design, run and steer teams of agents.">
+    <AuthCard title="Sign in to CopperTide" lead="Design, run and steer teams of agents.">
       {error && <p className="auth-error" role="alert">{error}</p>}
       <ProviderButtons providers={providers} purpose="login" />
       <form onSubmit={submit} className="auth-form">
@@ -32,7 +32,7 @@ function LoginForm() {
         <label>Password<input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required autoComplete="current-password" /></label>
         <button className="btn btn-primary auth-submit" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
       </form>
-      <p className="auth-note">Sculptured is in private beta: creating an account needs a personal invite link. Forgot your password? Ask the person who invited you for a reset link.</p>
+      <p className="auth-note">CopperTide is in private beta: creating an account needs a personal invite link. Forgot your password? Ask the person who invited you for a reset link.</p>
     </AuthCard>
   );
 }

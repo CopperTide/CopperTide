@@ -12,7 +12,7 @@ export function withSetup(d: TeamDraft, patch: Partial<ClaudeSetup>): TeamDraft 
 }
 
 const NOTE = 'Your own Claude Code setup loads into every agent and is re-read on every model call. '
-  + 'Sculptured’s own agent tools load either way. Takes effect the next time an agent starts.';
+  + 'CopperTide’s own agent tools load either way. Takes effect the next time an agent starts.';
 
 /** Which of the person's own Claude Code setup the team's Claude agents load. */
 export function ClaudeSetupFields({ draft, edit, locked }: { draft: TeamDraft; edit: Edit; locked: boolean }) {

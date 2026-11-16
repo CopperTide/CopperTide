@@ -63,7 +63,7 @@ export function SignInAlert() {
 
 /** Whether this computer's Claude Code and Codex CLIs are signed in and how much of each plan is used
  *  (as the CLIs report it), with sign-in from the browser. The CLI runs its own sign-in (it opens the
- *  system browser); Sculptured stores no credentials. Shown on the Account and usage page. */
+ *  system browser); CopperTide stores no credentials. Shown on the Account and usage page. */
 export function CliAccounts() {
   const [started, setStarted] = useState<Record<string, LoginStarted>>({});
   const [error, setError] = useState<string | null>(null);
@@ -111,7 +111,7 @@ export function CliAccounts() {
                 {u && (
                   <li className="muted">
                     Reported by the CLI {span(now - u.observed_ms)} ago
-                    {u.source === 'codex-session-files' ? ' (Codex session files; counts use outside Sculptured)' : ' in an agent session'}
+                    {u.source === 'codex-session-files' ? ' (Codex session files; counts use outside CopperTide)' : ' in an agent session'}
                   </li>
                 )}
               </ul>

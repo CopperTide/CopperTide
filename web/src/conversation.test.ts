@@ -173,11 +173,11 @@ it('attributes captured peer messages to the agent rather than You',()=>{
 describe('protections', () => {
   it('show a refusal and a fresh continue as plain notices with the raw reason kept', () => {
     const items = conversationItems([
-      ev(1, { type: 'protection-applied', call_id: 'c1', reason: 'Sculptured protection: big.csv is 293 KB, too large to read whole.' }),
+      ev(1, { type: 'protection-applied', call_id: 'c1', reason: 'CopperTide protection: big.csv is 293 KB, too large to read whole.' }),
       ev(2, { type: 'context-ceiling-reached', used_tokens: 61234, ceiling: 60000 }),
     ]);
     const texts = items.map((i) => (i.kind === 'notice' ? i.text : ''));
-    expect(texts[0]).toBe('Sculptured refused this call: big.csv is 293 KB, too large to read whole.');
+    expect(texts[0]).toBe('CopperTide refused this call: big.csv is 293 KB, too large to read whole.');
     expect(texts[1]).toBe('Context 61k passed the 60k limit: this agent writes its notes and continues in a fresh conversation');
   });
 });

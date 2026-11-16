@@ -12,7 +12,7 @@ const reply = (status: number, body: unknown) => Promise.resolve(new Response(JS
 it('the sign-in page offers the official Google and GitHub buttons, then email and password', async () => {
   vi.spyOn(globalThis, 'fetch').mockImplementation(() => reply(200, { password: true, google: true, github: true }));
   render(<MemoryRouter><LoginPage /></MemoryRouter>);
-  expect(screen.getByRole('heading', { name: 'Sign in to Sculptured' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Sign in to CopperTide' })).toBeInTheDocument();
   const google = await screen.findByRole('link', { name: 'Continue with Google' });
   expect(google).toHaveAttribute('href', '/gw/api/login/oidc/google');
   expect(google).toHaveClass('gsi-button');
@@ -36,7 +36,7 @@ it('the sign-in page hides providers that are not configured', async () => {
 it('the logo goes to the app, not to a site that does not exist', async () => {
   vi.spyOn(globalThis, 'fetch').mockImplementation(() => reply(200, { password: true, google: false, github: false }));
   render(<MemoryRouter><LoginPage /></MemoryRouter>);
-  expect(screen.getByRole('link', { name: 'Sculptured' })).toHaveAttribute('href', '/');
+  expect(screen.getByRole('link', { name: 'CopperTide' })).toHaveAttribute('href', '/');
 });
 
 it('a group link names the group and leaves the name for the person to fill in', async () => {
@@ -72,7 +72,7 @@ it('on a Mac, the sign-in page offers the app first, and remembers choosing the 
   asBrowser(SAFARI_MAC);
   gateway(DMG);
   const { unmount } = render(<MemoryRouter><LoginPage /></MemoryRouter>);
-  expect(await screen.findByRole('link', { name: 'Download Sculptured for Mac' })).toHaveAttribute('href', DMG);
+  expect(await screen.findByRole('link', { name: 'Download CopperTide for Mac' })).toHaveAttribute('href', DMG);
   expect(screen.getByText(/Open Anyway/)).toBeInTheDocument();
   expect(screen.queryByLabelText('Email')).toBeNull();
   await userEvent.click(screen.getByRole('button', { name: 'Continue in the browser' }));
@@ -80,7 +80,7 @@ it('on a Mac, the sign-in page offers the app first, and remembers choosing the 
   unmount();
   render(<MemoryRouter><LoginPage /></MemoryRouter>);
   expect(await screen.findByLabelText('Email')).toBeInTheDocument();
-  expect(screen.queryByRole('link', { name: 'Download Sculptured for Mac' })).toBeNull();
+  expect(screen.queryByRole('link', { name: 'Download CopperTide for Mac' })).toBeNull();
 });
 
 it('inside the Mac app, and when there is no app, the sign-in page is as usual', async () => {
