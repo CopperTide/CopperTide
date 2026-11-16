@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task by task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** A dockable, mission-control-style workspace. It is Sculptured's Control page for real and simulated deployments, and the Arena control page that replaces the Tests section.
+**Goal:** A dockable, mission-control-style workspace. It is CopperTide's Control page for real and simulated deployments, and the Arena control page that replaces the Tests section.
 
 **Architecture:** One in-house docking engine sits in `web/src/workspace/`. It has a pure layout-tree model, persistence, pane registry, selection bus and React views. Two pages register panes: `web/src/control/` and `web/src/arena/`. Panes read a `ControlSource` interface, which has a deployment implementation (the shell stream plus controld routes) and a simulated one (`/api/arena/*`). The backend gets small controld routes for pause and resume, and arenad routes for world, usage and gc.
 
@@ -15,8 +15,8 @@
 ## Global Constraints
 
 - **Where the work happens:**
-  - Sculptured work is in the worktree `/home/alexsky2/MLSys/Sculptured/sculptured-control`, branch `control-workspace`.
-  - Arena work is in `/home/alexsky2/MLSys/Sculptured/arena`, branch `integrations`.
+  - CopperTide work is in the worktree `/home/alexsky2/MLSys/CopperTide/sculptured-control`, branch `control-workspace`.
+  - Arena work is in `/home/alexsky2/MLSys/CopperTide/arena`, branch `integrations`.
 - **Rules:**
   - `AGENTS.md` and `DESIGN.md` hold.
   - No raw hex outside `web/src/tokens.css`.
@@ -35,7 +35,7 @@
   - Keep at least 20 GB free. Check with `df -h /` before a cargo build.
   - Delete only your own build output.
 - **Never touch:**
-  - the user's Sculptured on :4410, its data in `~/.sculptured`, or its runners;
+  - the user's CopperTide on :4410, its data in `~/.sculptured`, or its runners;
   - the user's arenad;
   - other Docker containers or volumes;
   - `Sculptured-Examples`;
@@ -343,7 +343,7 @@ Steps:
 
 ### Task 7: arenad world, usage and gc routes (arena repo)
 
-**Files** (in `/home/alexsky2/MLSys/Sculptured/arena/core/crates/arenad/src/`):
+**Files** (in `/home/alexsky2/MLSys/CopperTide/arena/core/crates/arenad/src/`):
 - Modify: `api.rs` to register the routes.
 - Create: a leaf module for the three handlers (for example, `api/world.rs`). Use the existing `saves.rs` (`integrations`, `world_of`, `usage`) and `gc.rs` (`usage`, `run_startup_gc`).
 - Test: unit tests next to the handlers, in the same style as the existing api tests.
