@@ -18,4 +18,4 @@
 5. Capture: `npm run screenshots -- --base http://127.0.0.1:4499 --session-folder <home>/app`. Add `--only <step>` to retake one group (`startFrom`, `websiteLaunch`, `manyChildren`, `importSession`, `readmeBoard`), or `--from <step>` to go on from one. Each run creates its teams again, so start from an empty data folder for a clean Projects list. Stop the server when done.
 6. Look at every image before committing: the state it shows, nothing clipped, and nothing personal (only `~/app` paths, made-up teams).
 
-`--base` is required, so the script never drives a Sculptured you actually use. The teams are Practice agents, so no model is called.
+`--base` is required, so the script never drives a CopperTide you actually use. The teams are Practice agents, so no model is called.

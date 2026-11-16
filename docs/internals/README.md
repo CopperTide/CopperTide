@@ -1,6 +1,6 @@
-# Sculptured internals
+# CopperTide internals
 
-These pages explain how Sculptured works for contributors changing its code. Start with the [overview](overview.md) for the architecture and code map, then follow the topic relevant to your change. For instructions on using the app, see the [user documentation](../../docs-site/README.md).
+These pages explain how CopperTide works for contributors changing its code. Start with the [overview](overview.md) for the architecture and code map, then follow the topic relevant to your change. For instructions on using the app, see the [user documentation](../../docs-site/README.md).
 
 This repository contains the app, runner and shared types. The hosted gateway and Community server live in separate private repositories; these pages describe their boundaries where they connect to the core.
 
@@ -17,7 +17,7 @@ Read these pages to understand how a design becomes a running team and how its a
 
 | Area | Page | What it covers |
 | --- | --- | --- |
-| Control workspace | [The Control workspace](workspace.md) | The dockable workspace of Control and Arena: layout model, saved layouts, pane registry, selection channel, pop-out windows, sources, and how to add a pane |
+| Control workspace | [The Control workspace](workspace.md) | The dockable workspace of Control and Shakedown: layout model, saved layouts, pane registry, selection channel, pop-out windows, sources, and how to add a pane |
 | Community | [Community](community.md) | Community in the hosted app: the gateway's asserted user, accounts, the web section and Library sources |
 | Agent execution | [Drivers](drivers.md) | CLI protocols, normalized output, sessions, interruption and process shutdown |
 | Resource control | [Limits and usage](limits-and-usage.md) | Managed subagents, token limits, plan usage holds and cost estimates |

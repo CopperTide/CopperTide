@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Report a security problem
-    url: https://github.com/Sculptured/Sculptured/security/advisories/new
+    url: https://github.com/CopperTide/CopperTide/security/advisories/new
     about: Please report vulnerabilities privately.
   - name: Documentation
-    url: https://docs.usesculptured.com
+    url: https://docs.coppertide.ai
     about: Guides for designing, running and inspecting agent teams.

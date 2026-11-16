@@ -1,6 +1,6 @@
-# Sculptured documentation
+# CopperTide documentation
 
-This directory contains the public user guides and reference pages for [docs.usesculptured.com](https://docs.usesculptured.com). Pages are written in MDX, with navigation in `docs.json`. The same sources support a Mintlify preview and the static site built by `build.mjs`.
+This directory contains the public user guides and reference pages for [docs.coppertide.ai](https://docs.coppertide.ai). Pages are written in MDX, with navigation in `docs.json`. The same sources support a Mintlify preview and the static site built by `build.mjs`.
 
 For architecture and implementation details, see [the internals documentation](../docs/internals/README.md).
 
@@ -56,4 +56,4 @@ Preserve page paths and heading anchors when possible. Update internal links whe
 
 The static output can be served as the documentation site. To use Mintlify hosting, configure a documentation project with this directory as its content root and connect the repository and documentation domain there.
 
-Publishing documentation does not deploy the Sculptured app or grant access to an agent runner.
+Publishing documentation does not deploy the CopperTide app or grant access to an agent runner.

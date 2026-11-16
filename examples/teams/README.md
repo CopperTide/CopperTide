@@ -22,7 +22,7 @@ its own subagents.
 
 ## Load one
 
-The app cannot import a team JSON file yet. Use the API of a running Sculptured (`serve`
+The app cannot import a team JSON file yet. Use the API of a running CopperTide (`serve`
 defaults to port 4410). Create a blank team named after the file's `id`, so the new team gets that
 id. Then save the draft over it, which also sets the real name:
 

@@ -1,7 +1,7 @@
-# Sculptured artwork
+# App artwork
 
-`sculptured-coastal-emblem.png` is the original artwork supplied by the project owner
-as `~/Downloads/Sculptured Coastal Emblem.png`. The image is preserved unchanged.
+`sculptured-coastal-emblem.png` is the app's current artwork, supplied by the project owner
+and preserved unchanged. The CopperTide mark replaces it when the app's rebrand ships.
 Compact application marks frame its coastal symbol with CSS; the original wordmark
 remains in the source asset. The browser icon uses the complete artwork. The app loads smaller copies made from it
 (`sculptured-coastal-emblem-256.png` for the marks, `-64.png` for the browser icon), since the

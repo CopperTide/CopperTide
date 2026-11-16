@@ -1,5 +1,5 @@
 name: Idea or feature request
-description: Suggest something Sculptured should do
+description: Suggest something CopperTide should do
 labels: [enhancement]
 body:
   - type: textarea

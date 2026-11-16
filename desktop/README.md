@@ -1,6 +1,6 @@
-# Sculptured desktop (Electron)
+# CopperTide desktop (Electron)
 
-A desktop window on the local workspace. On launch it uses a Sculptured already answering on
+A desktop window on the local workspace. On launch it uses a CopperTide already answering on
 `127.0.0.1:4410`, or starts the bundled `sculptured serve` (which starts the agent runner) with your
 usual data folder (`~/.sculptured`). Closing the app stops the `serve` it started; the agent runner keeps
 running agents, exactly as when `serve` stops. Sign-in pages (Claude Code, Codex, Community) open in
@@ -31,9 +31,9 @@ unprivileged user namespaces. Do not ship `--no-sandbox`.
 
 ## Modes
 
-On first launch the app asks how to use Sculptured, and remembers the answer (menu: **Sculptured → Switch mode…**):
+On first launch the app asks how to use CopperTide, and remembers the answer (app menu: **Switch mode…**):
 - **On this computer:** the local workspace, as before. If you enter your account's address, Community opens inside the app. Community needs you to sign in; its *Add to project* downloads blocks into your local Library.
-- **Sculptured account:** your account's site. The bundled `sculptured connect` pairs this computer (approve the code in the same window) and runs your agents while the app is open. Quitting asks first, then stops the runner and its agents.
+- **CopperTide account:** your account's site. The bundled `sculptured connect` pairs this computer (approve the code in the same window) and runs your agents while the app is open. Quitting asks first, then stops the runner and its agents.
 
 Teams and settings aren't synced between the two modes yet.
 
