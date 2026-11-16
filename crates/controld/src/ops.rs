@@ -123,7 +123,7 @@ pub async fn run(
         Err(crate::hosts::OpFailure::OlderRunner) => Err(ApiError::conflict(
             "older_runner",
             format!(
-                "{host}'s CopperTide is too old for this. Update it and run `sculptured connect` again."
+                "{host}'s CopperTide is too old for this. Update it and run `coppertide connect` again."
             ),
         )),
         Err(crate::hosts::OpFailure::Timeout) => Err(ApiError::new(

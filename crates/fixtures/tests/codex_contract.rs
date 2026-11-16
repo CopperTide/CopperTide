@@ -538,9 +538,9 @@ async fn seat_tools_reach_codex_as_thread_config() {
     let mut sp = spec(dir.path());
     let file = dir.path().join("rig.json");
     sp.seat_tools = Some(SeatToolsLaunch {
-        program: "/opt/sculptured".into(),
+        program: "/opt/coppertide".into(),
         args: vec!["seat-tools".into()],
-        env: vec![("SCULPTURED_SEAT_TOKEN".into(), "tok-secret".into())].into(),
+        env: vec![("COPPERTIDE_SEAT_TOKEN".into(), "tok-secret".into())].into(),
         approve: false,
         config_file: Some(file.clone()),
     });
@@ -555,11 +555,11 @@ async fn seat_tools_reach_codex_as_thread_config() {
     assert_eq!(start["model"], "fake-model");
     assert_eq!(
         start["config"]["mcp_servers.rig.command"],
-        "/opt/sculptured"
+        "/opt/coppertide"
     );
     assert_eq!(start["config"]["mcp_servers.rig.args"][0], "seat-tools");
     assert_eq!(
-        start["config"]["mcp_servers.rig.env"]["SCULPTURED_SEAT_TOKEN"],
+        start["config"]["mcp_servers.rig.env"]["COPPERTIDE_SEAT_TOKEN"],
         "tok-secret"
     );
     assert_eq!(
@@ -653,7 +653,7 @@ async fn a_crash_ends_the_session_with_exited() {
 ///
 /// The real driver starts `codex app-server` through `codex-probe app-server`, which records every
 /// line in the refresh's format to `$RIG_PROBE_OUT` (scrub before committing: `codex-probe scrub`).
-/// The `rig` server is the real `sculptured seat-tools` shim, configured through the thread
+/// The `rig` server is the real `coppertide seat-tools` shim, configured through the thread
 /// `config`; its socket is a test socket here that records each call and answers like controld.
 /// Turn 1 (`thread/start`): Codex calls `request_input`; the socket answers "Blue"; the answer must
 /// reach Codex. Turn 2 (`thread/resume`, a fresh token, as on a relaunch): Codex calls `report`.
@@ -663,7 +663,7 @@ async fn a_crash_ends_the_session_with_exited() {
 /// `RIG_PROBE_DRY=<fake-codex>` checks the plumbing without a model: fake-codex instead of codex,
 /// one direct shim call, and no tool-call expectations.
 #[tokio::test]
-#[ignore = "real Codex CLI, run once: SCULPTURED_REAL_CODEX=1 SCULPTURED_BIN=<target>/debug/sculptured RIG_PROBE_OUT=<raw dir> cargo test -p fixtures --test codex_contract real_codex_probe -- --ignored --nocapture"]
+#[ignore = "real Codex CLI, run once: COPPERTIDE_REAL_CODEX=1 COPPERTIDE_BIN=<target>/debug/coppertide RIG_PROBE_OUT=<raw dir> cargo test -p fixtures --test codex_contract real_codex_probe -- --ignored --nocapture"]
 async fn real_codex_probe() {
     use host_proto::seat_tools::{ToolReply, ToolRequest};
     use serde_json::json;
@@ -671,12 +671,12 @@ async fn real_codex_probe() {
     use std::os::unix::net::UnixListener;
     use std::sync::{Arc, Mutex};
 
-    if std::env::var("SCULPTURED_REAL_CODEX").as_deref() != Ok("1") {
+    if model::brand::env_var("COPPERTIDE_REAL_CODEX").as_deref() != Some("1") {
         return;
     }
     let dry = std::env::var("RIG_PROBE_DRY").ok();
     let bin = PathBuf::from(
-        std::env::var("SCULPTURED_BIN").expect("SCULPTURED_BIN: the built sculptured"),
+        model::brand::env_var("COPPERTIDE_BIN").expect("COPPERTIDE_BIN: the built coppertide"),
     );
     let out = PathBuf::from(
         std::env::var("RIG_PROBE_OUT").expect("RIG_PROBE_OUT: the raw recording dir"),
@@ -927,7 +927,7 @@ async fn real_codex_probe() {
                     "bytes": meta.len(),
                     "seat_token_a": has(&tokens[0]),
                     "seat_token_b": has(&tokens[1]),
-                    "token_env_name": has("SCULPTURED_SEAT_TOKEN"),
+                    "token_env_name": has("COPPERTIDE_SEAT_TOKEN"),
                     "rig_config_key": has("mcp_servers.rig"),
                     "thread_id": has(&thread),
                 }));

@@ -83,7 +83,7 @@ async fn hello_lists_features_and_seat_tools_only_when_offered() {
     let dir = tempfile::tempdir().unwrap();
     let host = SeatToolsHost {
         socket: dir.path().join("s.sock"),
-        shim: "/opt/sculptured".into(),
+        shim: "/opt/coppertide".into(),
     };
     let with = Supervisor::with_seat_tools(
         "local".into(),
@@ -166,7 +166,7 @@ async fn a_starting_hostd_sweeps_config_files_left_by_an_earlier_one() {
     std::fs::write(&other, "not ours").unwrap();
     let host = SeatToolsHost {
         socket: dir.path().join("seat-tools.sock"),
-        shim: "/opt/sculptured".into(),
+        shim: "/opt/coppertide".into(),
     };
     let _sup = Supervisor::with_seat_tools(
         "local".into(),

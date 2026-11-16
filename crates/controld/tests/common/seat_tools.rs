@@ -24,7 +24,7 @@ pub async fn with_tools() -> (Served, Supervisor, tempfile::TempDir) {
     let socket = dir.path().join("seat-tools.sock");
     let host = SeatToolsHost {
         socket: socket.clone(),
-        shim: "/unused/sculptured".into(),
+        shim: "/unused/coppertide".into(),
     };
     let sup = crate::common::m2::connect(&s, vec![Arc::new(StubDriver)], Some(host)).await;
     tokio::spawn(hostd::seat_tools::serve_socket(sup.clone(), socket.clone()));

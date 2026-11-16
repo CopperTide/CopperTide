@@ -1,4 +1,4 @@
-//! `sculptured run <file>`: a team from one MADL file, run in the terminal with Practice agents (no
+//! `coppertide run <file>`: a team from one MADL file, run in the terminal with Practice agents (no
 //! model), printing what happens and ending with an exit code that says how it went.
 use std::io::Read;
 use std::os::unix::process::CommandExt;
@@ -8,14 +8,14 @@ use std::time::{Duration, Instant};
 
 fn team(job: &str, budget: &str) -> String {
     format!(
-        "#!/usr/bin/env -S sculptured run\nmadl: draft\nsystem: {{ id: hello, name: Hello{budget} }}\nagents:\n  - {{ id: writer, name: Writer, runtime: x-sculptured-practice, instructions: \"{job}\" }}\n"
+        "#!/usr/bin/env -S coppertide run\nmadl: draft\nsystem: {{ id: hello, name: Hello{budget} }}\nagents:\n  - {{ id: writer, name: Writer, runtime: x-sculptured-practice, instructions: \"{job}\" }}\n"
     )
 }
 
 fn command(dir: &Path, file_text: &str, extra: &[&str]) -> Command {
     let file = dir.join("hello.madl");
     std::fs::write(&file, file_text).unwrap();
-    let mut c = Command::new(env!("CARGO_BIN_EXE_sculptured"));
+    let mut c = Command::new(env!("CARGO_BIN_EXE_coppertide"));
     c.arg("run")
         .arg(&file)
         .arg("--folder")
@@ -40,7 +40,7 @@ fn run(dir: &Path, file_text: &str, extra: &[&str]) -> Output {
             // SAFETY: the unreaped child is owned by this test; POSIX signals require libc.
             unsafe { libc::kill(child.id() as i32, libc::SIGTERM) };
             let _ = child.wait();
-            panic!("sculptured run did not finish");
+            panic!("coppertide run did not finish");
         }
         std::thread::sleep(Duration::from_millis(100));
     }

@@ -22,7 +22,7 @@ async fn skills_and_kindex_reach_each_agent_the_way_its_cli_can_use_them() {
     let data = tempfile::tempdir().unwrap();
     let tools = hostd::supervisor::SeatToolsHost {
         socket: data.path().join("seat-tools.sock"),
-        shim: "/unused/sculptured".into(),
+        shim: "/unused/coppertide".into(),
     };
     let _runner =
         crate::common::m2::connect(&s, vec![Arc::new(claude), Arc::new(codex)], Some(tools)).await;
@@ -185,7 +185,7 @@ async fn skills_components_join_an_agents_skills_and_remote_servers_and_plugins_
     .unwrap();
     let tools = hostd::supervisor::SeatToolsHost {
         socket: data.path().join("seat-tools.sock"),
-        shim: "/unused/sculptured".into(),
+        shim: "/unused/coppertide".into(),
     };
     let _runner =
         crate::common::m2::connect(&s, vec![Arc::new(claude), Arc::new(codex)], Some(tools)).await;
@@ -319,7 +319,7 @@ async fn skills_components_join_an_agents_skills_and_remote_servers_and_plugins_
             .unwrap_or_default()
     };
     assert!(
-        note("weather").contains("sculptured set-secret WEATHER_KEY_NOT_SET_FOR_TEST"),
+        note("weather").contains("coppertide set-secret WEATHER_KEY_NOT_SET_FOR_TEST"),
         "{notes:?}"
     );
     assert!(

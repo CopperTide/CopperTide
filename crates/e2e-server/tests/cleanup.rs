@@ -1,5 +1,5 @@
 //! The e2e launcher leaves nothing behind: the throwaway directory is removed and hostd is
-//! stopped. hostd is played by a copy of `sh` named `sculptured`, started on the session's
+//! stopped. hostd is played by a copy of `sh` named `coppertide`, started on the session's
 //! data dir like the real one, so the name-and-dir check is exercised for real.
 
 use std::path::{Path, PathBuf};
@@ -9,20 +9,20 @@ use std::time::{Duration, Instant};
 
 use e2e_server::{HOME_FOLDERS, Session};
 
-/// One copy of `sh` named `sculptured`, made once for every test in this file.
+/// One copy of `sh` named `coppertide`, made once for every test in this file.
 fn fake_exe() -> &'static Path {
     static EXE: OnceLock<(tempfile::TempDir, PathBuf)> = OnceLock::new();
     &EXE.get_or_init(|| {
         let dir = tempfile::tempdir().unwrap();
-        let exe = dir.path().join("sculptured");
+        let exe = dir.path().join("coppertide");
         std::fs::copy("/bin/sh", &exe).expect("copy sh");
         (dir, exe)
     })
     .1
 }
 
-/// A long-running process whose command name is `sculptured` and whose command line names `dir`.
-fn fake_sculptured(dir: &Path) -> Child {
+/// A long-running process whose command name is `coppertide` and whose command line names `dir`.
+fn fake_coppertide(dir: &Path) -> Child {
     // A fork in another test thread can briefly hold the fresh copy open for writing (ETXTBSY).
     for _ in 0..100 {
         match Command::new(fake_exe())
@@ -95,7 +95,7 @@ fn shutdown_stops_serve_then_hostd_and_removes_the_directory() {
     let serve = sleeper();
     let serve_pid = serve.id() as i32;
     session.adopt_serve(serve);
-    let mut hostd = Reap(fake_sculptured(&session.data_dir().join("host-local")));
+    let mut hostd = Reap(fake_coppertide(&session.data_dir().join("host-local")));
     write_pid(&session, hostd.0.id());
 
     session.shutdown();
@@ -106,12 +106,12 @@ fn shutdown_stops_serve_then_hostd_and_removes_the_directory() {
 }
 
 #[test]
-fn a_recorded_pid_that_is_not_this_sessions_sculptured_is_left_alone() {
+fn a_recorded_pid_that_is_not_this_sessions_coppertide_is_left_alone() {
     let elsewhere = tempfile::tempdir().unwrap();
     let mut session = Session::try_new().unwrap();
-    // Another program, and a sculptured of another data dir: neither is touched.
+    // Another program, and a coppertide of another data dir: neither is touched.
     let mut other = Reap(sleeper());
-    let mut foreign = Reap(fake_sculptured(elsewhere.path()));
+    let mut foreign = Reap(fake_coppertide(elsewhere.path()));
     write_pid(&session, other.0.id());
     session.shutdown();
     let mut session2 = Session::try_new().unwrap();
@@ -124,7 +124,7 @@ fn a_recorded_pid_that_is_not_this_sessions_sculptured_is_left_alone() {
     );
     assert!(
         matches!(foreign.0.try_wait(), Ok(None)),
-        "another session's sculptured keeps running"
+        "another session's coppertide keeps running"
     );
 }
 

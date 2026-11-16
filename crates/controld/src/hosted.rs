@@ -1,4 +1,4 @@
-//! Hosted mode (`sculptured serve --hosted`): this Sculptured belongs to one beta user and sits behind the
+//! Hosted mode (`coppertide serve --hosted`): this Sculptured belongs to one beta user and sits behind the
 //! gateway. Every request must carry the gateway's signature (`signing`). Routes that would act on this
 //! server's own files are refused until they are routed to the user's computer (milestone 3).
 use crate::error::ApiError;

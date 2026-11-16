@@ -19,7 +19,7 @@ pods:
     edges: [{ kind: delegates_to, from: a, to: b }]
 "#;
 
-/// A running `sculptured serve`. On drop, kills serve's process group and the hostd
+/// A running `coppertide serve`. On drop, kills serve's process group and the hostd
 /// recorded in `{data}/host-local/hostd.pid` (hostd runs in its own session).
 struct Serve {
     child: std::process::Child,
@@ -35,7 +35,7 @@ impl Serve {
 
     fn start_with(data: &Path, port: u16, extra: &[&str]) -> Serve {
         let started = Instant::now();
-        let mut child = Command::new(env!("CARGO_BIN_EXE_sculptured"))
+        let mut child = Command::new(env!("CARGO_BIN_EXE_coppertide"))
             .args([
                 "serve",
                 "--port",
@@ -97,9 +97,9 @@ impl Drop for Serve {
                 libc::killpg(self.pgid(), libc::SIGKILL);
             }
         }
-        // hostd.pid may be stale: kill only a pid that is still a sculptured of this test.
+        // hostd.pid may be stale: kill only a pid that is still a coppertide of this test.
         if let Some(pid) = self.hostd_pid()
-            && sculptured_procs(&self.data).contains(&pid)
+            && coppertide_procs(&self.data).contains(&pid)
         {
             // SAFETY: pid verified above as this test's hostd.
             unsafe {
@@ -121,8 +121,8 @@ fn alive(pid: i32) -> bool {
     unsafe { libc::kill(pid, 0) == 0 && !is_zombie(pid) }
 }
 
-/// Pids of live sculptured processes whose command line mentions `data`.
-fn sculptured_procs(data: &Path) -> Vec<i32> {
+/// Pids of live coppertide processes whose command line mentions `data`.
+fn coppertide_procs(data: &Path) -> Vec<i32> {
     let needle = data.to_string_lossy().to_string();
     let mut found = vec![];
     let flattened_items = std::fs::read_dir("/proc").unwrap().flatten();
@@ -134,7 +134,7 @@ fn sculptured_procs(data: &Path) -> Vec<i32> {
             continue;
         };
         let cmd = String::from_utf8_lossy(&cmd).replace('\0', " ");
-        if cmd.contains("sculptured") && cmd.contains(&needle) && alive(pid) {
+        if cmd.contains("coppertide") && cmd.contains(&needle) && alive(pid) {
             found.push(pid);
         }
     }
@@ -143,11 +143,11 @@ fn sculptured_procs(data: &Path) -> Vec<i32> {
 
 fn wait_gone(data: &Path) {
     let deadline = Instant::now() + Duration::from_secs(5);
-    while !sculptured_procs(data).is_empty() {
+    while !coppertide_procs(data).is_empty() {
         assert!(
             Instant::now() < deadline,
-            "sculptured processes left: {:?}",
-            sculptured_procs(data)
+            "coppertide processes left: {:?}",
+            coppertide_procs(data)
         );
         std::thread::sleep(Duration::from_millis(50));
     }
@@ -388,7 +388,7 @@ async fn agent_processes_do_not_inherit_the_host_token() {
     let env = std::fs::read_to_string(&env_log).unwrap();
     let token = std::fs::read_to_string(data.path().join("host-token")).unwrap();
     assert!(
-        !env.contains("SCULPTURED_HOST_TOKEN"),
+        !env.contains("COPPERTIDE_HOST_TOKEN") && !env.contains("SCULPTURED_HOST_TOKEN"),
         "agent env has the token variable:\n{env}"
     );
     assert!(

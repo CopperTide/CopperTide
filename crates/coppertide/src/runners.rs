@@ -1,5 +1,5 @@
-//! One computer, several accounts. A computer's first account keeps its runner in `~/.sculptured/runner`;
-//! each other account gets a runner of its own in `~/.sculptured/runners/<id>`, with its own background
+//! One computer, several accounts. A computer's first account keeps its runner in `~/.coppertide/runner`;
+//! each other account gets a runner of its own in `~/.coppertide/runners/<id>`, with its own background
 //! service, so both run at once. A connect key is matched to the runner of its account.
 use crate::connect::Credentials;
 use std::path::{Path, PathBuf};

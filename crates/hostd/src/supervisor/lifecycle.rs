@@ -114,7 +114,7 @@ impl Supervisor {
                 .as_ref()
                 .is_some_and(|pol| !pol.caps().copies)
             {
-                return Err("Copies of work items are turned off on this computer (sculptured connect … --enable copies)".into());
+                return Err("Copies of work items are turned off on this computer (coppertide connect … --enable copies)".into());
             }
             if !localops::copies::valid_name(team, team) {
                 return Err(format!(
@@ -280,7 +280,7 @@ impl Supervisor {
         }
     }
 
-    /// Keeps the agent's process on record for `sculptured stop`, which works without the server.
+    /// Keeps the agent's process on record for `coppertide stop`, which works without the server.
     fn record_process(&self, seat: &str, pid: Option<u32>) {
         let Some(pid) = pid else { return };
         let ident = crate::local_stop::identity(pid);

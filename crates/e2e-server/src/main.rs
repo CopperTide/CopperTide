@@ -1,9 +1,9 @@
 //! `e2e-server`: the Playwright web server. Builds the web UI into a throwaway directory, runs
-//! `sculptured serve` on port 14410 with a throwaway data dir and `HOME`, and on exit, SIGINT,
+//! `coppertide serve` on port 14410 with a throwaway data dir and `HOME`, and on exit, SIGINT,
 //! SIGTERM or SIGHUP stops serve and hostd and removes the directory.
 //!
-//! The binary is `$SCULPTURED_BIN` when set; otherwise `cargo build -p sculptured` runs and
-//! `${CARGO_TARGET_DIR:-target}/debug/sculptured` is used. `$RIG_E2E_PORT` picks another
+//! The binary is `$COPPERTIDE_BIN` when set; otherwise `cargo build -p coppertide` runs and
+//! `${CARGO_TARGET_DIR:-target}/debug/coppertide` is used. `$RIG_E2E_PORT` picks another
 //! port (the Playwright config reads the same variable), so two runs can share a machine.
 //!
 //! Serve runs with `--question-timeout-secs 8`: questions expire in 8 s, long enough for a
@@ -12,7 +12,7 @@
 //! Codex agents run on `fake-codex` (`$RIG_E2E_FAKE_CODEX`, else built with cargo).
 //!
 //! Community goes through `fake-community` (`$RIG_E2E_FAKE_COMMUNITY`, else built with cargo), a
-//! stub Sculptured server on `$RIG_E2E_COMMUNITY_PORT` (default 14411); serve gets
+//! stub CopperTide server on `$RIG_E2E_COMMUNITY_PORT` (default 14411); serve gets
 //! `--community-origin http://127.0.0.1:<port>`, so no test reaches a real server.
 
 use std::path::{Path, PathBuf};
@@ -74,18 +74,18 @@ fn run(what: &str, cmd: &mut Command) -> Result<(), String> {
 }
 
 fn binary(root: &Path) -> Result<PathBuf, String> {
-    if let Some(bin) = std::env::var_os("SCULPTURED_BIN") {
+    if let Some(bin) = model::brand::env_var_os("COPPERTIDE_BIN") {
         let bin = PathBuf::from(bin);
         return if bin.is_file() {
             Ok(bin)
         } else {
-            Err(format!("SCULPTURED_BIN is not a file: {}", bin.display()))
+            Err(format!("COPPERTIDE_BIN is not a file: {}", bin.display()))
         };
     }
     run(
-        "cargo build -p sculptured",
+        "cargo build -p coppertide",
         Command::new("cargo")
-            .args(["build", "-q", "-p", "sculptured"])
+            .args(["build", "-q", "-p", "coppertide"])
             .current_dir(root),
     )?;
     let target = std::env::var_os("CARGO_TARGET_DIR")
@@ -96,7 +96,7 @@ fn binary(root: &Path) -> Result<PathBuf, String> {
     } else {
         root.join(target)
     };
-    Ok(target.join("debug").join("sculptured"))
+    Ok(target.join("debug").join("coppertide"))
 }
 
 /// A fixtures binary for e2e: `$<env>` when set, else built with cargo.
@@ -126,7 +126,7 @@ fn fixture_bin(root: &Path, name: &str, env: &str) -> Result<PathBuf, String> {
     Ok(target.join("debug").join(name))
 }
 
-/// Starts the stub Sculptured server and waits until it answers; returns its origin.
+/// Starts the stub CopperTide server and waits until it answers; returns its origin.
 fn start_stub(session: &mut Session, root: &Path) -> Result<String, String> {
     let bin = fixture_bin(root, "fake-community", "RIG_E2E_FAKE_COMMUNITY")?;
     let port = community_port();

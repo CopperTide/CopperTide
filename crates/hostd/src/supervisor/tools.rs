@@ -27,7 +27,7 @@ pub struct SeatToolsHost {
     /// The socket the shim dials. Its folder is hostd's private (0700) directory; the per-agent config
     /// files that name a token are written to `seat-tools/` next to it.
     pub socket: PathBuf,
-    /// The `sculptured` binary; its `seat-tools` subcommand is the MCP shim.
+    /// The `coppertide` binary; its `seat-tools` subcommand is the MCP shim.
     pub shim: PathBuf,
 }
 
@@ -172,14 +172,15 @@ impl Supervisor {
     /// as a file gets a unique one, so a late cleanup of an earlier process never deletes this one's
     /// (Codex passes it over stdin).
     /// The program whose `guard` subcommand checks an agent's tool calls: the seat-tools shim (the
-    /// `sculptured` binary), else this process when it is that binary. None: protections can't run here.
+    /// `coppertide` binary), else this process when it is that binary. None: protections can't run here.
     pub(super) fn guard_program(&self) -> Option<PathBuf> {
         if let Some(host) = &self.inner.seat_tools {
             return Some(host.shim.clone());
         }
-        std::env::current_exe()
-            .ok()
-            .filter(|p| p.file_stem().is_some_and(|n| n == "sculptured"))
+        std::env::current_exe().ok().filter(|p| {
+            p.file_stem()
+                .is_some_and(|n| n == "coppertide" || n == "sculptured")
+        })
     }
 
     pub(super) fn grant_tools(

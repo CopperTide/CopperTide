@@ -132,7 +132,7 @@ impl ClaudeStreamDriver {
     pub fn protection_env(spec: &LaunchSpec) -> Option<(&'static str, String)> {
         let p = spec.protection.as_ref()?;
         Some((
-            "SCULPTURED_PROTECTION",
+            "COPPERTIDE_PROTECTION",
             serde_json::to_string(&p.rules).expect("rules serialize"),
         ))
     }

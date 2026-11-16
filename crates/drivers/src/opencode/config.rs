@@ -117,9 +117,9 @@ mod tests {
     fn team_tools_integrations_and_web_servers_are_named_in_the_session() {
         let mut s = spec();
         s.seat_tools = Some(crate::SeatToolsLaunch {
-            program: "/bin/sculptured".into(),
+            program: "/bin/coppertide".into(),
             args: vec!["seat-tools".into()],
-            env: vec![("SCULPTURED_SEAT_TOKEN".to_string(), "t0k".to_string())].into(),
+            env: vec![("COPPERTIDE_SEAT_TOKEN".to_string(), "t0k".to_string())].into(),
             approve: false,
             config_file: None,
         });
@@ -137,7 +137,7 @@ mod tests {
         assert_eq!(m[0]["name"], "rig");
         assert_eq!(
             m[0]["env"],
-            json!([{ "name": "SCULPTURED_SEAT_TOKEN", "value": "t0k" }])
+            json!([{ "name": "COPPERTIDE_SEAT_TOKEN", "value": "t0k" }])
         );
         assert_eq!(m[1]["command"], "/bin/kin");
         assert_eq!(m[2]["type"], "http");

@@ -195,7 +195,7 @@ impl Supervisor {
     }
 
     /// Seats with a process or one starting: a reconnect during a launch must not mark them lost.
-    /// The agent processes on record for `sculptured stop`: (seat, pid, identity).
+    /// The agent processes on record for `coppertide stop`: (seat, pid, identity).
     #[must_use]
     pub fn recorded_processes(&self) -> Vec<(String, u32, Option<String>)> {
         self.inner
@@ -419,7 +419,7 @@ impl Supervisor {
             } => {
                 let mut cwd = match &self.inner.policy {
                     Some(pol) if !pol.caps().checks => {
-                        return Err("Checks are turned off on this computer (sculptured connect … --enable checks)".into());
+                        return Err("Checks are turned off on this computer (coppertide connect … --enable checks)".into());
                     }
                     Some(pol) => pol
                         .resolve(&cwd)

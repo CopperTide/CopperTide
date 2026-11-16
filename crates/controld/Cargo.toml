@@ -35,7 +35,7 @@ sysinfo = "0.39.6"
 
 [features]
 # Test-only hooks (the `seams` module). Only this crate's own dev-dependency on itself
-# enables it, so a normal or release build of sculptured carries no hook.
+# enables it, so a normal or release build of coppertide carries no hook.
 test-seams = []
 
 [dev-dependencies]

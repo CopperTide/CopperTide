@@ -1,4 +1,4 @@
-//! `sculptured doctor`: what this computer has for its agents, in plain lines: Claude Code and Codex
+//! `coppertide doctor`: what this computer has for its agents, in plain lines: Claude Code and Codex
 //! (installed, signed in), each runner's allowed folders, the built-in components' programs, and the
 //! component approvals and secrets kept here (names only, never values). It changes nothing. An idea
 //! from Gas Town's `gt doctor`.
@@ -158,10 +158,10 @@ pub fn keeps_running(os: &str, systemd_user: bool, linger: Option<bool>, origin:
         return check(
             what,
             None,
-            "while you are logged in, through the login item `sculptured connect --service` sets up",
+            "while you are logged in, through the login item `coppertide connect --service` sets up",
         );
     }
-    let tmux = format!("tmux new -d -s sculptured 'sculptured connect {origin}'");
+    let tmux = format!("tmux new -d -s coppertide 'coppertide connect {origin}'");
     match (systemd_user, linger) {
         (true, Some(true)) => check(
             what,
@@ -225,7 +225,7 @@ pub fn runner_checks(dir: &Path) -> Vec<Check> {
         Ok(p) if p.allowed_folders.is_empty() => out.push(check(
             "Allowed folders",
             Some(false),
-            "none yet: run sculptured allow <folder>",
+            "none yet: run coppertide allow <folder>",
         )),
         Ok(p) => {
             for f in &p.allowed_folders {
@@ -336,7 +336,7 @@ mod tests {
         assert!(
             runner_checks(dir.path())[1]
                 .detail
-                .contains("sculptured allow")
+                .contains("coppertide allow")
         );
     }
 
@@ -346,7 +346,7 @@ mod tests {
         assert_eq!(c.ok, Some(false));
         assert!(
             c.detail
-                .contains("tmux new -d -s sculptured 'sculptured connect https://app.example.com'")
+                .contains("tmux new -d -s coppertide 'coppertide connect https://app.example.com'")
                 && c.detail.contains("allows"),
             "{}",
             c.detail

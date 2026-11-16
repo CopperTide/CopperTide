@@ -1408,7 +1408,7 @@ fn an_unknown_item_that_completes_is_kept_once() {
     assert_eq!(again.events.len(), 1, "{:?}", again.events);
 }
 
-/// Task 13 Step 12, the one real probe: the real `sculptured seat-tools` shim through the thread
+/// Task 13 Step 12, the one real probe: the real `coppertide seat-tools` shim through the thread
 /// `config` (dotted keys), on `thread/start` and again on `thread/resume`. Codex called the tools,
 /// the test socket's answers came back as the tool results, and both turns completed.
 #[test]

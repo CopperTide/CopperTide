@@ -1,4 +1,4 @@
-//! `sculptured seat-tools`, the MCP server a CLI starts for its agent: the real binary over stdio,
+//! `coppertide seat-tools`, the MCP server a CLI starts for its agent: the real binary over stdio,
 //! relaying a tool call through a fake hostd socket. No model and no CLI are involved.
 use serde_json::{Value, json};
 use std::collections::HashMap;
@@ -34,10 +34,12 @@ fn the_shim_speaks_mcp_on_stdio_and_relays_calls_to_the_socket() {
     let dir = tempfile::tempdir().unwrap();
     let socket = dir.path().join("seat-tools.sock");
     let requests = fake_socket(&socket);
-    let mut child = Command::new(env!("CARGO_BIN_EXE_sculptured"))
+    let mut child = Command::new(env!("CARGO_BIN_EXE_coppertide"))
         .arg("seat-tools")
+        // The names from before the rename: an agent an older runner started keeps its tools.
         .env("SCULPTURED_SEAT_SOCKET", &socket)
         .env("SCULPTURED_SEAT_TOKEN", "tok-1")
+        .env_remove("COPPERTIDE_SEAT_APPROVE")
         .env_remove("SCULPTURED_SEAT_APPROVE")
         .env_remove("RIG_CONTROL_SEAT_APPROVE")
         .stdin(Stdio::piped())
@@ -101,7 +103,7 @@ fn the_shim_speaks_mcp_on_stdio_and_relays_calls_to_the_socket() {
             "write_status",
             "read_pdf"
         ],
-        "no approve without SCULPTURED_SEAT_APPROVE"
+        "no approve without COPPERTIDE_SEAT_APPROVE"
     );
     assert_eq!(
         replies[&3]["result"]["content"][0]["text"],
@@ -124,15 +126,17 @@ fn the_shim_speaks_mcp_on_stdio_and_relays_calls_to_the_socket() {
 
 #[test]
 fn the_shim_says_plainly_when_it_was_started_without_its_socket() {
-    let out = Command::new(env!("CARGO_BIN_EXE_sculptured"))
+    let out = Command::new(env!("CARGO_BIN_EXE_coppertide"))
         .arg("seat-tools")
+        .env_remove("COPPERTIDE_SEAT_SOCKET")
         .env_remove("SCULPTURED_SEAT_SOCKET")
         .env_remove("RIG_CONTROL_SEAT_SOCKET")
+        .env_remove("COPPERTIDE_SEAT_TOKEN")
         .env_remove("SCULPTURED_SEAT_TOKEN")
         .stdin(Stdio::null())
         .output()
         .unwrap();
     assert!(!out.status.success());
     assert!(out.stdout.is_empty(), "nothing on the protocol stream");
-    assert!(String::from_utf8_lossy(&out.stderr).contains("SCULPTURED_SEAT_SOCKET is not set"));
+    assert!(String::from_utf8_lossy(&out.stderr).contains("COPPERTIDE_SEAT_SOCKET is not set"));
 }

@@ -1,6 +1,6 @@
 //! Agents' own copies (routes and settings). The git work is `localops::copies`, shared with connected
 //! computers; this module resolves the copies folder (the `copies_folder` setting, default
-//! `~/.sculptured/copies`), the project folder and which agents are running.
+//! `~/.coppertide/copies`), the project folder and which agents are running.
 use crate::error::ApiError;
 use crate::extract::{Json, Path};
 use crate::state::AppState;
@@ -52,11 +52,12 @@ pub fn copies_root(st: &AppState) -> Result<PathBuf, String> {
             "The copies folder {f} is not available. Is its drive connected?"
         )),
         Some(f) => Ok(PathBuf::from(f)),
-        None => Ok(st
-            .home
-            .as_deref()
-            .ok_or("Your home folder is unknown (HOME is not set)")?
-            .join(".sculptured/copies")),
+        None => Ok(model::brand::data_home(
+            st.home
+                .as_deref()
+                .ok_or("Your home folder is unknown (HOME is not set)")?,
+        )
+        .join("copies")),
     }
 }
 

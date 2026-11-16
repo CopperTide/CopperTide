@@ -1,10 +1,10 @@
-//! Runs the real `sculptured` binary for the Playwright end-to-end tests, on a throwaway
+//! Runs the real `coppertide` binary for the Playwright end-to-end tests, on a throwaway
 //! data dir and a throwaway `HOME`, and cleans up after itself.
 //!
-//! `sculptured serve` spawns `sculptured hostd` in its own session, so hostd outlives serve
+//! `coppertide serve` spawns `coppertide hostd` in its own session, so hostd outlives serve
 //! and is not reached by a signal to serve's process group. [`Session::shutdown`] (also run on
 //! drop) stops serve, then stops hostd by the pid it recorded, and only if that pid is still a
-//! `sculptured` process started on this session's data dir. Dropping the session removes the
+//! `coppertide` process started on this session's data dir. Dropping the session removes the
 //! throwaway directory, so a failed build, a signal or a panic never leaves it behind.
 
 use std::path::{Path, PathBuf};
@@ -17,7 +17,7 @@ pub const HOME_FOLDERS: [&str; 2] = ["projects/alpha", "projects/beta"];
 pub struct Session {
     tmp: Option<tempfile::TempDir>,
     serve: Option<Child>,
-    /// `fake-community`, the stub Sculptured server Community goes through in e2e.
+    /// `fake-community`, the stub CopperTide server Community goes through in e2e.
     stub: Option<Child>,
 }
 
@@ -25,7 +25,7 @@ impl Session {
     /// A new throwaway directory holding `data/`, `home/` (with [`HOME_FOLDERS`]) and `web-dist/`.
     pub fn try_new() -> std::io::Result<Self> {
         let tmp = tempfile::Builder::new()
-            .prefix("sculptured-e2e-")
+            .prefix("coppertide-e2e-")
             .tempdir()?;
         for f in HOME_FOLDERS {
             std::fs::create_dir_all(tmp.path().join("home").join(f))?;
@@ -149,14 +149,14 @@ pub fn alive(pid: i32) -> bool {
     }
 }
 
-/// True when `pid` is a `sculptured` process started on `session_dir` (so a reused pid is never
+/// True when `pid` is a `coppertide` process started on `session_dir` (so a reused pid is never
 /// killed). Without `/proc`, the command name alone is checked with `ps`.
 #[must_use]
-pub fn is_session_sculptured(pid: i32, session_dir: &Path) -> bool {
+pub fn is_session_coppertide(pid: i32, session_dir: &Path) -> bool {
     if let (Some(comm), Some(cmdline)) = (proc_file(pid, "comm"), proc_file(pid, "cmdline")) {
         let comm = String::from_utf8_lossy(&comm);
         let dir = session_dir.to_string_lossy();
-        return comm.trim() == "sculptured"
+        return comm.trim() == "coppertide"
             && cmdline
                 .split(|b| *b == 0)
                 .any(|arg| String::from_utf8_lossy(arg).contains(dir.as_ref()));
@@ -167,17 +167,17 @@ pub fn is_session_sculptured(pid: i32, session_dir: &Path) -> bool {
         .map(|o| {
             String::from_utf8_lossy(&o.stdout)
                 .trim()
-                .ends_with("sculptured")
+                .ends_with("coppertide")
         })
         .unwrap_or(false)
 }
 
-/// Stops the hostd recorded in `pidfile` if it is this session's sculptured: SIGTERM, then
+/// Stops the hostd recorded in `pidfile` if it is this session's coppertide: SIGTERM, then
 /// SIGKILL after 5 s. Returns the pid it stopped.
 pub fn stop_hostd(pidfile: &Path, session_dir: &Path) -> Option<i32> {
     let text = std::fs::read_to_string(pidfile).ok()?;
     let pid: i32 = text.trim().parse().ok()?;
-    if pid <= 1 || !alive(pid) || !is_session_sculptured(pid, session_dir) {
+    if pid <= 1 || !alive(pid) || !is_session_coppertide(pid, session_dir) {
         return None;
     }
     signal(pid, libc::SIGTERM);

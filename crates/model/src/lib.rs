@@ -1,3 +1,5 @@
+/// The product's names on a computer (environment variables, data folder), old ones still honoured.
+pub mod brand;
 mod group_block;
 pub use group_block::{BlockSource, GroupBlock};
 mod action;

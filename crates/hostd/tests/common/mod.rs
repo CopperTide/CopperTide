@@ -137,7 +137,7 @@ pub async fn tools_host_with(
     let seen = Arc::new(Mutex::new(None));
     let host = SeatToolsHost {
         socket: socket.clone(),
-        shim: "/opt/sculptured".into(),
+        shim: "/opt/coppertide".into(),
     };
     let sup = Supervisor::with_seat_tools(
         "local".into(),

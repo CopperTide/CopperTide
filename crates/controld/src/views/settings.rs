@@ -19,7 +19,7 @@ pub struct Settings {
     pub posture: PermissionPosture,
     /// D8: 10 minutes by default. 1 to 1440.
     pub question_timeout_min: u32,
-    /// Where agents' own git copies go (`copies`); None = `~/.sculptured/copies`.
+    /// Where agents' own git copies go (`copies`); None = `~/.coppertide/copies`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[ts(optional)]
     pub copies_folder: Option<String>,

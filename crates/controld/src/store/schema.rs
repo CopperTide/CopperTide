@@ -208,12 +208,12 @@ pub(super) fn migrate(conn: &mut Connection) -> rusqlite::Result<()> {
     let current: i64 = tx.query_row("PRAGMA user_version", [], |r| r.get(0))?;
     if current > SCHEMA_VERSION {
         return Err(rusqlite::Error::InvalidParameterName(format!(
-            "the store was written by a newer sculptured (schema {current}; this build knows {SCHEMA_VERSION})"
+            "the store was written by a newer CopperTide (schema {current}; this build knows {SCHEMA_VERSION})"
         )));
     }
     if current < 0 {
         return Err(rusqlite::Error::InvalidParameterName(format!(
-            "the store has an invalid schema version ({current}); it was not written by sculptured"
+            "the store has an invalid schema version ({current}); it was not written by CopperTide"
         )));
     }
     let matching_migrations = MIGRATIONS.iter().enumerate().skip(current as usize);

@@ -22,10 +22,10 @@ pub struct HostdOptions {
 }
 
 /// Returned by `run_hostd` when another hostd already owns the data dir.
-/// The `sculptured hostd` subcommand exits with code 75 (EX_TEMPFAIL) for it.
+/// The `coppertide hostd` subcommand exits with code 75 (EX_TEMPFAIL) for it.
 pub const ALREADY_RUNNING: &str = "another hostd already owns this data dir";
 /// Why a connected computer's runner stopped: its account disconnected it (its key is refused).
-pub const DISCONNECTED: &str = "This computer was disconnected from its CopperTide account. Run `sculptured connect <address>` again to reconnect it.";
+pub const DISCONNECTED: &str = "This computer was disconnected from its CopperTide account. Run `coppertide connect <address>` again to reconnect it.";
 
 /// Holds an exclusive lock on `{data_dir}/hostd.lock` for the life of the process (flock on Unix,
 /// LockFileEx on Windows), so a controld restart can never produce two hostds driving the same seats.
@@ -68,7 +68,7 @@ fn with_seat_tools(
 ) -> Result<Supervisor, String> {
     let socket = crate::seat_tools::socket_path(&opts.data_dir)?;
     let shim = std::env::current_exe()
-        .map_err(|e| format!("cannot locate sculptured for the agent tools: {e}"))?;
+        .map_err(|e| format!("cannot locate coppertide for the agent tools: {e}"))?;
     let host = crate::supervisor::SeatToolsHost {
         socket: socket.clone(),
         shim,
@@ -184,7 +184,7 @@ async fn keep_linked(opts: &HostdOptions, sup: &Supervisor) -> Result<(), String
 }
 
 /// Where this runner does local operations: its owner's home, a copies folder next to its data folder
-/// (`~/.sculptured/copies` for a local `serve`, `<runner dir>/copies` for a connected computer), its CLIs.
+/// (`~/.coppertide/copies` for a local `serve`, `<runner dir>/copies` for a connected computer), its CLIs.
 fn ops_host(opts: &HostdOptions) -> crate::ops::OpsHost {
     let home = crate::platform::home().unwrap_or_else(|| PathBuf::from("/"));
     let copies_root = opts

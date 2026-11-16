@@ -1,4 +1,4 @@
-//! DNS-rebinding and cross-site protection: only this machine's sculptured
+//! DNS-rebinding and cross-site protection: only this machine's CopperTide
 //! address may call the API (browser, hostd, CLI).
 use crate::error::ApiError;
 use crate::state::AppState;
@@ -29,7 +29,7 @@ pub async fn guard(State(st): State<AppState>, req: Request, next: Next) -> Resp
         return ApiError::new(
             StatusCode::FORBIDDEN,
             "forbidden_host",
-            "requests must use this machine's sculptured address",
+            "requests must use this machine's CopperTide address",
         )
         .into_response();
     }

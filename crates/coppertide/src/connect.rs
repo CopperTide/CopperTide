@@ -1,4 +1,4 @@
-//! `sculptured connect <origin>`: link this computer to a Sculptured account. It pairs once (a code
+//! `coppertide connect <origin>`: link this computer to a CopperTide account. It pairs once (a code
 //! approved in the browser), keeps its key in `<data dir>/device.json` (0600), then runs the agent
 //! runner against the account over `wss://…/host`, within the folders allowed in `runner.json`.
 use serde::{Deserialize, Serialize};
@@ -93,7 +93,7 @@ pub async fn pair(
     on_code(&s.user_code, &s.verify_url);
     let deadline = std::time::Instant::now() + std::time::Duration::from_secs(s.expires_in);
     let expired =
-        || "The code expired before it was approved. Run `sculptured connect` again.".to_string();
+        || "The code expired before it was approved. Run `coppertide connect` again.".to_string();
     loop {
         tokio::time::sleep(std::time::Duration::from_secs(s.interval.clamp(1, 30))).await;
         if std::time::Instant::now() > deadline {
@@ -110,7 +110,7 @@ pub async fn pair(
             Ok(Poll::Pending) | Err(_) => continue,
             Ok(Poll::Expired) => return Err(expired()),
             Ok(Poll::Denied) => return Err(
-                "Pairing was not approved in time or was refused. Run `sculptured connect` again."
+                "Pairing was not approved in time or was refused. Run `coppertide connect` again."
                     .into(),
             ),
         }
@@ -233,15 +233,20 @@ fn systemd_quote(s: &str) -> String {
 }
 
 /// Windows: the Scheduled Task (XML) that runs the runner at logon as this user, without a window
-/// (`sculptured-background.exe` starts `sculptured.exe` hidden), never stopped for running long, and
-/// restarted if it ends.
+/// (`coppertide-background.exe` starts `coppertide.exe` hidden), never stopped for running long, and
+/// restarted if it ends. A runner installed under its old name (`sculptured.exe`) has the launcher of
+/// that name beside it.
 pub fn windows_task(args: &[String], user: &str) -> String {
     // Split by hand: `\\` is a separator only on Windows, and this is also checked on Unix.
     let exe = &args[0];
-    let launcher = format!(
-        "{}sculptured-background.exe",
-        &exe[..exe.rfind(['\\', '/']).map_or(0, |i| i + 1)]
-    );
+    let cut = exe.rfind(['\\', '/']).map_or(0, |i| i + 1);
+    let stem = exe[cut..].strip_suffix(".exe").unwrap_or(&exe[cut..]);
+    let stem = if stem.eq_ignore_ascii_case("sculptured") {
+        "sculptured"
+    } else {
+        "coppertide"
+    };
+    let launcher = format!("{}{stem}-background.exe", &exe[..cut]);
     let rest: Vec<String> = args[1..].iter().map(|a| win_quote(a)).collect();
     format!(
         r#"<?xml version="1.0" encoding="UTF-16"?>
@@ -296,11 +301,38 @@ fn named(base: &str, sep: &str, suffix: Option<&str>, end: &str) -> String {
     suffix.map_or_else(|| base.to_string(), |s| format!("{base}{sep}{s}{end}"))
 }
 
+/// What the login service is called. Installs from before the rename wrote `LEGACY_SERVICE`'s names;
+/// reinstalling replaces those services (`retire_legacy_services`).
+pub struct ServiceNames {
+    /// The systemd user unit.
+    unit: &'static str,
+    /// The LaunchAgent's label.
+    launchd: &'static str,
+    /// The Windows Scheduled Task.
+    task: &'static str,
+    /// The task's XML, in the runner's folder.
+    task_file: &'static str,
+}
+
+pub const SERVICE: ServiceNames = ServiceNames {
+    unit: "coppertide-runner",
+    launchd: "dev.coppertide.runner",
+    task: "CopperTide runner",
+    task_file: "coppertide-runner.xml",
+};
+
+pub const LEGACY_SERVICE: ServiceNames = ServiceNames {
+    unit: "sculptured-runner",
+    launchd: "dev.sculptured.runner",
+    task: "Sculptured runner",
+    task_file: "sculptured-runner.xml",
+};
+
 /// `service_commands` for the runner whose folder gives `suffix`.
 pub fn service_commands_for(file: &Path, suffix: Option<&str>) -> Vec<Vec<String>> {
     let f = file.display().to_string();
-    let unit = named("sculptured-runner", "-", suffix, "");
-    let task = named(WINDOWS_TASK, " (", suffix, ")");
+    let unit = named(SERVICE.unit, "-", suffix, "");
+    let task = named(SERVICE.task, " (", suffix, ")");
     let v = |a: &[&str]| a.iter().map(|s| s.to_string()).collect::<Vec<_>>();
     if cfg!(target_os = "macos") {
         vec![
@@ -322,14 +354,16 @@ pub fn service_commands_for(file: &Path, suffix: Option<&str>) -> Vec<Vec<String
     }
 }
 
-const WINDOWS_TASK: &str = "Sculptured runner";
-
 /// The exit code of a runner whose account disconnected this computer: its service does not restart it.
 pub const DISCONNECTED_EXIT: u8 = 78;
 
 /// Commands that keep the runner's login service from starting again (systemd also skips a restart on
 /// DISCONNECTED_EXIT; launchd and Task Scheduler cannot tell exit codes apart).
-pub fn service_off_commands(file: &Path, suffix: Option<&str>) -> Vec<Vec<String>> {
+pub fn service_off_commands(
+    names: &ServiceNames,
+    file: &Path,
+    suffix: Option<&str>,
+) -> Vec<Vec<String>> {
     let v = |a: &[&str]| a.iter().map(|s| s.to_string()).collect::<Vec<_>>();
     if cfg!(target_os = "macos") {
         vec![v(&[
@@ -343,7 +377,7 @@ pub fn service_off_commands(file: &Path, suffix: Option<&str>) -> Vec<Vec<String
             "schtasks",
             "/Change",
             "/TN",
-            &named(WINDOWS_TASK, " (", suffix, ")"),
+            &named(names.task, " (", suffix, ")"),
             "/DISABLE",
         ])]
     } else {
@@ -354,20 +388,23 @@ pub fn service_off_commands(file: &Path, suffix: Option<&str>) -> Vec<Vec<String
             "disable",
             "--now",
             "--no-block",
-            &named("sculptured-runner", "-", suffix, ""),
+            &named(names.unit, "-", suffix, ""),
         ])]
     }
 }
 
 /// A disconnected computer's runner turns its login service off, so it is not started again every few
-/// seconds. Connecting again (`sculptured connect`) turns it back on.
+/// seconds. Connecting again (`coppertide connect`) turns it back on. A service from before the
+/// rename is found by its old name.
 fn service_off(dir: &Path) {
     let suffix = crate::runners::service_suffix(dir);
-    let (file, _) = service_unit_for(&[], "", suffix.as_deref());
-    if !file.exists() {
+    let Some((names, file)) = [&SERVICE, &LEGACY_SERVICE].into_iter().find_map(|n| {
+        let (file, _) = service_unit_named(n, &[], "", suffix.as_deref());
+        file.exists().then_some((n, file))
+    }) else {
         return;
-    }
-    for c in service_off_commands(&file, suffix.as_deref()) {
+    };
+    for c in service_off_commands(names, &file, suffix.as_deref()) {
         let _ = std::process::Command::new(&c[0])
             .args(&c[1..])
             .stdout(std::process::Stdio::null())
@@ -388,11 +425,19 @@ pub fn service_unit_for(
     path_env: &str,
     suffix: Option<&str>,
 ) -> (PathBuf, String) {
+    service_unit_named(&SERVICE, args, path_env, suffix)
+}
+
+/// `service_unit_for` with the service called by `names`.
+fn service_unit_named(
+    names: &ServiceNames,
+    args: &[String],
+    path_env: &str,
+    suffix: Option<&str>,
+) -> (PathBuf, String) {
     let home = hostd::platform::home().unwrap_or_default();
-    let folder = suffix.map_or_else(
-        || home.join(".sculptured").join("runner"),
-        |s| home.join(".sculptured").join("runners").join(s),
-    );
+    let data = model::brand::data_home(&home);
+    let folder = suffix.map_or_else(|| data.join("runner"), |s| data.join("runners").join(s));
     if cfg!(windows) {
         let user = format!(
             "{}\\{}",
@@ -400,11 +445,11 @@ pub fn service_unit_for(
             std::env::var("USERNAME").unwrap_or_default()
         );
         return (
-            folder.join("sculptured-runner.xml"),
+            folder.join(names.task_file),
             windows_task(args, user.trim_start_matches('\\')),
         );
     }
-    let label = named("dev.sculptured.runner", ".", suffix, "");
+    let label = named(names.launchd, ".", suffix, "");
     if cfg!(target_os = "macos") {
         let file = home.join(format!("Library/LaunchAgents/{label}.plist"));
         let argv: String = args
@@ -427,7 +472,7 @@ pub fn service_unit_for(
     } else {
         let file = home.join(format!(
             ".config/systemd/user/{}.service",
-            named("sculptured-runner", "-", suffix, "")
+            named(names.unit, "-", suffix, "")
         ));
         let exec: Vec<String> = args.iter().map(|a| systemd_quote(a)).collect();
         let text = format!(
@@ -437,6 +482,91 @@ pub fn service_unit_for(
         );
         (file, text)
     }
+}
+
+/// Stops and removes the login services an install from before the rename wrote (`LEGACY_SERVICE`),
+/// for every account's runner: `connect --install-service` then writes today's in their place. Their
+/// runners stop their agents, as a reinstall always did.
+pub fn retire_legacy_services() {
+    let home = hostd::platform::home().unwrap_or_default();
+    let base = model::brand::data_home(&home).join("runner");
+    let suffixes = std::iter::once(None).chain(
+        crate::runners::other_dirs(&base)
+            .into_iter()
+            .map(|d| d.file_name().and_then(|n| n.to_str()).map(String::from)),
+    );
+    let quiet = |c: &[String]| {
+        std::process::Command::new(&c[0])
+            .args(&c[1..])
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::null())
+            .status()
+            .is_ok_and(|s| s.success())
+    };
+    let mut retired = false;
+    for suffix in suffixes {
+        let (file, _) = service_unit_named(&LEGACY_SERVICE, &[], "", suffix.as_deref());
+        for c in retire_commands(&file, suffix.as_deref()) {
+            if cfg!(windows) || file.exists() {
+                retired |= quiet(&c);
+            }
+        }
+        retired |= std::fs::remove_file(&file).is_ok();
+    }
+    if retired && cfg!(target_os = "linux") {
+        let _ = quiet(&["systemctl".into(), "--user".into(), "daemon-reload".into()]);
+    }
+}
+
+/// The commands that stop a pre-rename login service and keep it from starting again.
+pub fn retire_commands(file: &Path, suffix: Option<&str>) -> Vec<Vec<String>> {
+    let v = |a: &[&str]| a.iter().map(|s| s.to_string()).collect::<Vec<_>>();
+    if cfg!(target_os = "macos") {
+        vec![v(&[
+            "launchctl",
+            "unload",
+            "-w",
+            &file.display().to_string(),
+        ])]
+    } else if cfg!(windows) {
+        let task = named(LEGACY_SERVICE.task, " (", suffix, ")");
+        vec![
+            v(&["schtasks", "/End", "/TN", &task]),
+            v(&["schtasks", "/Delete", "/TN", &task, "/F"]),
+        ]
+    } else {
+        let unit = named(LEGACY_SERVICE.unit, "-", suffix, "");
+        vec![v(&["systemctl", "--user", "disable", "--now", &unit])]
+    }
+}
+
+/// The program the login service runs. A build installed under the old name (`sculptured`, by an
+/// installer from before the rename) puts itself in place as `coppertide` beside it and leaves
+/// `sculptured` as a link to it, so the service and anything calling the old path run `coppertide`.
+/// Elsewhere, and whenever that cannot be done, the program as it is.
+pub fn adopt_new_name(exe: &Path) -> PathBuf {
+    #[cfg(unix)]
+    {
+        let is_old = exe.file_name().is_some_and(|n| n == "sculptured");
+        let is_link = std::fs::symlink_metadata(exe).is_ok_and(|m| m.file_type().is_symlink());
+        if is_old && !is_link {
+            let new = exe.with_file_name("coppertide");
+            let tmp = exe.with_file_name(".coppertide.new");
+            let link = exe.with_file_name(".sculptured.link");
+            let moved = std::fs::copy(exe, &tmp)
+                .and_then(|_| std::fs::rename(&tmp, &new))
+                .and_then(|()| {
+                    let _ = std::fs::remove_file(&link);
+                    std::os::unix::fs::symlink("coppertide", &link)
+                })
+                .and_then(|()| std::fs::rename(&link, exe));
+            if moved.is_ok() {
+                return new;
+            }
+            let _ = std::fs::remove_file(&tmp);
+        }
+    }
+    exe.to_path_buf()
 }
 
 pub struct ConnectArgs {
@@ -531,14 +661,14 @@ async fn account_runner(
     }
 }
 
-/// `~/.sculptured/runner` unless `--data-dir` is given; created owner-only.
+/// `~/.coppertide/runner` unless `--data-dir` is given; created owner-only.
 fn runner_dir(given: Option<PathBuf>) -> Result<PathBuf, String> {
-    let dir = match given {
-        Some(d) => d,
-        None => hostd::platform::home()
-            .ok_or("your home folder is unknown; pass --data-dir")?
-            .join(".sculptured")
-            .join("runner"),
+    let home = hostd::platform::home();
+    let dir = match (given, home) {
+        (Some(d), Some(h)) => model::brand::honour_legacy_path(&d, &h),
+        (Some(d), None) => d,
+        (None, Some(h)) => model::brand::data_home(&h).join("runner"),
+        (None, None) => return Err("your home folder is unknown; pass --data-dir".into()),
     };
     hostd::run::private_data_dir(&dir)?;
     Ok(dir)
@@ -622,7 +752,7 @@ pub async fn run_connect(a: ConnectArgs) -> Result<(), String> {
         }
     };
     if a.install_service {
-        let exe = std::env::current_exe().map_err(|e| e.to_string())?;
+        let exe = adopt_new_name(&std::env::current_exe().map_err(|e| e.to_string())?);
         // Full paths, found on PATH or where their installers put them: the login service's PATH may lack them.
         let found = |name: &str| Some(hostd::platform::program(name)).filter(|p| p.is_absolute());
         let claude = a.claude_program.clone().or_else(|| found("claude"));
@@ -662,7 +792,7 @@ pub async fn run_connect(a: ConnectArgs) -> Result<(), String> {
             );
         } else {
             println!(
-                "Wrote {}, but could not start it. Start it yourself, or run `sculptured connect {origin}` to stay connected while it runs.",
+                "Wrote {}, but could not start it. Start it yourself, or run `coppertide connect {origin}` to stay connected while it runs.",
                 file.display()
             );
         }
@@ -710,7 +840,7 @@ pub async fn run_connect(a: ConnectArgs) -> Result<(), String> {
     ran
 }
 
-/// `sculptured stop`: ends this computer's agents without the server: every account's runner here,
+/// `coppertide stop`: ends this computer's agents without the server: every account's runner here,
 /// or only the one in `--data-dir`.
 pub fn run_stop(data_dir: Option<PathBuf>) -> Result<(), String> {
     let dirs = match data_dir {
@@ -756,7 +886,7 @@ pub fn run_allow(folder: &Path, data_dir: Option<PathBuf>) -> Result<(), String>
             .collect::<Vec<_>>()
             .join(", ")
     );
-    println!("Restart `sculptured connect` (or its service) so running agents see it.");
+    println!("Restart `coppertide connect` (or its service) so running agents see it.");
     Ok(())
 }
 
@@ -806,7 +936,7 @@ pub fn runner_dirs(data_dir: Option<PathBuf>) -> Result<Vec<PathBuf>, String> {
     })
 }
 
-/// `sculptured set-secret NAME`: keeps a component's secret for every runner on this computer (or the
+/// `coppertide set-secret NAME`: keeps a component's secret for every runner on this computer (or the
 /// one in `--data-dir`), read at each launch. The value comes from the terminal unechoed, or from stdin.
 pub fn run_set_secret(name: &str, remove: bool, data_dir: Option<PathBuf>) -> Result<(), String> {
     let name = name.trim().trim_start_matches("${").trim_end_matches('}');
@@ -1076,12 +1206,12 @@ mod tests {
 
     #[test]
     fn another_accounts_runner_is_a_service_of_its_own() {
-        let args = vec!["/x/sculptured".to_string(), "connect".into()];
+        let args = vec!["/x/coppertide".to_string(), "connect".into()];
         let (file, text) = service_unit_for(&args, "/usr/bin", Some("b1c2d3e4"));
         let cmds = service_commands_for(&file, Some("b1c2d3e4"));
         if cfg!(target_os = "linux") {
             assert!(
-                file.ends_with(".config/systemd/user/sculptured-runner-b1c2d3e4.service"),
+                file.ends_with(".config/systemd/user/coppertide-runner-b1c2d3e4.service"),
                 "{}",
                 file.display()
             );
@@ -1091,14 +1221,14 @@ mod tests {
                     "systemctl",
                     "--user",
                     "restart",
-                    "sculptured-runner-b1c2d3e4"
+                    "coppertide-runner-b1c2d3e4"
                 ]
             );
         }
         if cfg!(target_os = "macos") {
             assert!(
-                file.ends_with("Library/LaunchAgents/dev.sculptured.runner.b1c2d3e4.plist")
-                    && text.contains("<string>dev.sculptured.runner.b1c2d3e4</string>")
+                file.ends_with("Library/LaunchAgents/dev.coppertide.runner.b1c2d3e4.plist")
+                    && text.contains("<string>dev.coppertide.runner.b1c2d3e4</string>")
             );
         }
         let (first, _) = service_unit_for(&args, "/usr/bin", None);
@@ -1109,16 +1239,16 @@ mod tests {
     #[test]
     fn installing_again_restarts_the_service_so_the_new_runner_takes_over() {
         let cmds = service_commands(Path::new(
-            "/home/a/.config/systemd/user/sculptured-runner.service",
+            "/home/a/.config/systemd/user/coppertide-runner.service",
         ));
         if cfg!(target_os = "linux") {
             assert_eq!(
                 cmds.last().unwrap(),
-                &["systemctl", "--user", "restart", "sculptured-runner"]
+                &["systemctl", "--user", "restart", "coppertide-runner"]
             );
             assert!(
                 cmds.iter()
-                    .any(|c| c[..] == ["systemctl", "--user", "enable", "sculptured-runner"])
+                    .any(|c| c[..] == ["systemctl", "--user", "enable", "coppertide-runner"])
             );
         }
         if cfg!(target_os = "macos") {
@@ -1130,15 +1260,23 @@ mod tests {
     #[test]
     fn on_windows_a_logon_task_runs_the_runner_without_a_window_and_restarts_it() {
         let args = vec![
-            r"C:\Users\Ana\AppData\Local\Programs\Sculptured\sculptured.exe".to_string(),
+            r"C:\Users\Ana\AppData\Local\Programs\CopperTide\coppertide.exe".to_string(),
             "connect".into(),
             "https://app.x".into(),
             "--data-dir".into(),
-            r"C:\Users\Ana\.sculptured\runner".into(),
+            r"C:\Users\Ana\.coppertide\runner".into(),
         ];
         let xml = windows_task(&args, r"PC\Ana");
-        assert!(xml.contains(r"<Command>C:\Users\Ana\AppData\Local\Programs\Sculptured\sculptured-background.exe</Command>"), "{xml}");
-        assert!(xml.contains(r#"<Arguments>connect https://app.x --data-dir "C:\Users\Ana\.sculptured\runner"</Arguments>"#) || xml.contains(r"<Arguments>connect https://app.x --data-dir C:\Users\Ana\.sculptured\runner</Arguments>"), "{xml}");
+        assert!(xml.contains(r"<Command>C:\Users\Ana\AppData\Local\Programs\CopperTide\coppertide-background.exe</Command>"), "{xml}");
+        let mut old = args.clone();
+        old[0] = r"C:\Users\Ana\AppData\Local\Programs\Sculptured\sculptured.exe".into();
+        assert!(
+            windows_task(&old, r"PC\Ana").contains(
+                r"<Command>C:\Users\Ana\AppData\Local\Programs\Sculptured\sculptured-background.exe</Command>"
+            ),
+            "a runner installed under the old name keeps the launcher beside it"
+        );
+        assert!(xml.contains(r#"<Arguments>connect https://app.x --data-dir "C:\Users\Ana\.coppertide\runner"</Arguments>"#) || xml.contains(r"<Arguments>connect https://app.x --data-dir C:\Users\Ana\.coppertide\runner</Arguments>"), "{xml}");
         assert!(
             xml.contains(
                 r"<LogonTrigger><Enabled>true</Enabled><UserId>PC\Ana</UserId></LogonTrigger>"
@@ -1162,20 +1300,20 @@ mod tests {
     #[test]
     fn the_login_service_runs_connect_for_this_origin_and_finds_the_clis_after_a_reboot() {
         let args = service_args(
-            Path::new("/opt/My Apps/sculptured"),
+            Path::new("/opt/My Apps/coppertide"),
             "https://app.x",
-            Path::new("/home/a/.sculptured/runner"),
+            Path::new("/home/a/.coppertide/runner"),
             Some(Path::new("/home/a/.local/bin/claude")),
             Some(Path::new("/opt/homebrew/bin/codex")),
         );
         assert_eq!(
             args,
             [
-                "/opt/My Apps/sculptured",
+                "/opt/My Apps/coppertide",
                 "connect",
                 "https://app.x",
                 "--data-dir",
-                "/home/a/.sculptured/runner",
+                "/home/a/.coppertide/runner",
                 "--claude-program",
                 "/home/a/.local/bin/claude",
                 "--codex-program",
@@ -1184,9 +1322,9 @@ mod tests {
         );
         let (file, text) = service_unit(&args, "/usr/bin:/home/a/.local/bin:/a&b");
         if cfg!(target_os = "linux") {
-            assert!(file.ends_with(".config/systemd/user/sculptured-runner.service"));
+            assert!(file.ends_with(".config/systemd/user/coppertide-runner.service"));
             assert!(
-                text.contains(r#"ExecStart="/opt/My Apps/sculptured" "connect""#),
+                text.contains(r#"ExecStart="/opt/My Apps/coppertide" "connect""#),
                 "{text}"
             );
             assert!(
@@ -1200,9 +1338,9 @@ mod tests {
             );
         }
         if cfg!(target_os = "macos") {
-            assert!(file.ends_with("Library/LaunchAgents/dev.sculptured.runner.plist"));
+            assert!(file.ends_with("Library/LaunchAgents/dev.coppertide.runner.plist"));
             assert!(
-                text.contains("<string>/opt/My Apps/sculptured</string>")
+                text.contains("<string>/opt/My Apps/coppertide</string>")
                     && text.contains("/a&amp;b")
                     && text.contains("<key>KeepAlive</key>")
             );
@@ -1213,7 +1351,8 @@ mod tests {
 #[test]
 fn a_disconnected_runner_turns_its_own_service_off() {
     let off = service_off_commands(
-        Path::new("/home/a/.config/systemd/user/sculptured-runner-b.service"),
+        &SERVICE,
+        Path::new("/home/a/.config/systemd/user/coppertide-runner-b.service"),
         Some("b"),
     );
     if cfg!(target_os = "linux") {
@@ -1225,13 +1364,63 @@ fn a_disconnected_runner_turns_its_own_service_off() {
                 "disable",
                 "--now",
                 "--no-block",
-                "sculptured-runner-b"
+                "coppertide-runner-b"
             ]]
         );
+        let old = service_off_commands(&LEGACY_SERVICE, Path::new("/x"), Some("b"));
+        assert_eq!(old[0].last().unwrap(), "sculptured-runner-b");
     }
     if cfg!(target_os = "macos") {
         assert_eq!(off[0][..3], ["launchctl", "unload", "-w"]);
     }
+}
+
+#[test]
+fn a_service_from_before_the_rename_is_stopped_and_turned_off() {
+    let cmds = retire_commands(
+        Path::new("/home/a/.config/systemd/user/sculptured-runner.service"),
+        None,
+    );
+    if cfg!(target_os = "linux") {
+        assert_eq!(
+            cmds,
+            [[
+                "systemctl",
+                "--user",
+                "disable",
+                "--now",
+                "sculptured-runner"
+            ]]
+        );
+    }
+    if cfg!(target_os = "macos") {
+        assert_eq!(cmds[0][..3], ["launchctl", "unload", "-w"]);
+    }
+}
+
+#[cfg(unix)]
+#[test]
+fn a_build_installed_under_the_old_name_becomes_coppertide_and_leaves_a_link() {
+    let dir = tempfile::tempdir().unwrap();
+    let old = dir.path().join("sculptured");
+    std::fs::write(&old, "build").unwrap();
+    let new = adopt_new_name(&old);
+    assert_eq!(new, dir.path().join("coppertide"));
+    assert_eq!(std::fs::read_to_string(&new).unwrap(), "build");
+    assert!(
+        std::fs::symlink_metadata(&old)
+            .unwrap()
+            .file_type()
+            .is_symlink()
+    );
+    assert_eq!(
+        std::fs::read_to_string(&old).unwrap(),
+        "build",
+        "the old path still runs it"
+    );
+    // Already done, or already called coppertide: nothing changes.
+    assert_eq!(adopt_new_name(&old), old);
+    assert_eq!(adopt_new_name(&new), new);
 }
 
 #[cfg(test)]

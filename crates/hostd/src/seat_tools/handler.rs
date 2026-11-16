@@ -9,7 +9,7 @@ pub const SOCKET_FILE: &str = "seat-tools.sock";
 pub const MAX_SOCKET_PATH: usize = 100;
 
 /// Where the agent tool socket goes for hostd data folder `data_dir`: inside it, unless that path is
-/// too long for a Unix socket; then in a private `sculptured` folder under `short_root`, named for the
+/// too long for a Unix socket; then in a private `coppertide` folder under `short_root`, named for the
 /// data folder.
 #[must_use]
 pub fn socket_path_in(data_dir: &std::path::Path, short_root: &std::path::Path) -> PathBuf {
@@ -21,7 +21,7 @@ pub fn socket_path_in(data_dir: &std::path::Path, short_root: &std::path::Path) 
     let mut h = std::collections::hash_map::DefaultHasher::new();
     data_dir.hash(&mut h);
     short_root
-        .join("sculptured")
+        .join("coppertide")
         .join(format!("{:016x}.sock", h.finish()))
 }
 
@@ -263,19 +263,20 @@ pub(super) fn tool_call(
     }
 }
 
-/// `sculptured seat-tools`: serves MCP on stdin/stdout until stdin closes. Each request runs on its
+/// `coppertide seat-tools`: serves MCP on stdin/stdout until stdin closes. Each request runs on its
 /// own thread, so a `ping` is answered while a question waits.
 pub fn run_shim() -> Result<(), String> {
-    let socket = std::env::var_os(SOCKET_ENV)
+    let socket = model::brand::env_var_os(SOCKET_ENV)
         .map(PathBuf::from)
         .ok_or(format!("{SOCKET_ENV} is not set"))?;
-    let token = std::env::var(TOKEN_ENV).map_err(|_| format!("{TOKEN_ENV} is not set"))?;
-    let approve = std::env::var(APPROVE_ENV).is_ok_and(|v| v == "1");
+    let token = model::brand::env_var(TOKEN_ENV).ok_or(format!("{TOKEN_ENV} is not set"))?;
+    let approve = model::brand::env_var(APPROVE_ENV).is_some_and(|v| v == "1");
     // Teams without a workflow are told so by the launch; when it says nothing, the tools are offered.
     let offer = Offer {
         approve,
-        workflow: std::env::var(host_proto::seat_tools::WORKFLOW_ENV).map_or(true, |v| v != "0"),
-        skills: std::env::var(host_proto::seat_tools::SKILLS_ENV).is_ok_and(|v| v == "1"),
+        workflow: model::brand::env_var(host_proto::seat_tools::WORKFLOW_ENV)
+            .is_none_or(|v| v != "0"),
+        skills: model::brand::env_var(host_proto::seat_tools::SKILLS_ENV).is_some_and(|v| v == "1"),
     };
     let out = Arc::new(Mutex::new(std::io::stdout()));
     let matching_items = std::io::stdin().lock().lines();
@@ -320,7 +321,7 @@ mod socket_path_tests {
         let other = format!("{long}2");
         let p = socket_path_in(Path::new(&long), Path::new("/run/user/1000"));
         assert!(
-            p.starts_with("/run/user/1000/sculptured") && p.as_os_str().len() < MAX_SOCKET_PATH,
+            p.starts_with("/run/user/1000/coppertide") && p.as_os_str().len() < MAX_SOCKET_PATH,
             "{}",
             p.display()
         );

@@ -16,7 +16,7 @@ use axum::response::{IntoResponse, Response};
 use std::sync::Arc;
 use std::time::Duration;
 
-/// Where arenad listens unless `SCULPTURED_ARENA_URL` says otherwise.
+/// Where arenad listens unless `COPPERTIDE_ARENA_URL` says otherwise.
 pub const DEFAULT_ARENA_URL: &str = "http://127.0.0.1:4510";
 
 pub struct Arena {
@@ -41,12 +41,10 @@ impl Arena {
         })
     }
 
-    /// `SCULPTURED_ARENA_URL`, else [`DEFAULT_ARENA_URL`].
+    /// `COPPERTIDE_ARENA_URL`, else [`DEFAULT_ARENA_URL`].
     #[must_use]
     pub fn from_env() -> Arc<Arena> {
-        let url = std::env::var("SCULPTURED_ARENA_URL")
-            .ok()
-            .filter(|u| !u.trim().is_empty());
+        let url = model::brand::env_var("COPPERTIDE_ARENA_URL").filter(|u| !u.trim().is_empty());
         Arena::new(url.as_deref().unwrap_or(DEFAULT_ARENA_URL))
     }
 }

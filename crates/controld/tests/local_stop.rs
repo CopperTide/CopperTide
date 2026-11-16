@@ -1,4 +1,4 @@
-//! The runner keeps each agent's process on record while it runs, for `sculptured stop`.
+//! The runner keeps each agent's process on record while it runs, for `coppertide stop`.
 mod common;
 use common::fake_bin;
 

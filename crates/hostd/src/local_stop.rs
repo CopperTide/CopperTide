@@ -1,4 +1,4 @@
-//! `sculptured stop`: ends every agent this computer's runner started, at once and without the
+//! `coppertide stop`: ends every agent this computer's runner started, at once and without the
 //! server, like Ctrl+C: each agent's own process group is interrupted, then forced after 2 seconds.
 //! Only a process whose identity still matches what the runner recorded at launch is signalled.
 use crate::journal::Journal;

@@ -8,9 +8,9 @@ fn spec() -> LaunchSpec {
 }
 fn tools(approve: bool) -> SeatToolsLaunch {
     SeatToolsLaunch {
-        program: "/opt/sculptured".into(),
+        program: "/opt/coppertide".into(),
         args: vec!["seat-tools".into()],
-        env: vec![("SCULPTURED_SEAT_TOKEN".into(), "tok".into())].into(),
+        env: vec![("COPPERTIDE_SEAT_TOKEN".into(), "tok".into())].into(),
         approve,
         config_file: None,
     }
@@ -67,9 +67,9 @@ fn mcp_config_names_the_rig_server() {
     let v: Value = serde_json::from_str(after(&a, "--mcp-config").unwrap()).unwrap();
     let rig = &v["mcpServers"]["rig"];
     assert_eq!(rig["type"], "stdio");
-    assert_eq!(rig["command"], "/opt/sculptured");
+    assert_eq!(rig["command"], "/opt/coppertide");
     assert_eq!(rig["args"][0], "seat-tools");
-    assert_eq!(rig["env"]["SCULPTURED_SEAT_TOKEN"], "tok");
+    assert_eq!(rig["env"]["COPPERTIDE_SEAT_TOKEN"], "tok");
 }
 
 #[test]
@@ -125,7 +125,7 @@ fn protections_add_the_guard_hook_the_output_cap_and_a_compaction_backstop() {
             shell_output_chars: 8000,
             ..Default::default()
         },
-        guard: "/opt/My Apps/sculptured".into(),
+        guard: "/opt/My Apps/coppertide".into(),
         briefing_file: None,
     });
     let a = ClaudeStreamDriver::args(&s, None, "s1");
@@ -136,11 +136,11 @@ fn protections_add_the_guard_hook_the_output_cap_and_a_compaction_backstop() {
     assert_eq!(hook["matcher"], "Read|Bash");
     assert_eq!(
         hook["hooks"][0]["command"],
-        r#""/opt/My Apps/sculptured" guard"#
+        r#""/opt/My Apps/coppertide" guard"#
     );
     assert_eq!(after(&a, "--autocompact"), Some("100000"));
     let env = ClaudeStreamDriver::protection_env(&s).expect("rules travel in the environment");
-    assert_eq!(env.0, "SCULPTURED_PROTECTION");
+    assert_eq!(env.0, "COPPERTIDE_PROTECTION");
     assert_eq!(
         serde_json::from_str::<model::GuardRules>(&env.1)
             .unwrap()
@@ -189,7 +189,7 @@ fn after_compaction_a_protected_claude_agent_gets_its_briefing_back() {
     };
     s.protection = Some(drivers::ProtectionLaunch {
         rules,
-        guard: "/opt/sculptured".into(),
+        guard: "/opt/coppertide".into(),
         briefing_file: Some("/data/briefings/dev.a@r.md".into()),
     });
     let settings: Value = serde_json::from_str(
@@ -203,7 +203,7 @@ fn after_compaction_a_protected_claude_agent_gets_its_briefing_back() {
     );
     assert_eq!(
         start["hooks"][0]["command"],
-        r#""/opt/sculptured" rebrief "/data/briefings/dev.a@r.md""#
+        r#""/opt/coppertide" rebrief "/data/briefings/dev.a@r.md""#
     );
 }
 
@@ -242,7 +242,7 @@ fn safety_rules_widen_the_hook_to_every_tool_and_signet_runs_after_the_guard() {
     rules.writes = vec!["src/".into()];
     s.protection = Some(drivers::ProtectionLaunch {
         rules: rules.clone(),
-        guard: "/opt/sculptured".into(),
+        guard: "/opt/coppertide".into(),
         briefing_file: None,
     });
     let hooks = |s: &LaunchSpec| -> Value {
@@ -260,7 +260,7 @@ fn safety_rules_widen_the_hook_to_every_tool_and_signet_runs_after_the_guard() {
     rules.safety = model::safety::presets();
     s.protection = Some(drivers::ProtectionLaunch {
         rules,
-        guard: "/opt/sculptured".into(),
+        guard: "/opt/coppertide".into(),
         briefing_file: None,
     });
     s.tool_hooks =

@@ -1,5 +1,6 @@
-//! `sculptured-background`: starts `sculptured <args>` (next to this program) with no window and waits
+//! `coppertide-background`: starts `coppertide <args>` (next to this program) with no window and waits
 //! for it, exiting with its code. Windows' logon task runs this so the runner never shows a console.
+//! Installed under its old name (`sculptured-background`), it starts `sculptured` beside it.
 #![cfg_attr(windows, windows_subsystem = "windows")]
 use std::process::{Command, ExitCode};
 
@@ -7,11 +8,8 @@ fn main() -> ExitCode {
     let Ok(me) = std::env::current_exe() else {
         return ExitCode::FAILURE;
     };
-    let runner = me.with_file_name(if cfg!(windows) {
-        "sculptured.exe"
-    } else {
-        "sculptured"
-    });
+    let name = me.file_name().and_then(|n| n.to_str()).unwrap_or_default();
+    let runner = me.with_file_name(name.replacen("-background", "", 1));
     let mut cmd = Command::new(runner);
     cmd.args(std::env::args_os().skip(1));
     #[cfg(windows)]

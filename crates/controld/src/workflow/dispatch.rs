@@ -95,7 +95,7 @@ pub fn spawn(st: AppState, rig: String, start: i64, job: Job) {
 /// Why the command could not run at all, in words a person can act on.
 fn unrunnable(e: crate::error::ApiError) -> String {
     if e.code == "unknown_op" {
-        return "This computer's CopperTide is too old to run a dispatch command. Update CopperTide on that computer and run `sculptured connect` again.".into();
+        return "This computer's CopperTide is too old to run a dispatch command. Update CopperTide on that computer and run `coppertide connect` again.".into();
     }
     format!(
         "The dispatch command did not run: {} Nothing was dispatched.",

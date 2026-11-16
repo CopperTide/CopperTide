@@ -141,7 +141,7 @@ impl Journal {
     }
 
     /// The agent's process (the leader of the group its driver made) and what identifies it beyond
-    /// its pid, so `sculptured stop` can end it without the server, and never a process that reused the pid.
+    /// its pid, so `coppertide stop` can end it without the server, and never a process that reused the pid.
     pub fn record_process(
         &mut self,
         seat: &str,

@@ -6,7 +6,7 @@ use super::{
 
 #[derive(Parser)]
 #[command(
-    name = "sculptured",
+    name = "coppertide",
     version,
     about = "Run and supervise teams of agents on your computer"
 )]
@@ -21,7 +21,7 @@ pub(super) enum Cmd {
     Serve {
         #[arg(long, default_value_t = 4410)]
         port: u16,
-        #[arg(long, env = "SCULPTURED_DATA_DIR")]
+        #[arg(long, env = "COPPERTIDE_DATA_DIR")]
         data_dir: Option<PathBuf>,
         #[arg(long, default_value = "web/dist")]
         web_dir: PathBuf,
@@ -32,11 +32,11 @@ pub(super) enum Cmd {
         /// Question timeout in seconds, overriding the settings (tests and e2e only).
         #[arg(long, hide = true)]
         question_timeout_secs: Option<u64>,
-        /// Hosted beta: serve one user behind the gateway (needs SCULPTURED_GATEWAY_SECRET); no local agent runner.
+        /// Hosted beta: serve one user behind the gateway (needs COPPERTIDE_GATEWAY_SECRET); no local agent runner.
         #[arg(long)]
         hosted: bool,
         /// The CopperTide server Community goes through once it is turned on (not when hosted).
-        #[arg(long, env = "SCULPTURED_COMMUNITY_ORIGIN", default_value = controld::community::DEFAULT_ORIGIN)]
+        #[arg(long, env = "COPPERTIDE_COMMUNITY_ORIGIN", default_value = controld::community::DEFAULT_ORIGIN)]
         community_origin: String,
     },
     /// Run a host runtime that dials controld.
@@ -47,7 +47,7 @@ pub(super) enum Cmd {
         host_id: String,
         #[arg(long)]
         data_dir: PathBuf,
-        #[arg(long, env = "SCULPTURED_HOST_TOKEN", hide_env_values = true)]
+        #[arg(long, env = "COPPERTIDE_HOST_TOKEN", hide_env_values = true)]
         token: String,
         #[arg(long)]
         claude_program: Option<PathBuf>,
@@ -64,7 +64,7 @@ pub(super) enum Cmd {
         /// How this computer appears in your account (default: its hostname).
         #[arg(long)]
         name: Option<String>,
-        /// A folder agents may work in (repeatable). Add more later with `sculptured allow`.
+        /// A folder agents may work in (repeatable). Add more later with `coppertide allow`.
         #[arg(long)]
         allow: Vec<PathBuf>,
         #[arg(long)]
@@ -141,7 +141,7 @@ pub(super) enum Cmd {
         /// Most minutes for the run; may only lower what the file sets.
         #[arg(long)]
         minutes: Option<u32>,
-        /// The run's data (default: `~/.sculptured/runs/<name>-<time>`).
+        /// The run's data (default: `~/.coppertide/runs/<name>-<time>`).
         #[arg(long)]
         data_dir: Option<PathBuf>,
         /// Seconds every agent must be idle, with nothing waiting, before the run counts as finished.
@@ -157,6 +157,23 @@ pub(super) enum Cmd {
         #[arg(long)]
         data_dir: Option<PathBuf>,
     },
+}
+
+impl Cmd {
+    /// Commands a person runs without `--data-dir`, which use (and may move) the default data folder.
+    fn uses_default_data_dir(&self) -> bool {
+        match self {
+            Cmd::Hostd { .. } | Cmd::SeatTools => false,
+            Cmd::Serve { data_dir, .. }
+            | Cmd::Connect { data_dir, .. }
+            | Cmd::Allow { data_dir, .. }
+            | Cmd::ApproveComponent { data_dir, .. }
+            | Cmd::Doctor { data_dir }
+            | Cmd::SetSecret { data_dir, .. }
+            | Cmd::Run { data_dir, .. }
+            | Cmd::Stop { data_dir } => data_dir.is_none(),
+        }
+    }
 }
 
 pub(super) fn main() -> ExitCode {
@@ -175,6 +192,7 @@ pub(super) fn main() -> ExitCode {
     // SAFETY: no other thread exists yet; the tokio runtime is built below.
     unsafe {
         std::env::remove_var(drivers::HOST_TOKEN_ENV);
+        std::env::remove_var("SCULPTURED_HOST_TOKEN");
         std::env::remove_var("RIG_CONTROL_HOST_TOKEN");
     };
     let runtime = match tokio::runtime::Builder::new_multi_thread()
@@ -183,7 +201,7 @@ pub(super) fn main() -> ExitCode {
     {
         Ok(rt) => rt,
         Err(e) => {
-            eprintln!("sculptured: cannot start the async runtime: {e}");
+            eprintln!("coppertide: cannot start the async runtime: {e}");
             return ExitCode::FAILURE;
         }
     };
@@ -197,6 +215,18 @@ pub(super) async fn run(cli: Cli) -> ExitCode {
         )
         .with_writer(std::io::stderr)
         .init();
+    // Reinstalling replaces a login service from before the rename, which would otherwise keep the
+    // old folder in use; then the old data folder can move.
+    if let Cmd::Connect {
+        install_service: true,
+        ..
+    } = &cli.cmd
+    {
+        connect::retire_legacy_services();
+    }
+    if cli.cmd.uses_default_data_dir() {
+        migrate_data_home();
+    }
     let result = match cli.cmd {
         Cmd::Serve {
             port,
@@ -214,7 +244,7 @@ pub(super) async fn run(cli: Cli) -> ExitCode {
                 Some(d) => d,
                 None => {
                     eprintln!(
-                        "sculptured: set --data-dir or SCULPTURED_DATA_DIR (HOME is not set)"
+                        "coppertide: set --data-dir or COPPERTIDE_DATA_DIR (HOME is not set)"
                     );
                     return ExitCode::FAILURE;
                 }
@@ -341,15 +371,15 @@ pub(super) async fn run(cli: Cli) -> ExitCode {
         Ok(()) => ExitCode::SUCCESS,
         // The service must not start a runner whose account disconnected this computer again.
         Err(e) if e == hostd::DISCONNECTED => {
-            eprintln!("sculptured: {e}");
+            eprintln!("coppertide: {e}");
             ExitCode::from(connect::DISCONNECTED_EXIT)
         }
         Err(e) if e == hostd::ALREADY_RUNNING => {
-            eprintln!("sculptured: {e}");
+            eprintln!("coppertide: {e}");
             ExitCode::from(75)
         }
         Err(e) => {
-            eprintln!("sculptured: {e}");
+            eprintln!("coppertide: {e}");
             ExitCode::FAILURE
         }
     }
@@ -437,8 +467,8 @@ pub(super) async fn serve(
     )
     .with_cli_programs(claude_program.clone(), codex_program.clone());
     let st = if hosted {
-        let secret = std::env::var("SCULPTURED_GATEWAY_SECRET")
-            .map_err(|_| "--hosted needs SCULPTURED_GATEWAY_SECRET".to_string())?;
+        let secret = model::brand::env_var("COPPERTIDE_GATEWAY_SECRET")
+            .ok_or_else(|| "--hosted needs COPPERTIDE_GATEWAY_SECRET".to_string())?;
         let secret = std::sync::Arc::new(secret.into_bytes());
         let st = st.with_auth(controld::auth::AuthPolicy::Gateway {
             secret: secret.clone(),
@@ -446,10 +476,10 @@ pub(super) async fn serve(
         // The gateway passes where to report (analytics) and read model connections, and as whom;
         // without both, nothing is sent and agents with a model connection do not start.
         match (
-            std::env::var("SCULPTURED_GATEWAY_URL"),
-            std::env::var("SCULPTURED_USER"),
+            model::brand::env_var("COPPERTIDE_GATEWAY_URL"),
+            model::brand::env_var("COPPERTIDE_USER"),
         ) {
-            (Ok(url), Ok(user)) => {
+            (Some(url), Some(user)) => {
                 let st = st.with_gateway(controld::gateway::Gateway::new(
                     url.clone(),
                     user.clone(),
@@ -537,7 +567,7 @@ pub(super) async fn start_with(
             codex_program,
         )));
         // Announce readiness only once the local hostd is connected; a boot sent before
-        // that would put every seat in attention ("Sculptured's agent runner is not connected").
+        // that would put every seat in attention ("CopperTide's agent runner is not connected").
         let deadline = tokio::time::Instant::now() + Duration::from_secs(10);
         while !st.hosts.is_connected(LOCAL_HOST) {
             if tokio::time::Instant::now() >= deadline {
@@ -552,7 +582,7 @@ pub(super) async fn start_with(
     Ok((supervisor, server))
 }
 
-/// controld and a local runner on 127.0.0.1 for `sculptured run`, with no web UI: its address, state,
+/// controld and a local runner on 127.0.0.1 for `coppertide run`, with no web UI: its address, state,
 /// and the local runner's supervisor (abort it before stopping the runner, or it starts another).
 pub(crate) async fn start_local(
     data_dir: &Path,
@@ -618,7 +648,7 @@ pub(super) async fn supervise_hostd(
             .arg("local")
             .arg("--data-dir")
             .arg(&data_dir)
-            .env("SCULPTURED_HOST_TOKEN", &token)
+            .env(drivers::HOST_TOKEN_ENV, &token)
             .stdout(std::process::Stdio::null());
         if let Some(p) = &claude_program {
             cmd.arg("--claude-program").arg(p);
@@ -659,7 +689,8 @@ pub(super) async fn supervise_hostd(
     }
 }
 
-/// Compatibility for existing installations and live agent tool processes during the rename.
+/// Compatibility for existing installations and live agent tool processes: `SCULPTURED_*` (and the
+/// older `RIG_CONTROL_*`) values count as their `COPPERTIDE_*` names when those are not set.
 /// Called before any thread is started; credentials are removed again before agents launch.
 pub(super) fn migrate_legacy_environment() {
     for suffix in [
@@ -669,17 +700,27 @@ pub(super) fn migrate_legacy_environment() {
         "SEAT_TOKEN",
         "SEAT_APPROVE",
     ] {
-        let current = format!("SCULPTURED_{suffix}");
+        let current = format!("{}{suffix}", model::brand::ENV_PREFIX);
+        let older = [
+            format!("{}{suffix}", model::brand::LEGACY_ENV_PREFIX),
+            format!("RIG_CONTROL_{suffix}"),
+        ];
         if std::env::var_os(&current).is_none()
-            && let Some(value) = std::env::var_os(format!("RIG_CONTROL_{suffix}"))
+            && let Some(value) = older.iter().find_map(std::env::var_os)
         {
             // SAFETY: main calls this before parsing CLI arguments or creating threads.
             unsafe { std::env::set_var(current, value) };
         }
     }
+    for (name, value) in model::brand::legacy_env_to_adopt(std::env::vars_os()) {
+        // SAFETY: as above.
+        unsafe { std::env::set_var(name, value) };
+    }
 }
+
+/// The data folder for `home`: `~/.coppertide`, or the older folder an install from before still uses.
 pub(super) fn default_data_dir(home: &Path) -> PathBuf {
-    let current = home.join(".sculptured");
+    let current = model::brand::data_home(home);
     let legacy = home.join(".rig-control");
     if !current.exists() && legacy.exists() {
         legacy
@@ -687,15 +728,35 @@ pub(super) fn default_data_dir(home: &Path) -> PathBuf {
         current
     }
 }
+
+/// Moves the pre-rename data folder once, saying so in one line. Commands people run call this; the
+/// ones a running system starts (hostd, the agent tools) do not.
+pub(super) fn migrate_data_home() {
+    let Some(home) = hostd::platform::home() else {
+        return;
+    };
+    match model::brand::migrate_data_home(&home) {
+        model::brand::Migration::Moved => eprintln!(
+            "coppertide: moved your data from {} to {}",
+            home.join(model::brand::LEGACY_DATA_FOLDER).display(),
+            home.join(model::brand::DATA_FOLDER).display()
+        ),
+        model::brand::Migration::Kept(why) => {
+            tracing::debug!(%why, "kept the data folder ~/.sculptured")
+        }
+        model::brand::Migration::Nothing => {}
+    }
+}
+
 #[cfg(test)]
 mod branding_migration_tests {
     use super::*;
     #[test]
-    fn existing_projects_are_reused_and_new_installs_use_sculptured() {
+    fn existing_projects_are_reused_and_new_installs_use_coppertide() {
         let home = tempfile::tempdir().unwrap();
         assert_eq!(
             default_data_dir(home.path()),
-            home.path().join(".sculptured")
+            home.path().join(".coppertide")
         );
         std::fs::create_dir(home.path().join(".rig-control")).unwrap();
         assert_eq!(
@@ -706,6 +767,11 @@ mod branding_migration_tests {
         assert_eq!(
             default_data_dir(home.path()),
             home.path().join(".sculptured")
+        );
+        std::fs::create_dir(home.path().join(".coppertide")).unwrap();
+        assert_eq!(
+            default_data_dir(home.path()),
+            home.path().join(".coppertide")
         );
     }
 }

@@ -101,7 +101,7 @@ impl CodexAppServerDriver {
             .collect()
     }
 
-    /// Config overrides that start the `rig` MCP server (`sculptured seat-tools`) for this thread,
+    /// Config overrides that start the `rig` MCP server (`coppertide seat-tools`) for this thread,
     /// as dotted keys (codex-m2-seat-config-dotted: started, listed and called).
     #[must_use]
     pub fn mcp_config(t: &SeatToolsLaunch) -> Value {
@@ -126,5 +126,5 @@ impl CodexAppServerDriver {
 
 /// The environment variable holding header `j` of remote server `i`.
 fn remote_header_env(i: usize, j: usize) -> String {
-    format!("SCULPTURED_MCP_HEADER_{i}_{j}")
+    format!("COPPERTIDE_MCP_HEADER_{i}_{j}")
 }

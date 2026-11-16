@@ -1,5 +1,5 @@
-//! `sculptured run <file>`: a team from one MADL file, run here in the terminal. It starts its own
-//! controld and local runner (data under `~/.sculptured/runs/`), imports the file, applies the options,
+//! `coppertide run <file>`: a team from one MADL file, run here in the terminal. It starts its own
+//! controld and local runner (data under `~/.coppertide/runs/`), imports the file, applies the options,
 //! starts the team, and prints a line whenever an agent's state changes. A question is asked in the
 //! terminal when there is one; without one the run stops and says what was asked. The run is over when
 //! every agent has stopped, or every agent has been idle with nothing waiting for `settle`. Ctrl+C asks
@@ -35,7 +35,7 @@ pub async fn run(a: RunArgs) -> u8 {
     match go(a).await {
         Ok(code) => code,
         Err((code, why)) => {
-            eprintln!("sculptured run: {why}");
+            eprintln!("coppertide run: {why}");
             code
         }
     }
@@ -93,8 +93,7 @@ fn default_dir(file: &std::path::Path) -> Result<PathBuf, Fail> {
         .duration_since(std::time::UNIX_EPOCH)
         .map(|d| d.as_secs())
         .unwrap_or(0);
-    Ok(home
-        .join(".sculptured")
+    Ok(model::brand::data_home(&home)
         .join("runs")
         .join(format!("{stem}-{at}")))
 }

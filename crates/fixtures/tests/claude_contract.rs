@@ -602,7 +602,7 @@ async fn seat_tools_raise_the_clis_mcp_tool_timeout() {
         let mut sp = spec(dir.path(), vec![]);
         if tools {
             sp.seat_tools = Some(SeatToolsLaunch {
-                program: "/opt/sculptured".into(),
+                program: "/opt/coppertide".into(),
                 args: vec!["seat-tools".into()],
                 env: Default::default(),
                 approve: false,
@@ -632,9 +632,9 @@ async fn the_seat_tools_config_is_a_private_file_and_the_token_stays_off_argv() 
         vec![("FAKE_CLAUDE_ARGV_LOG".into(), argv.display().to_string())],
     );
     sp.seat_tools = Some(SeatToolsLaunch {
-        program: "/opt/sculptured".into(),
+        program: "/opt/coppertide".into(),
         args: vec!["seat-tools".into()],
-        env: vec![("SCULPTURED_SEAT_TOKEN".into(), "secret-token-1".into())].into(),
+        env: vec![("COPPERTIDE_SEAT_TOKEN".into(), "secret-token-1".into())].into(),
         approve: false,
         config_file: Some(file.clone()),
     });
@@ -649,7 +649,7 @@ async fn the_seat_tools_config_is_a_private_file_and_the_token_stays_off_argv() 
     let config: serde_json::Value =
         serde_json::from_str(&std::fs::read_to_string(&file).unwrap()).unwrap();
     assert_eq!(
-        config["mcpServers"]["rig"]["env"]["SCULPTURED_SEAT_TOKEN"],
+        config["mcpServers"]["rig"]["env"]["COPPERTIDE_SEAT_TOKEN"],
         "secret-token-1"
     );
     let args = std::fs::read_to_string(&argv).unwrap();
@@ -673,9 +673,9 @@ async fn an_existing_config_file_is_narrowed_to_owner_only_and_replaced() {
     std::fs::set_permissions(&file, std::fs::Permissions::from_mode(0o644)).unwrap();
     let mut sp = spec(dir.path(), vec![]);
     sp.seat_tools = Some(SeatToolsLaunch {
-        program: "/opt/sculptured".into(),
+        program: "/opt/coppertide".into(),
         args: vec!["seat-tools".into()],
-        env: vec![("SCULPTURED_SEAT_TOKEN".into(), "secret-token-2".into())].into(),
+        env: vec![("COPPERTIDE_SEAT_TOKEN".into(), "secret-token-2".into())].into(),
         approve: false,
         config_file: Some(file.clone()),
     });

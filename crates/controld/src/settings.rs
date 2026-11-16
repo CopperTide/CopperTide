@@ -134,7 +134,7 @@ impl Store {
         }
         write(self.connection(), &team_key(team), s)
     }
-    /// `sculptured serve --question-timeout-secs` (tests and e2e only). None removes it.
+    /// `coppertide serve --question-timeout-secs` (tests and e2e only). None removes it.
     pub fn set_question_timeout_override(&mut self, ms: Option<u64>) -> rusqlite::Result<()> {
         match ms {
             Some(ms) => write(self.connection(), OVERRIDE, &Some(ms)),

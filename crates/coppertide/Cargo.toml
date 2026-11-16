@@ -1,16 +1,16 @@
 [package]
-name = "sculptured"
+name = "coppertide"
 edition.workspace = true
 version.workspace = true
 publish.workspace = true
 
 [[bin]]
-name = "sculptured"
+name = "coppertide"
 path = "src/main.rs"
 
-# Windows: runs `sculptured` with no console window (the logon task starts this).
+# Windows: runs `coppertide` with no console window (the logon task starts this).
 [[bin]]
-name = "sculptured-background"
+name = "coppertide-background"
 path = "src/background.rs"
 
 [dependencies]

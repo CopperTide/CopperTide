@@ -1,4 +1,4 @@
-//! `sculptured stop`: the computer ends the agents its runner started, without the server.
+//! `coppertide stop`: the computer ends the agents its runner started, without the server.
 #![cfg(unix)]
 use hostd::journal::Journal;
 use hostd::local_stop;

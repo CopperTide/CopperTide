@@ -297,7 +297,7 @@ impl Session for RiggedSession {
 fn rigged_sup(rig: &Rigged, dir: Option<&Path>) -> Supervisor {
     let host = dir.map(|d| SeatToolsHost {
         socket: d.join("seat-tools.sock"),
-        shim: "/opt/sculptured".into(),
+        shim: "/opt/coppertide".into(),
     });
     Supervisor::with_seat_tools(
         "local".into(),
@@ -482,7 +482,7 @@ async fn seat_tools_token_lives_as_long_as_the_process() {
     let seen = Arc::new(Mutex::new(None));
     let host = SeatToolsHost {
         socket: dir.path().join("seat-tools.sock"),
-        shim: "/opt/sculptured".into(),
+        shim: "/opt/coppertide".into(),
     };
     let s = Supervisor::with_seat_tools(
         "local".into(),
@@ -642,7 +642,7 @@ async fn a_driver_that_takes_no_config_file_gets_none() {
     let seen = Arc::new(Mutex::new(None));
     let host = SeatToolsHost {
         socket: dir.path().join("seat-tools.sock"),
-        shim: "/opt/sculptured".into(),
+        shim: "/opt/coppertide".into(),
     };
     let s = Supervisor::with_seat_tools(
         "local".into(),

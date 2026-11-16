@@ -120,7 +120,7 @@ impl Supervisor {
         // approved there by its digest.
         if !may_run(self.inner.policy.is_some(), c, &|d| self.approved(d)) {
             return Err(format!(
-                "This agent runs without {}: it is not approved on this computer. It would run `{}`. To allow it, run on that computer: sculptured approve-component {}",
+                "This agent runs without {}: it is not approved on this computer. It would run `{}`. To allow it, run on that computer: coppertide approve-component {}",
                 c.name,
                 c.command_line(),
                 c.digest()
@@ -139,7 +139,7 @@ impl Supervisor {
         };
         let missing = |n: String| {
             format!(
-                "This agent runs without {}: the secret {n} is not set on its computer. Set it there with: sculptured set-secret {n} (then restart the agent). {}",
+                "This agent runs without {}: the secret {n} is not set on its computer. Set it there with: coppertide set-secret {n} (then restart the agent). {}",
                 c.name, c.install
             )
         };
@@ -190,7 +190,7 @@ impl Supervisor {
         Ok(LocalCommand { program, args })
     }
 
-    /// Manifests this computer's owner approved (`sculptured approve-component`), read at each launch so
+    /// Manifests this computer's owner approved (`coppertide approve-component`), read at each launch so
     /// an approval needs no restart.
     fn approved(&self, digest: &str) -> bool {
         let Some(host) = &self.inner.seat_tools else {
@@ -207,7 +207,7 @@ impl Supervisor {
             .is_some_and(|l| l.iter().any(|d| d == digest))
     }
 
-    /// Secrets this computer's owner set for components (`sculptured set-secret`), read at each launch.
+    /// Secrets this computer's owner set for components (`coppertide set-secret`), read at each launch.
     fn secrets(&self) -> std::collections::BTreeMap<String, String> {
         let Some(host) = &self.inner.seat_tools else {
             return Default::default();
@@ -223,7 +223,7 @@ impl Supervisor {
             .unwrap_or_default()
     }
 
-    /// The agent's briefing in this runner's data, readable by this user only, for `sculptured rebrief`.
+    /// The agent's briefing in this runner's data, readable by this user only, for `coppertide rebrief`.
     pub(super) fn briefing_file(&self, seat: &str, text: &str) -> Option<PathBuf> {
         let host = self.inner.seat_tools.as_ref()?;
         let dir = host

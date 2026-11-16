@@ -1,4 +1,4 @@
-//! Sculptured's tools for agents. `sculptured seat-tools` is a stdio MCP server (the "shim") that a
+//! Sculptured's tools for agents. `coppertide seat-tools` is a stdio MCP server (the "shim") that a
 //! CLI starts for its agent; it forwards each call over hostd's private socket (`socket`), which relays
 //! it to controld over the host link. One JSON line each way on the socket (`host_proto::seat_tools`).
 mod collaboration;

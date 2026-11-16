@@ -5,13 +5,13 @@ use std::io::{BufRead, BufReader, Write};
 use std::os::unix::net::UnixStream;
 use std::path::Path;
 
-pub const SOCKET_ENV: &str = "SCULPTURED_SEAT_SOCKET";
-pub const TOKEN_ENV: &str = "SCULPTURED_SEAT_TOKEN";
-pub const APPROVE_ENV: &str = "SCULPTURED_SEAT_APPROVE";
+pub const SOCKET_ENV: &str = "COPPERTIDE_SEAT_SOCKET";
+pub const TOKEN_ENV: &str = "COPPERTIDE_SEAT_TOKEN";
+pub const APPROVE_ENV: &str = "COPPERTIDE_SEAT_APPROVE";
 /// "0": the team has no dynamic workflow, so its tools are not offered.
-pub const WORKFLOW_ENV: &str = "SCULPTURED_SEAT_WORKFLOW";
+pub const WORKFLOW_ENV: &str = "COPPERTIDE_SEAT_WORKFLOW";
 /// "1": the agent has skills it reads with `read_skill` (its CLI cannot load them natively).
-pub const SKILLS_ENV: &str = "SCULPTURED_SEAT_SKILLS";
+pub const SKILLS_ENV: &str = "COPPERTIDE_SEAT_SKILLS";
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ToolRequest {

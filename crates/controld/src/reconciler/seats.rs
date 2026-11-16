@@ -97,9 +97,9 @@ pub(crate) async fn restart_seat_claimed(
 /// stop; reconcile any live projection from that explicit response. A computer that is offline
 /// cannot stop it now, and may never come back: the seat is stopped here at once, with a reason
 /// that says it may still run there, and the computer ends it when it reconnects
-/// (`restore::on_hello`), or `sculptured stop` ends it on that computer.
+/// (`restore::on_hello`), or `coppertide stop` ends it on that computer.
 /// Why an agent whose computer is offline shows as stopped.
-pub(crate) const OFFLINE_STOP: &str = "Stopped here; its computer is offline. If the agent is still running there, it is ended when that computer reconnects, or run `sculptured stop` on it";
+pub(crate) const OFFLINE_STOP: &str = "Stopped here; its computer is offline. If the agent is still running there, it is ended when that computer reconnects, or run `coppertide stop` on it";
 
 pub(crate) async fn stop_on_host(st: &AppState, host: &str, seat: &str) -> Result<(), String> {
     stop_on_host_as(st, host, seat, false).await

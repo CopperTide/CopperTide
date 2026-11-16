@@ -1,5 +1,5 @@
-//! `sculptured serve` runs controld and supervises a local hostd child process.
-//! `sculptured hostd` runs the host runtime; controld normally starts it.
+//! `coppertide serve` runs controld and supervises a local hostd child process.
+//! `coppertide hostd` runs the host runtime; controld normally starts it.
 mod connect;
 mod doctor;
 mod guard;

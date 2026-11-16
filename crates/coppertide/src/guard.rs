@@ -1,5 +1,5 @@
-//! `sculptured guard`: Claude Code's PreToolUse hook for Sculptured's protections. It reads the pending
-//! tool call on stdin and the agent's rules from `SCULPTURED_PROTECTION`, and prints a refusal or
+//! `coppertide guard`: Claude Code's PreToolUse hook for CopperTide's protections. It reads the pending
+//! tool call on stdin and the agent's rules from `COPPERTIDE_PROTECTION`, and prints a refusal or
 //! nothing. It runs before anything else in this binary starts, reads no file contents, and lets the
 //! call through whenever it cannot decide.
 use std::io::Read;
@@ -9,8 +9,7 @@ use std::process::ExitCode;
 const MAX_INPUT: u64 = 4 * 1024 * 1024;
 
 pub fn run() -> ExitCode {
-    let rules = std::env::var("SCULPTURED_PROTECTION")
-        .ok()
+    let rules = model::brand::env_var("COPPERTIDE_PROTECTION")
         .and_then(|r| serde_json::from_str::<model::GuardRules>(&r).ok());
     let mut input = String::new();
     let read = std::io::stdin().take(MAX_INPUT).read_to_string(&mut input);
@@ -36,7 +35,7 @@ pub fn run() -> ExitCode {
     ExitCode::SUCCESS
 }
 
-/// `sculptured rebrief <file>`: Claude Code's SessionStart hook after a compaction. Prints the agent's
+/// `coppertide rebrief <file>`: Claude Code's SessionStart hook after a compaction. Prints the agent's
 /// briefing as context for the conversation that continues, or nothing when the file is gone.
 pub fn rebrief(file: Option<std::ffi::OsString>) -> ExitCode {
     if let Some(text) = file

@@ -1,4 +1,4 @@
-//! The gateway's device-code pairing (C4), shared by `sculptured connect` (a computer) and
+//! The gateway's device-code pairing (C4), shared by `coppertide connect` (a computer) and
 //! Community sign-in (scope `community`): start shows a code to approve in the browser, then the
 //! caller polls until the key is handed over, the code expires or the person turns it down.
 use serde::Deserialize;

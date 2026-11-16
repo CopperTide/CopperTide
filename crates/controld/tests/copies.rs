@@ -132,7 +132,7 @@ async fn an_agent_works_in_its_own_copy_that_merges_back_and_can_be_removed() {
     );
 }
 
-/// `SCULPTURED_TEST_COPIES_DIR` points this at a real drive (e.g. an exFAT SSD); by default a temp folder.
+/// `COPPERTIDE_TEST_COPIES_DIR` points this at a real drive (e.g. an exFAT SSD); by default a temp folder.
 #[tokio::test]
 async fn copies_go_to_the_chosen_folder_and_a_missing_drive_is_refused() {
     let (s, _sup, _dir) = crate::common::seat_tools::with_tools().await;
@@ -166,9 +166,9 @@ async fn copies_go_to_the_chosen_folder_and_a_missing_drive_is_refused() {
     let why = controld::copies::prepare(&s.st, &id, &seat, &proj).unwrap_err();
     assert!(why.contains("not available"), "{why}");
 
-    let base = std::env::var("SCULPTURED_TEST_COPIES_DIR")
+    let base = model::brand::env_var_os("COPPERTIDE_TEST_COPIES_DIR")
         .map(std::path::PathBuf::from)
-        .unwrap_or_else(|_| s.home.path().join("drive"));
+        .unwrap_or_else(|| s.home.path().join("drive"));
     let chosen = base.join(format!("t{}", std::process::id()));
     std::fs::create_dir_all(&chosen).unwrap();
     set(chosen.to_str().unwrap());

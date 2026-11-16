@@ -4,7 +4,7 @@
 //! write one, share it through Community, and add it to a team. The runner finds programs and plugins
 //! on its own computer and fills in a remote server's secrets there, so the server never holds them.
 //! A connected computer runs a manifest that is not built in only after its owner approved that exact
-//! manifest there (`sculptured approve-component <digest>`).
+//! manifest there (`coppertide approve-component <digest>`).
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::BTreeMap;

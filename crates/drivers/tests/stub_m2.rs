@@ -364,7 +364,7 @@ async fn tool_session(
 ) {
     let mut spec = LaunchSpec::new("dev.a@r".parse().unwrap(), dir.into());
     spec.seat_tools = Some(SeatToolsLaunch {
-        program: "/opt/sculptured".into(),
+        program: "/opt/coppertide".into(),
         args: vec!["seat-tools".into()],
         env: host_proto::seat_tools::shim_env(socket, "tok", false).into(),
         approve: false,

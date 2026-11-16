@@ -5,9 +5,9 @@ use super::{
 };
 
 /// hostd's bearer token for controld. Agent processes must never inherit it.
-pub const HOST_TOKEN_ENV: &str = "SCULPTURED_HOST_TOKEN";
+pub const HOST_TOKEN_ENV: &str = "COPPERTIDE_HOST_TOKEN";
 
-/// The injected MCP server a CLI should start for this agent (`sculptured seat-tools`).
+/// The injected MCP server a CLI should start for this agent (`coppertide seat-tools`).
 #[derive(Clone, Debug, PartialEq)]
 pub struct SeatToolsLaunch {
     pub program: PathBuf,
@@ -53,7 +53,7 @@ pub struct LaunchSpec {
     pub add_dirs: Vec<PathBuf>,
     /// Claude: which of the person's own Claude Code setup to load; None = all of it.
     pub claude_setup: Option<model::ClaudeSetup>,
-    /// Claude: guard the agent's tool calls with these rules, run by `guard` (the `sculptured` binary).
+    /// Claude: guard the agent's tool calls with these rules, run by `guard` (the `coppertide` binary).
     pub protection: Option<ProtectionLaunch>,
     /// Codex: compact the conversation once its context passes this many tokens (within a turn too).
     pub compact_tokens: Option<u64>,
@@ -103,9 +103,9 @@ impl std::fmt::Debug for RemoteMcp {
 #[derive(Clone, Debug, PartialEq)]
 pub struct ProtectionLaunch {
     pub rules: model::GuardRules,
-    /// The `sculptured` binary; its `guard` subcommand is the hook.
+    /// The `coppertide` binary; its `guard` subcommand is the hook.
     pub guard: std::path::PathBuf,
-    /// The agent's briefing, given back by `sculptured rebrief` after Claude compacts its context.
+    /// The agent's briefing, given back by `coppertide rebrief` after Claude compacts its context.
     pub briefing_file: Option<std::path::PathBuf>,
 }
 

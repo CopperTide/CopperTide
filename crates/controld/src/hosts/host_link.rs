@@ -43,7 +43,7 @@ pub(super) fn runner(host: &str) -> String {
 
 /// How to update an older agent runner, in working steps. A hostd outlives a Sculptured restart by
 /// design (it owns the agents), so restarting Sculptured alone never updates it. Once it is ended,
-/// `sculptured serve` starts the new one: its supervisor checks back every 30 seconds while another
+/// `coppertide serve` starts the new one: its supervisor checks back every 30 seconds while another
 /// runner holds the data folder. Teams are stopped first so no agent outlives its runner.
 pub(super) fn update_steps(host: &str) -> String {
     if host == LOCAL_HOST {

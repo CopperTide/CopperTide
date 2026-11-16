@@ -1,5 +1,5 @@
 //! What a connected computer lets the server do, decided on the computer (`runner.json`, written by
-//! `sculptured connect` / `sculptured allow`). Launches outside the allowed folders, and any server-supplied
+//! `coppertide connect` / `coppertide allow`). Launches outside the allowed folders, and any server-supplied
 //! program, environment or extra arguments, are refused here. Allowed folders decide where an agent
 //! *starts*; what it may do once running is the `access` level: `full` (the CLIs' full-access modes, the
 //! default) or `sandboxed`. The server can lower access but never raise it.
@@ -7,7 +7,7 @@ use host_proto::LaunchParams;
 use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 
-/// How much agents may do on this computer, chosen by its owner at `sculptured connect`.
+/// How much agents may do on this computer, chosen by its owner at `coppertide connect`.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Access {
@@ -158,7 +158,7 @@ impl RunnerPolicy {
             Err(localops::LocalError::forbidden(
                 "not_allowed_here",
                 format!(
-                    "{what} is turned off on this computer (sculptured connect … --enable {flag})"
+                    "{what} is turned off on this computer (coppertide connect … --enable {flag})"
                 ),
             ))
         };
@@ -331,7 +331,7 @@ impl RunnerPolicy {
             return Err(localops::LocalError::forbidden(
                 "not_allowed_here",
                 format!(
-                    "{folder} is inside the git repository {}, which reaches outside the folders this computer allows. Agents' own copies cover the whole repository: allow it with `sculptured allow {}`, or switch off own copies.",
+                    "{folder} is inside the git repository {}, which reaches outside the folders this computer allows. Agents' own copies cover the whole repository: allow it with `coppertide allow {}`, or switch off own copies.",
                     root.display(),
                     root.display()
                 ),
@@ -381,7 +381,7 @@ impl RunnerPolicy {
             return Err("refused: the server asked to change the program, its environment or its arguments; this computer only runs its own Claude Code / Codex".into());
         }
         let first = self.allowed_folders.first().ok_or(
-            "No folders are allowed on this computer yet. Run `sculptured allow <folder>` on it.",
+            "No folders are allowed on this computer yet. Run `coppertide allow <folder>` on it.",
         )?;
         let asked = Path::new(&p.cwd);
         let joined = if asked.is_absolute() {
@@ -403,7 +403,7 @@ impl RunnerPolicy {
             Ok(real)
         } else {
             Err(format!(
-                "{} is not in a folder this computer allows. Allowed: {}. Add one with `sculptured allow <folder>`.",
+                "{} is not in a folder this computer allows. Allowed: {}. Add one with `coppertide allow <folder>`.",
                 real.display(),
                 self.allowed_folders
                     .iter()

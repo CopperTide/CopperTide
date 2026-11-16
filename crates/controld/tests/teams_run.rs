@@ -1058,7 +1058,7 @@ fn spawn_hostd(url: String) -> tokio::task::JoinHandle<()> {
 }
 
 /// hostd has no graceful shutdown, and Practice agents run inside it, so a restart (a
-/// reboot, or stopping and starting `sculptured serve`) ends every agent. The spec
+/// reboot, or stopping and starting `coppertide serve`) ends every agent. The spec
 /// relaunches nothing without an operator decision (restore-on-boot is M2), so each
 /// agent needs attention, with a plain reason that says what happened and what to do.
 /// Start is that decision: it relaunches the team and sends each Job again.

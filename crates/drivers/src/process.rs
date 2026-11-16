@@ -30,6 +30,7 @@ pub(crate) fn command(
         .current_dir(&spec.cwd)
         .envs(spec.env.iter().cloned())
         .env_remove(crate::HOST_TOKEN_ENV)
+        .env_remove("SCULPTURED_HOST_TOKEN")
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
