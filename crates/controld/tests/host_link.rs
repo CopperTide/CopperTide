@@ -172,7 +172,7 @@ async fn hostd_restart_puts_dead_seats_in_attention() {
     assert_eq!(
         reason(&st, "dev.b@r").as_deref(),
         Some(
-            "This agent's process ended when Sculptured restarted. Start it again from its file to relaunch it."
+            "This agent's process ended when CopperTide restarted. Start it again from its file to relaunch it."
         )
     );
 }
@@ -277,7 +277,7 @@ async fn disconnected_host_needs_attention() {
     );
     assert_eq!(
         reason(&st, "dev.b@r").as_deref(),
-        Some("Sculptured's agent runner is not connected")
+        Some("CopperTide's agent runner is not connected")
     );
 }
 
@@ -931,6 +931,6 @@ async fn a_connected_runner_without_the_driver_says_what_it_cannot_run() {
     );
     assert_eq!(
         reason(&st, "dev.b@r").as_deref(),
-        Some("Sculptured's agent runner can't run Practice agents")
+        Some("CopperTide's agent runner can't run Practice agents")
     );
 }

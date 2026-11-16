@@ -64,7 +64,7 @@ fn record(
 ) -> Result<(), ToolError> {
     st.local_event(actor, Subject::Rig(team.to_string()), provenance, body)
         .map(|_| ())
-        .map_err(|e| ToolError::Failed(format!("Sculptured could not record this: {e}")))
+        .map_err(|e| ToolError::Failed(format!("CopperTide could not record this: {e}")))
 }
 
 fn mandate_of(st: &AppState, team: &str) -> Mandate {

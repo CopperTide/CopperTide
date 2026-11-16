@@ -312,9 +312,9 @@ async fn ask_only_accepts_just_its_options() {
 async fn a_practice_agent_without_tools_says_it_cannot_call_them() {
     let (mut s, mut ev, _d) = session(PermissionPosture::Unrestricted).await;
     s.send(msg("m1", "request:Which?|A")).await.unwrap();
-    assert!(rest_of_turn(&mut ev).await.iter().any(|e| matches!(e, DriverEvent::Text { text, .. } if text == "stub has no Sculptured tools, so it could not call request_input")));
+    assert!(rest_of_turn(&mut ev).await.iter().any(|e| matches!(e, DriverEvent::Text { text, .. } if text == "stub has no CopperTide tools, so it could not call request_input")));
     s.send(msg("m2", "report:All good")).await.unwrap();
-    assert!(rest_of_turn(&mut ev).await.iter().any(|e| matches!(e, DriverEvent::Text { text, .. } if text == "stub has no Sculptured tools, so it could not call report")));
+    assert!(rest_of_turn(&mut ev).await.iter().any(|e| matches!(e, DriverEvent::Text { text, .. } if text == "stub has no CopperTide tools, so it could not call report")));
 }
 
 /// A fake hostd socket: hands each request to the test and replies with what the test sends back.

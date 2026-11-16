@@ -3,7 +3,7 @@ use super::{
     creds, link, pairing, proxy,
 };
 
-pub const DEFAULT_ORIGIN: &str = "https://app.usesculptured.com";
+pub const DEFAULT_ORIGIN: &str = "https://app.coppertide.ai";
 pub const PROXY_TIMEOUT: Duration = Duration::from_secs(15);
 pub const REVOKE_TIMEOUT: Duration = Duration::from_secs(5);
 pub const ACCOUNT_TTL: Duration = Duration::from_secs(60);

@@ -468,7 +468,7 @@ fn tool_turn(
         return core.finish(
             turn,
             Some(format!(
-                "stub has no Sculptured tools, so it could not call {tool}"
+                "stub has no CopperTide tools, so it could not call {tool}"
             )),
         );
     };
