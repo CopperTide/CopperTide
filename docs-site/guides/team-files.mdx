@@ -67,16 +67,16 @@ Group files are cleaned on export and on import, the same way Community cleans a
 
 ## Edit a team file by hand
 
-A team file is YAML you can read and edit. Its JSON form (`.madl.json`) starts with a `$schema` line naming [MADL's JSON Schema](https://github.com/Sculptured/Multi-Agent-Descriptor-Language/blob/main/schema/draft/schema.json), so editors that understand JSON Schema check the file and complete field names as you type; VS Code does this with no setup. For YAML, the [YAML extension](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) reads the same schema.
+A team file is YAML you can read and edit. Its JSON form (`.madl.json`) starts with a `$schema` line naming [MADL's JSON Schema](https://github.com/CopperTide/Multi-Agent-Descriptor-Language/blob/main/schema/draft/schema.json), so editors that understand JSON Schema check the file and complete field names as you type; VS Code does this with no setup. For YAML, the [YAML extension](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) reads the same schema.
 
 The `madl` command checks a file before you import it:
 
 ```sh
-cargo install --git https://github.com/Sculptured/Multi-Agent-Descriptor-Language madl-cli
+cargo install --git https://github.com/CopperTide/Multi-Agent-Descriptor-Language madl-cli
 madl validate my-team.madl.yaml
 ```
 
-Every field is described in [MADL's specification](https://github.com/Sculptured/Multi-Agent-Descriptor-Language/tree/main/spec/draft); [MADL files](/guides/madl) lists where each part of a CopperTide team goes.
+Every field is described in [MADL's specification](https://github.com/CopperTide/Multi-Agent-Descriptor-Language/tree/main/spec/draft); [MADL files](/guides/madl) lists where each part of a CopperTide team goes.
 
 ## Keep a team in Git
 
