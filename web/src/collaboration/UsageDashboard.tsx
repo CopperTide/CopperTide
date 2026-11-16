@@ -11,7 +11,8 @@ import { nameForId, type NameMap } from '../vocab';
 import './usage.css';
 
 /** Categorical slots in fixed order (validated against the app surface). */
-const SERIES = ['#3987e5', '#d95926', '#199e70', '#c98500', '#d55181', '#008300', '#9085e9'];
+/** One colour per agent, from the look's data series (tokens.css), so every look keeps them apart. */
+const SERIES = ['var(--series-2)', 'var(--series-5)', 'var(--series-3)', 'var(--series-4)', 'var(--k-web)', 'var(--series-6)', 'var(--series-1)'];
 const W = 720, H = 240, PAD = { l: 56, r: 12, t: 12, b: 28 };
 
 const total = (p: UsagePoint | undefined) => (p ? p.input + p.output : 0);
@@ -77,8 +78,8 @@ export function UsageDashboard({ rig, names, onClose }: { rig: string; names: Na
             {[0, 0.5, 1].map((f) => <g key={f}><line className="usage-grid" x1={PAD.l} x2={W - PAD.r} y1={y(top * f)} y2={y(top * f)} /><text className="usage-axis" x={PAD.l - 6} y={y(top * f) + 4} textAnchor="end">{tokens(Math.round(top * f))}</text></g>)}
             <text className="usage-axis" x={PAD.l} y={H - 8}>{clock(t0)}</text>
             <text className="usage-axis" x={W - PAD.r} y={H - 8} textAnchor="end">{clock(t1)}</text>
-            {series.map((s) => <path key={s.key} d={path(s.points)} stroke={s.color} className="usage-line" />)}
-            {series.map((s) => { const p = s.points.at(-1)!; return <circle key={s.key} cx={x(p.at_ms)} cy={y(total(p))} r={4} fill={s.color} className="usage-end" />; })}
+            {series.map((s) => <path key={s.key} d={path(s.points)} style={{ stroke: s.color }} className="usage-line" />)}
+            {series.map((s) => { const p = s.points.at(-1)!; return <circle key={s.key} cx={x(p.at_ms)} cy={y(total(p))} r={4} style={{ fill: s.color }} className="usage-end" />; })}
             {hover !== null && <line className="usage-cross" x1={x(hover)} x2={x(hover)} y1={PAD.t} y2={H - PAD.b} />}
           </svg>
           {hover !== null && (

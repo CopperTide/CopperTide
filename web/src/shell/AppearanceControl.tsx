@@ -63,7 +63,7 @@ export function AppearanceControl({ trigger: showTrigger = true }: { trigger?: b
   </>;
 }
 
-/** The dialog's fields: look (and Standard's mode), font, text size and Coastal's translucency. */
+/** The dialog's fields: look (and Standard's mode), font, text size and the CopperTide look's translucency. */
 function AppearanceBody({ value, update }: { value: Appearance; update: (patch: Partial<Appearance>) => void }) {
   return (
     <div className="appearance-body">

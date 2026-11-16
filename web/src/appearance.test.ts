@@ -22,4 +22,10 @@ describe('appearance', () => {
     expect(readAppearance().look).toBe('coastal');
     meta.remove();
   });
+  it('defaults to the brand font and keeps a saved one', () => {
+    expect(readAppearance().font).toBe('instrument');
+    expect(LOOKS.coastal.label).toBe('CopperTide');
+    localStorage.setItem(APPEARANCE_KEY, JSON.stringify({ font: 'inter', look: 'coastal' }));
+    expect(readAppearance().font).toBe('inter');
+  });
 });

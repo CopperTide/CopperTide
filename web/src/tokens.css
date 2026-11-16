@@ -2,7 +2,9 @@
  * CopperTide design tokens. The only place raw colours, type sizes, radii, shadows and motion
  * values live; every component stylesheet reads these custom properties.
  *
- * Default look: Coastal (dark) — ink, chalk and quiet sea-glass.
+ * Default look: CopperTide (dark; stored key `coastal`) — warm Ink surfaces, Cream text, one Copper
+ * accent. The brand colours: Ink #100e0c, Slate #29323f, Copper #ee7a3a, Cream #f6f2eb, Stone #8c857c
+ * (Other/coppertide-brand). Every text colour is at least 4.5:1 on every surface it is used on.
  *
  * Adding another look: add ONE block at the end of this file,
  *   :root[data-look="<name>"] { color-scheme: …; --bg: …; --panel: …; … }
@@ -23,74 +25,75 @@
   --brand-ink: var(--text);
   --brand-copper: #ee7a3a;
 
-  /* ── Surfaces, back to front ── */
-  --bg: #111b22;            /* app canvas behind panels */
-  --panel: #17232b;         /* panels, sheets, menus */
-  --raised: #1d2c34;        /* cards and controls on a panel */
-  --raised-2: #273942;      /* buttons, selected segments */
-  --hover: #2a3e47;         /* hover fill for rows and quiet buttons */
-  --well: #142028;          /* inset wells: inputs, code, raw output */
-  --scrim: rgb(8 14 18 / 62%); /* behind dialogs */
-  --glass: rgb(23 35 43 / 94%);
-  --glass-solid: #1b2a32;   /* --glass when the "solid surfaces" preference is on */
-  --glass-border: rgb(177 202 203 / 18%);
-  --app-tint: #1b2c34;      /* top-left wash on the app background */
+  /* ── Surfaces, back to front: warm Ink stepping up (brand Ink #100e0c, the site's ink-2/ink-3) ── */
+  --bg: #100e0c;            /* app canvas behind panels (Ink) */
+  --panel: #181512;         /* panels, sheets, menus */
+  --raised: #1f1b17;        /* cards and controls on a panel */
+  --raised-2: #2a251f;      /* buttons, selected segments */
+  --hover: #2e2822;         /* hover fill for rows and quiet buttons */
+  --well: #141210;          /* inset wells: inputs, code, raw output */
+  --scrim: rgb(6 5 4 / 64%); /* behind dialogs */
+  --glass: rgb(24 21 18 / 94%);
+  --glass-solid: #1b1815;   /* --glass when the "solid surfaces" preference is on */
+  --glass-border: rgb(246 242 235 / 13%);
+  --app-tint: #1b1d21;      /* top-left wash on the app background: Ink with a little Slate */
 
   /* ── Lines ── */
-  --line: #31434c;          /* hairlines and quiet borders */
-  --line-2: #435963;        /* control borders */
-  --line-3: #718b92;        /* strong borders, hover borders, separators in text */
+  --line: #2e2924;          /* hairlines and quiet borders */
+  --line-2: #423b34;        /* control borders */
+  --line-3: #786f65;        /* strong borders, hover borders, separators in text */
 
   /* ── Text ── */
-  --text: #f1f2ee;
-  --muted: #b1c0c2;         /* secondary text; AA on every surface */
+  --text: #f6f2eb;          /* Cream */
+  --muted: #b9b1a6;         /* secondary text (the site's stone-2); AA on every surface */
   --faint: var(--muted);    /* kept equal to muted so every text colour stays readable */
-  --text-disabled: #7d8f94;
+  --text-disabled: #8c857c; /* Stone */
 
-  /* ── Accent: sea-glass ── */
-  --accent: #add5ce;
-  --accent-strong: #c5e5dd; /* hover on accent fills */
-  --accent-ink: #172b31;    /* text on accent fills */
-  --accent-deep: #436766;   /* selection, accent fills that carry light text */
-  --on-hue: #142026;        /* text on red / amber / green fills */
+  /* ── Accent: Copper ── */
+  --accent: #ee7a3a;
+  --accent-strong: #f4915a; /* hover on accent fills */
+  --accent-ink: #100e0c;    /* text on accent fills (Ink) */
+  --accent-deep: #7a3a1a;   /* selection, accent fills that carry light text */
+  --on-hue: #100e0c;        /* text on red / amber / green fills */
 
-  /* ── Hues (status meanings: red = needs you / failed, green = done, amber = waiting /
-        needs setup, violet = unknown). Colour only ever adds to a glyph + word. ── */
-  --red: #f1a8ae;
-  --green: #9cd9bb;
-  --amber: #e9cb98;
-  --violet: #c3a6ff;
-  --blue: #8db7ff;
+  /* ── Hues (status meanings: red = needs you / failed, green = verified, amber = waiting /
+        needs setup, violet = unknown). Colour only ever adds to a glyph + word. Amber is a
+        light gold and red a rose, so neither reads as the copper accent. ── */
+  --red: #f59ca6;
+  --green: #a3d9a5;
+  --amber: #e9cd75;
+  --violet: #c5abf7;
+  --blue: #96bbf2;
 
   /* ── Providers ── */
   --claude: #eba184;
-  --codex: #8db7ff;
-  --opencode: #a7d48a;
-  --practice: #80d0c7;
-  --other: #c0c7d2;
+  --codex: #96bbf2;
+  --opencode: #b6d68e;
+  --practice: #e3d3b6;     /* sand: the stand-in agent */
+  --other: #b4bcc8;         /* a light Slate */
 
   /* ── Data series: tool kinds in a transcript, context categories ── */
   --k-read: var(--blue);
   --k-edit: #ecc184;
   --k-bash: var(--violet);
   --k-search: var(--practice);
-  --k-web: #f0a6ca;
+  --k-web: #f0a8cc;
   --k-task: var(--claude);
-  --k-other: #a4aebd;
+  --k-other: #b9b3aa;
   --series-1: #ad94eb;
-  --series-2: #62aed5;
-  --series-3: #50b9ab;
+  --series-2: #6aa8d8;
+  --series-3: #5fb59c;
   --series-4: #d9b16b;
-  --series-5: #cf8c6e;
-  --series-6: #a1b781;
+  --series-5: #e08a58;
+  --series-6: #a7b97f;
 
   /* Light and shade used for inset highlights, shadows and scrims (mixed with alpha). */
   --light: #fff;
   --shade: #000;
 
   /* ── Type ── */
-  --font-ui: 'Inter', 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-ui: 'Instrument Sans', 'Inter', 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   /* Six steps, relative to the user's UI size (12–16px, default 13px). */
   --text-xs: 0.84615rem;    /* 11px  meta, legends, counters */
   --text-sm: 0.92308rem;    /* 12px  secondary text, pills, labels */
@@ -220,14 +223,15 @@
 :root[data-surface='solid'] { --glass: var(--glass-solid); }
 @media (prefers-reduced-transparency: reduce) { :root { --glass: var(--glass-solid); } }
 /* The OS asking for more contrast: stronger secondary text and lines. */
-@media (prefers-contrast: more) { :root { --muted: #d6e0e0; --line: #5f7680; --line-2: #7f979e; --glass: var(--panel); } }
+@media (prefers-contrast: more) { :root { --muted: #ddd6cc; --line: #5c544b; --line-2: #7a7167; --glass: var(--panel); } }
 
 /*
  * ── Look: Standard ──────────────────────────────────────────────────────────────────────────
  * The category standard at the craft level of Linear and GitHub Primer: neutral, flat and exact.
  * Light and dark, following the system unless data-mode pins one (appearance.ts sets data-look
  * and data-mode on <html> before first paint). No glass, no gradients; shadows only on popovers,
- * menus and dialogs; a dot-grid board with groups tinted indigo.
+ * menus and dialogs; a dot-grid board with groups tinted copper. Light is Cream and Paper with Ink
+ * text; dark is the CopperTide look made flat.
  *
  * In light mode --light is the ink colour: every "lift" overlay written as
  * color-mix(var(--light) n%, transparent) becomes a faint grey tint on white, which is what a
@@ -237,57 +241,59 @@
 :root[data-look='standard'] {
   color-scheme: light;
 
-  --bg: #f7f8fa;
-  --panel: #ffffff;
-  --raised: #ffffff;
-  --raised-2: #ffffff;
-  --hover: #f1f2f4;
-  --well: #f7f8fa;
-  --scrim: rgb(15 17 21 / 32%);
+  --bg: #f6f2eb;            /* Cream */
+  --panel: #fbf9f5;         /* Paper */
+  --raised: #fffefb;
+  --raised-2: #fffefb;
+  --hover: #efe9df;
+  --well: #f6f2eb;
+  --scrim: rgb(16 14 12 / 32%);
   --glass: var(--panel);
   --glass-solid: var(--panel);
   --glass-border: var(--line);
   --app-tint: var(--bg);
 
-  --line: #e6e8eb;
-  --line-2: #d9dce0;
-  --line-3: #a9aeb6;
+  --line: #e5ddd1;
+  --line-2: #d6cdbf;
+  --line-3: #a39a8d;
 
-  --text: #0f1115;
-  --muted: #5f646c;
+  --text: #100e0c;          /* Ink */
+  --muted: #5e5850;         /* the site's stone-3 */
   --faint: var(--muted);
-  --text-disabled: #9a9fa7;
+  --text-disabled: #8a8279;
 
-  --accent: #5e6ad2;
-  --accent-strong: #4f5bc4;
-  --accent-ink: #ffffff;
-  --accent-deep: #d9dcf6;
+  /* Copper as text or a thin line is darkened to stay 4.5:1 on cream; fills and the mark keep
+     #ee7a3a (--accent-fill, carrying Ink text: white on copper is under 3:1). */
+  --accent: #a4461a;
+  --accent-strong: #8f3c15;
+  --accent-ink: #100e0c;
+  --accent-deep: #f6d9c5;
   --on-hue: #ffffff;
 
-  --red: #c9302c;
-  --green: #1a7f4b;
-  --amber: #9a5b00;
-  --violet: #7c4dce;
-  --blue: #0b67c9;
+  --red: #b8283a;           /* crimson, away from the copper */
+  --green: #1d703f;
+  --amber: #7a5e00;         /* mustard, away from the copper */
+  --violet: #6038a7;
+  --blue: #184f98;
 
-  --claude: #b4542f;
-  --codex: #0b67c9;
-  --opencode: #3d7a1c;
-  --practice: #0e766e;
-  --other: #5f646c;
+  --claude: #813d21;
+  --codex: #184f98;
+  --opencode: #416d19;
+  --practice: #624f30;
+  --other: #4c5666;
 
-  --k-edit: #8f5a00;
-  --k-web: #b3367f;
-  --k-other: #5f646c;
+  --k-edit: #674e08;
+  --k-web: #8a2a5b;
+  --k-other: #565149;
   --series-1: #7c4dce;
-  --series-2: #0b67c9;
-  --series-3: #0e766e;
-  --series-4: #a36b00;
-  --series-5: #bc4c00;
+  --series-2: #1d63b8;
+  --series-3: #1b7a68;
+  --series-4: #9c6c00;
+  --series-5: #c0541f;
   --series-6: #4f7a28;
 
-  --light: #0f1115;
-  --shade: rgb(15 17 21 / 38%);
+  --light: #100e0c;
+  --shade: rgb(16 14 12 / 38%);
 
   --tracking-tight: -0.011em;
   --sidebar-w: 220px;
@@ -303,14 +309,14 @@
      popovers, menus and dialogs. */
   --shadow-control: 0 0 0 0 transparent;
   --shadow-card: 0 0 0 0 transparent;
-  --shadow-pop: 0 0 0 1px rgb(15 17 21 / 2%), 0 4px 12px rgb(15 17 21 / 8%), 0 12px 32px -8px rgb(15 17 21 / 14%);
-  --shadow-overlay: 0 8px 24px rgb(15 17 21 / 12%), 0 24px 64px -12px rgb(15 17 21 / 22%);
+  --shadow-pop: 0 0 0 1px rgb(16 14 12 / 2%), 0 4px 12px rgb(16 14 12 / 8%), 0 12px 32px -8px rgb(16 14 12 / 14%);
+  --shadow-overlay: 0 8px 24px rgb(16 14 12 / 12%), 0 24px 64px -12px rgb(16 14 12 / 22%);
 
   --accent-soft: color-mix(in srgb, var(--accent) 8%, transparent);
   --accent-line: color-mix(in srgb, var(--accent) 35%, transparent);
   --red-soft: color-mix(in srgb, var(--red) 8%, transparent);
   --green-soft: color-mix(in srgb, var(--green) 9%, transparent);
-  --amber-soft: color-mix(in srgb, #e5a01a 13%, transparent);
+  --amber-soft: color-mix(in srgb, #e0b13a 14%, transparent);
   --violet-soft: color-mix(in srgb, var(--violet) 9%, transparent);
   --focus-ring: var(--accent);
   --selection: var(--accent-deep);
@@ -324,40 +330,40 @@
   --sidebar-bg: var(--bg);
   --sidebar-line: transparent;
   --nav-current-bg: var(--panel);
-  --nav-current-ring: inset 0 0 0 1px var(--line), 0 1px 2px rgb(15 17 21 / 5%);
+  --nav-current-ring: inset 0 0 0 1px var(--line), 0 1px 2px rgb(16 14 12 / 5%);
   --sidebar-shadow: none;
   --panel-shadow: none;
-  --canvas-bg: #fafbfc;
-  --canvas-dot: #dcdfe4;
+  --canvas-bg: #f9f6f0;
+  --canvas-dot: #ddd5c8;
   --canvas-dot-size: 20px;
   --group-bg: color-mix(in srgb, var(--accent) 5%, transparent);
   --group-line: transparent;
-  --group-label: #3d47a8;
+  --group-label: #8a3a14;
   --card-bg: var(--raised);
-  --card-bg-needs-you: color-mix(in srgb, var(--amber-soft) 40%, var(--raised));
+  --card-bg-needs-you: color-mix(in srgb, var(--red-soft) 40%, var(--raised));
   --card-bg-idle: var(--raised);
-  --accent-fill: var(--accent);
-  --accent-fill-strong: var(--accent-strong);
+  --accent-fill: #ee7a3a;
+  --accent-fill-strong: #e86d2b;
   --btn-primary-shadow: none;
-  --brand-mark-bg: var(--accent);
+  --brand-mark-bg: var(--accent-fill);
   --brand-mark-shadow: none;
   --wash: 0;
   --avatar-bg: var(--accent-fill);
-  --avatar-ink: #ffffff;
+  --avatar-ink: #100e0c;
 }
 
 @media (prefers-color-scheme: dark) {
   :root[data-look='standard']:not([data-mode='light']) {
     color-scheme: dark;
-    --bg: #0f1115; --panel: #16181d; --raised: #1b1e24; --raised-2: #22252c; --hover: #262930; --well: #121418;
-    --scrim: rgb(5 6 8 / 60%); --glass: var(--panel); --glass-solid: var(--panel); --glass-border: var(--line); --app-tint: var(--bg);
-    --line: #2a2d34; --line-2: #363a43; --line-3: #5d626c;
-    --text: #edeef0; --muted: #9ba0a8; --faint: var(--muted); --text-disabled: #656a73;
-    --accent: #8a92f0; --accent-strong: #a2a8f4; --accent-ink: #ffffff; --accent-deep: #343a73; --on-hue: #0f1115;
-    --red: #f2827a; --green: #4cc38a; --amber: #e5b04a; --violet: #b49cf4; --blue: #6ea8fe;
-    --claude: #e8916b; --codex: #6ea8fe; --opencode: #93c873; --practice: #4fc1b4; --other: #a4a9b1;
-    --k-edit: #e6b56a; --k-web: #ec8fc0; --k-other: #9ba0a8;
-    --series-1: #a68cf0; --series-2: #5ea4dc; --series-3: #45b5a6; --series-4: #d6ad63; --series-5: #d98a66; --series-6: #9cb67c;
+    --bg: #100e0c; --panel: #171411; --raised: #1c1915; --raised-2: #24201b; --hover: #28231e; --well: #13110f;
+    --scrim: rgb(4 3 2 / 62%); --glass: var(--panel); --glass-solid: var(--panel); --glass-border: var(--line); --app-tint: var(--bg);
+    --line: #2a2520; --line-2: #39332c; --line-3: #655d54;
+    --text: #f6f2eb; --muted: #b3ab9f; --faint: var(--muted); --text-disabled: #847c73;
+    --accent: #ee7a3a; --accent-strong: #f4915a; --accent-ink: #100e0c; --accent-deep: #6b3317; --on-hue: #100e0c;
+    --red: #f58f9b; --green: #74cf8f; --amber: #e6c252; --violet: #bda5f5; --blue: #86b3f5;
+    --claude: #eba17f; --codex: #86b3f5; --opencode: #a0cb78; --practice: #dccaa6; --other: #aab3c0;
+    --k-edit: #e6b866; --k-web: #ed98c5; --k-other: #b7b1a9;
+    --series-1: #a68cf0; --series-2: #64a3dc; --series-3: #4fb39b; --series-4: #d6ad63; --series-5: #e08654; --series-6: #9cb67c;
     --light: #fff; --shade: #000;
     --shadow-control: 0 0 0 0 transparent;
     --shadow-card: 0 0 0 0 transparent;
@@ -369,26 +375,26 @@
     --amber-soft: color-mix(in srgb, var(--amber) 13%, transparent);
     --violet-soft: color-mix(in srgb, var(--violet) 12%, transparent);
     --sidebar-bg: var(--bg); --panel-shadow: none; --nav-current-bg: var(--raised-2); --nav-current-ring: inset 0 0 0 1px var(--line-2);
-    --canvas-bg: #121418; --canvas-dot: #2a2d34;
+    --canvas-bg: #13110f; --canvas-dot: #2a2520;
     --group-bg: color-mix(in srgb, var(--accent) 8%, transparent);
     --group-line: transparent; --group-label: var(--accent);
-    --card-bg-needs-you: color-mix(in srgb, var(--amber) 6%, var(--raised));
-    --accent-fill: #5e6ad2; --accent-fill-strong: #6c77da;
+    --card-bg-needs-you: color-mix(in srgb, var(--red) 6%, var(--raised));
+    --accent-fill: var(--accent); --accent-fill-strong: var(--accent-strong);
     --btn-primary-shadow: none;
-    --brand-mark-bg: #5e6ad2;
+    --brand-mark-bg: var(--accent);
   }
 }
 :root[data-look='standard'][data-mode='dark'] {
   color-scheme: dark;
-  --bg: #0f1115; --panel: #16181d; --raised: #1b1e24; --raised-2: #22252c; --hover: #262930; --well: #121418;
-  --scrim: rgb(5 6 8 / 60%); --glass: var(--panel); --glass-solid: var(--panel); --glass-border: var(--line); --app-tint: var(--bg);
-  --line: #2a2d34; --line-2: #363a43; --line-3: #5d626c;
-  --text: #edeef0; --muted: #9ba0a8; --faint: var(--muted); --text-disabled: #656a73;
-  --accent: #8a92f0; --accent-strong: #a2a8f4; --accent-ink: #ffffff; --accent-deep: #343a73; --on-hue: #0f1115;
-  --red: #f2827a; --green: #4cc38a; --amber: #e5b04a; --violet: #b49cf4; --blue: #6ea8fe;
-  --claude: #e8916b; --codex: #6ea8fe; --opencode: #93c873; --practice: #4fc1b4; --other: #a4a9b1;
-  --k-edit: #e6b56a; --k-web: #ec8fc0; --k-other: #9ba0a8;
-  --series-1: #a68cf0; --series-2: #5ea4dc; --series-3: #45b5a6; --series-4: #d6ad63; --series-5: #d98a66; --series-6: #9cb67c;
+  --bg: #100e0c; --panel: #171411; --raised: #1c1915; --raised-2: #24201b; --hover: #28231e; --well: #13110f;
+  --scrim: rgb(4 3 2 / 62%); --glass: var(--panel); --glass-solid: var(--panel); --glass-border: var(--line); --app-tint: var(--bg);
+  --line: #2a2520; --line-2: #39332c; --line-3: #655d54;
+  --text: #f6f2eb; --muted: #b3ab9f; --faint: var(--muted); --text-disabled: #847c73;
+  --accent: #ee7a3a; --accent-strong: #f4915a; --accent-ink: #100e0c; --accent-deep: #6b3317; --on-hue: #100e0c;
+  --red: #f58f9b; --green: #74cf8f; --amber: #e6c252; --violet: #bda5f5; --blue: #86b3f5;
+  --claude: #eba17f; --codex: #86b3f5; --opencode: #a0cb78; --practice: #dccaa6; --other: #aab3c0;
+  --k-edit: #e6b866; --k-web: #ed98c5; --k-other: #b7b1a9;
+  --series-1: #a68cf0; --series-2: #64a3dc; --series-3: #4fb39b; --series-4: #d6ad63; --series-5: #e08654; --series-6: #9cb67c;
   --light: #fff; --shade: #000;
   --shadow-control: 0 0 0 0 transparent;
   --shadow-card: 0 0 0 0 transparent;
@@ -400,18 +406,18 @@
   --amber-soft: color-mix(in srgb, var(--amber) 13%, transparent);
   --violet-soft: color-mix(in srgb, var(--violet) 12%, transparent);
   --sidebar-bg: var(--bg); --panel-shadow: none; --nav-current-bg: var(--raised-2); --nav-current-ring: inset 0 0 0 1px var(--line-2);
-  --canvas-bg: #121418; --canvas-dot: #2a2d34;
+  --canvas-bg: #13110f; --canvas-dot: #2a2520;
   --group-bg: color-mix(in srgb, var(--accent) 8%, transparent);
   --group-line: transparent; --group-label: var(--accent);
-  --card-bg-needs-you: color-mix(in srgb, var(--amber) 6%, var(--raised));
-  --accent-fill: #5e6ad2; --accent-fill-strong: #6c77da;
+  --card-bg-needs-you: color-mix(in srgb, var(--red) 6%, var(--raised));
+  --accent-fill: var(--accent); --accent-fill-strong: var(--accent-strong);
   --btn-primary-shadow: none;
-  --brand-mark-bg: #5e6ad2;
+  --brand-mark-bg: var(--accent);
 }
 
 /*
  * ── Look: Mission ───────────────────────────────────────────────────────────────────────────
- * Mission control: near-black, hairline lines, one cyan accent and bright status hues, for
+ * Mission control: near-Ink, hairline lines, Copper as the one accent and bright status hues, for
  * watching a live team on one dense screen. Dark only and flat (no glass, no gradients).
  * The Control workspaces use it by default on their own root (`.workspace[data-look='mission']`,
  * see web/src/workspace/WorkspacePage.tsx), and it is also a third app-wide look.
@@ -424,57 +430,57 @@
 .workspace[data-look='mission'] {
   color-scheme: dark;
 
-  --bg: #0a0f14;
-  --panel: #101820;
-  --raised: #15202a;
-  --raised-2: #1b2833;
-  --hover: #1f2e3a;
-  --well: #0c131a;
-  --scrim: rgb(2 5 8 / 70%);
+  --bg: #0b0a09;
+  --panel: #11100e;
+  --raised: #171513;
+  --raised-2: #1d1b18;
+  --hover: #23201c;
+  --well: #0e0d0b;
+  --scrim: rgb(2 2 1 / 72%);
   --glass: var(--panel);
   --glass-solid: var(--panel);
   --glass-border: var(--line);
   --app-tint: var(--bg);
 
-  --line: #1e2c38;
-  --line-2: #2a3d4c;
-  --line-3: #4f6577;
+  --line: #221f1b;
+  --line-2: #312d28;
+  --line-3: #5a534b;
 
-  --text: #c9d6e0;
-  --muted: #8296a7;
+  --text: #e9e3d9;
+  --muted: #a0988d;
   --faint: var(--muted);
-  --text-disabled: #5f7486;
+  --text-disabled: #736c63;
 
-  --accent: #3fd0ff;
-  --accent-strong: #74ddff;
-  --accent-ink: #04141c;
-  --accent-deep: #0e4a63;
-  --on-hue: #071018;
+  --accent: #ee7a3a;
+  --accent-strong: #ff9558;
+  --accent-ink: #0b0a09;
+  --accent-deep: #5a2810;
+  --on-hue: #0b0a09;
 
-  --red: #ff6170;
-  --green: #3ddc84;
-  --amber: #ffb020;
-  --violet: #b48cff;
-  --blue: #5aa9ff;
+  --red: #ff6b7a;
+  --green: #45d98a;
+  --amber: #f5cf4a;
+  --violet: #bc99ff;
+  --blue: #68adff;
 
   --claude: #f39a74;
-  --codex: #79b0ff;
+  --codex: #7fb2ff;
   --opencode: #9ad67a;
-  --practice: #4fd6c8;
-  --other: #a9b6c2;
+  --practice: #e6d2a8;
+  --other: #a9b3c1;
 
   --k-read: var(--blue);
-  --k-edit: #ffc76a;
+  --k-edit: #ffcf6a;
   --k-bash: var(--violet);
   --k-search: var(--practice);
   --k-web: #ff8fd0;
   --k-task: var(--claude);
-  --k-other: #93a6b6;
+  --k-other: #b1aaa1;
   --series-1: #b39cff;
-  --series-2: #4fb8ff;
-  --series-3: #3fd6b8;
+  --series-2: #56b1ff;
+  --series-3: #3fcfa8;
   --series-4: #ffc35a;
-  --series-5: #ff9a6b;
+  --series-5: #ff8f55;
   --series-6: #a6d96a;
 
   --light: #fff;
@@ -552,5 +558,5 @@
 /* The OS asking for more contrast: stronger secondary text and lines in Mission too. */
 @media (prefers-contrast: more) {
   :root[data-look='mission'],
-  .workspace[data-look='mission'] { --muted: #a9bccb; --line: #34495a; --line-2: #4f6577; --line-3: #7590a4; }
+  .workspace[data-look='mission'] { --muted: #bdb5aa; --line: #3a352f; --line-2: #554e46; --line-3: #7d746a; }
 }

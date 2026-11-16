@@ -1,7 +1,7 @@
 /*
  * Standard look: the first viewport's layout, on top of the shared
  * component CSS. Everything here is scoped to :root[data-look='standard'] or to elements only the
- * Standard look renders (the header status pill, the footer usage strip), so Coastal is unchanged.
+ * Standard look renders (the header status pill, the footer usage strip), so the CopperTide look is unchanged.
  * Reads tokens only (tokens.css).
  */
 

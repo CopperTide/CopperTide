@@ -31,7 +31,7 @@
 .computer-details p { margin: 0; }
 .computer-folders, .computer-clis { margin: 0; padding-left: 18px; }
 .computer-clis li { display: flex; gap: 8px; align-items: center; }
-/* Analytics: one series per chart in one validated hue (#3987e5 on the dark panel). */
+/* Analytics: one series per chart in one hue (--blue, AA on every look's panel). */
 .an { display: grid; gap: 12px; }
 .an-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
 .an-tabs .is-on { border-color: var(--accent); }

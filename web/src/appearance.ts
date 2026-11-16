@@ -5,22 +5,26 @@ export const APPEARANCE_KEY = 'sculptured.appearance.v1';
 /** Fired on window whenever this tab saves a preference (the palette and the dialog stay in step). */
 export const APPEARANCE_CHANGED = 'sculptured:appearance-changed';
 export const FONTS = {
+  instrument: { label: 'Instrument Sans', value: '"Instrument Sans", "Inter", "Segoe UI", system-ui, sans-serif' },
   inter: { label: 'Inter', value: '"Inter", "Segoe UI", system-ui, sans-serif' },
   system: { label: 'System', value: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
   plex: { label: 'IBM Plex Sans', value: '"IBM Plex Sans", system-ui, sans-serif' },
   humanist: { label: 'Humanist', value: '"Aptos", "Trebuchet MS", system-ui, sans-serif' },
 } as const;
-/** Looks (tokens.css). Coastal and Mission are dark only; Standard comes in light and dark. */
+/**
+ * Looks (tokens.css). CopperTide and Mission are dark only; Standard comes in light and dark.
+ * The keys are stored in saved preferences, so the default look keeps its old key, `coastal`.
+ */
 export const LOOKS = {
-  coastal: { label: 'Coastal', note: 'Dark sea-glass.', darkOnly: true },
-  standard: { label: 'Standard', note: 'Neutral and flat, in light or dark.', darkOnly: false },
-  mission: { label: 'Mission', note: 'Near-black with a cyan accent, like a control room.', darkOnly: true },
+  coastal: { label: 'CopperTide', note: 'Warm dark, copper accent.', darkOnly: true },
+  standard: { label: 'Standard', note: 'Flat, in light (cream) or dark.', darkOnly: false },
+  mission: { label: 'Mission', note: 'Near-black and dense with a copper accent, like a control room.', darkOnly: true },
 } as const;
 export const MODES = { system: 'System', light: 'Light', dark: 'Dark' } as const;
 export type Look = keyof typeof LOOKS;
 export type ColorMode = keyof typeof MODES;
 export type Appearance = { font: keyof typeof FONTS; size: number; glass: boolean; look: Look; mode: ColorMode };
-export const DEFAULT_APPEARANCE: Appearance = { font: 'inter', size: 13, glass: true, look: 'coastal', mode: 'system' };
+export const DEFAULT_APPEARANCE: Appearance = { font: 'instrument', size: 13, glass: true, look: 'coastal', mode: 'system' };
 
 export function readAppearance(): Appearance {
   try {
@@ -38,7 +42,7 @@ export function readAppearance(): Appearance {
   }
 }
 
-/** The colour scheme the page shows: Coastal and Mission are always dark; Standard follows the mode or the system. */
+/** The colour scheme the page shows: CopperTide and Mission are always dark; Standard follows the mode or the system. */
 export function resolvedScheme(value: Pick<Appearance, 'look' | 'mode'>): 'light' | 'dark' {
   if (LOOKS[value.look].darkOnly) return 'dark';
   if (value.mode !== 'system') return value.mode;

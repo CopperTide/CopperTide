@@ -32,12 +32,12 @@ describe('Appearance', () => {
     const user = userEvent.setup();
     const first = render(<AppearanceControl />);
     await user.click(screen.getByRole('button', { name: 'Appearance' }));
-    expect(screen.getByRole('button', { name: 'Coastal' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('button', { name: 'CopperTide' })).toHaveAttribute('aria-pressed', 'true');
     expect(screen.queryByRole('group', { name: 'Mode' })).not.toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Standard' }));
     expect(document.documentElement.dataset.look).toBe('standard');
     expect(screen.getByRole('button', { name: 'System' })).toHaveAttribute('aria-pressed', 'true');
-    // Coastal's translucency switch means nothing in the flat Standard look.
+    // The CopperTide look's translucency switch means nothing in the flat Standard look.
     expect(screen.queryByRole('checkbox', { name: /Translucent surfaces/ })).not.toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Dark' }));
     expect(document.documentElement.dataset.mode).toBe('dark');
@@ -55,7 +55,7 @@ describe('Appearance', () => {
     expect(document.documentElement.dataset.look).toBe('coastal');
   });
 
-  it('resolves the colour scheme: Coastal is dark, Standard follows its mode', () => {
+  it('resolves the colour scheme: CopperTide is dark, Standard follows its mode', () => {
     expect(resolvedScheme({ look: 'coastal', mode: 'light' })).toBe('dark');
     expect(resolvedScheme({ look: 'standard', mode: 'light' })).toBe('light');
     expect(resolvedScheme({ look: 'standard', mode: 'dark' })).toBe('dark');
