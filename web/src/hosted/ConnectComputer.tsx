@@ -21,7 +21,7 @@ const SYSTEMS: { os: Os; label: string; target: RegExp; open: string; paste: str
 /** The command that installs CopperTide on `os`, connects it with a one-time `key`, and keeps it running. */
 export function connectCommand(os: Os, origin: string, key: string): string {
   return os === 'windows'
-    ? `$env:SCULPTURED_KEY="${key}"; irm ${origin}/install.ps1 | iex`
+    ? `$env:COPPERTIDE_KEY="${key}"; irm ${origin}/install.ps1 | iex`
     : `curl -fsSL ${origin}/install.sh | sh -s -- --key ${key}`;
 }
 
@@ -111,7 +111,7 @@ function CopySteps({ sys, copied, busy, error, onCopy }: { sys: System; copied: 
         <div className="connect-copied" role="status">
           <p>{copied.copied ? <><Icon name="check" size={14} /> Copied. Now {sys.paste}.</> : 'Your browser would not copy it. Select it and copy it yourself:'}</p>
           <pre className="hosted-cmd">{copied.command}</pre>
-          <p className="muted">This command works once, for 30 minutes. Agents may work anywhere in your home folder; change that later with <code>sculptured allow</code>.</p>
+          <p className="muted">This command works once, for 30 minutes. Agents may work anywhere in your home folder; change that later with <code>coppertide allow</code>.</p>
         </div>
       )}
       {error && <p className="tone-red" role="alert">{error}</p>}

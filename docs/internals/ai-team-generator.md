@@ -119,7 +119,7 @@ flowchart TD
   - **Claude Code** runs with no built-in tools (`--tools ""`), no MCP servers (`--strict-mcp-config`), no user settings or hooks (`--setting-sources project,local`, both empty in the empty folder) and no skills. It sees only the description, plus the user's own `~/.claude/CLAUDE.md` instructions. The screen says "no tools or MCP servers: it sees only this description".
   - **Codex** has no MCP servers (`-c mcp_servers={}`) and a read-only sandbox, but that sandbox can still *read* files on the computer. The screen says so: "Codex runs read-only: it can read files on this computer but not change them".
   - **Both** save no session and run in a fresh, empty temporary folder that is removed afterwards.
-- **The computer decides:** the `generate` capability is on by default, sandboxed computers included, because no tools run. The owner turns it off with `sculptured connect … --disable generate`.
+- **The computer decides:** the `generate` capability is on by default, sandboxed computers included, because no tools run. The owner turns it off with `coppertide connect … --disable generate`.
 - **Bounded:**
   - 300 s per call, enforced where the CLI runs (local mode included);
   - one retry, and a description of at most 32 KB;

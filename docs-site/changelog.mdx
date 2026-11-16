@@ -5,6 +5,12 @@ description: What changed in CopperTide, newest first.
 
 Changes you can see or use, by date. The open-source core's full history is on [GitHub](https://github.com/CopperTide/CopperTide/commits/main).
 
+## 16 November 2026
+
+### The program is called `coppertide`
+
+- **Commands:** type `coppertide connect`, `coppertide serve`, `coppertide allow` and so on. Environment variables are `COPPERTIDE_*` and CopperTide keeps its data in `~/.coppertide`. To update a connected computer, copy its command from **Computers** and run it again: the runner, its data and its connection carry over. The Mac app is `CopperTide-mac.dmg`.
+
 ## 27 October 2026
 
 ### Events from other systems
@@ -49,13 +55,13 @@ Changes you can see or use, by date. The open-source core's full history is on [
 ### Clusters from the web app
 
 - **More ways to sign in to a cluster:** certificates from your site (NERSC sshproxy, step-ca), with their end shown and a place to paste a new one; staying signed in after one code (12 hours by default, up to 7 days, **Sign out** on the card), so restarts don't ask again; every question of a sign-in round with its links, a Duo push hint and a countdown; and chains such as a password then a code. The Add dialog says what a web app can't use (hardware security keys, Kerberos, agent forwarding). See [Add a cluster from the web app](/connect-a-computer#add-a-cluster-from-the-web-app).
-- **Add a cluster** on the Computers page: give the login node, your user name and how to sign in (a key CopperTide makes, a private key or a password; a jump host if you need one). CopperTide's server connects over SSH, installs and starts the runner there (in tmux), runs `sculptured doctor` and keeps it running. Cluster codes such as Duo are asked for on the card and never stored, and every SSH action is listed on it. See [Add a cluster from the web app](/connect-a-computer#add-a-cluster-from-the-web-app).
+- **Add a cluster** on the Computers page: give the login node, your user name and how to sign in (a key CopperTide makes, a private key or a password; a jump host if you need one). CopperTide's server connects over SSH, installs and starts the runner there (in tmux), runs `coppertide doctor` and keeps it running. Cluster codes such as Duo are asked for on the card and never stored, and every SSH action is listed on it. See [Add a cluster from the web app](/connect-a-computer#add-a-cluster-from-the-web-app).
 
 ## 19 October 2026
 
 ### Run from a terminal
 
-- **`sculptured run <team file>`** runs a team on this computer without the app, printing what happens, asking questions in the terminal, and ending with an exit code (0 finished, 1 failed, 2 budget, 3 needs an answer, 4 invalid file). Ctrl+C wraps up; a second stops at once. **Export team file** now saves a file that runs on its own after `chmod +x`. See [Run from a terminal](/guides/run-from-terminal).
+- **`coppertide run <team file>`** runs a team on this computer without the app, printing what happens, asking questions in the terminal, and ending with an exit code (0 finished, 1 failed, 2 budget, 3 needs an answer, 4 invalid file). Ctrl+C wraps up; a second stops at once. **Export team file** now saves a file that runs on its own after `chmod +x`. See [Run from a terminal](/guides/run-from-terminal).
 
 ### Skills from a catalog
 
@@ -64,7 +70,7 @@ Changes you can see or use, by date. The open-source core's full history is on [
 
 ### Agents on more than one computer
 
-- **`sculptured doctor` checks what a shared computer needs:** whether the runner keeps running after you log out (and how to keep it alive in tmux where it doesn't), whether this computer reaches your account, Anthropic and OpenAI, and which proxy settings are set. See [Set up a cluster yourself](/connect-a-computer#set-up-a-cluster-yourself).
+- **`coppertide doctor` checks what a shared computer needs:** whether the runner keeps running after you log out (and how to keep it alive in tmux where it doesn't), whether this computer reaches your account, Anthropic and OpenAI, and which proxy settings are set. See [Set up a cluster yourself](/connect-a-computer#set-up-a-cluster-yourself).
 - **An agent can run on another of your computers** than its team, such as a GPU desktop or a cluster's login node: **Advanced** → **Runs on**. Messages and handoffs reach it there; files stay on the computer where they were made. Start names any computer that is not connected and the agent that needs it. See [Run agents on more than one computer](/connect-a-computer#run-agents-on-more-than-one-computer).
 
 ### Team files are MADL
@@ -101,13 +107,13 @@ Changes you can see or use, by date. The open-source core's full history is on [
 ### Components
 
 - **Kindex and Signet-Eval are now components:** programs on the agent's computer described by a small manifest instead of built into CopperTide. Add your own, or one from Community, in the team's **Settings** → **More settings** → **Components**, and give it to agents in their Advanced settings; agent cards show a chip for each. Share yours with **Share to Community**. See [Components](/guides/skills#components-tools-on-the-agents-computer).
-- **A component that is not built in runs on a connected computer only after its owner approves it there**, with `sculptured approve-component`.
+- **A component that is not built in runs on a connected computer only after its owner approves it there**, with `coppertide approve-component`.
 - **A refused start pops up** with its reason, and a plan hold offers **Start anyway**.
-- **More kinds of components:** remote MCP servers at a web address (such as a hosted OpenFOAM server), skill packs, and Claude plugins installed on the agent's computer. **New component** makes one from a short form. A remote server's key stays on the agent's computer: the manifest names it as `${NAME}`, and the computer's owner sets it with `sculptured set-secret NAME`.
+- **More kinds of components:** remote MCP servers at a web address (such as a hosted OpenFOAM server), skill packs, and Claude plugins installed on the agent's computer. **New component** makes one from a short form. A remote server's key stays on the agent's computer: the manifest names it as `${NAME}`, and the computer's owner sets it with `coppertide set-secret NAME`.
 - **A Questions page for the project and for each agent:** every question your agents asked, the ones waiting for you (answer them right there), your answers with the choices offered, what agents decided when nobody answered, and withdrawn ones. See [Questions](/guides/questions#where-you-see-them).
 - **Urgent questions first:** an agent can mark its question urgent or low; urgent ones come first in Needs you, marked as the agent's own word. An idea from Gas Town.
 - **Waves on the item board:** when a workflow's items depend on each other, the Run view shows them as waves, each done, in progress or waiting. An idea from Gas Town's convoys.
-- **`sculptured doctor`** checks a computer for its agents: Claude Code and Codex installed and signed in, allowed folders, component programs, approvals and secret names. See [CLI](/reference/cli#sculptured-doctor).
+- **`coppertide doctor`** checks a computer for its agents: Claude Code and Codex installed and signed in, allowed folders, component programs, approvals and secret names. See [CLI](/reference/cli#coppertide-doctor).
 - **Briefings survive compaction:** when Claude Code compacts a Claude agent's conversation, CopperTide gives the agent its briefing back (with protections on). An idea from Gas Town.
 - **A cap for the whole computer:** on the **Computers** page, **Most agents working at once** limits each computer across all your teams, so several teams together stay within your plan. An idea from Gas Town. See [Budgets](/guides/budgets#a-cap-for-the-whole-computer).
 - **An agent that goes quiet is flagged:** no output for 30 minutes in the middle of its turn shows it as **Stalled (heuristic)** and under Needs you, with **Nudge** and **Soft stop**. Nothing happens on its own. An idea from Gas Town.
@@ -156,7 +162,7 @@ Changes you can see or use, by date. The open-source core's full history is on [
 
 ### A disconnected computer stays quiet
 
-- **A runner whose computer was disconnected from its account stops for good.** It used to be started again every 5 seconds by its login service. It now turns its service off; `sculptured connect` turns it back on. Reinstall the runner from **Computers** to get it.
+- **A runner whose computer was disconnected from its account stops for good.** It used to be started again every 5 seconds by its login service. It now turns its service off; `coppertide connect` turns it back on. Reinstall the runner from **Computers** to get it.
 
 ### Upload files to the Input
 
@@ -183,7 +189,7 @@ Changes you can see or use, by date. The open-source core's full history is on [
 ### Stopping always works
 
 - **Stop finishes even when the agents' computer is offline.** The agents are marked stopped at once instead of waiting for a computer that may never come back, so their project can go to the Trash. If an agent is still running there, the computer ends it when it reconnects.
-- **`sculptured stop`** ends every agent a computer's runner started, on that computer, without CopperTide. See [Connect a computer](/connect-a-computer#stop-agents-when-something-stops-responding). Reinstall the runner from **Computers** to get it.
+- **`coppertide stop`** ends every agent a computer's runner started, on that computer, without CopperTide. See [Connect a computer](/connect-a-computer#stop-agents-when-something-stops-responding). Reinstall the runner from **Computers** to get it.
 
 ### Delete forever
 
@@ -295,8 +301,8 @@ Changes you can see or use, by date. The open-source core's full history is on [
 
 - **One copied command** connects a computer on macOS, Linux or Windows. The Computers page picks your system, copies a command with a one-time key, and that's it: no code to approve. See [Connect a computer](/connect-a-computer).
 - **Runs in the background.** The runner installs as a service and starts again whenever you log in, so the terminal can be closed.
-- **Your home folder by default.** Agents may work anywhere in your home folder unless you choose other folders with `sculptured allow`.
-- **Windows runs natively.** The runner, Claude Code and Codex run on Windows with no WSL. The installer needs no admin rights and installs to `%LOCALAPPDATA%\Programs\Sculptured`.
+- **Your home folder by default.** Agents may work anywhere in your home folder unless you choose other folders with `coppertide allow`.
+- **Windows runs natively.** The runner, Claude Code and Codex run on Windows with no WSL. The installer needs no admin rights and installs to `%LOCALAPPDATA%\Programs\CopperTide`.
 - **Reconnecting** a disconnected computer works with a freshly copied command; the old key is noticed and replaced.
 - **Reinstalling on Windows** stops the previous runner before replacing its files.
 - The installer says plainly when there is no build for your computer, instead of failing halfway.

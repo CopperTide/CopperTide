@@ -37,15 +37,15 @@ flowchart LR
 | --- | --- |
 | Your code and files | In the folders you allowed, on your computer. They reach the server only as results you ask for, such as a folder listing, Git status or a diff. |
 | Claude Code and Codex sign-in | In the CLIs' own settings on your computer. CopperTide never reads or stores them. **Sign in** only starts the CLI's own sign-in. |
-| Teams, runs, messages and transcripts | In your own CopperTide. With an account, that is one private instance per user on the server. Running it yourself, it is `~/.sculptured/` on your computer. |
-| Your computer's key | `~/.sculptured/runner/device.json` on that computer, readable only by your user. The server keeps only a hash. |
+| Teams, runs, messages and transcripts | In your own CopperTide. With an account, that is one private instance per user on the server. Running it yourself, it is `~/.coppertide/` on your computer. |
+| Your computer's key | `~/.coppertide/runner/device.json` on that computer, readable only by your user. The server keeps only a hash. |
 | Your account password | Stored as an argon2id hash. Google and GitHub sign-in store no password. |
 
 See [Privacy](/privacy) for what is recorded about how you use CopperTide.
 
 ## Running it yourself
 
-`sculptured serve` listens only on `127.0.0.1` and accepts only requests addressed to `127.0.0.1` or `localhost`, with a matching origin. That stops other websites from driving it through your browser. The runner connects to it with a private token that agents never see.
+`coppertide serve` listens only on `127.0.0.1` and accepts only requests addressed to `127.0.0.1` or `localhost`, with a matching origin. That stops other websites from driving it through your browser. The runner connects to it with a private token that agents never see.
 
 <Warning>Do not reverse-proxy port 4410 onto the Internet. Anyone who reaches it can control your agents.</Warning>
 
@@ -55,7 +55,7 @@ See [Privacy](/privacy) for what is recorded about how you use CopperTide.
   <Step title="A one-time connect key">The Computers page copies a command that carries a connect key. It works **once**, for **30 minutes**, and only a signed-in browser can create one.</Step>
   <Step title="Traded for a device key">The installer trades it for this computer's own device key. The server stores only a hash of it.</Step>
   <Step title="An outgoing link">The runner opens a secure link (`wss://`) out to your account. Nothing connects in to your computer, so no port is opened.</Step>
-  <Step title="Revocable">**Disconnect** on the Computers page drops the live link at once and refuses that key from then on. The runner stops and says to run `sculptured connect` again.</Step>
+  <Step title="Revocable">**Disconnect** on the Computers page drops the live link at once and refuses that key from then on. The runner stops and says to run `coppertide connect` again.</Step>
 </Steps>
 
 A computer can only connect as itself. It cannot pretend to be another of your computers.
@@ -79,20 +79,20 @@ A refused launch shows on the agent: it needs attention, with the reason.
 
 ### Allowed folders
 
-Allowed folders decide **where an agent may start**, not what it can do once running. The installer allows your home folder. Add more with `sculptured allow <folder>`, or choose them when you connect with `--allow`.
+Allowed folders decide **where an agent may start**, not what it can do once running. The installer allows your home folder. Add more with `coppertide allow <folder>`, or choose them when you connect with `--allow`.
 
 ### Access level
 
 | Access | Claude Code | Codex | Set with |
 | --- | --- | --- | --- |
-| **Full** (default) | Runs as the team asks. An unrestricted agent skips permission prompts. | Full access | `sculptured connect … --full-access` |
-| **Sandboxed** | Always restricted: risky actions need your approval in the browser. | Writes only inside its folder | `sculptured connect … --sandboxed` |
+| **Full** (default) | Runs as the team asks. An unrestricted agent skips permission prompts. | Full access | `coppertide connect … --full-access` |
+| **Sandboxed** | Always restricted: risky actions need your approval in the browser. | Writes only inside its folder | `coppertide connect … --sandboxed` |
 
 <Warning>With full access, an agent, or anyone who can instruct it, can act as you do on that computer. Prompt injection is real: a file or web page an agent reads can contain instructions. Use **Sandboxed**, or set reviewers to **Restricted**, when agents read untrusted material.</Warning>
 
 ### What the account may do on a computer
 
-Each computer turns these on or off with `--enable` and `--disable` on `sculptured connect`:
+Each computer turns these on or off with `--enable` and `--disable` on `coppertide connect`:
 
 | Capability | What it allows | Full access | Sandboxed |
 | --- | --- | --- | --- |

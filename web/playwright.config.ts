@@ -15,7 +15,7 @@ export default defineConfig({
     { name: 'mobile', use: { ...devices['Pixel 7'] } },
   ],
   webServer: {
-    // crates/e2e-server: builds the UI, runs the real binary ($SCULPTURED_BIN, else a cargo build)
+    // crates/e2e-server: builds the UI, runs the real binary ($COPPERTIDE_BIN, else a cargo build)
     // on a throwaway data dir and HOME, and cleans up serve, hostd and the directory.
     command: 'cargo run -q -p e2e-server',
     url: `http://127.0.0.1:${port}/api/rigs`,

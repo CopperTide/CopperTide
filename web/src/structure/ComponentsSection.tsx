@@ -55,7 +55,7 @@ function HeaderFields({ headers, onChange }: { headers: [string, string][]; onCh
   const change = (i: number, at: 0 | 1, v: string) => onChange(headers.map((h, j) => (j === i ? (at === 0 ? [v, h[1]] : [h[0], v]) : h)));
   return (
     <fieldset className="component-headers"><legend className="fld-label">Headers</legend>
-      <p className="fld-hint muted">Write a secret as {'${NAME}'}. It stays on each agent's computer, where its owner sets it with <code>sculptured set-secret NAME</code>; the team and Community never see it.</p>
+      <p className="fld-hint muted">Write a secret as {'${NAME}'}. It stays on each agent's computer, where its owner sets it with <code>coppertide set-secret NAME</code>; the team and Community never see it.</p>
       {headers.map(([k, v], i) => (
         <span key={i} className="row">
           <input className="fld-input" aria-label={`Header ${i + 1} name`} value={k} onChange={(e) => change(i, 0, e.target.value)} />
@@ -160,7 +160,7 @@ export function ComponentsSection({ draft, edit, locked }: { draft: TeamDraft; e
   return (
     <fieldset className="fld-skills" aria-label="Components">
       <legend className="fld-label">Components</legend>
-      <p className="fld-hint muted">What agents can be given besides CopperTide's tools: MCP servers on their computers or at a web address, Claude plugins and tool hooks, and skill packs. Give one to an agent in its Advanced settings. Find more in <a href="/community">Community</a>, or add your own; a connected computer runs one that is not built in only after its owner approves it there (<code>sculptured approve-component</code>).</p>
+      <p className="fld-hint muted">What agents can be given besides CopperTide's tools: MCP servers on their computers or at a web address, Claude plugins and tool hooks, and skill packs. Give one to an agent in its Advanced settings. Find more in <a href="/community">Community</a>, or add your own; a connected computer runs one that is not built in only after its owner approves it there (<code>coppertide approve-component</code>).</p>
       <ul className="components-list">{BUILTIN.map((c) => row(c, true))}{own.map((c) => row(c, false))}</ul>
       {!locked && (making
         ? <NewComponent draft={draft} team={own} initial={making} onAdd={(c) => set([...own, c])} onClose={() => setMaking(null)} />

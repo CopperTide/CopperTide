@@ -84,7 +84,7 @@ export function TeamExport({ teamId, draft, flush }: Props) {
       const name = `${teamId}.madl.yaml`;
       // The first line lets the file run from a terminal (`./team.madl.yaml`, after chmod +x); to MADL
       // tools it is a YAML comment.
-      downloadText(name, yaml.startsWith('#!') ? yaml : `#!/usr/bin/env -S sculptured run\n${yaml}`, 'application/yaml');
+      downloadText(name, yaml.startsWith('#!') ? yaml : `#!/usr/bin/env -S coppertide run\n${yaml}`, 'application/yaml');
       setExported(name);
     } catch (e) {
       setError(`Could not export the team: ${errorText(e)}`);

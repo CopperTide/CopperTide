@@ -63,7 +63,7 @@ Agent states such as *running*, *stopping* or *needs attention* are listed on [A
 | --- | --- |
 | **Computer** | One of your machines, connected to your account. The **Computers** page lists them. |
 | **Runner** | The background program on a computer that starts the agents, captures what they do and passes messages. Installed by the [connect command](/connect-a-computer). |
-| **Allowed folders** | The folders a computer lets agents start in, decided on that computer. By default, your home folder. Add more with `sculptured allow <folder>`. |
+| **Allowed folders** | The folders a computer lets agents start in, decided on that computer. By default, your home folder. Add more with `coppertide allow <folder>`. |
 | **Access** | How much agents may do once started. **Full access** (the default) lets them act as you do. **Sandboxed** makes Claude ask before risky actions and keeps Codex writing only inside its folder. |
 | **Run on** | Which computer runs a team. With one connected computer, **Automatic** uses it. |
 
@@ -116,7 +116,7 @@ The hosted service signs you in and provides a separate CopperTide instance for 
 
 ```mermaid
 flowchart LR
-  B["Your browser"] -- "http://127.0.0.1:4410" --> S["sculptured serve: board, journal, workflows"]
+  B["Your browser"] -- "http://127.0.0.1:4410" --> S["coppertide serve: board, journal, workflows"]
   S -- "start, message, stop" --> R["Local runner"]
   R --> C["Claude Code"]
   R --> X["Codex"]
@@ -125,7 +125,7 @@ flowchart LR
   R -- "every event" --> S
 ```
 
-`sculptured serve` starts the app server and a runner on the same machine. Team designs and run history are stored locally. Claude Code and Codex still communicate with their providers; see [Privacy](/privacy) for the data flow.
+`coppertide serve` starts the app server and a runner on the same machine. Team designs and run history are stored locally. Claude Code and Codex still communicate with their providers; see [Privacy](/privacy) for the data flow.
 
   </Tab>
 </Tabs>

@@ -3,7 +3,7 @@ title: Run it yourself
 description: Build CopperTide from source, run it on your own computer, and back up, upgrade and roll back your data.
 ---
 
-Run CopperTide locally to keep the app, runner and run history on your computer without a CopperTide account. The `sculptured serve` command serves the app on port 4410 and starts the runner. CopperTide stores its data in `~/.sculptured/`; agents work in the project folders you choose. The app and runner are open source under Apache 2.0.
+Run CopperTide locally to keep the app, runner and run history on your computer without a CopperTide account. The `coppertide serve` command serves the app on port 4410 and starts the runner. CopperTide stores its data in `~/.coppertide/`; agents work in the project folders you choose. The app and runner are open source under Apache 2.0.
 
 <Tabs>
   <Tab title="On your own computer">
@@ -16,18 +16,18 @@ Run CopperTide locally to keep the app, runner and run history on your computer 
 
 ```mermaid
 flowchart LR
-  B["Your browser"] -- "http://127.0.0.1:4410" --> S["sculptured serve: app, API, database"]
+  B["Your browser"] -- "http://127.0.0.1:4410" --> S["coppertide serve: app, API, database"]
   S -- "loopback link, host token" --> R["Local runner"]
   R -- "starts, sends messages, stops" --> A["Claude Code / Codex"]
   A -- "reads and writes" --> F[("Your project folders")]
-  S -- "reads and writes" --> D[("~/.sculptured/")]
+  S -- "reads and writes" --> D[("~/.coppertide/")]
 ```
 
 ## Before you start
 
 | You need | Why |
 | --- | --- |
-| Linux or macOS | `sculptured serve` runs on Linux and macOS. On Windows, CopperTide runs only as a connected computer for a CopperTide account. |
+| Linux or macOS | `coppertide serve` runs on Linux and macOS. On Windows, CopperTide runs only as a connected computer for a CopperTide account. |
 | Rust 1.95 or newer and Node.js 24 | To build the program and the web app. |
 | Claude Code or Codex, signed in as your own user | CopperTide uses their existing sign-in and never stores provider credentials. |
 | Git | For agents' own copies of a repository and the Git panel. |
@@ -53,12 +53,12 @@ cd CopperTide
   </Step>
   <Step title="Build the program">
     ```bash
-    cargo build --locked --release -p sculptured
+    cargo build --locked --release -p coppertide
     ```
   </Step>
   <Step title="Start it">
     ```bash
-    ./target/release/sculptured serve --port 4410 --web-dir web/dist
+    ./target/release/coppertide serve --port 4410 --web-dir web/dist
     ```
     Open http://127.0.0.1:4410. If CopperTide is already running, open that address instead of starting a second copy.
   </Step>
@@ -69,7 +69,7 @@ cd CopperTide
 | Option | Default | Meaning |
 | --- | --- | --- |
 | `--port` | `4410` | Port on `127.0.0.1`. |
-| `--data-dir` | `~/.sculptured` | Where CopperTide stores its data. Also read from `SCULPTURED_DATA_DIR`. |
+| `--data-dir` | `~/.coppertide` | Where CopperTide stores its data. Also read from `COPPERTIDE_DATA_DIR`. |
 | `--web-dir` | `web/dist` | The built web app. |
 | `--claude-program` | found on `PATH` | Full path to Claude Code, if it is not on `PATH`. |
 | `--codex-program` | found on `PATH` | Full path to Codex, if it is not on `PATH`. |
@@ -78,7 +78,7 @@ CopperTide logs to the terminal. Set `RUST_LOG=debug` for more detail. See the [
 
 <Warning>Do not expose port 4410 to the Internet or put it behind a public reverse proxy. The local app controls your agents and reads your project files. It accepts only requests addressed to `127.0.0.1` or `localhost`, so a public proxy would either fail or defeat that protection.</Warning>
 
-## What's in `~/.sculptured/`
+## What's in `~/.coppertide/`
 
 | Path | What it holds |
 | --- | --- |
@@ -97,15 +97,15 @@ The database uses SQLite's write-ahead log, so copying only `controld.sqlite` wh
 <Tabs>
   <Tab title="While it runs">
     ```bash
-    sqlite3 ~/.sculptured/controld.sqlite ".backup '/path/to/backup/controld.sqlite'"
+    sqlite3 ~/.coppertide/controld.sqlite ".backup '/path/to/backup/controld.sqlite'"
     ```
   </Tab>
   <Tab title="Stopped">
-    Stop CopperTide, then copy the whole `~/.sculptured/` folder.
+    Stop CopperTide, then copy the whole `~/.coppertide/` folder.
   </Tab>
 </Tabs>
 
-Agents' copies in `~/.sculptured/copies/` are separate Git working folders. Merge or copy out their work before you delete them.
+Agents' copies in `~/.coppertide/copies/` are separate Git working folders. Merge or copy out their work before you delete them.
 
 You can also keep a team outside the database: **Export team file** saves it as a `.madl.yaml` file, and **Import** loads one. See [Team files](/guides/team-files).
 
@@ -114,8 +114,8 @@ You can also keep a team outside the database: **Export team file** saves it as 
 <Steps>
   <Step title="Stop running teams">Stop every team in the app, so no agent is left working unwatched.</Step>
   <Step title="Back up">Take a backup as above.</Step>
-  <Step title="Replace the program and web app">Build or copy the new `sculptured` and the new web folder. Keep the old program until you have checked the new one.</Step>
-  <Step title="Start again">Run `sculptured serve`. It upgrades its database when it starts.</Step>
+  <Step title="Replace the program and web app">Build or copy the new `coppertide` and the new web folder. Keep the old program until you have checked the new one.</Step>
+  <Step title="Start again">Run `coppertide serve`. It upgrades its database when it starts.</Step>
 </Steps>
 
 ## Roll back

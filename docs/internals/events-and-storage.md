@@ -155,7 +155,7 @@ No boot-time task relaunches anything: agents come back only through the operato
 
 ## 10. The SQLite schema
 
-The local file is `controld.sqlite` in the data folder (`~/.sculptured/` for a local `serve`, see Deployment (in the private sculptured-cloud repo)). The main tables:
+The local file is `controld.sqlite` in the data folder (`~/.coppertide/` for a local `serve`, see Deployment (in the private sculptured-cloud repo)). The main tables:
 
 ```mermaid
 erDiagram

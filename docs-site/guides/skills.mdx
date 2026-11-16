@@ -60,7 +60,7 @@ A remote server usually needs a key. The manifest names it as `${NAME}`, and nev
 The computer's owner sets the value once, on that computer:
 
 ```bash
-sculptured set-secret OPENFOAM_TOKEN
+coppertide set-secret OPENFOAM_TOKEN
 ```
 
 The runner fills it in when it starts the agent, so the team, the server and Community never see it. On your own local CopperTide, an environment variable of the same name works too.
@@ -70,7 +70,7 @@ The runner fills it in when it starts the agent, so the team, the server and Com
 On a computer connected to your account, a component that is not built in runs only after that computer's owner approves it there. The agent's page shows what it would run or connect to, and the line to approve it:
 
 ```bash
-sculptured approve-component <digest>
+coppertide approve-component <digest>
 ```
 
 The digest is a fingerprint of that exact manifest: if anything in it changes, it needs approving again. Secrets are not part of it, so changing a key needs no new approval. Running agents are not restarted. On your own local CopperTide, the teams are yours, so nothing extra is asked.
@@ -86,7 +86,7 @@ The digest is a fingerprint of that exact manifest: if anything in it changes, i
   "url": "https://foam.example.com/mcp",
   "headers": { "Authorization": "Bearer ${OPENFOAM_TOKEN}" },
   "briefing": "You also have the OpenFOAM tools: check the mesh before a run.",
-  "install": "Ask the HPC team for a token, then: sculptured set-secret OPENFOAM_TOKEN"
+  "install": "Ask the HPC team for a token, then: coppertide set-secret OPENFOAM_TOKEN"
 }
 ```
 

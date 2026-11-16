@@ -31,7 +31,7 @@ Two AI builders, one Claude Code and one Codex, race to build the same small lib
 4. **The builders' jobs.** Implement SPEC.md in this repo. Each builder's **check** is `node ~/bakeoff/hidden/run.mjs .`
 5. **Team settings:**
    - **Own copies** on;
-   - the computer **sandboxed** (`sculptured connect … --sandboxed --enable checks`), so builders can't write outside their copy; checks still run because they're enabled by name.
+   - the computer **sandboxed** (`coppertide connect … --sandboxed --enable checks`), so builders can't write outside their copy; checks still run because they're enabled by name.
 6. **The judge's job.** Compare both branches and their check history (Copies panel, History). Pick the winner on passing tests first, then on simplicity, and explain why.
 
 ## The demo, beat by beat
@@ -85,7 +85,7 @@ Two AI builders, one Claude Code and one Codex, race to build the same small lib
 
 ## Start / Run
 10. **The start dialog is clear:** "Start 4 Claude agents? They run in ~/bakeoff/ratelimit … First to start: Examiner."
-11. **Own copies of a `--data-dir` instance go to ~/.sculptured/copies**, not under its data folder (isolation leak between instances).
+11. **Own copies of a `--data-dir` instance go to ~/.coppertide/copies**, not under its data folder (isolation leak between instances).
 12. **The Run graph draws an arrow only once a message has passed along it** ("1 message observed"). Before that, who hands work to whom isn't visible; one arrow label is clipped at the left edge.
 13. **Codex plan at 100%** was visible in the corner and in /api/plan-usage; this is why the run is Claude vs Claude.
 14. **Token limits and team budgets can't be added while a team runs** (409 team_running), so a cap can't be added mid-run. I used an external guard script instead.

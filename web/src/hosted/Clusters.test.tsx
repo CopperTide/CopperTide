@@ -92,7 +92,7 @@ it('lists the cluster’s audit log, its doctor report and states such as “Rec
     ...base, state: 'needs_code', detail: 'Reconnect needs your code.', needs_mfa: true, keeper: 'tmux', host_key: 'SHA256:abc', device_id: 'd1', doctor: 'Claude Code: not installed',
     events: [
       { at: '2026-10-20T10:05:00Z', action: 'needs your code', ok: false, detail: 'The cluster asked a question at sign-in.' },
-      { at: '2026-10-20T10:01:00Z', action: 'started', ok: true, detail: 'Started the runner in the tmux session ‘sculptured-runner’.' },
+      { at: '2026-10-20T10:01:00Z', action: 'started', ok: true, detail: 'Started the runner in the tmux session ‘coppertide-runner’.' },
       { at: '2026-10-20T10:00:00Z', action: 'signed in', ok: true, detail: 'Signed in to alex@perlmutter.nersc.gov with key + your answer.' },
     ],
   };

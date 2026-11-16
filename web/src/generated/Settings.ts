@@ -20,6 +20,6 @@ posture: PermissionPosture,
  */
 question_timeout_min: number, 
 /**
- * Where agents' own git copies go (`copies`); None = `~/.sculptured/copies`.
+ * Where agents' own git copies go (`copies`); None = `~/.coppertide/copies`.
  */
 copies_folder?: string, };

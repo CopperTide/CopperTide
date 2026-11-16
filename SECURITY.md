@@ -13,7 +13,7 @@ Include what you found, how to reproduce it, and the version or commit. You will
 
 CopperTide runs coding agents on your own computer with your own Claude Code and Codex sign-in. Reports we especially want:
 
-- A way for a web page, another local user or a remote party to reach `sculptured serve` (it must only listen on loopback) or drive agents without the user.
+- A way for a web page, another local user or a remote party to reach `coppertide serve` (it must only listen on loopback) or drive agents without the user.
 - Reading or writing files outside the folders a team is allowed to use.
 - A connected computer's runner accepting work its owner's folder policy refuses.
 - Secrets (CLI tokens, instance or device keys) leaking into logs, exports or the browser.

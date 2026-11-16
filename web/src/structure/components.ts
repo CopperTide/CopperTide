@@ -58,7 +58,7 @@ export function whereItRuns(c: Component): string {
   const secrets = secretsOf(c);
   switch (c.kind) {
     case 'skills': return `Adds ${c.skills?.length ?? 0} skill${c.skills?.length === 1 ? '' : 's'} to the agent; nothing runs.`;
-    case 'mcp-remote': return `${commandLine(c)}${secrets.length ? `. Set ${secrets.join(', ')} on the agent's computer: sculptured set-secret ${secrets[0]}` : ''}`;
+    case 'mcp-remote': return `${commandLine(c)}${secrets.length ? `. Set ${secrets.join(', ')} on the agent's computer: coppertide set-secret ${secrets[0]}` : ''}`;
     case 'claude-plugin': return `${commandLine(c)} from the agent's computer`;
     default: return `Runs ${commandLine(c)} on the agent's computer`;
   }

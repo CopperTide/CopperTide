@@ -16,7 +16,7 @@ Sources:
 flowchart BT
   U["Rust unit tests: mod tests in crates/*/src"] --> I["Rust integration tests: crates/*/tests"]
   I --> K["Driver contract tests: drivers against fake-claude and fake-codex"]
-  K --> P["Process smoke: real sculptured binary, stub agents"]
+  K --> P["Process smoke: real coppertide binary, stub agents"]
   W["Web unit and component tests: Vitest, jsdom"] --> L["Playwright layout: built UI, mocked API"]
   P --> E["Playwright end to end: real binary via e2e-server"]
   L --> E
@@ -27,7 +27,7 @@ flowchart BT
 | Rust unit | `mod tests` in `crates/*/src` | No | No |
 | Rust integration | `crates/*/tests/*.rs` | In-process controld router and hostd supervisor; stub driver | No |
 | Driver contract | `crates/fixtures/tests/{claude,codex}_contract.rs`, `crates/drivers/tests/` | Fake CLIs | No |
-| Process smoke | `crates/sculptured/tests/process_smoke.rs` | The `sculptured` binary | No (stub) |
+| Process smoke | `crates/coppertide/tests/process_smoke.rs` | The `coppertide` binary | No (stub) |
 | Web component | `web/src/**/*.test.{ts,tsx}` | No (jsdom, mocked `api`) | No |
 | Playwright layout | `web/e2e/layout.spec.ts` | `vite preview` only; every `/api/*` answered by route fixtures | No |
 | Playwright e2e | `web/e2e/{team,rig,handoff,codex,many-teams}.spec.ts` | Real binary from `crates/e2e-server` | No (Practice agents, fake-codex) |
@@ -91,7 +91,7 @@ sequenceDiagram
 
 Notes:
 - `playwright.config.ts` sets `testDir: './e2e'` with no `testMatch`, so the default run also collects `layout.spec.ts`. Name the real-binary specs when you want only those.
-- e2e builds the UI and the binary unless `SCULPTURED_BIN` and `RIG_E2E_FAKE_CODEX` point at prebuilt ones. `RIG_E2E_PORT` moves it off port 14410.
+- e2e builds the UI and the binary unless `COPPERTIDE_BIN` and `RIG_E2E_FAKE_CODEX` point at prebuilt ones. `RIG_E2E_PORT` moves it off port 14410.
 - clippy settings live in `clippy.toml` (`too-many-lines-threshold = 30`) and `[workspace.lints.clippy]`.
 
 ## 4. Test helpers
@@ -143,7 +143,7 @@ npm --prefix web test -- src/structure/StructureBoard.test.tsx -t "keeps the boa
 | The Claude driver handles turns, tools, interrupts, crashes and unknown lines | `crates/fixtures/tests/claude_contract.rs` (`basic_turn_and_args`, `interrupt_then_continue`, `unknown_lines_are_kept_not_fatal`) |
 | The Codex driver handles queued turns, interrupts, resume, permissions and crashes | `crates/fixtures/tests/codex_contract.rs` (`queued_messages_each_get_their_own_turn`, `a_crash_ends_the_session_with_exited`) |
 | Stop ends a CLI and a child that ignores EOF | `claude_contract.rs` `stop_kills_a_child_that_ignores_eof_and_a_grandchild_holding_stderr` |
-| Agent processes do not inherit the runner's token | `crates/sculptured/tests/process_smoke.rs` `agent_processes_do_not_inherit_the_host_token` |
+| Agent processes do not inherit the runner's token | `crates/coppertide/tests/process_smoke.rs` `agent_processes_do_not_inherit_the_host_token` |
 | Duplicate events are ignored; a gap records `EventsLost` first | `crates/controld/tests/store.rs` `duplicate_ingest_is_ignored`, `gap_records_events_lost_first` |
 | Runner journal replays after reconnect | `crates/hostd/tests/link.rs` `link_runs_commands_and_replays_after_reconnect` |
 | controld refuses a foreign Host or Origin | `crates/controld/tests/api.rs` `foreign_host_or_origin_is_403` |
@@ -154,7 +154,7 @@ npm --prefix web test -- src/structure/StructureBoard.test.tsx -t "keeps the boa
 | Tool calls are read heuristically and flag risks in plain words | `crates/interpreter/tests/interpret.rs` `risky_commands_are_flagged_in_plain_words` |
 | A spec file that is really a secret is not echoed | `crates/rigspec/tests/compile.rs` `env_file_is_not_a_spec_and_is_not_echoed` |
 | e2e cleanup stops serve, then hostd, and removes the directory | `crates/e2e-server/tests/cleanup.rs` `shutdown_stops_serve_then_hostd_and_removes_the_directory` |
-| e2e never stops a process that is not its own | `cleanup.rs` `a_recorded_pid_that_is_not_this_sessions_sculptured_is_left_alone` |
+| e2e never stops a process that is not its own | `cleanup.rs` `a_recorded_pid_that_is_not_this_sessions_coppertide_is_left_alone` |
 | An exported run imports and exports identically | `crates/controld/tests/portable_session.rs` `an_exported_run_imports_as_a_past_run_and_exports_identically` |
 | UI names follow the vocabulary; OpenRig words stay under Advanced | `web/src/vocab.test.ts`; component tests that call `openRigWords` |
 | Seven running teams share one live connection | `web/e2e/many-teams.spec.ts` |

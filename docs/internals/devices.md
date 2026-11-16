@@ -9,31 +9,31 @@ In the hosted beta, agents never run on the server. They run on the user's own c
 Sources:
 - `crates/gateway/src/{devices.rs,host_proxy.rs,instances.rs}`
 - `crates/hostd/src/{policy.rs,run.rs,link.rs,supervisor/lifecycle.rs}`
-- `crates/sculptured/src/connect.rs`
+- `crates/coppertide/src/connect.rs`
 - `crates/controld/src/{launch.rs,teams/run.rs,api.rs}`
 - `web/src/hosted/{ConnectPage,ComputersPage,RunOn}.tsx`
 
 ## 1. What a connected computer is
 
-`sculptured connect https://app.<domain>` keeps everything in one private folder (mode 0700), by default `~/.sculptured/runner/`:
+`coppertide connect https://app.<domain>` keeps everything in one private folder (mode 0700), by default `~/.coppertide/runner/`:
 
 ```mermaid
 flowchart TB
-  R["~/.sculptured/runner/  (0700)"]
+  R["~/.coppertide/runner/  (0700)"]
   R --> D["device.json (0600)<br/>origin · device_id · key"]
   R --> P["runner.json (0600)<br/>allowed_folders · access · capabilities"]
   R --> H["hostd/<br/>journal · lock · seat-tools socket"]
 ```
 
 - **`device.json`** holds this computer's identity for one account: its id and its key. The key is shown to the computer once and stored on the server only as a hash. It is kept in this file, readable only by the user; keeping it in the OS keychain is not built yet.
-- **`runner.json`** is the owner's own rules: which folders agents may start in, how much they may do (`access`: `full`, the default, or `sandboxed`), and which local operations the server may ask for (`capabilities`: git, copies, checks, CLI sign-in, plan usage). Only the owner changes it (`--allow`, `sculptured allow`, `--sandboxed` / `--full-access`, `--enable` / `--disable <capability>`).
+- **`runner.json`** is the owner's own rules: which folders agents may start in, how much they may do (`access`: `full`, the default, or `sandboxed`), and which local operations the server may ask for (`capabilities`: git, copies, checks, CLI sign-in, plan usage). Only the owner changes it (`--allow`, `coppertide allow`, `--sandboxed` / `--full-access`, `--enable` / `--disable <capability>`).
 - **`hostd/`** is the ordinary runner state, the same as a local `serve`'s.
 
 ## 2. Pairing
 
 ```mermaid
 sequenceDiagram
-  participant R as sculptured connect
+  participant R as coppertide connect
   participant G as Gateway
   participant B as Browser (signed in)
   R->>G: POST /gw/api/device/start {name, platform}
@@ -92,7 +92,7 @@ sequenceDiagram
 - **Identity:** the gateway forwards the authenticated device id in the signed path (`/host?device=<id>`). The user's CopperTide closes any Hello whose `host_id` differs, so a computer can only connect as itself and never as another of the user's computers, or as `local`.
 - **Keep-alive:** the runner pings every 25 s and gives the link up after 75 s with nothing back, then reconnects. The gateway drops a computer that sent nothing for `GATEWAY_HOST_IDLE_SECS` (75 s), which also releases the instance hold.
 - **Revocation during setup:** a link is registered before the slow setup (starting the instance) and re-authenticated after it, so a revoke or disable in between is not missed.
-- **Stopping after disconnect:** a runner whose key is refused (401) stops with "This computer was disconnected… run `sculptured connect` again" instead of retrying forever.
+- **Stopping after disconnect:** a runner whose key is refused (401) stops with "This computer was disconnected… run `coppertide connect` again" instead of retrying forever.
 
 ## 4. Permissions on the computer
 
@@ -102,7 +102,7 @@ sequenceDiagram
 
 | Access | Claude Code | Codex | Who chooses |
 |---|---|---|---|
-| `full` (default) | the posture controld asks for: unrestricted means `--dangerously-skip-permissions` | `danger-full-access` sandbox | owner, at `sculptured connect` (`--full-access`) |
+| `full` (default) | the posture controld asks for: unrestricted means `--dangerously-skip-permissions` | `danger-full-access` sandbox | owner, at `coppertide connect` (`--full-access`) |
 | `sandboxed` | always restricted: risky actions need approval, shown in the browser | `workspace-write`: writes only inside its folder | owner (`--sandboxed`) |
 
 The server can ask for less than the computer allows, never more (`RunnerPolicy::posture`). With full access, an agent, or whoever can instruct it, can act as the user does on that computer. The pairing page says so.
@@ -112,7 +112,7 @@ flowchart TD
   A[Launch / Restart from the server] --> B{program, env or extra args set?}
   B -- yes --> X1[refused: this computer only runs its own Claude Code / Codex]
   B -- no --> C{any allowed folder?}
-  C -- no --> X2["refused: No folders are allowed… run sculptured allow"]
+  C -- no --> X2["refused: No folders are allowed… run coppertide allow"]
   C -- yes --> D["cwd absolute? else join to the first allowed folder"]
   D --> E[canonicalize: resolves .. and symlinks]
   E -- missing --> X3[refused: does not exist on this computer]
@@ -154,18 +154,18 @@ flowchart TD
 
 **Installing:** the Computers page detects the visitor's system and copies one command with a one-time connect key (`POST /gw/api/device/connect-key`: single use, 30 minutes, needs CSRF). The runner trades it for its own device key at `POST /gw/api/device/redeem`, so there is no code to approve. The page offers only systems the gateway has a build for (`GET /gw/api/releases`).
 - **macOS / Linux:** `curl -fsSL https://app.<domain>/install.sh | sh -s -- --key <key>`.
-- **Windows (PowerShell):** `$env:SCULPTURED_KEY="<key>"; irm https://app.<domain>/install.ps1 | iex`. It installs to `%LOCALAPPDATA%\Programs\Sculptured`.
+- **Windows (PowerShell):** `$env:COPPERTIDE_KEY="<key>"; irm https://app.<domain>/install.ps1 | iex`. It installs to `%LOCALAPPDATA%\Programs\CopperTide`.
 
-Both run `sculptured connect <origin> --install-service`. A computer with no folders allowed lets agents work in its home folder. ([Desktop and installers](desktop-and-installers.md))
+Both run `coppertide connect <origin> --install-service`. A computer with no folders allowed lets agents work in its home folder. ([Desktop and installers](desktop-and-installers.md))
 
 ## 6. Runs on login
 
-`sculptured connect <origin> --install-service` writes a service that runs `sculptured connect <origin> --data-dir <dir> --claude-program <path> --codex-program <path>` at login and restarts it if it stops. It never pairs again, because `device.json` already holds the key. Running it again restarts the service, so a new runner takes over.
+`coppertide connect <origin> --install-service` writes a service that runs `coppertide connect <origin> --data-dir <dir> --claude-program <path> --codex-program <path>` at login and restarts it if it stops. It never pairs again, because `device.json` already holds the key. Running it again restarts the service, so a new runner takes over.
 - **Linux:** a systemd user service.
 - **macOS:** a LaunchAgent.
-- **Windows:** a Scheduled Task, "Sculptured runner", run at logon as the user (no admin rights). It starts `sculptured-background.exe`, which runs `sculptured.exe` without a console window.
+- **Windows:** a Scheduled Task, "CopperTide runner", run at logon as the user (no admin rights). It starts `coppertide-background.exe`, which runs `coppertide.exe` without a console window.
 
-Only the runner runs on Windows (hostd, the drivers, local operations, `connect`). `sculptured serve` and every server never do. Windows differences:
+Only the runner runs on Windows (hostd, the drivers, local operations, `connect`). `coppertide serve` and every server never do. Windows differences:
 - the agents' tool channel is a loopback TCP port, whose address is written to the socket path (calls still need each agent's token);
 - stop uses `taskkill /T`;
 - checks run through `cmd /C`.
@@ -174,11 +174,11 @@ Login services start with a minimal PATH, so the CLIs' full paths are found at i
 
 | OS | File | Started with |
 |---|---|---|
-| Linux | `~/.config/systemd/user/sculptured-runner.service` (`Restart=always`, `RestartSec=5`, `RestartPreventExitStatus=78`) | `systemctl --user enable --now sculptured-runner` |
-| macOS | `~/Library/LaunchAgents/dev.sculptured.runner.plist` (`RunAtLoad`, `KeepAlive`) | `launchctl load -w <plist>` |
-| Windows | Scheduled Task "Sculptured runner" (task XML) | `schtasks /Create /TN … /XML <file> /F`, then `schtasks /Run` |
+| Linux | `~/.config/systemd/user/coppertide-runner.service` (`Restart=always`, `RestartSec=5`, `RestartPreventExitStatus=78`) | `systemctl --user enable --now coppertide-runner` |
+| macOS | `~/Library/LaunchAgents/dev.coppertide.runner.plist` (`RunAtLoad`, `KeepAlive`) | `launchctl load -w <plist>` |
+| Windows | Scheduled Task "CopperTide runner" (task XML) | `schtasks /Create /TN … /XML <file> /F`, then `schtasks /Run` |
 
-**When the account disconnects the computer.** The server then refuses the device key. The runner stops retrying (`hostd::run::keep_linked` returns `DISCONNECTED`) and exits with code 78 (`connect::DISCONNECTED_EXIT`). Before exiting it turns its own login service off (`service_off_commands`): systemd `disable --now --no-block`, launchd `unload -w`, and Task Scheduler `/DISABLE`. Without that it would be started again every few seconds and refused each time. systemd also skips the restart because of `RestartPreventExitStatus=78`; launchd and Task Scheduler cannot tell exit codes apart. Running `sculptured connect` again turns the service back on. Agents already running keep running when the link is only down, not refused.
+**When the account disconnects the computer.** The server then refuses the device key. The runner stops retrying (`hostd::run::keep_linked` returns `DISCONNECTED`) and exits with code 78 (`connect::DISCONNECTED_EXIT`). Before exiting it turns its own login service off (`service_off_commands`): systemd `disable --now --no-block`, launchd `unload -w`, and Task Scheduler `/DISABLE`. Without that it would be started again every few seconds and refused each time. systemd also skips the restart because of `RestartPreventExitStatus=78`; launchd and Task Scheduler cannot tell exit codes apart. Running `coppertide connect` again turns the service back on. Agents already running keep running when the link is only down, not refused.
 
 ## 7. TLS
 
@@ -197,6 +197,6 @@ Login services start with a minimal PATH, so the CLIs' full paths are found at i
 | Allowed folders: siblings, `..`, symlink escapes and missing paths refused; relative paths resolve inside; program, env and args refused; policy file private | `crates/hostd/tests/policy.rs` |
 | `wss://` is supported | `crates/hostd/tests/link.rs` `the_runner_can_dial_secure_websocket_urls` |
 | A team runs on its chosen computer; offline computer refused by name; hosted single-computer default; folders passed through in hosted mode | `crates/controld/tests/hosts_choice.rs` |
-| Pairing client shows the code, waits for approval, saves private credentials; `wss` except on localhost; login service contents | `crates/sculptured/src/connect.rs` tests |
+| Pairing client shows the code, waits for approval, saves private credentials; `wss` except on localhost; login service contents | `crates/coppertide/src/connect.rs` tests |
 | Approve, list and disconnect in the browser | `web/src/hosted/computers.test.tsx` |
-| A disconnected runner turns its own login service off; systemd does not restart exit 78 | `crates/sculptured/src/connect.rs` `a_disconnected_runner_turns_its_own_service_off` |
+| A disconnected runner turns its own login service off; systemd does not restart exit 78 | `crates/coppertide/src/connect.rs` `a_disconnected_runner_turns_its_own_service_off` |

@@ -20,7 +20,7 @@ The team is a board. A multi-agent team is designed and steered visually: each a
 
 ## Operating Context
 - Agents run locally through the user's installed Claude Code or Codex CLI, using the user's existing sign-in. They may cost money or consume plan usage.
-- `sculptured serve` provides the board, journal and workflows in the browser. There is also a hosted beta that connects to the user's computer.
+- `coppertide serve` provides the board, journal and workflows in the browser. There is also a hosted beta that connects to the user's computer.
 - The work spans two modes. Design is the Structure board, where the team is composed. Run is the Live graph or list, where the team is watched and steered.
 
 ## Capabilities and Constraints

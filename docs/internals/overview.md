@@ -1,10 +1,10 @@
 # Overview and component map
 
-CopperTide is a web control plane for teams of local coding agents. A user designs a team on a board, starts it, and watches and talks to its Claude Code and Codex agents live. It runs either on the user's own machine (`sculptured serve`) or as a hosted beta, where the server holds the user's teams and the agents still run on the user's own computer.
+CopperTide is a web control plane for teams of local coding agents. A user designs a team on a board, starts it, and watches and talks to its Claude Code and Codex agents live. It runs either on the user's own machine (`coppertide serve`) or as a hosted beta, where the server holds the user's teams and the agents still run on the user's own computer.
 
 Sources:
 - `Cargo.toml` (workspace), `crates/*/Cargo.toml`, the top doc comment of each crate's `lib.rs` or `main.rs`
-- `crates/sculptured/src/main.rs` (subcommands `serve`, `hostd`, `seat-tools`, `connect`, `allow`)
+- `crates/coppertide/src/main.rs` (subcommands `serve`, `hostd`, `seat-tools`, `connect`, `allow`)
 - `crates/controld/src/store/{mod,project,runs}.rs`, `crates/drivers/src/{lib,process}.rs`
 - `web/src/`, `web/src/vocab.ts`, `desktop/README.md`, `docs-site/README.md`
 
@@ -14,8 +14,8 @@ There are two ways to run CopperTide:
 
 | Mode | What runs where |
 |---|---|
-| **Local** | `sculptured serve` binds `127.0.0.1:4410` (default `--port 4410`). It runs controld (API, web UI, SQLite store) and starts a local agent runner, `sculptured hostd`, which dials back to `ws://127.0.0.1:<port>/host`. |
-| **Hosted beta** | The gateway (`sculptured-gateway`) signs users in and starts one `sculptured serve --hosted` per user on loopback. That instance has no local runner. The user's computer runs `sculptured connect <address>`, whose runner links out through the gateway's `/host` route. See Gateway (in the private sculptured-cloud repo) and [Connected computers](devices.md). |
+| **Local** | `coppertide serve` binds `127.0.0.1:4410` (default `--port 4410`). It runs controld (API, web UI, SQLite store) and starts a local agent runner, `coppertide hostd`, which dials back to `ws://127.0.0.1:<port>/host`. |
+| **Hosted beta** | The gateway (`sculptured-gateway`) signs users in and starts one `coppertide serve --hosted` per user on loopback. That instance has no local runner. The user's computer runs `coppertide connect <address>`, whose runner links out through the gateway's `/host` route. See Gateway (in the private sculptured-cloud repo) and [Connected computers](devices.md). |
 
 In both modes the same controld code serves the same `/api/*`, and the same hostd code runs the agents.
 
@@ -38,14 +38,14 @@ The diagram is C4 level 1 (context). CopperTide never calls a model itself; the 
 
 ```mermaid
 flowchart LR
-  B["Browser: web/dist"] -- "/api/* HTTP, live stream" --> C["controld, in sculptured serve"]
+  B["Browser: web/dist"] -- "/api/* HTTP, live stream" --> C["controld, in coppertide serve"]
   C -- "reads and writes" --> DB[("controld.sqlite: events and projections")]
   C -- "in-process LocalOp" --> LO["localops"]
-  H["hostd, sculptured hostd"] -- "WebSocket /host: Hello, events" --> C
+  H["hostd, coppertide hostd"] -- "WebSocket /host: Hello, events" --> C
   C -- "Launch, Send, Stop, Op" --> H
   H -- "journal until acked" --> J[("hostd journal")]
   H -- "spawns via drivers" --> CLI["claude, codex or stub driver"]
-  CLI -- "starts MCP server rig" --> ST["sculptured seat-tools"]
+  CLI -- "starts MCP server rig" --> ST["coppertide seat-tools"]
   ST -- "local socket: tool calls" --> H
   E["Desktop app, Electron"] -- "starts or reuses serve on 4410" --> C
 ```
@@ -62,14 +62,14 @@ flowchart LR
   G -- "users, sessions, invites" --> PG[("Postgres")]
   G -- "loopback, HMAC-signed" --> I["User's CopperTide: serve --hosted"]
   I -- "reads and writes" --> DB[("per-user controld.sqlite")]
-  RN["Runner on user's computer: sculptured connect"] -- "WebSocket /host, device key" --> G
+  RN["Runner on user's computer: coppertide connect"] -- "WebSocket /host, device key" --> G
   G -- "forwards link, signed" --> I
   RN -- "localops after policy check" --> F["Allowed folders"]
   RN -- "spawns" --> CLI["Claude Code or Codex"]
   G -- "OIDC" --> ID["Google or GitHub"]
 ```
 
-- The gateway links only the `signing` crate from this repository. It runs the `sculptured` binary as a child process for each user (`instances.rs`: `serve --hosted --port 0`).
+- The gateway links only the `signing` crate from this repository. It runs the `coppertide` binary as a child process for each user (`instances.rs`: `serve --hosted --port 0`).
 - Local operations (folders, git, copies, checks) run on the user's computer, not the server. See [Local operations](local-ops.md).
 - Deployment topology: Deployment (in the private sculptured-cloud repo). Security model: Security (in the private sculptured-cloud repo).
 
@@ -88,7 +88,7 @@ The Cargo workspace is `crates/*` (`spikes/` is excluded). The hosted gateway an
 | `crates/localops` | Folders, git, own copies, checks, CLI sign-in, plan usage, generation, project maps. Called in-process or by a runner. | Yes: `LocalOp` JSON |
 | `crates/interpreter` | Heuristic reading of tool calls into plain-language actions and risk flags. Pure; never reads the filesystem, never blocks. | No |
 | `crates/signing` | HMAC `sign` and `verify` for gateway-to-instance requests. | Yes: request signature |
-| `crates/sculptured` | The one binary: `serve`, `hostd`, `seat-tools`, `connect`, `allow`, `stop`, and `guard` (Claude Code's hook for [protections](protections.md)). | CLI |
+| `crates/coppertide` | The one binary: `serve`, `hostd`, `seat-tools`, `connect`, `allow`, `stop`, and `guard` (Claude Code's hook for [protections](protections.md)). | CLI |
 | `crates/fixtures` | Fake CLIs (`fake-claude`, `fake-codex`), scrubbed recordings, manual probes. Test-only. | No |
 | `crates/e2e-server` | The Playwright web server: real binary, throwaway data dir and `HOME`. Test-only. | No |
 | `web/src/generated` | TypeScript types generated from Rust. Never hand-edited. | Mirror of Rust types |
@@ -108,7 +108,7 @@ The Cargo workspace is `crates/*` (`spikes/` is excluded). The hosted gateway an
 
 ## 5. Architecture invariants
 
-- `sculptured serve` binds only `127.0.0.1` (`main.rs`: `TcpListener::bind(("127.0.0.1", port))`).
+- `coppertide serve` binds only `127.0.0.1` (`main.rs`: `TcpListener::bind(("127.0.0.1", port))`).
 - controld never starts an agent process. Only hostd does, through `drivers`; `drivers` and `hostd` are dev-dependencies of controld.
 - Each event and its projection onto the seat and message tables commit in one SQLite transaction (`store/project.rs`).
 - Ingesting a runner event is idempotent per `(host, host_seq)`. A gap is recorded first as `EventsLost`, so lost history is never silent (`Store::ingest`).
@@ -116,7 +116,7 @@ The Cargo workspace is `crates/*` (`spikes/` is excluded). The hosted gateway an
 - `localops` depends on no web framework, no `controld` and no host link. Its errors carry a status number that controld answers with.
 - `model`, `rigspec` and `interpreter` do no file or process I/O.
 - The interpreter is observe-only and heuristic. An empty result means nothing stood out, never that a call was safe.
-- Agent processes never inherit the runner's token: the process builder removes `SCULPTURED_HOST_TOKEN` (`drivers/src/process.rs`).
+- Agent processes never inherit the runner's token: the process builder removes `COPPERTIDE_HOST_TOKEN` (`drivers/src/process.rs`).
 - The gateway does not link controld. It reaches each user's instance over loopback with an HMAC signature (`signing`).
 - TypeScript API types come only from Rust (`cargo test --workspace export_bindings`).
 - OpenRig words (rig, pod, seat, edge, runtime…) appear in the UI only inside `data-advanced` or raw evidence (`web/src/vocab.ts`, `web/src/test-vocab.ts`).
@@ -151,8 +151,8 @@ The user-facing word comes first, the code name second.
 | **Own copy** (`localops::copies`, `CopiesMode`) | An agent's own git worktree, so agents don't overwrite each other. |
 | **Check** | A configured command CopperTide runs; its result is `Verified` evidence. |
 | **Runner** (`hostd`) | The process that runs agents on one machine and streams their events. |
-| **Computer** (device) | A user's machine linked to a hosted account with `sculptured connect`. |
+| **Computer** (device) | A user's machine linked to a hosted account with `coppertide connect`. |
 | **Gateway** | The hosted beta's multi-user front door. |
-| **Instance** | One user's own `sculptured serve --hosted`, started by the gateway. |
-| **Seat tools** (MCP server `rig`) | The MCP server a CLI starts for its agent (`sculptured seat-tools`), talking to the runner over a local socket. |
+| **Instance** | One user's own `coppertide serve --hosted`, started by the gateway. |
+| **Seat tools** (MCP server `rig`) | The MCP server a CLI starts for its agent (`coppertide seat-tools`), talking to the runner over a local socket. |
 | **Block** | A published, inert group definition on the community site. |

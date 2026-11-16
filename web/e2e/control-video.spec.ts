@@ -9,7 +9,7 @@ import { beat, caption, glide, keepVideo, press, recorder, shot, SHOTS, stills }
  *   RECORD_VIDEOS=1 npx playwright test control-video.spec.ts
  *
  * Screenshots go to docs/images/control/, videos to docs/videos/ (WebM and, with ffmpeg, MP4). The
- * Arena captures need a running arenad that serve reaches (SCULPTURED_ARENA_URL) with the retail
+ * Arena captures need a running arenad that serve reaches (COPPERTIDE_ARENA_URL) with the retail
  * example and a scripted OpenAI-compatible stand-in as a local model server (ARENA_LOCAL_MODELS), like
  * the fake upstream of arena's own tests, so no real model is called; without them they are skipped
  * and say so. The screenshots expect at least one finished run of task 27.
@@ -284,7 +284,7 @@ test('screenshots: Control on a phone', async ({ page, request }, info) => {
   await stop(request, id);
 });
 
-/** True when serve reaches an arenad (SCULPTURED_ARENA_URL). */
+/** True when serve reaches an arenad (COPPERTIDE_ARENA_URL). */
 async function arenaUp(request: APIRequestContext) {
   const r = await request.get('/api/arena/health').catch(() => null);
   return !!r?.ok();
@@ -306,7 +306,7 @@ async function scriptedArenaTeam(context: BrowserContext, request: APIRequestCon
 
 test('video 4: Shakedown control, a run’s Replay and a fork', async ({ browser, request, baseURL }, info) => {
   desktopOnly(info.project.name);
-  test.skip(!(await arenaUp(request)), 'no arenad answers (start one and set SCULPTURED_ARENA_URL)');
+  test.skip(!(await arenaUp(request)), 'no arenad answers (start one and set COPPERTIDE_ARENA_URL)');
   const { context, page } = await recorder(browser, info, baseURL!);
   await scriptedArenaTeam(context, request);
   await page.goto('/arena');
@@ -348,7 +348,7 @@ test('video 4: Shakedown control, a run’s Replay and a fork', async ({ browser
 
 test('screenshots: Shakedown control, Storage, a simulated run’s Replay and a fork', async ({ browser, request, baseURL }, info) => {
   desktopOnly(info.project.name);
-  test.skip(!(await arenaUp(request)), 'no arenad answers (start one and set SCULPTURED_ARENA_URL)');
+  test.skip(!(await arenaUp(request)), 'no arenad answers (start one and set COPPERTIDE_ARENA_URL)');
   const { context, page } = await stills(browser, baseURL!);
   await scriptedArenaTeam(context, request);
   await page.goto('/arena');

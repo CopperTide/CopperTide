@@ -46,7 +46,7 @@ it('gives Windows its PowerShell command', async () => {
   const panel = await screen.findByRole('tabpanel');
   expect(within(panel).getByText(/PowerShell/)).toBeInTheDocument();
   await userEvent.click(screen.getByRole('button', { name: 'Copy connect command' }));
-  expect(screen.getByText(`$env:SCULPTURED_KEY="${KEY}"; irm ${window.location.origin}/install.ps1 | iex`)).toBeInTheDocument();
+  expect(screen.getByText(`$env:COPPERTIDE_KEY="${KEY}"; irm ${window.location.origin}/install.ps1 | iex`)).toBeInTheDocument();
 });
 
 it('says plainly when there is no build for a system yet', async () => {
@@ -68,7 +68,7 @@ it('still shows the command when the browser will not copy', async () => {
 });
 
 it('offers Macs the app to download, and the Terminal command too', async () => {
-  const dmg = 'https://example.com/Sculptured-mac-arm64.dmg';
+  const dmg = 'https://example.com/CopperTide-mac.dmg';
   gateway(['aarch64-apple-darwin', 'x86_64-unknown-linux-gnu'], dmg);
   render(<ConnectComputer os="mac" />);
   const link = await screen.findByRole('link', { name: 'Download CopperTide for Mac' });

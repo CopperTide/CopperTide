@@ -1,6 +1,6 @@
 # Releasing
 
-**What a release is:** the `sculptured` runner builds that `install.sh` and `install.ps1` download, plus the macOS desktop app. People get them from the hosted gateway's Computers page, which serves the builds at `/releases/` (`install.sh` fetches `sculptured-<target>.tar.gz` and its `.sha256`, checks the checksum, then installs).
+**What a release is:** the `coppertide` runner builds that `install.sh` and `install.ps1` download, plus the macOS desktop app. People get them from the hosted gateway's Computers page, which serves the builds at `/releases/` (`install.sh` fetches `coppertide-<target>.tar.gz` and its `.sha256`, checks the checksum, then installs).
 
 There is no separate release step: each deploy of the server and each push to `main` produce the builds.
 
@@ -9,8 +9,8 @@ There is no separate release step: each deploy of the server and each push to `m
 | Build | Made by | When |
 |---|---|---|
 | Linux x86_64 runner | The gateway image (`sculptured-cloud/deploy/Gateway.Dockerfile`, Rust on Debian bullseye, so glibc 2.31 or newer), packaged with `deploy/release/package.sh` | Every server deploy |
-| Windows x64 runner (`sculptured.exe`, `sculptured-background.exe`) | The same image, cross-compiled with MinGW (`x86_64-pc-windows-gnu`), for `install.ps1` | Every server deploy |
-| macOS runners (Apple silicon and Intel) and `Sculptured-mac.dmg` (universal) | `.github/workflows/mac.yml` on GitHub's Apple silicon Macs, into the `mac-latest` prerelease | Every push to `main` |
+| Windows x64 runner (`coppertide.exe`, `coppertide-background.exe`) | The same image, cross-compiled with MinGW (`x86_64-pc-windows-gnu`), for `install.ps1` | Every server deploy |
+| macOS runners (Apple silicon and Intel) and `CopperTide-mac.dmg` (universal) | `.github/workflows/mac.yml` on GitHub's Apple silicon Macs, into the `mac-latest` prerelease | Every push to `main` |
 | Linux arm64 runner | Not built. `install.sh` asks for it, and the gateway answers that there is no build for that system yet | – |
 
 The server's update timer (`sculptured-cloud/deploy/aws/update.sh`) takes the macOS files from `mac-latest` once their `.commit` matches the commit it runs, checks their checksums, and serves them from `/data/releases`. Each deploy (and `deploy.sh --release-status`) warns when an uploaded build is from another commit.
@@ -26,8 +26,8 @@ The macOS app is signed ad hoc, so macOS asks once before it opens; a Developer 
 A Linux build anywhere:
 
 ```sh
-cargo build --release -p sculptured
-sh deploy/release/package.sh x86_64-unknown-linux-gnu target/release/sculptured dist
+cargo build --release -p coppertide
+sh deploy/release/package.sh x86_64-unknown-linux-gnu target/release/coppertide dist
 ```
 
 The macOS builds, when GitHub can't make them:

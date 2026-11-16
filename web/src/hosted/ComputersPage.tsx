@@ -104,7 +104,7 @@ function ComputerDetails({ id, name, policy }: { id: string; name: string; polic
     <div className="computer-details">
       <p><strong>{policy.access === 'sandboxed' ? 'Sandboxed' : 'Full access'}</strong> <span className="muted">· agents start in:</span></p>
       <ul className="computer-folders">{policy.allowed_folders.map((f) => <li key={f}><code>{f}</code></li>)}</ul>
-      {policy.allowed_folders.length === 0 && <p className="tone-amber">No folders allowed yet: run <code>sculptured allow &lt;folder&gt;</code> on it.</p>}
+      {policy.allowed_folders.length === 0 && <p className="tone-amber">No folders allowed yet: run <code>coppertide allow &lt;folder&gt;</code> on it.</p>}
       <p className="muted">Also allowed: {policy.capabilities.map((c) => CAPS[c] ?? c).join(', ') || 'nothing else'}.</p>
       <ComputerClis id={id} name={name} canSignIn={policy.capabilities.includes('cli_sign_in')} />
     </div>

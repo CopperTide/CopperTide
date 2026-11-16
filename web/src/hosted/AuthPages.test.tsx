@@ -58,7 +58,7 @@ it('a used invite says so and links to sign in', async () => {
 });
 
 const SAFARI_MAC = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15';
-const DMG = 'https://example.com/Sculptured-mac.dmg';
+const DMG = 'https://example.com/CopperTide-mac.dmg';
 function asBrowser(ua: string) {
   vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue(ua);
 }

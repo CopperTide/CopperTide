@@ -73,7 +73,7 @@ describe('Components', () => {
     fireEvent.click(form.getByRole('button', { name: 'Add' }));
     expect(saved().components).toEqual(['openfoam']);
     const list = within(screen.getByRole('group', { name: 'Components' }));
-    expect(list.getByText(/connects to https:\/\/foam.example.com\/mcp/).textContent).toContain('sculptured set-secret FOAM_TOKEN');
+    expect(list.getByText(/connects to https:\/\/foam.example.com\/mcp/).textContent).toContain('coppertide set-secret FOAM_TOKEN');
     const servers = within(screen.getByRole('group', { name: 'MCP servers' }));
     fireEvent.click(servers.getByRole('checkbox', { name: /OpenFOAM/ }));
     expect(saved().uses).toEqual(['openfoam']);

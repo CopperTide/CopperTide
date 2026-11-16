@@ -3,10 +3,10 @@ title: Run from a terminal
 description: Run a team from its file with one command, see what happens as it happens, and use the exit code in scripts.
 ---
 
-A team file runs without the app: `sculptured run` starts the team on this computer, prints a line whenever an agent starts working, finishes a turn, asks something or stops, and ends with an exit code that says how it went.
+A team file runs without the app: `coppertide run` starts the team on this computer, prints a line whenever an agent starts working, finishes a turn, asks something or stops, and ends with an exit code that says how it went.
 
 ```sh
-sculptured run review-team.madl.yaml --folder ./my-project
+coppertide run review-team.madl.yaml --folder ./my-project
 ```
 
 **Export team file** (the team's **Settings** → **Export**) saves a file that also runs on its own:
@@ -16,7 +16,7 @@ chmod +x review-team.madl.yaml
 ./review-team.madl.yaml --folder ./my-project
 ```
 
-Its first line, `#!/usr/bin/env -S sculptured run`, is a comment to every other tool, so the file is still an ordinary [MADL file](/guides/madl).
+Its first line, `#!/usr/bin/env -S coppertide run`, is a comment to every other tool, so the file is still an ordinary [MADL file](/guides/madl).
 
 ## Options
 
@@ -25,7 +25,7 @@ Its first line, `#!/usr/bin/env -S sculptured run`, is a comment to every other 
 | `--folder DIR` | Where the agents work (default: the current folder). Agents with a folder of their own keep it. |
 | `--input-text TEXT` | The team's Input. |
 | `--tokens N`, `--minutes N` | The run's budget. They can only lower what the file sets; a higher value is refused. |
-| `--data-dir DIR` | Where the run's records go (default: `~/.sculptured/runs/<name>-<time>`). |
+| `--data-dir DIR` | Where the run's records go (default: `~/.coppertide/runs/<name>-<time>`). |
 
 ## While it runs
 
@@ -46,7 +46,7 @@ Its first line, `#!/usr/bin/env -S sculptured run`, is a comment to every other 
 
 ## Inside a cluster job
 
-A batch job can run a team: the job ends the run when its time is up, and the agents wrap up first if `--minutes` leaves room (a lowered limit starts the wrap-up at 85% of it). Run it with `exec`, so the scheduler's stop signal reaches `sculptured run` directly. The compute node needs to reach Anthropic or OpenAI (check with `sculptured doctor`), and Claude Code or Codex signed in for your account; ask your site whether agents may run in jobs.
+A batch job can run a team: the job ends the run when its time is up, and the agents wrap up first if `--minutes` leaves room (a lowered limit starts the wrap-up at 85% of it). Run it with `exec`, so the scheduler's stop signal reaches `coppertide run` directly. The compute node needs to reach Anthropic or OpenAI (check with `coppertide doctor`), and Claude Code or Codex signed in for your account; ask your site whether agents may run in jobs.
 
 <Tabs>
   <Tab title="Slurm">
@@ -55,7 +55,7 @@ A batch job can run a team: the job ends the run when its time is up, and the ag
     #SBATCH --job-name=review-team
     #SBATCH --time=02:00:00
     #SBATCH --signal=B:TERM@120
-    exec sculptured run review-team.madl.yaml --folder "$SLURM_SUBMIT_DIR" --minutes 110
+    exec coppertide run review-team.madl.yaml --folder "$SLURM_SUBMIT_DIR" --minutes 110
     ```
     `--signal=B:TERM@120` asks the job to stop two minutes before its limit, so the run stops cleanly rather than being killed.
   </Tab>
@@ -65,7 +65,7 @@ A batch job can run a team: the job ends the run when its time is up, and the ag
     #PBS -N review-team
     #PBS -l walltime=02:00:00
     cd "$PBS_O_WORKDIR"
-    exec sculptured run review-team.madl.yaml --folder "$PBS_O_WORKDIR" --minutes 110
+    exec coppertide run review-team.madl.yaml --folder "$PBS_O_WORKDIR" --minutes 110
     ```
     At the walltime PBS sends the job a stop signal before killing it; `--minutes 110` has the agents wrap up before that.
   </Tab>
@@ -73,4 +73,4 @@ A batch job can run a team: the job ends the run when its time is up, and the ag
 
 The exit code tells the next step of a pipeline what happened (see [Exit codes](#exit-codes)).
 
-<Note>`sculptured run` uses Claude Code and Codex as they are signed in on this computer, so a run counts toward your plan like any other. Set a budget in the file, or lower it with `--tokens` or `--minutes`.</Note>
+<Note>`coppertide run` uses Claude Code and Codex as they are signed in on this computer, so a run counts toward your plan like any other. Set a budget in the file, or lower it with `--tokens` or `--minutes`.</Note>

@@ -59,7 +59,7 @@ flowchart LR
 | `--permission-prompt-tool mcp__rig__approve` | restricted posture and the `approve` tool is offered |
 | `--add-dir <dir>` | each extra folder (a team's items folder) |
 | `--setting-sources <list>`, and `--strict-mcp-config` without `user` | the team leaves out part of the person's own Claude Code setup (`ClaudeSetup::claude_args`) |
-| `--settings <hook JSON> --autocompact 100000` | protections are on ([Protections](protections.md)); the agent's environment also gets `SCULPTURED_PROTECTION` |
+| `--settings <hook JSON> --autocompact 100000` | protections are on ([Protections](protections.md)); the agent's environment also gets `COPPERTIDE_PROTECTION` |
 | `--plugin-dir <dir>` | the agent has skills: the runner's per-agent plugin folder ([Skills](skills-and-integrations.md)) |
 | a second `--mcp-config <JSON>` | the agent has integrations (Kindex's `kin-mcp`) |
 
@@ -181,7 +181,7 @@ stateDiagram-v2
 - `process::kill_group` sends `SIGKILL` with `killpg` to that group, only while the leader is not yet reaped, so the group id cannot have been reused.
 - Codex: whenever the app-server's output ends, the rest of its group (a command an interrupt left running, MCP servers) is killed before reaping. A failed handshake kills the group too.
 - Interrupt sends no signal. It is a protocol message on stdin.
-- hostd itself runs in its own session (`setsid` in `sculptured/src/main.rs`), so Ctrl-C at `serve` does not reach agents. On SIGTERM or SIGINT, hostd stops every agent with a 3 s grace.
+- hostd itself runs in its own session (`setsid` in `coppertide/src/main.rs`), so Ctrl-C at `serve` does not reach agents. On SIGTERM or SIGINT, hostd stops every agent with a 3 s grace.
 - The supervisor bounds Stop at grace + 5 s and records Attention ("stop timed out") if it is exceeded.
 
 ## 7. Practice agents and fixture CLIs

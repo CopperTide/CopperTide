@@ -16,7 +16,7 @@ You need Rust 1.95 or newer, Node.js 24, and Git. Claude Code or Codex is only n
 git clone https://github.com/CopperTide/CopperTide.git
 cd CopperTide
 npm --prefix web ci && npm --prefix web run build
-cargo run -p sculptured -- serve          # http://127.0.0.1:4410
+cargo run -p coppertide -- serve          # http://127.0.0.1:4410
 ```
 
 How the code fits together is in [docs/internals/](docs/internals/README.md); start with the overview.

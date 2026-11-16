@@ -2,8 +2,8 @@
 // drawn or mocked.
 //
 //   1. Build and serve the app with a fresh data folder and Practice agents (no model is called):
-//        cargo build -p sculptured && npm --prefix web run build
-//        sculptured serve --port 4499 --data-dir <empty folder> --claude-program <fixture CLI>
+//        cargo build -p coppertide && npm --prefix web run build
+//        coppertide serve --port 4499 --data-dir <empty folder> --claude-program <fixture CLI>
 //      The fixture CLI (see README.md here) answers "Improve this team with AI" with one canned team.
 //   2. node screenshots/capture.mjs --base http://127.0.0.1:4499 --session-folder <home>/app
 //

@@ -1,6 +1,6 @@
 const OPENRIG = /\b(rigs?|pods?|seats?|members?|edges?|runtimes?|rigspec|yaml|agent_ref|profiles?)\b/gi;
 const PRODUCT = /CopperTide/g;
-/** The retired product name: banned from visible text (commands such as `sculptured connect` are lower case and pass). */
+/** The retired product name: banned from visible text (stored lower-case values such as `sculptured.team/v1` pass). */
 const OLD_PRODUCT = /\bSculptured\b/g;
 
 /**

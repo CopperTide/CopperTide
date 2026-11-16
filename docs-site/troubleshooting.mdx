@@ -21,7 +21,7 @@ Find your symptom below and expand it for the likely cause and next step. For an
     The Mac app isn't signed with an Apple Developer ID yet, so macOS asks once. Click **Done** (not Move to Trash). Open *System Settings → Privacy & Security*, scroll to **Security**, click **Open Anyway** next to *“CopperTide” was blocked*, enter your password and click **Open**. See [Install the Mac app](/connect-a-computer#install-the-mac-app).
   </Accordion>
   <Accordion title="The Mac app's icon is crossed out">
-    That download doesn't run on this Mac's processor. Download the app again from the Computers page: the current `Sculptured-mac.dmg` runs on both Apple silicon and Intel Macs.
+    That download doesn't run on this Mac's processor. Download the app again from the Computers page: the current `CopperTide-mac.dmg` runs on both Apple silicon and Intel Macs.
   </Accordion>
   <Accordion title="“checksum mismatch” or “could not download”">
     The download was cut off or changed on the way. Nothing was installed. Copy a new connect command from the Computers page and run it again.
@@ -35,14 +35,14 @@ Find your symptom below and expand it for the likely cause and next step. For an
   <Accordion title="I ran the Windows command again and it still doesn't connect">
     The Windows installer stops the previous runner before replacing its files, then starts the new one. If an older copy is still running from before that fix, stop it first:
 
-    1. Open **Task Scheduler**, find **Sculptured runner**, and choose **End**, then **Disable**.
-    2. In Task Manager, end any `sculptured.exe` and `sculptured-background.exe`.
+    1. Open **Task Scheduler**, find **CopperTide runner**, and choose **End**, then **Disable**.
+    2. In Task Manager, end any `coppertide.exe` and `coppertide-background.exe`.
     3. Run the connect command again in PowerShell.
 
-    The runner is installed in `%LOCALAPPDATA%\Programs\Sculptured`.
+    The runner is installed in `%LOCALAPPDATA%\Programs\CopperTide`.
   </Accordion>
   <Accordion title="The computer shows as not connected after a restart">
-    The runner starts again when you log in, not when the computer boots: a systemd user service on Linux, a LaunchAgent on macOS, or the **Sculptured runner** logon task on Windows. Log in to the computer. If it still doesn't appear, run the connect command again; running it again restarts the service.
+    The runner starts again when you log in, not when the computer boots: a systemd user service on Linux, a LaunchAgent on macOS, or the **CopperTide runner** logon task on Windows. Log in to the computer. If it still doesn't appear, run the connect command again; running it again restarts the service.
   </Accordion>
 </AccordionGroup>
 
@@ -71,7 +71,7 @@ Find your symptom below and expand it for the likely cause and next step. For an
     The computer only lets agents start inside the folders its owner allowed. The installer allows your home folder. On that computer, run:
 
     ```bash
-    sculptured allow /path/to/folder
+    coppertide allow /path/to/folder
     ```
 
     Or choose a folder inside one it already allows; **Browse…** shows only those.

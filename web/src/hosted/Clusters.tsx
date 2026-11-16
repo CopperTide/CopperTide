@@ -46,7 +46,7 @@ export function Clusters() {
   return (
     <section aria-label="Clusters" className="clusters">
       <h2>Clusters</h2>
-      <p className="muted">CopperTide&apos;s server signs in to your cluster&apos;s login node over SSH, installs the runner in <code>~/.sculptured</code>, and keeps it running there. Nothing to install on your side.</p>
+      <p className="muted">CopperTide&apos;s server signs in to your cluster&apos;s login node over SSH, installs the runner in <code>~/.coppertide</code>, and keeps it running there. Nothing to install on your side.</p>
       {error && <p className="tone-red" role="alert">{error}</p>}
       {(data?.clusters ?? []).map((c) => <ClusterCard key={c.id} c={c} reload={load} />)}
       {data && !data.available && <p className="tone-amber">This server is not set up to keep cluster keys yet.</p>}
@@ -128,7 +128,7 @@ function CardActions({ c, onConnect, onRemove }: { c: Cluster; onConnect: () => 
     </div>
     {confirming && (
       <div role="group" aria-label={`Remove ${c.name}?`} className="cluster-confirm">
-        <p>Removing {c.name} deletes its saved key or password and disconnects its runner (it stops there by itself). Remove the line CopperTide added to ~/.ssh/authorized_keys yourself, and ~/.sculptured if you like.</p>
+        <p>Removing {c.name} deletes its saved key or password and disconnects its runner (it stops there by itself). Remove the line CopperTide added to ~/.ssh/authorized_keys yourself, and ~/.coppertide if you like.</p>
         <button type="button" className="btn" onClick={() => { setConfirming(false); onRemove(); }}>Yes, remove {c.name}</button>
         <button type="button" className="btn" onClick={() => setConfirming(false)}>Keep it</button>
       </div>
@@ -141,7 +141,7 @@ function CardHistory({ c }: { c: Cluster }) {
   return <>
     {c.doctor && (
       <details>
-        <summary>sculptured doctor on {c.host}{c.doctor_at ? `, ${new Date(c.doctor_at).toLocaleString()}` : ''}</summary>
+        <summary>coppertide doctor on {c.host}{c.doctor_at ? `, ${new Date(c.doctor_at).toLocaleString()}` : ''}</summary>
         <pre className="hosted-cmd">{c.doctor}</pre>
       </details>
     )}

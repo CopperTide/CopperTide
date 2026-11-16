@@ -1,5 +1,5 @@
 {
-  "name": "sculptured-docs",
+  "name": "coppertide-docs",
   "private": true,
   "scripts": {
     "dev": "mint dev --port 4411",

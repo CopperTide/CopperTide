@@ -53,7 +53,7 @@ description: Short answers about what CopperTide is, what it costs to run, where
     A network interruption does not stop agents on a computer that is still awake. Their calls to CopperTide wait for the connection to return. Sleep pauses the computer and its agents. You can still answer open questions in the app; answers and stop requests reach the runner when it reconnects. See [When a computer drops off](/guides/offline).
   </Accordion>
   <Accordion title="Can agents read my whole computer?">
-    Agents start only in folders the computer allows; the installer allows your home folder. Once running, what they can do depends on the computer's access level: **Full** (the default) lets them act as you do, and **Sandboxed** restricts Claude Code to asking first and Codex to writing inside its folder. Choose with `sculptured connect … --sandboxed`. See [Security](/security#access-level).
+    Agents start only in folders the computer allows; the installer allows your home folder. Once running, what they can do depends on the computer's access level: **Full** (the default) lets them act as you do, and **Sandboxed** restricts Claude Code to asking first and Codex to writing inside its folder. Choose with `coppertide connect … --sandboxed`. See [Security](/security#access-level).
   </Accordion>
   <Accordion title="How do I disconnect a computer?">
     Press **Disconnect** on the Computers page. Its live link is dropped and its key stops working at once, so the runner can't connect again. To remove the background service from that computer as well:
@@ -61,17 +61,17 @@ description: Short answers about what CopperTide is, what it costs to run, where
     <Tabs>
       <Tab title="Linux">
         ```bash
-        systemctl --user disable --now sculptured-runner
+        systemctl --user disable --now coppertide-runner
         ```
       </Tab>
       <Tab title="macOS">
         ```bash
-        launchctl unload -w ~/Library/LaunchAgents/dev.sculptured.runner.plist
+        launchctl unload -w ~/Library/LaunchAgents/dev.coppertide.runner.plist
         ```
       </Tab>
       <Tab title="Windows">
         ```powershell
-        Unregister-ScheduledTask -TaskName 'Sculptured runner' -Confirm:$false
+        Unregister-ScheduledTask -TaskName 'CopperTide runner' -Confirm:$false
         ```
       </Tab>
     </Tabs>

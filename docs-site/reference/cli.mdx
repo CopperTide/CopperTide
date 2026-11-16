@@ -1,42 +1,42 @@
 ---
 title: CLI reference
-description: Every command and flag of the sculptured program, with defaults and examples.
+description: Every command and flag of the coppertide program, with defaults and examples.
 ---
 
-`sculptured` is one program with several commands. On a connected computer it runs as a background service, so you rarely type it yourself. Use these pages when you want to change what a computer allows, run CopperTide entirely on your own machine, or script a setup.
+`coppertide` is one program with several commands. On a connected computer it runs as a background service, so you rarely type it yourself. Use these pages when you want to change what a computer allows, run CopperTide entirely on your own machine, or script a setup.
 
 ```bash
-sculptured <command> [options]
+coppertide <command> [options]
 ```
 
 | Command | What it does |
 | --- | --- |
-| [`connect`](#sculptured-connect) | Link this computer to a CopperTide account and run that account's agents here. |
-| [`allow`](#sculptured-allow) | Let agents from your account work in one more folder on this computer. |
-| [`serve`](#sculptured-serve) | Run a complete CopperTide on this computer: the app, its data and a local runner. |
-| [`hostd`](#sculptured-hostd) | Run only the agent runner, dialling a CopperTide server. `serve` normally starts it for you. |
+| [`connect`](#coppertide-connect) | Link this computer to a CopperTide account and run that account's agents here. |
+| [`allow`](#coppertide-allow) | Let agents from your account work in one more folder on this computer. |
+| [`serve`](#coppertide-serve) | Run a complete CopperTide on this computer: the app, its data and a local runner. |
+| [`hostd`](#coppertide-hostd) | Run only the agent runner, dialling a CopperTide server. `serve` normally starts it for you. |
 
-`sculptured --version` prints the version. `sculptured <command> --help` prints the flags of one command.
+`coppertide --version` prints the version. `coppertide <command> --help` prints the flags of one command.
 
 ```mermaid
 flowchart LR
   subgraph you["Your computer"]
-    C["sculptured connect<br/>(runner)"] -- "starts" --> A["Claude Code / Codex agents"]
-    AL["sculptured allow"] -- "edits runner.json" --> C
+    C["coppertide connect<br/>(runner)"] -- "starts" --> A["Claude Code / Codex agents"]
+    AL["coppertide allow"] -- "edits runner.json" --> C
   end
   C -- "outbound websocket" --> H["CopperTide account<br/>(hosted)"]
   subgraph self["Self-hosted"]
-    S["sculptured serve"] -- "starts" --> HD["hostd (local runner)"]
+    S["coppertide serve"] -- "starts" --> HD["hostd (local runner)"]
     HD -- "starts" --> A2["agents"]
   end
 ```
 
-## `sculptured connect`
+## `coppertide connect`
 
 Links this computer to an account and keeps a runner connected, so the account's agents start here. The connect command you copy from the **Computers** page calls this for you, with a one-time key and `--install-service`.
 
 ```bash
-sculptured connect <origin> [options]
+coppertide connect <origin> [options]
 ```
 
 | Argument or flag | Default | Meaning |
@@ -44,13 +44,13 @@ sculptured connect <origin> [options]
 | `<origin>` | required | The account's address, for example `https://app.example.com`. A trailing `/` is ignored. |
 | `--key <KEY>` | none | A one-time connect key from the Computers page. With a key, the computer connects with no code to approve. A key works once, for 30 minutes. |
 | `--name <NAME>` | the computer's hostname | How this computer appears in your account. |
-| `--allow <FOLDER>` | your home folder | A folder agents may work in. Repeat it for more folders. When no folder has ever been allowed, your home folder is allowed. Add more later with `sculptured allow`. |
+| `--allow <FOLDER>` | your home folder | A folder agents may work in. Repeat it for more folders. When no folder has ever been allowed, your home folder is allowed. Add more later with `coppertide allow`. |
 | `--install-service` | off | Install a login service, so the runner starts again whenever you log in, and return. Without it, `connect` stays in the foreground until you stop it. |
 | `--sandboxed` | off | Limit agents: Claude Code asks before risky actions, and Codex writes only inside its folder. Cannot be combined with `--full-access`. |
 | `--full-access` | on | Let agents act as you do on this computer. This is the default. |
 | `--enable <CAPABILITY>` | see below | Turn on something the account may do here. Repeatable. |
 | `--disable <CAPABILITY>` | see below | Turn off something the account may do here. Repeatable. |
-| `--data-dir <DIR>` | `~/.sculptured/runner` | Where the runner keeps its settings, its saved pairing and its agents' records. Created readable by you only. |
+| `--data-dir <DIR>` | `~/.coppertide/runner` | Where the runner keeps its settings, its saved pairing and its agents' records. Created readable by you only. |
 | `--claude-program <PATH>` | found on `PATH` | The Claude Code program to run. |
 | `--codex-program <PATH>` | found on `PATH` | The Codex program to run. |
 
@@ -87,13 +87,13 @@ It also opens the link in your browser. Sign in, check that the code matches, an
 
 <Tabs>
   <Tab title="macOS">
-    A LaunchAgent at `~/Library/LaunchAgents/dev.sculptured.runner.plist`, loaded with `launchctl`. It starts at login and restarts if it stops.
+    A LaunchAgent at `~/Library/LaunchAgents/dev.coppertide.runner.plist`, loaded with `launchctl`. It starts at login and restarts if it stops.
   </Tab>
   <Tab title="Linux">
-    A systemd user service at `~/.config/systemd/user/sculptured-runner.service`, enabled and restarted with `systemctl --user`.
+    A systemd user service at `~/.config/systemd/user/coppertide-runner.service`, enabled and restarted with `systemctl --user`.
   </Tab>
   <Tab title="Windows">
-    A Scheduled Task named **Sculptured runner**, which runs when you log on. Its definition is kept at `%USERPROFILE%\.sculptured\runner\sculptured-runner.xml`.
+    A Scheduled Task named **CopperTide runner**, which runs when you log on. Its definition is kept at `%USERPROFILE%\.coppertide\runner\coppertide-runner.xml`.
   </Tab>
 </Tabs>
 
@@ -106,10 +106,10 @@ The service records the full paths of Claude Code and Codex, because a login ser
 curl -fsSL https://app.example.com/install.sh | sh -s -- --key <KEY>
 
 # Connect, allow two project folders, keep it running after login
-sculptured connect https://app.example.com --allow ~/code/site --allow ~/code/api --install-service
+coppertide connect https://app.example.com --allow ~/code/site --allow ~/code/api --install-service
 
 # Sandboxed agents, and no Git operations from the browser
-sculptured connect https://app.example.com --sandboxed --disable git
+coppertide connect https://app.example.com --sandboxed --disable git
 ```
 
 ### Exit codes
@@ -118,79 +118,79 @@ sculptured connect https://app.example.com --sandboxed --disable git
 | --- | --- |
 | `0` | Finished: the service was installed, or the runner stopped normally. |
 | `75` | A runner is already running with this data folder. |
-| `1` | Any other error. The message is printed after `sculptured:`. |
+| `1` | Any other error. The message is printed after `coppertide:`. |
 
-## `sculptured allow`
+## `coppertide allow`
 
 Adds a folder agents may work in. Agents and every file operation stay inside allowed folders, after `..` and symbolic links are resolved.
 
 ```bash
-sculptured allow <folder> [--data-dir <DIR>]
+coppertide allow <folder> [--data-dir <DIR>]
 ```
 
 | Argument or flag | Default | Meaning |
 | --- | --- | --- |
 | `<folder>` | required | The folder to allow. |
-| `--data-dir <DIR>` | `~/.sculptured/runner` | The runner's data folder, if you connected with a different one. |
+| `--data-dir <DIR>` | `~/.coppertide/runner` | The runner's data folder, if you connected with a different one. |
 
-It prints the full list of allowed folders. Restart `sculptured connect`, or its login service, so running agents see the change.
+It prints the full list of allowed folders. Restart `coppertide connect`, or its login service, so running agents see the change.
 
 ```bash
-sculptured allow ~/code/new-project
+coppertide allow ~/code/new-project
 ```
 
-## `sculptured approve-component`
+## `coppertide approve-component`
 
 ```bash
-sculptured approve-component <digest> [--data-dir <DIR>]
+coppertide approve-component <digest> [--data-dir <DIR>]
 ```
 
 Lets agents on this computer use a component that is not built in. The digest is in the note on the agent that went without it, next to what the component runs or connects to. Approve only what you would run yourself. Agents given the component start it at their next launch; nothing is restarted. A changed manifest has a new digest and needs approving again.
 
-## `sculptured doctor`
+## `coppertide doctor`
 
 ```bash
-sculptured doctor [--data-dir <DIR>]
+coppertide doctor [--data-dir <DIR>]
 ```
 
 Checks what this computer has for its agents and prints one line each: Claude Code and Codex (installed, signed in), the built-in components' programs, and for each runner its allowed folders, how many components are approved here, and the names of component secrets set here (never their values). Lines marked `fix` need something done. It changes nothing.
 
-## `sculptured set-secret`
+## `coppertide set-secret`
 
 ```bash
-sculptured set-secret <NAME> [--remove] [--data-dir <DIR>]
+coppertide set-secret <NAME> [--remove] [--data-dir <DIR>]
 ```
 
 Keeps a secret that a component names as `${NAME}` (such as a remote MCP server's key) on this computer, for every runner here, or only the one in `--data-dir`. You type the value; it is not shown. You can also pipe it in. The value is never given on the command line, and never leaves this computer: the runner fills it in when it starts an agent. Agents pick it up at their next start. `--remove` forgets it.
 
-## `sculptured serve`
+## `coppertide serve`
 
 Runs a complete CopperTide on your own computer: the web app, its database and a local runner that starts your agents. See [Run it yourself](/operations).
 
 ```bash
-sculptured serve [options]
+coppertide serve [options]
 ```
 
 | Flag | Default | Meaning |
 | --- | --- | --- |
 | `--port <PORT>` | `4410` | The port to listen on. CopperTide listens on `127.0.0.1` only. |
-| `--data-dir <DIR>` | `~/.sculptured` | Where projects, transcripts and settings are kept. Also read from `SCULPTURED_DATA_DIR`. |
-| `--web-dir <DIR>` | `web/dist` | The built web app to serve. An installed copy uses `~/.sculptured/web`. |
+| `--data-dir <DIR>` | `~/.coppertide` | Where projects, transcripts and settings are kept. Also read from `COPPERTIDE_DATA_DIR`. |
+| `--web-dir <DIR>` | `web/dist` | The built web app to serve. An installed copy uses `~/.coppertide/web`. |
 | `--claude-program <PATH>` | found on `PATH` | The Claude Code program to run. |
 | `--codex-program <PATH>` | found on `PATH` | The Codex program to run. |
-| `--hosted` | off | Used by the hosted service only: serve one user behind the gateway, with no local runner. Needs `SCULPTURED_GATEWAY_SECRET`. |
+| `--hosted` | off | Used by the hosted service only: serve one user behind the gateway, with no local runner. Needs `COPPERTIDE_GATEWAY_SECRET`. |
 
 ```bash
-~/.sculptured/bin/sculptured serve --port 4410 --web-dir ~/.sculptured/web
+~/.coppertide/bin/coppertide serve --port 4410 --web-dir ~/.coppertide/web
 ```
 
 Then open `http://127.0.0.1:4410`. The runner is started in its own session, so pressing Ctrl+C in the terminal does not stop your agents.
 
 <Warning>Do not expose the `serve` port to the Internet. It controls agents that act as you.</Warning>
 
-`serve` runs on macOS and Linux. On Windows, connect the computer to an account with `sculptured connect` instead.
+`serve` runs on macOS and Linux. On Windows, connect the computer to an account with `coppertide connect` instead.
 
-## `sculptured hostd`
+## `coppertide hostd`
 
 Runs only the agent runner and dials a CopperTide server. `serve` starts one for you; run it yourself only when you know you need a separate runner.
 
@@ -199,7 +199,7 @@ Runs only the agent runner and dials a CopperTide server. `serve` starts one for
 | `--controld <URL>` | required | The server's runner address. |
 | `--host-id <ID>` | `local` | The id this runner reports. |
 | `--data-dir <DIR>` | required | Where the runner keeps its records. |
-| `--token <TOKEN>` | required | The runner's token. Read from `SCULPTURED_HOST_TOKEN` when not given; it is removed from the environment before any agent starts. |
+| `--token <TOKEN>` | required | The runner's token. Read from `COPPERTIDE_HOST_TOKEN` when not given; it is removed from the environment before any agent starts. |
 | `--claude-program <PATH>` | found on `PATH` | The Claude Code program to run. |
 | `--codex-program <PATH>` | found on `PATH` | The Codex program to run. |
 
@@ -207,10 +207,10 @@ Runs only the agent runner and dials a CopperTide server. `serve` starts one for
 
 | Variable | Used by | Meaning |
 | --- | --- | --- |
-| `SCULPTURED_DATA_DIR` | `serve` | Same as `--data-dir`. |
-| `SCULPTURED_HOST_TOKEN` | `hostd` | Same as `--token`. |
-| `SCULPTURED_ARENA_URL` | `serve` | Where the Tests pages reach arenad, the test engine. The default is `http://127.0.0.1:4510`. Not used with `--hosted`. |
-| `SCULPTURED_KEY` | the Windows installer | The one-time connect key the PowerShell command passes to `connect --key`. |
+| `COPPERTIDE_DATA_DIR` | `serve` | Same as `--data-dir`. |
+| `COPPERTIDE_HOST_TOKEN` | `hostd` | Same as `--token`. |
+| `COPPERTIDE_ARENA_URL` | `serve` | Where the Tests pages reach arenad, the test engine. The default is `http://127.0.0.1:4510`. Not used with `--hosted`. |
+| `COPPERTIDE_KEY` | the Windows installer | The one-time connect key the PowerShell command passes to `connect --key`. |
 | `RUST_LOG` | every command | How much the program logs to standard error, for example `RUST_LOG=debug`. The default is `info`. |
 
 ## Next steps

@@ -3,8 +3,8 @@
 ## Product
 CopperTide runs and supervises local Claude Code, Codex and OpenCode agents. Users design a team on a
 board, start it, and watch and talk to it live. Internally it follows the OpenRig RigSpec model
-(rig → pod → seat, typed edges). It owns its runtime: `sculptured serve` (controld) and
-`sculptured hostd` (the agent runner). How it fits together is in `docs/internals/`, starting
+(rig → pod → seat, typed edges). It owns its runtime: `coppertide serve` (controld) and
+`coppertide hostd` (the agent runner). How it fits together is in `docs/internals/`, starting
 with `docs/internals/overview.md`.
 
 Agents are the primary way users work: compose their roles and communication, inspect

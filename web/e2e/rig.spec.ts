@@ -44,7 +44,7 @@ test('desktop: start a team, message an agent and stop it', async ({ page }, inf
   await boxC.click();
   await expect(page.getByRole('heading', { level: 1, name: 'c', exact: true })).toBeVisible();
   await expect(page.getByText(`Reason: ${fullReason}`)).toBeVisible();
-  expect(fullReason).toContain('/nonexistent/sculptured-e2e/');
+  expect(fullReason).toContain('/nonexistent/coppertide-e2e/');
   expect(fullReason).toMatch(/lifecycle\/reason$/);
 
   // Esc returns to the same board.

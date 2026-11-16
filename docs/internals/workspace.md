@@ -137,7 +137,7 @@ cd web && RECORD_VIDEOS=1 npx playwright test control-video.spec.ts
 ```
 
 - **Videos.** Each is recorded at 1280×800. `fixtures/recording.ts` draws only a pointer and a step caption over the real app (both marked `data-recording-overlay`), and encodes WebM (VP9) and MP4 (H.264) with ffmpeg when it is installed.
-- **Shakedown captures** need serve to reach an arenad (`SCULPTURED_ARENA_URL`) with the retail example. Without one they are skipped, saying why.
+- **Shakedown captures** need serve to reach an arenad (`COPPERTIDE_ARENA_URL`) with the retail example. Without one they are skipped, saying why.
   - Shakedown captures are pending: the November 2 recording environment denied Docker access and local socket creation. No Shakedown media is committed by this task.
   - Use a throwaway Postgres and save folder, and a scripted stand-in model; never call a real model for recordings.
 

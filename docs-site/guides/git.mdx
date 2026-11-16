@@ -43,7 +43,7 @@ When agents run at the same time in one folder, they can overwrite each other's 
 2. The project folder must be a git repository. Commit first: each copy starts from the last commit.
 3. The setting applies when agents next start.
 
-Each Claude Code or Codex agent then works in its own copy, a git worktree, on its own branch, `sculptured/<team>/…`. Copies live in `~/.sculptured/copies` on the computer unless you chose another copies folder. Agents see each other's work only after you merge it.
+Each Claude Code or Codex agent then works in its own copy, a git worktree, on its own branch, `sculptured/<team>/…`. Copies live in `~/.coppertide/copies` on the computer unless you chose another copies folder. Agents see each other's work only after you merge it.
 
 **Copies that take no extra space.** When the copies folder is on the same drive as the project and that drive can clone files (APFS on a Mac, btrfs or XFS on Linux, a Dev Drive on Windows), a new copy shares the project's disk: only the files an agent changes take space, and build output such as `node_modules` or `target` comes along already built. On other drives (ext4, NTFS, exFAT) each copy is an ordinary checkout, as before. Either way a copy starts exactly at its branch, without your uncommitted changes.
 
@@ -70,5 +70,5 @@ The Git page lists them under **Agent copies**. Each shows its branch, the commi
   <Card title="Run a team" icon="play" href="/guides/running">Start, watch and stop a team.</Card>
   <Card title="Workflows" icon="diagram-project" href="/guides/workflows">Give each workflow item its own copy and branch.</Card>
   <Card title="Context and communication" icon="eye" href="/guides/context">See which files an agent changed.</Card>
-  <Card title="Run it yourself" icon="server" href="/operations">Back up `~/.sculptured`, including copies.</Card>
+  <Card title="Run it yourself" icon="server" href="/operations">Back up `~/.coppertide`, including copies.</Card>
 </CardGroup>

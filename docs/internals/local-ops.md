@@ -78,7 +78,7 @@ sequenceDiagram
 | Link dropped while waiting | `409 needs_computer` | "<id> disconnected. Open Computers to reconnect it." |
 | Runner without `local-ops` | `409 older_runner` | "<id>'s CopperTide is too old for this…" |
 | No answer in time | `504 computer_timeout` | "<id> did not answer in N s." |
-| Policy refused | `403 not_allowed_here` | the runner's reason, for example "Git is turned off on this computer (sculptured connect … --enable git)" |
+| Policy refused | `403 not_allowed_here` | the runner's reason, for example "Git is turned off on this computer (coppertide connect … --enable git)" |
 | The operation itself failed | the runner's status and code | unchanged from local mode |
 
 A pending op is keyed by `op_id` in the registry. A disconnect fails every op waiting on that computer at once (`OpFailure::NotConnected`) rather than letting them run out their timeouts.
@@ -118,7 +118,7 @@ Timeouts are set in `ops::timeout_for`. A runner from before `analyze-run` answe
 - `list-folder` with no path answers with the allowed folders as entries and `path: ""`. The folder picker shows this level as "Folders this computer allows" and disables *Choose* and *New folder* there.
 - Inside an allowed folder, that folder acts as home for the listing, so the picker never offers to go above it.
 
-**Capabilities** come from the owner's `runner.json`, set with `sculptured connect … --enable <cap>` / `--disable <cap>`. Only the owner's explicit choices are stored; any capability left unset follows the access level, so switching to sandboxed later turns checks off unless the owner enabled them by name:
+**Capabilities** come from the owner's `runner.json`, set with `coppertide connect … --enable <cap>` / `--disable <cap>`. Only the owner's explicit choices are stored; any capability left unset follows the access level, so switching to sandboxed later turns checks off unless the owner enabled them by name:
 
 | Capability | Default (full access) | Default (sandboxed) |
 |---|---|---|
@@ -181,9 +181,9 @@ sequenceDiagram
   R->>R: start the CLI in the copy
 ```
 
-- **Whole repository:** a copy, and merging it back, covers the whole git repository, not just the project folder. So the repository root must itself be inside an allowed folder (`RunnerPolicy::whole_repo`, applied to launches, checks and every copy op). Allowing only `~/mono/pkg-a` of the repository `~/mono` refuses copies with "allow it with `sculptured allow ~/mono`, or switch off own copies".
+- **Whole repository:** a copy, and merging it back, covers the whole git repository, not just the project folder. So the repository root must itself be inside an allowed folder (`RunnerPolicy::whole_repo`, applied to launches, checks and every copy op). Allowing only `~/mono/pkg-a` of the repository `~/mono` refuses copies with "allow it with `coppertide allow ~/mono`, or switch off own copies".
 - **Where copies are made:** on the computer, at launch, after the policy check. The server never sends a copy path, so a hostile server cannot point an agent at an arbitrary folder.
-- **Copies folder:** `copies_root` is `<data dir>/../copies` (by default `~/.sculptured/runner/copies`), separate from the project folders.
+- **Copies folder:** `copies_root` is `<data dir>/../copies` (by default `~/.coppertide/runner/copies`), separate from the project folders.
 - **Copy-on-write** (`localops::clone`): when one real file of the project can be cloned into the copies folder (`reflink_copy`: FICLONE on btrfs/XFS, `clonefile` on APFS, block cloning on ReFS), `prepare` adds the worktree with `--no-checkout`, clones the project's files into it (every `.git` and the copies folder left out; a file that cannot be cloned is skipped, never copied in full), then `read-tree HEAD`, `update-index --refresh`, `reset --hard` (rewriting only files that differ) and `clean -fd` (removing the project's untracked work; ignored build output stays). Otherwise, or if that fails, it is an ordinary checkout. Item copies use the same path. Tests: `copies.rs::a_cloned_copy_is_exactly_its_branch_plus_the_projects_build_output` (with a plain copy standing in for cloning); real cloning is not exercised on the test machine's ext4.
 - **Listing, merging and removing** use `copies-read`, `copy-merge` and `copy-remove` through `ops::run` like any other op.
 - **Local mode:** controld prepares the copy itself before launching, as before.
@@ -225,7 +225,7 @@ If it cannot run on a computer, add it to `LOCAL_ONLY` and to `crates/controld/t
 | A launch asking for its own copy runs in a worktree on the computer | `policy.rs` `a_launch_asking_for_its_own_copy_runs_in_a_worktree_on_this_computer` |
 | Copies refused when the repository reaches outside the allowed folder | `policy.rs` `copies_are_refused_when_the_repository_reaches_outside_the_allowed_folder` |
 | A check for an agent with its own copy runs in that copy | `policy.rs` `a_check_for_an_agent_with_its_own_copy_runs_in_that_copy` |
-| Switching to sandboxed later turns checks off unless enabled by name | `crates/sculptured/src/connect.rs` `switching_to_sandboxed_later_turns_checks_off_unless_enabled_by_name` |
+| Switching to sandboxed later turns checks off unless enabled by name | `crates/coppertide/src/connect.rs` `switching_to_sandboxed_later_turns_checks_off_unless_enabled_by_name` |
 | Up from an allowed folder returns to the list of allowed folders | `FolderPicker.test.tsx` |
 | The Computers page shows folders, access and CLIs, with sign-in on that computer | `web/src/hosted/computers.test.tsx` |
 | The folder picker browses the team's computer | `web/src/structure/FolderPicker.test.tsx` |
