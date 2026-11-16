@@ -66,7 +66,7 @@ pub fn write_status(st: &AppState, seat: &str, args: &Value) -> Result<Value, St
             done,
         },
     )
-    .map_err(|e| format!("Sculptured could not save the status page: {e}"))?;
+    .map_err(|e| format!("CopperTide could not save the status page: {e}"))?;
     Ok(json!({ "text": if done {
         "Saved the final status page. People see it under Results → Status."
     } else {

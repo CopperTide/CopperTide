@@ -14,11 +14,11 @@ Find your symptom below and expand it for the likely cause and next step. For an
 ## Connecting a computer
 
 <AccordionGroup>
-  <Accordion title="“There's no Sculptured build for … yet”">
+  <Accordion title="“There's no CopperTide build for … yet”">
     The Computers page offers only the systems the server has a build for, and the installer stops before installing anything if there is none. Build availability can differ by platform while a release is being published. Check the Computers page again after the build finishes, or connect a computer with an available build.
   </Accordion>
-  <Accordion title="“Sculptured” Not Opened: Apple could not verify it is free of malware">
-    The Mac app isn't signed with an Apple Developer ID yet, so macOS asks once. Click **Done** (not Move to Trash). Open *System Settings → Privacy & Security*, scroll to **Security**, click **Open Anyway** next to *“Sculptured” was blocked*, enter your password and click **Open**. See [Install the Mac app](/connect-a-computer#install-the-mac-app).
+  <Accordion title="“CopperTide” Not Opened: Apple could not verify it is free of malware">
+    The Mac app isn't signed with an Apple Developer ID yet, so macOS asks once. Click **Done** (not Move to Trash). Open *System Settings → Privacy & Security*, scroll to **Security**, click **Open Anyway** next to *“CopperTide” was blocked*, enter your password and click **Open**. See [Install the Mac app](/connect-a-computer#install-the-mac-app).
   </Accordion>
   <Accordion title="The Mac app's icon is crossed out">
     That download doesn't run on this Mac's processor. Download the app again from the Computers page: the current `Sculptured-mac.dmg` runs on both Apple silicon and Intel Macs.
@@ -29,7 +29,7 @@ Find your symptom below and expand it for the likely cause and next step. For an
   <Accordion title="The command worked once, but now it says the key is invalid">
     A connect key works **once**, for **30 minutes**. Copy a new command from **Computers → Connect a computer** each time you connect.
   </Accordion>
-  <Accordion title="“This computer was disconnected from its Sculptured account”">
+  <Accordion title="“This computer was disconnected from its CopperTide account”">
     Someone pressed **Disconnect** for this computer, or its key was revoked. The runner stops instead of retrying. Copy a new connect command from the Computers page and run it on this computer: it notices the old key no longer works and connects with the new one.
   </Accordion>
   <Accordion title="I ran the Windows command again and it still doesn't connect">
@@ -53,10 +53,10 @@ Find your symptom below and expand it for the likely cause and next step. For an
     The team has something to fix before it can start. **Start team** says why when you point at it. Click the status (**Draft · N to fix**, next to Start team in the project's tab row) to open the Design board, where **Things to fix** lists each problem; clicking one selects the agent, group or arrow it is about. Errors block starting; warnings don't.
   </Accordion>
   <Accordion title="“Connect a computer first: Computers → Connect a computer.”">
-    With a Sculptured account, agents run on a computer you connect, and none is connected now. Open **Computers**, copy the connect command, and run it on the computer that has Claude Code or Codex. See [Connect a computer](/connect-a-computer).
+    With a CopperTide account, agents run on a computer you connect, and none is connected now. Open **Computers**, copy the connect command, and run it on the computer that has Claude Code or Codex. See [Connect a computer](/connect-a-computer).
   </Accordion>
   <Accordion title="“Choose which computer: more than one is connected.”">
-    Several computers are connected, so Sculptured doesn't guess. Choose one under **Runs on** in the project panel on the Design board.
+    Several computers are connected, so CopperTide doesn't guess. Choose one under **Runs on** in the project panel on the Design board.
   </Accordion>
   <Accordion title="“… is not connected. Open Computers to connect it.”">
     The team is set to run on a computer that is offline. Turn that computer on and log in, or choose another computer under **Runs on**.
@@ -64,8 +64,8 @@ Find your symptom below and expand it for the likely cause and next step. For an
   <Accordion title="“…'s folder must be a full path”">
     A folder must start from the top of the disk: `/home/you/project` on Linux, `/Users/you/project` on macOS, or `C:\Users\you\project` on Windows. A path such as `project` or `~/project` is not full.
   </Accordion>
-  <Accordion title="“Sculptured can't read that folder”">
-    The connected computer can't open the folder. On a Mac, Desktop, Documents and Downloads need your permission: in *System Settings → Privacy & Security*, allow Sculptured under **Files and Folders** or **Full Disk Access**, then choose the folder again. Elsewhere, check that the folder belongs to the user the runner runs as.
+  <Accordion title="“CopperTide can't read that folder”">
+    The connected computer can't open the folder. On a Mac, Desktop, Documents and Downloads need your permission: in *System Settings → Privacy & Security*, allow CopperTide under **Files and Folders** or **Full Disk Access**, then choose the folder again. Elsewhere, check that the folder belongs to the user the runner runs as.
   </Accordion>
   <Accordion title="“… is not in a folder this computer allows”">
     The computer only lets agents start inside the folders its owner allowed. The installer allows your home folder. On that computer, run:
@@ -80,13 +80,13 @@ Find your symptom below and expand it for the likely cause and next step. For an
     The folder is typed for the wrong computer, or was moved. A team's folder is a path on the computer that runs it, not on the computer you're browsing from. Use **Browse…** to pick it.
   </Accordion>
   <Accordion title="Start says my plan is near its limit">
-    Claude Code or Codex reported that your Claude or ChatGPT plan is at 90% or more of a usage window. Sculptured holds new work so a team doesn't stop halfway. Wait for the reset time shown, or press **Start anyway**. See [Limits](/reference/limits#plan-usage-holds).
+    Claude Code or Codex reported that your Claude or ChatGPT plan is at 90% or more of a usage window. CopperTide holds new work so a team doesn't stop halfway. Wait for the reset time shown, or press **Start anyway**. See [Limits](/reference/limits#plan-usage-holds).
   </Accordion>
   <Accordion title="I can't edit agents or arrows">
     A running team's structure is locked: agents' settings, arrows, groups and folders. Names, jobs and positions can still change. Stop the team to change the rest.
   </Accordion>
   <Accordion title="Someone else saved this team">
-    The team changed in another tab or window since you opened it. Sculptured keeps your version on screen and asks: **Reload** to take the other version, or **Keep mine** to save yours over it.
+    The team changed in another tab or window since you opened it. CopperTide keeps your version on screen and asks: **Reload** to take the other version, or **Keep mine** to save yours over it.
   </Accordion>
 </AccordionGroup>
 
@@ -99,13 +99,13 @@ Find your symptom below and expand it for the likely cause and next step. For an
     You can also sign in by hand: run `claude` (or `codex login`) in a terminal on that computer as the same user. On Windows, if `claude` is not on your PATH, run `& "$env:USERPROFILE\.local\bin\claude.exe"`.
   </Accordion>
   <Accordion title="Claude Code or Codex shows “not installed”">
-    The computer couldn't find the program. Install it as the same user that runs Sculptured. Sculptured looks on your PATH, then in the usual install folders: `~/.local/bin`, npm's, Bun's and Volta's folders, and Homebrew's on macOS; on Windows, `%USERPROFILE%\.local\bin` and `%APPDATA%\npm`. It looks again each time an agent starts, so you don't need to restart the runner.
+    The computer couldn't find the program. Install it as the same user that runs CopperTide. CopperTide looks on your PATH, then in the usual install folders: `~/.local/bin`, npm's, Bun's and Volta's folders, and Homebrew's on macOS; on Windows, `%USERPROFILE%\.local\bin` and `%APPDATA%\npm`. It looks again each time an agent starts, so you don't need to restart the runner.
   </Accordion>
   <Accordion title="“Live updates for … aren't arriving”">
-    The board couldn't receive live updates for 8 seconds. Sculptured keeps trying in the background, and your agents are not affected. This is usually a dropped network connection, or a network or proxy that blocks live connections. Press **Try again**, or **Open the Design board** in the meantime.
+    The board couldn't receive live updates for 8 seconds. CopperTide keeps trying in the background, and your agents are not affected. This is usually a dropped network connection, or a network or proxy that blocks live connections. Press **Try again**, or **Open the Design board** in the meantime.
   </Accordion>
   <Accordion title="An agent shows “stale” or “unknown”">
-    Its computer's link was lost, so what you see is the last known state. Agents may keep working if the computer is awake and only its connection was lost. When it reconnects, Sculptured catches up. See [When a computer drops off](/guides/offline).
+    Its computer's link was lost, so what you see is the last known state. Agents may keep working if the computer is awake and only its connection was lost. When it reconnects, CopperTide catches up. See [When a computer drops off](/guides/offline).
   </Accordion>
   <Accordion title="An agent is “stuck”">
     It is idle and its handoffs can't go on by themselves. The pane says why: often an upstream agent hasn't produced a result, or its turn was interrupted. Use **Hand over again** to resend the work it is owed, **Resend handoff**, or send it guidance.
@@ -126,7 +126,7 @@ Find your symptom below and expand it for the likely cause and next step. For an
     It stopped when it shouldn't have, couldn't start, or was lost in a restart. Read the reason in its pane. Then **Restart this agent**, or answer the team's restore offer: **Resume**, **Start fresh** or **Leave stopped**.
   </Accordion>
   <Accordion title="An agent stopped saying a limit was reached">
-    Its token limit, the team's output budget, or your provider's limit was reached. The first two are set on the team; see [Limits](/reference/limits). For a provider limit, Sculptured shows the reset time when the CLI gives one and never retries by itself: send "continue" after the reset.
+    Its token limit, the team's output budget, or your provider's limit was reached. The first two are set on the team; see [Limits](/reference/limits). For a provider limit, CopperTide shows the reset time when the CLI gives one and never retries by itself: send "continue" after the reset.
   </Accordion>
   <Accordion title="Stop says “Stops as soon as its computer reconnects”">
     You stopped a team while its computer was offline. The agents stay **stopping** until the computer comes back, and are stopped then. If the computer is off, they aren't running anyway.
@@ -140,12 +140,12 @@ Find your symptom below and expand it for the likely cause and next step. For an
 
 <AccordionGroup>
   <Accordion title="The port is already in use">
-    Sculptured is probably already running. Open http://127.0.0.1:4410 instead of starting a second copy, or pass `--port` to use another port.
+    CopperTide is probably already running. Open http://127.0.0.1:4410 instead of starting a second copy, or pass `--port` to use another port.
   </Accordion>
   <Accordion title="The page is blank or says it can't find the app">
     `--web-dir` must point at the built web app. Build it with `npm ci && npm run build` in `web/`, then start with `--web-dir web/dist`. See [Run it yourself](/operations).
   </Accordion>
-  <Accordion title="Opening Sculptured through another hostname is refused">
+  <Accordion title="Opening CopperTide through another hostname is refused">
     The local app accepts only requests addressed to `127.0.0.1` or `localhost`. This is on purpose: it stops other websites from driving your agents. Don't put it behind a public proxy.
   </Accordion>
   <Accordion title="Agents keep running after I stop the server">
@@ -157,7 +157,7 @@ Find your symptom below and expand it for the likely cause and next step. For an
 
 - Note the action you took, the message shown and whether the computer was connected.
 - Open the agent's **Transcript**, **Visual progress** and **Events** to inspect what happened. See [Context and communication](/guides/context).
-- Report a bug on the [Sculptured GitHub repository](https://github.com/Sculptured/Sculptured/issues). Leave out prompts, file contents and keys.
+- Report a bug on the [CopperTide GitHub repository](https://github.com/Sculptured/Sculptured/issues). Leave out prompts, file contents and keys.
 
 <CardGroup cols={2}>
   <Card title="FAQ" icon="circle-question" href="/faq">Common questions.</Card>

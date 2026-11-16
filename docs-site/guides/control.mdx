@@ -40,7 +40,7 @@ Open the agent's **Activity** tab. The controls are at the top.
 | Control | What it does |
 | --- | --- |
 | **Interrupt** (<kbd>i</kbd>, on any of the agent's tabs) | Cuts off the current turn so you can redirect the agent. It is off when no turn is in progress, or when this kind of agent can't be interrupted. |
-| **Soft stop · ~5K** | Asks the agent to finish the current task, summarize and hand off, then stop. Sculptured stops the session after the wrap-up turn, about 5,000 more output tokens, or 5 minutes, whichever comes first. The button reads **Wrapping up…** meanwhile. |
+| **Soft stop · ~5K** | Asks the agent to finish the current task, summarize and hand off, then stop. CopperTide stops the session after the wrap-up turn, about 5,000 more output tokens, or 5 minutes, whichever comes first. The button reads **Wrapping up…** meanwhile. |
 | **Hard stop…** | Stops the agent's process after you confirm, with no wrap-up turn. Agents it started stop too. "Messages it has not read yet will be marked as not delivered." |
 | **Stop team…** (the project's tab row) | Stops every running agent in the team. "Their history is kept." |
 
@@ -55,7 +55,7 @@ Its Conversation tab may show **Stalled (heuristic)** above the transcript, with
 - keeps hitting the same error, three times in a row; or
 - has had no output for 30 minutes in the middle of its turn, for example a command that never finishes. An agent waiting for your answer to a question is not counted.
 
-This is an inference from recent events, labelled as a heuristic, and the agent also shows under **Needs you**. Sculptured does not intervene automatically. You can:
+This is an inference from recent events, labelled as a heuristic, and the agent also shows under **Needs you**. CopperTide does not intervene automatically. You can:
 
 - **Nudge**: interrupt the agent with a message. One that keeps failing is asked to summarize what it tried and try a different approach; one that went quiet is asked to stop anything that will not finish, say where it is, and continue;
 - **Soft stop**: ask it to wrap up.
@@ -67,7 +67,7 @@ A silent agent's flag clears as soon as it produces output again.
 - **An open, idle session is not working.** "No active work; sessions are open" means nothing is in progress.
 - **Unknown is not stopped.** While an agent's computer is unreachable, the agent is *stale*: its activity is the last known one, and it may still be running. See [When the computer drops off](/guides/offline).
 - **Run shows the running agents.** The **Agents** tab lists every agent, including stopped and planned ones. The Design board keeps the full design.
-- **Each status has evidence.** On the Activity tab, "status" names who said so, such as observed by the computer or inferred by Sculptured.
+- **Each status has evidence.** On the Activity tab, "status" names who said so, such as observed by the computer or inferred by CopperTide.
 
 The full table is in [Agent states](/reference/states).
 
@@ -98,7 +98,7 @@ The Run board stays readable with many children. A parent with more than six sho
   ![The Run board: a Lead researcher card with arrows to five of its helper agents, and a +3 more card for the helpers that are not drawn](/images/guides/more-children.png)
 </Frame>
 
-A hard stop of a parent stops its descendants first. Helpers that a CLI starts by itself, and other processes an agent launches, are not managed children. Sculptured does not track or stop them.
+A hard stop of a parent stops its descendants first. Helpers that a CLI starts by itself, and other processes an agent launches, are not managed children. CopperTide does not track or stop them.
 
 ## Full screen
 

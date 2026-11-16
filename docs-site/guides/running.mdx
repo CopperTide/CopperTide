@@ -27,7 +27,7 @@ The project's status, next to **Start team** at the right of the tab row, reads 
 
 <Steps>
   <Step title="Press Start team">It sits at the right of the project's tab row, on every page of the project.</Step>
-  <Step title="Confirm real agents">If the team has Claude or Codex agents, Sculptured first asks "Start …?". It names where they run, whose accounts they use and which agent starts first.</Step>
+  <Step title="Confirm real agents">If the team has Claude or Codex agents, CopperTide first asks "Start …?". It names where they run, whose accounts they use and which agent starts first.</Step>
   <Step title="Watch the launch">Agents launch in order, givers before the agents they hand work to. Each one shows <em>launching</em>, then <em>running</em>.</Step>
   <Step title="Open the Run board">The board switches to **Run** once the team has started. Before then **Run** is off and says "Run opens once the team has started".</Step>
 </Steps>
@@ -65,7 +65,7 @@ Each card shows its state as a symbol and a word, so nothing relies on color alo
 | ▲ stuck | Its handoffs cannot go on by themselves. The reason says why. |
 | ✓ done | A turn finished since you last looked. |
 | ○ idle | Its session is open but it is doing nothing. |
-| ∅ unknown | Sculptured cannot see it right now, for example while its computer is offline. |
+| ∅ unknown | CopperTide cannot see it right now, for example while its computer is offline. |
 
 "No active work; sessions are open. Stop team closes them." means every agent is idle. An open session is not working. The full list of states and what moves an agent between them is in [Agent states](/reference/states).
 
@@ -74,7 +74,7 @@ Each card shows its state as a symbol and a word, so nothing relies on color alo
 Only **hands work to** arrows move work. **Reports to** and **watches** describe intent and send nothing.
 
 - **The first handoff waits for everyone upstream.** An agent that receives from two agents starts when both have a result. Its card shows "starts when they have all finished; their results are passed along".
-- **The final reply is the handoff.** After an agent completes its assigned work turn, Sculptured sends its final reply to the next agent. Interrupted or failed turns produce no handoff; the agent remains stuck until a later turn completes.
+- **The final reply is the handoff.** After an agent completes its assigned work turn, CopperTide sends its final reply to the next agent. Interrupted or failed turns produce no handoff; the agent remains stuck until a later turn completes.
 - **More work moves in waves.** After the first round, each finished work turn sends one message to every agent downstream. Each of them runs once per wave.
 - **A reply to you is not a handoff.** If you chat with an agent, its answer to you stays with you.
 
@@ -111,7 +111,7 @@ See [Limits and usage](/reference/limits) for token accounting, budgets and plan
 - **Stop team…** asks you to confirm, then stops every running agent. "Their history is kept."
 - An agent that could not be stopped is listed with its computer's reason. The others still stop.
 - When no agent runs, **Start team** appears in the project's tab row. Every agent gets its Job again as its first message.
-- If Sculptured restarted while the team ran, the board asks "N agents stopped mid-work. Resume them where they left off?" Choose **Resume**, **Start fresh** or **Leave stopped**. Nothing relaunches until you answer.
+- If CopperTide restarted while the team ran, the board asks "N agents stopped mid-work. Resume them where they left off?" Choose **Resume**, **Start fresh** or **Leave stopped**. Nothing relaunches until you answer.
 
 ## Next steps
 

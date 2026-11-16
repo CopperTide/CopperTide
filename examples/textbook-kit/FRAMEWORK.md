@@ -4,7 +4,7 @@
 
 For a new project, select the Textbook creator template. Its Mathematical visualization group contains the reusable reference, builder and review roles. Open Input → Live textbook starter, choose an empty project folder and select Prepare textbook folder. This installs this framework and the local frontend without starting a run or choosing a source. Run `npm ci` in the folder before the first real run.
 
-The Input block in Sculptured is the authoritative brief. It accepts multiple URLs, local paths, pasted notes, rough ideas, questions, intended audience, learning outcomes and constraints. Empty input means “await the operator,” not permission to invent a subject.
+The Input block in CopperTide is the authoritative brief. It accepts multiple URLs, local paths, pasted notes, rough ideas, questions, intended audience, learning outcomes and constraints. Empty input means “await the operator,” not permission to invent a subject.
 
 Possible inputs include an MIT OCW course index, one lecture PDF, a notesheet, selected textbook pages or an original syllabus. An OCW resource landing page must be resolved to its actual notes and related course context. Track access failures, missing chapters, ambiguous notation and licensing; ask for clarification when they change the learning plan. Do not treat every linked page as in scope automatically.
 
@@ -80,7 +80,7 @@ Mathematical review independently checks assumptions, derivations, implementatio
 
 UI review operates the actual app. Capture real desktop and mobile states, test pointer and keyboard paths, inspect focus, clipping, equations, disabled/error states, source links and clarity of explanation. If browser access is unavailable, return blocked and state what remains untested. No invented screenshots or simulated walkthroughs.
 
-Reports name the task, artifact revision/hash, checks actually run, command/capture paths, findings, severity and limitations. Any builder revision invalidates previous acceptance until it is checked again. `accept` is the reviewer’s report; Sculptured labels it agent-reported, not independently verified. The frontend reruns integration checks before reporting assembly done.
+Reports name the task, artifact revision/hash, checks actually run, command/capture paths, findings, severity and limitations. Any builder revision invalidates previous acceptance until it is checked again. `accept` is the reviewer’s report; CopperTide labels it agent-reported, not independently verified. The frontend reruns integration checks before reporting assembly done.
 
 ## Runtime reliability
 

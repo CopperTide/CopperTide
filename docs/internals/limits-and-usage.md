@@ -34,7 +34,7 @@ A running agent starts a subagent by calling the `spawn_agent` seat tool (`colla
 - Native delegation is turned off when seat tools are on: Claude gets `--disallowedTools Agent,Task`; Codex gets `features.multi_agent = false` and `features.multi_agent_v2 = false`. So every subagent is a tracked board agent.
 - `spawn_agent` is idempotent by `request_id`: the same id returns the existing child; changed arguments with the same id are refused.
 
-Limits (`check_spawn_limits`), checked only when a new child would be created. Sculptured sets none of its own: each is a team setting, `TeamDraft.limits` (`model::TeamLimits`, Advanced on the Design board, `limits` in the team file), read from the saved draft at spawn time. Absent = no limit.
+Limits (`check_spawn_limits`), checked only when a new child would be created. CopperTide sets none of its own: each is a team setting, `TeamDraft.limits` (`model::TeamLimits`, Advanced on the Design board, `limits` in the team file), read from the saved draft at spawn time. Absent = no limit.
 
 | Team setting | Refused when | Refusal text |
 |---|---|---|
@@ -71,7 +71,7 @@ stateDiagram-v2
 
 ## 4. Plan-usage holds
 
-The CLIs report how much of the signed-in plan is used (`model::PlanUsage`): Claude's `rate_limit_event`, Codex's `account/rateLimits/updated`. Codex also writes it to `$CODEX_HOME/sessions/YYYY/MM/DD/*.jsonl` (`localops::plan::codex_files`). Claude keeps no such file, so Claude has a reading only after a Claude agent has run. The newest reading per provider wins. Readings are account-wide, so they include use outside Sculptured.
+The CLIs report how much of the signed-in plan is used (`model::PlanUsage`): Claude's `rate_limit_event`, Codex's `account/rateLimits/updated`. Codex also writes it to `$CODEX_HOME/sessions/YYYY/MM/DD/*.jsonl` (`localops::plan::codex_files`). Claude keeps no such file, so Claude has a reading only after a Claude agent has run. The newest reading per provider wins. Readings are account-wide, so they include use outside CopperTide.
 
 ```mermaid
 flowchart TB
@@ -95,7 +95,7 @@ When a turn itself hits the provider's limit, the driver sends `LimitReached` wi
 
 ## 5. Token accounting
 
-Every count is the CLI's own report. Sculptured estimates nothing here except Codex prices.
+Every count is the CLI's own report. CopperTide estimates nothing here except Codex prices.
 
 | | Claude Code | Codex |
 |---|---|---|
@@ -217,4 +217,4 @@ No test found pins the 64-agent cap or the depth cap.
 - Run budget outcomes are kept per run (`run_budgets`), but only the latest run's shows on the board.
 
 - No price table exists for any provider other than OpenAI. Claude Code costs are its own figures.
-- Codex `credits` are shown in the hold reason only; Sculptured does not track spend against them.
+- Codex `credits` are shown in the hold reason only; CopperTide does not track spend against them.

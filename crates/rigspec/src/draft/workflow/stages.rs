@@ -94,7 +94,7 @@ fn check_errors(s: &WorkflowStage) -> Vec<String> {
 
     if !no_agents(s) {
         e.push(format!(
-            "{name} is a check: Sculptured runs it, so remove its agents."
+            "{name} is a check: CopperTide runs it, so remove its agents."
         ));
     }
     if s.command
@@ -145,7 +145,7 @@ fn merge_errors(w: &Workflow, s: &WorkflowStage) -> Vec<String> {
 
     if !no_agents(s) {
         e.push(format!(
-            "{name} is a merge: Sculptured does it, so remove its agents."
+            "{name} is a merge: CopperTide does it, so remove its agents."
         ));
     }
     if !only_routes(s, &["merged", "conflict"]) {

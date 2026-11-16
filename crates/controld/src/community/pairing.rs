@@ -30,17 +30,17 @@ fn start_error(e: StartError) -> ApiError {
     match e {
         StartError::Network(_) => ApiError::bad_gateway(
             "community_unreachable",
-            "Could not reach the Sculptured server",
+            "Could not reach the CopperTide server",
         ),
         StartError::Refused { status, code } => match PASSED_ON.iter().find(|c| **c == code) {
             Some(c) => ApiError::new(
                 StatusCode::from_u16(status).unwrap_or(StatusCode::BAD_GATEWAY),
                 c,
-                "The Sculptured server refused this sign-in",
+                "The CopperTide server refused this sign-in",
             ),
             None => ApiError::bad_gateway(
                 "community_bad_answer",
-                "The Sculptured server answered in a way this app does not accept",
+                "The CopperTide server answered in a way this app does not accept",
             ),
         },
     }

@@ -11,7 +11,7 @@ pub(crate) const PROCESS_ENDED: &str = "the agent's process ended before anyone 
 pub(crate) const TURN_INTERRUPTED: &str = "the agent's turn was interrupted before anyone answered";
 pub(crate) const TURN_FAILED: &str = "the agent's turn failed before anyone answered";
 pub(crate) const SETTLED_BY_PROGRAM: &str =
-    "the agent's program settled this question itself before Sculptured answered";
+    "the agent's program settled this question itself before CopperTide answered";
 pub(crate) const ANSWER_LOST_PROCESS: &str =
     "the agent's process ended before the answer reached it";
 pub(crate) const ANSWER_LOST_TURN: &str = "the agent's turn ended before the answer reached it";

@@ -1,4 +1,4 @@
-# Contributing to Sculptured
+# Contributing to CopperTide
 
 Thanks for helping. Bug reports, ideas, docs fixes and code are all welcome.
 

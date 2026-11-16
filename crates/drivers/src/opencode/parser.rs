@@ -397,7 +397,7 @@ impl AcpParser {
         if method != "session/request_permission" {
             out.replies
                 .push(json!({ "jsonrpc": "2.0", "id": id, "error": {
-                "code": -32601, "message": format!("Sculptured does not offer {method}") } }));
+                "code": -32601, "message": format!("CopperTide does not offer {method}") } }));
             return;
         }
         self.flush(out);

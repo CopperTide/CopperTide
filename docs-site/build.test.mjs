@@ -15,7 +15,7 @@ try {
     const file = path.join(out, `${page}.html`);
     assert.ok(fs.existsSync(file), `${page}.html is built`);
     const html = fs.readFileSync(file, 'utf8');
-    assert.match(html, /<title>[^<]+ · Sculptured docs<\/title>/, `${page} has a title`);
+    assert.match(html, /<title>[^<]+ · CopperTide docs<\/title>/, `${page} has a title`);
     assert.doesNotMatch(html, /<(Card|CardGroup|Steps|Step|Note|Tip|Info|Check|Warning|Tabs|Tab|AccordionGroup|Accordion|Frame)[\s>]/, `${page} has no raw components`);
     for (const other of pages) assert.ok(html.includes(`href="/${other}"`), `${page} links to ${other} in the sidebar`);
     assert.ok(html.includes(`aria-current="page" href="/${page}"`), `${page} marks itself current`);
@@ -26,7 +26,7 @@ try {
   const quick = fs.readFileSync(path.join(out, 'quickstart.html'), 'utf8');
   assert.match(quick, /<ol class="steps">/, 'steps are an ordered list');
   assert.equal(fs.readFileSync(path.join(out, 'index.html'), 'utf8'), intro, 'the home page is the introduction');
-  assert.ok(fs.existsSync(path.join(out, 'images/sculptured-coastal-emblem.png')), 'images are copied');
+  assert.ok(fs.existsSync(path.join(out, 'images/coppertide-mark.png')), 'images are copied');
   const llms = fs.readFileSync(path.join(out, 'llms.txt'), 'utf8');
   for (const page of pages) {
     assert.ok(llms.includes(`(/${page}.md)`), `llms.txt lists ${page}`);

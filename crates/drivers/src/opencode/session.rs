@@ -101,7 +101,7 @@ impl Handshake<'_> {
         match init["protocolVersion"].as_u64() {
             Some(PROTOCOL) => Ok(()),
             _ => Err(format!(
-                "it speaks ACP version {}, and Sculptured speaks {PROTOCOL}",
+                "it speaks ACP version {}, and CopperTide speaks {PROTOCOL}",
                 init["protocolVersion"]
             )),
         }

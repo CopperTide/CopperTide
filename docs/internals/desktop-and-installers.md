@@ -27,7 +27,7 @@ flowchart TD
   L[Launch] --> M{saved mode?}
   M -- none --> C[Chooser] --> M
   M -- On this computer --> S["start or find local serve<br/>window: local origin (+ account site for Community)"]
-  M -- Sculptured account --> A["window: account site<br/>bundled sculptured connect --no-browser"]
+  M -- CopperTide account --> A["window: account site<br/>bundled sculptured connect --no-browser"]
   A --> P["code → window opens /connect?code=… → one-click approve"]
   P --> K["Connected → back to the site<br/>quitting asks, then stops the runner and its agents"]
 ```

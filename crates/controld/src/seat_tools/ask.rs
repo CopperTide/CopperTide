@@ -14,7 +14,7 @@ use tokio::sync::oneshot;
 const STOPPED_WAITING: &str =
     "the agent's call stopped waiting for an answer; the agent was told the question failed";
 /// Why an answer is recorded as failed when Sculptured could no longer pass the call's reply on.
-const ANSWER_LOST: &str = "Sculptured could not pass the answer on to the agent's call";
+const ANSWER_LOST: &str = "CopperTide could not pass the answer on to the agent's call";
 
 pub(super) async fn request_input(
     st: &AppState,
@@ -229,7 +229,7 @@ async fn wait_for_answer(
                 let concerns_agent = match item {
                     Ok(item) => matches!(&item.event.subject, Subject::Seat(s) if s == seat),
                     Err(RecvError::Lagged(_)) => true,
-                    Err(RecvError::Closed) => return Err(ToolError::Failed("Sculptured is shutting down".into())),
+                    Err(RecvError::Closed) => return Err(ToolError::Failed("CopperTide is shutting down".into())),
                 };
                 if concerns_agent && let Some(e) = withdrawn(st, id) {
                     return Err(e);

@@ -148,7 +148,7 @@ impl CodexParser {
     fn refuse(&mut self, method: &str, id: Value, v: &Value, out: &mut Parsed) {
         out.replies.push(json!({
             "jsonrpc": "2.0", "id": id,
-            "error": { "code": -32601, "message": format!("Sculptured does not handle {method}") },
+            "error": { "code": -32601, "message": format!("CopperTide does not handle {method}") },
         }));
         out.events
             .push(DriverEvent::Unrecognized { raw: v.clone() });

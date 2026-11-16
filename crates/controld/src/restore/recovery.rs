@@ -15,7 +15,7 @@ pub fn routes() -> Router<AppState> {
 /// decision (restore-on-boot is M2).
 pub(super) fn lost_process_reason(host: &str, source: Option<&RigSource>) -> String {
     let when = if host == LOCAL_HOST {
-        "Sculptured".to_string()
+        "CopperTide".to_string()
     } else {
         format!("host {host}")
     };
@@ -195,7 +195,7 @@ mod tests {
         let file = RigSource::File {
             path: "/x.yaml".into(),
         };
-        let start = "This agent's process ended when Sculptured restarted.";
+        let start = "This agent's process ended when CopperTide restarted.";
         assert_eq!(
             lost_process_reason(LOCAL_HOST, Some(&team)),
             format!("{start} Start the team again to relaunch it.")

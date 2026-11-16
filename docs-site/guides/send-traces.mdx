@@ -3,7 +3,7 @@ title: Send traces
 description: Send a team's runs as OpenTelemetry traces to Laminar or another collector you already use.
 ---
 
-If you already watch your AI work in an observability tool, Sculptured can send each run there as one trace. Laminar is built in; any collector that takes OTLP over HTTP (Langfuse, Datadog, Honeycomb, your company's own) works the same way. The board stays the main view: traces are a copy for the tools you already have.
+If you already watch your AI work in an observability tool, CopperTide can send each run there as one trace. Laminar is built in; any collector that takes OTLP over HTTP (Langfuse, Datadog, Honeycomb, your company's own) works the same way. The board stays the main view: traces are a copy for the tools you already have.
 
 Sending is off until you turn it on, team by team.
 
@@ -12,7 +12,7 @@ Sending is off until you turn it on, team by team.
 <Steps>
   <Step title="Open the team's settings">Open the team, then **Settings** → **More settings** → **Send traces**.</Step>
   <Step title="Choose where">Leave **Send to** on **Laminar**, or choose **Another OTLP/HTTP collector** and give its address (it usually ends in `/v1/traces`).</Step>
-  <Step title="Add the key">Paste the project API key from your tool. Sculptured's server keeps it and sends it only to that address, as `authorization: Bearer <key>`. It is never shown again; the page only says **A key is saved**.</Step>
+  <Step title="Add the key">Paste the project API key from your tool. CopperTide's server keeps it and sends it only to that address, as `authorization: Bearer <key>`. It is never shown again; the page only says **A key is saved**.</Step>
   <Step title="Choose what to send">**Timings, tokens and costs** (the default), or **Also prompts and outputs**.</Step>
   <Step title="Save">Tick **Send this team's runs as traces** and choose **Save**. The team's latest run (one going now, or the last one if it has finished) is sent from its start, then each new run as it goes.</Step>
 </Steps>
@@ -34,7 +34,7 @@ A turn or tool goes when it ends, an agent span when its session ends, and the r
 
 ## When a send fails
 
-A failed send is tried again every few seconds with the same spans, so nothing is lost while the collector is down. The settings show why the last send failed (for example, the key was refused). If the collector stays unreachable for a long time, Sculptured keeps the newest 20,000 spans and says how many it dropped.
+A failed send is tried again every few seconds with the same spans, so nothing is lost while the collector is down. The settings show why the last send failed (for example, the key was refused). If the collector stays unreachable for a long time, CopperTide keeps the newest 20,000 spans and says how many it dropped.
 
 ## Addresses you can use
 

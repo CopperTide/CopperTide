@@ -63,9 +63,9 @@ fn outcomes(run: &WorkflowRun, task: &WorkflowTask) -> String {
 fn by(step: &WorkflowStep) -> &'static str {
     match step.by {
         StepBy::Agent => "agent-reported",
-        StepBy::Check => "verified: Sculptured ran the check",
+        StepBy::Check => "verified: CopperTide ran the check",
         StepBy::Person => "a person's decision",
-        StepBy::Sculptured => "Sculptured",
+        StepBy::Sculptured => "CopperTide",
     }
 }
 

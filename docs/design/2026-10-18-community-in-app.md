@@ -1,7 +1,7 @@
 # Community in the App (sculptured repo) Implementation Plan
 
 
-**Goal:** Make Community a top-bar section of the app in every build. Locally it is opt-in: controld pairs a `community`-scope device key and proxies an allow-listed `/api/community/*` to the Sculptured server. The web app gets Explore, People, profiles, Saved, Yours, Publish and Moderation pages. "Add to project" and "Save to Library" work directly against the local Library.
+**Goal:** Make Community a top-bar section of the app in every build. Locally it is opt-in: controld pairs a `community`-scope device key and proxies an allow-listed `/api/community/*` to the CopperTide server. The web app gets Explore, People, profiles, Saved, Yours, Publish and Moderation pages. "Add to project" and "Save to Library" work directly against the local Library.
 
 **Architecture:**
 - **controld** gains a `community` module:
@@ -45,7 +45,7 @@ The contracts win where they refine the design.
 - A disabled control says why in visible text.
 
 **Opt-in and credentials**
-- A self-run install sends no request to any Sculptured server until the user turns Community on. When `Settings.sculptured_origin` is `None`, Community is off.
+- A self-run install sends no request to any CopperTide server until the user turns Community on. When `Settings.sculptured_origin` is `None`, Community is off.
 - Credentials live in `<data_dir>/community.json`, mode `0600`, as `{origin, device_id, key}`.
 - No browser-facing response ever contains `key`, `device_id` or a `Bearer` value.
 
@@ -572,7 +572,7 @@ pub async fn poll_once(http: &reqwest::Client, origin: &str, device_code: &str) 
 
 ```bash
 git add crates/controld/src/device_pairing.rs crates/controld/src/community crates/controld/src/lib.rs crates/controld/tests/community_pairing.rs crates/sculptured/src/connect.rs web/src/generated/CommunityPair*.ts
-git commit -m "controld: sign in to Sculptured for Community with a community-scope device key"
+git commit -m "controld: sign in to CopperTide for Community with a community-scope device key"
 ```
 
 ---
@@ -770,16 +770,16 @@ export const COMMUNITY_ERROR_WORDS: Record<string, string> = {
   avatar_type: 'Use a PNG, JPEG or WebP picture.',
   handle_required: 'Choose a handle before you publish.',
   publish_limit: 'A new account can publish 5 blocks in its first day. Try again tomorrow.',
-  signed_out: 'Sign in to Sculptured to do this.',
+  signed_out: 'Sign in to CopperTide to do this.',
   csrf: `Your sign-in could not be checked. ${RELOAD}`,
   community_off: 'Community is off on this computer. Turn it on to use it.',
   community_unreachable: 'Could not reach Community. Check your internet connection, then try again.',
   community_timeout: 'Community did not answer within 15 seconds. Try again.',
   community_too_large: 'That is too large to send to Community (the limit is 1.1 MB).',
-  community_bad_answer: 'Community answered in a way Sculptured does not accept. Try again later.',
+  community_bad_answer: 'Community answered in a way CopperTide does not accept. Try again later.',
   community_origin_invalid: 'Use an https:// address, such as https://app.usesculptured.com.',
   // C3 generic and new codes
-  account_disabled: 'This Community account is disabled. Contact Sculptured support if you think this is a mistake.',
+  account_disabled: 'This Community account is disabled. Contact CopperTide support if you think this is a mistake.',
   rate_limited: 'Too many requests to Community just now. Wait a minute, then try again.',
   invalid: 'Community did not accept that. Check what you entered, then try again.',
   // C4/C5: the sign-in key was refused
@@ -787,8 +787,8 @@ export const COMMUNITY_ERROR_WORDS: Record<string, string> = {
   // C4 gateway codes seen while signing in or joining
   bad_scope: `Sculptured refused this kind of sign-in. ${RELOAD}`,
   bad_purpose: `That sign-in link is not valid. ${RELOAD}`,
-  already_member: 'You already have a Sculptured account. Sign in instead.',
-  community_unavailable: 'Community is not available on this Sculptured server right now.',
+  already_member: 'You already have a CopperTide account. Sign in instead.',
+  community_unavailable: 'Community is not available on this CopperTide server right now.',
   too_many_attempts: 'Too many sign-in attempts. Wait a few minutes, then try again.',
 };
 // `not_found` already has words in ERROR_WORDS. In `apiRequest`, an `error` that is a string (the legacy Community shape) becomes
@@ -799,16 +799,16 @@ export const COMMUNITY_ERROR_WORDS: Record<string, string> = {
   - **Tabs:** `Explore`, `People`, `Saved`, `Yours`, `Moderation`.
   - **`optIn`:**
     - `title`: 'Turn on Community'
-    - `intro`: 'Community is where people share blocks of agents and their profiles. It runs on Sculptured’s servers, so this computer sends nothing there until you turn it on.'
+    - `intro`: 'Community is where people share blocks of agents and their profiles. It runs on CopperTide’s servers, so this computer sends nothing there until you turn it on.'
     - `sendsTitle`: 'What turning it on sends'
     - `sends`: ['The Community pages and searches you open.', 'If you sign in: what you publish, save and report, and what you put on your profile.']
     - `neverTitle`: 'What never leaves this computer'
     - `never`: 'Your projects, files, transcripts and runs.'
     - `browse`: 'Turn on and browse'
     - `signIn`: 'Turn on and sign in'
-    - `otherServer`: 'Use another Sculptured server'
+    - `otherServer`: 'Use another CopperTide server'
   - **`signIn`:**
-    - `title`: 'Sign in to Sculptured'
+    - `title`: 'Sign in to CopperTide'
     - `enter`: 'Enter this code on the sign-in page:'
     - `open`: 'Open the sign-in page'
     - `waiting`: 'Waiting for you to approve…'
@@ -885,7 +885,7 @@ git commit -m "web: Community data layer, link state, words and test helpers"
 
 ---
 
-### Task 7: Turn on Community, Sign in to Sculptured, and the Account page card
+### Task 7: Turn on Community, Sign in to CopperTide, and the Account page card
 
 **Files:**
 - Create:
@@ -910,7 +910,7 @@ git commit -m "web: Community data layer, link state, words and test helpers"
 
 - **`TurnOnCommunity`:**
   - Renders the exact `optIn` copy as a heading, two lists and two buttons.
-  - Also has `<details>` "Use another Sculptured server" with an origin input.
+  - Also has `<details>` "Use another CopperTide server" with an origin input.
   - "Turn on and browse" → `linkApi.enable(origin || undefined)` → `onDone(false)`. "Turn on and sign in" does the same → `onDone(true)`.
   - `community_origin_invalid` shows under the input.
 - **`SignInToSculptured`:**
@@ -922,7 +922,7 @@ git commit -m "web: Community data layer, link state, words and test helpers"
   - The poll stops on unmount.
 - **`CommunityCard`:**
   - Off: one line and a link "Open Community" to `/community`.
-  - On: the origin's host, then "Signed in as {name} (@handle)" or a "Sign in to Sculptured" button, then "Turn off Community" (→ `linkApi.turnOff()` + `refresh()`).
+  - On: the origin's host, then "Signed in as {name} (@handle)" or a "Sign in to CopperTide" button, then "Turn off Community" (→ `linkApi.turnOff()` + `refresh()`).
 
 - [ ] **Step 1: Write the failing tests.**
 
@@ -949,7 +949,7 @@ it('an expired or turned-down code says so and offers a new one', async () => {
   // status expired → 'The code expired before it was approved.' + button 'Get a new code' → second POST pair
   // status denied → 'The sign-in was turned down.'
 });
-it('hides a sign-in link that points away from the Sculptured server', async () => { /* verify_url 'https://evil/x' → no link; code still shown */ });
+it('hides a sign-in link that points away from the CopperTide server', async () => { /* verify_url 'https://evil/x' → no link; code still shown */ });
 // AccountPage.test.tsx
 it('local: shows the Community card and turns Community off', async () => { /* link on+signed in → 'Signed in as You Example'; click Turn off Community → DELETE /api/community-link */ });
 ```
@@ -961,7 +961,7 @@ it('local: shows the Community card and turns Community off', async () => { /* l
 
 ```bash
 git add web/src/community web/src/account/AccountPage.tsx web/src/account/AccountPage.test.tsx
-git commit -m "web: Turn on Community and Sign in to Sculptured with a code"
+git commit -m "web: Turn on Community and Sign in to CopperTide with a code"
 ```
 
 ---
@@ -1581,7 +1581,7 @@ git commit -m "e2e: Community flows against the stub upstream"
 
 - **`guides/community.mdx`** covers:
   - **Turn on Community:** the exact opt-in copy, and that nothing is sent before it.
-  - **Sign in to Sculptured:** the code and the sign-in page, which asks you to approve "Community access from ‘{name}’". The key is kept in `~/.sculptured/community.json`, owner-only. It is listed on the Computers page. If it is removed there, the app says "Your Community sign-in was removed. Sign in again."
+  - **Sign in to CopperTide:** the code and the sign-in page, which asks you to approve "Community access from ‘{name}’". The key is kept in `~/.sculptured/community.json`, owner-only. It is listed on the Computers page. If it is removed there, the app says "Your Community sign-in was removed. Sign in again."
   - **Explore and block pages:** Add to project (the review step), Save to Library and Update to v{n}.
   - **People and profiles:** each profile field and what is public.
   - **Your profile:** handle rules, the 30-day change limit, old handles redirecting for 90 days, and the picture's ≤256 KB limit and square crop.
@@ -1598,7 +1598,7 @@ git commit -m "e2e: Community flows against the stub upstream"
   - Turning Community off revokes the key.
 - **`privacy.mdx`:**
   - Opt-in: what is sent when on and what never leaves.
-  - Identity is your Sculptured account.
+  - Identity is your CopperTide account.
   - Profiles are public: name, handle, bio, links, picture, joined date, published blocks and counts.
   - Empty fields are not shown.
   - Reports can target a profile.
@@ -1638,7 +1638,7 @@ git commit -m "docs: Community inside the app, opt-in, profiles and what is sent
 | C5 proxy (allow-list, strip, bearer, limits, `community_off`) | 5 |
 | Stub upstream in fixtures | 2 |
 | C6 `api.ts`, `link.ts`, generated types | 6 |
-| Opt-in screen and Sign in to Sculptured | 7 |
+| Opt-in screen and Sign in to CopperTide | 7 |
 | Explore and block page with Add to project | 8 |
 | Save to Library, `source`, Update to v{n} | 9 |
 | People and profiles | 10 |

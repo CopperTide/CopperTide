@@ -315,7 +315,7 @@ pub(super) fn local_driver(
     if !st.hosts.has_driver(host, driver) {
         let reason = if st.hosts.is_connected(host) {
             format!(
-                "Sculptured's agent runner can't run {} agents",
+                "CopperTide's agent runner can't run {} agents",
                 runtime_words(seat.runtime)
             )
         } else {

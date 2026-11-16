@@ -413,7 +413,7 @@ fn commit_work(dir: &Path, who_worked: &str) -> Result<(), String> {
             "user.email=sculptured@localhost",
         ]
     };
-    let msg = format!("Work by {who_worked} (committed by Sculptured before merging)");
+    let msg = format!("Work by {who_worked} (committed by CopperTide before merging)");
     git(dir, &[who, &["commit", "-q", "-m", &msg]].concat()).map(|_| ())
 }
 

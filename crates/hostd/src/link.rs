@@ -203,7 +203,7 @@ where
                 msg = stream.next() => { heard = tokio::time::Instant::now(); self.on_frame(msg, &done_tx)? },
                 _ = tick.tick() => {
                     if heard.elapsed() > keepalive.dead_after {
-                        return Err(LinkError::Protocol(format!("no answer from Sculptured for {} s; reconnecting", keepalive.dead_after.as_secs())));
+                        return Err(LinkError::Protocol(format!("no answer from CopperTide for {} s; reconnecting", keepalive.dead_after.as_secs())));
                     }
                     self.sink.send(Message::Ping(Vec::new().into())).await?;
                 }

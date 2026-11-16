@@ -170,7 +170,7 @@ fn skills_load_as_a_plugin_folder_and_integrations_as_an_mcp_server() {
     assert_eq!(
         configs.len(),
         2,
-        "Sculptured's own tools and the integration: {a:?}"
+        "CopperTide's own tools and the integration: {a:?}"
     );
     let extra: Value = serde_json::from_str(configs[1]).unwrap();
     assert_eq!(

@@ -96,7 +96,7 @@ async fn where_it_runs(origin: Option<&str>) -> Vec<Check> {
             std::env::consts::OS,
             systemd_user,
             linger,
-            origin.unwrap_or("<your Sculptured address>"),
+            origin.unwrap_or("<your CopperTide address>"),
         ),
     ];
     let client = crate::connect::http();
@@ -111,7 +111,7 @@ async fn where_it_runs(origin: Option<&str>) -> Vec<Check> {
         .and_then(|o| reqwest::Url::parse(o).ok())
         .and_then(|u| u.host_str().map(str::to_string))
     {
-        targets.insert(0, ("Your Sculptured account".into(), host));
+        targets.insert(0, ("Your CopperTide account".into(), host));
     }
     for (what, host) in targets {
         let got = client

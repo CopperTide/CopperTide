@@ -56,7 +56,7 @@ fn connect(socket: &Path) -> std::io::Result<std::net::TcpStream> {
 
 /// Calls one tool and waits for its reply. Blocking: call it from a blocking thread.
 pub fn call(socket: &Path, token: &str, tool: &str, args: Value) -> Result<Value, String> {
-    let unreachable = |e: std::io::Error| format!("cannot reach Sculptured's agent runner: {e}");
+    let unreachable = |e: std::io::Error| format!("cannot reach CopperTide's agent runner: {e}");
     let mut s = connect(socket).map_err(unreachable)?;
     let req = serde_json::to_string(&ToolRequest {
         token: token.into(),
@@ -69,9 +69,9 @@ pub fn call(socket: &Path, token: &str, tool: &str, args: Value) -> Result<Value
     let mut line = String::new();
     BufReader::new(s)
         .read_line(&mut line)
-        .map_err(|e| format!("no reply from Sculptured's agent runner: {e}"))?;
+        .map_err(|e| format!("no reply from CopperTide's agent runner: {e}"))?;
     let reply: ToolReply = serde_json::from_str(line.trim())
-        .map_err(|e| format!("unreadable reply from Sculptured's agent runner: {e}"))?;
+        .map_err(|e| format!("unreadable reply from CopperTide's agent runner: {e}"))?;
     if reply.ok {
         Ok(reply.result)
     } else {

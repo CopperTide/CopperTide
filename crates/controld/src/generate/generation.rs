@@ -113,7 +113,7 @@ Give each agent a clear area of files it writes, so no two agents write the same
 }
 
 pub(in super::super) const ABOUT: &str = concat!(
-    "You design teams of AI agents for Sculptured. Agents are Claude Code or Codex sessions. \
+    "You design teams of AI agents for CopperTide. Agents are Claude Code or Codex sessions. \
 An arrow \"hands-work-to\" means the first agent's finished work is sent to the second; \"reports-to\" and \"watches\" record intent only. \
 Each agent's job is the first message it receives: write it as a direct, specific instruction.\n\n",
     design_rules!()

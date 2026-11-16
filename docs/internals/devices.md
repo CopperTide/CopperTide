@@ -2,7 +2,7 @@
 
 In the hosted beta, agents never run on the server. They run on the user's own computers, through the existing agent runner (`hostd`), which connects *out* to the account. This page covers:
 - how a computer is paired;
-- how its link reaches the user's Sculptured;
+- how its link reaches the user's CopperTide;
 - what the computer refuses no matter what the server asks;
 - how a team picks a computer.
 
@@ -68,7 +68,7 @@ sequenceDiagram
 sequenceDiagram
   participant R as Runner (hostd, policy on)
   participant G as Gateway /host
-  participant I as User's Sculptured /host
+  participant I as User's CopperTide /host
   R->>G: WSS upgrade · Authorization: Bearer <device_id>.<key>
   G->>G: devices::authenticate (not revoked, owner not disabled)
   G->>G: Instances::ensure(owner) · hold(owner)
@@ -87,9 +87,9 @@ sequenceDiagram
 
 - **Frames:** the gateway forwards text, binary, ping and pong frames unchanged. It does not interpret the host protocol (`crates/host-proto/src/lib.rs`).
 - **Reconnecting:** the runner reconnects on its own (`hostd::run::run_hostd`, backoff from 500 ms to 5 s), with the same key. A reconnect replaces the older link. `Live` keys each link by a generation, so the old link's cleanup cannot remove the new one.
-- **Workspace kept running:** while any of a user's computers is connected, `Instances::hold` keeps their Sculptured running. The idle reaper skips held users.
+- **Workspace kept running:** while any of a user's computers is connected, `Instances::hold` keeps their CopperTide running. The idle reaper skips held users.
 - **No URL override:** a connected computer never follows `controld.url`, the file a local `serve` uses to hand over its port.
-- **Identity:** the gateway forwards the authenticated device id in the signed path (`/host?device=<id>`). The user's Sculptured closes any Hello whose `host_id` differs, so a computer can only connect as itself and never as another of the user's computers, or as `local`.
+- **Identity:** the gateway forwards the authenticated device id in the signed path (`/host?device=<id>`). The user's CopperTide closes any Hello whose `host_id` differs, so a computer can only connect as itself and never as another of the user's computers, or as `local`.
 - **Keep-alive:** the runner pings every 25 s and gives the link up after 75 s with nothing back, then reconnects. The gateway drops a computer that sent nothing for `GATEWAY_HOST_IDLE_SECS` (75 s), which also releases the instance hold.
 - **Revocation during setup:** a link is registered before the slow setup (starting the instance) and re-authenticated after it, so a revoke or disable in between is not missed.
 - **Stopping after disconnect:** a runner whose key is refused (401) stops with "This computer was disconnected… run `sculptured connect` again" instead of retrying forever.

@@ -1,13 +1,13 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Sculptured",
+  "name": "CopperTide",
   "colors": {
     "primary": "#477C80",
     "light": "#ADD5CE",
     "dark": "#244D55"
   },
-  "favicon": "/images/sculptured-coastal-emblem.png",
+  "favicon": "/images/coppertide-mark.png",
   "appearance": {
     "default": "system"
   },
@@ -106,5 +106,5 @@
       "view"
     ]
   },
-  "description": "Sculptured lets you design a team of agents performing complex tasks on a visual board, run it and see the evidence behind every result."
+  "description": "CopperTide lets you design a team of agents performing complex tasks on a visual board, run it and see the evidence behind every result."
 }

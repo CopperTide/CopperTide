@@ -3,12 +3,12 @@ title: Questions and approvals
 description: What happens when an agent asks you something, how long it waits, and what it does if nobody answers.
 ---
 
-When an agent needs a decision, Sculptured shows **needs you** and opens a question card. A restricted Claude agent can also request permission to run a tool. Answer on the card before its deadline; if the deadline passes first, the timeout behavior applies.
+When an agent needs a decision, CopperTide shows **needs you** and opens a question card. A restricted Claude agent can also request permission to run a tool. Answer on the card before its deadline; if the deadline passes first, the timeout behavior applies.
 
 ```mermaid
 sequenceDiagram
   participant A as Agent
-  participant S as Sculptured
+  participant S as CopperTide
   participant Y as You
   A->>S: "request_input: Which colour?"
   S->>S: "record question, agent needs you"
@@ -42,7 +42,7 @@ The tools agents use are listed in [Agent tools](/reference/agent-tools).
 
 **Answer** opens the agent. Its questions show at the top of its conversation, and the first one takes the focus.
 
-An agent can say how urgent its question is. Urgent ones come first in Needs you, marked *Urgent, says the agent*; ones it calls low come last. This is the agent's own word, not Sculptured's judgment. A question nobody answers still times out, and the agent decides for itself.
+An agent can say how urgent its question is. Urgent ones come first in Needs you, marked *Urgent, says the agent*; ones it calls low come last. This is the agent's own word, not CopperTide's judgment. A question nobody answers still times out, and the agent decides for itself.
 
 ## Answer in the app
 
@@ -56,7 +56,7 @@ Each question is a card above the agent's conversation. It shows what the agent 
 | --- | --- |
 | A question with choices | One button per choice. If it also takes your own words, a box and **Send answer**. |
 | A question in its own words | A box for your answer and **Send answer**. |
-| To run a tool (**Restricted** agents) | The tool, its input under **Tool input**, and Sculptured's reading of what it would do, such as "deletes files". Then **Allow** or **Deny**. |
+| To run a tool (**Restricted** agents) | The tool, its input under **Tool input**, and CopperTide's reading of what it would do, such as "deletes files". Then **Allow** or **Deny**. |
 
 - **Deny with a reason.** Type a reason before you choose **Deny**, and the agent is told it. Without one, it is told "The person running this team did not allow this."
 - **Send again.** If your answer may not have reached the agent, the card says why, in the computer's words, and offers **Send again**.
@@ -70,7 +70,7 @@ Your answer is recorded first and then sent to the agent. The log reads question
 
 - **One answer wins.** If two answers race, or an answer races the timeout, exactly one resolves the question. A second try gets "This question was already answered or withdrawn, so your answer was not sent."
 - **Choices.** An answer must fit the question: one of its choices, or your own words. Otherwise you get "That answer does not fit this question."
-- **Delivery in doubt.** If Sculptured could not confirm that the answer reached the agent, the answer stays recorded and is marked as unconfirmed, and the agent stays in Needs you until that is settled. An answer that certainly did not arrive opens the question again while the agent can still take it.
+- **Delivery in doubt.** If CopperTide could not confirm that the answer reached the agent, the answer stays recorded and is marked as unconfirmed, and the agent stays in Needs you until that is settled. An answer that certainly did not arrive opens the question again while the agent can still take it.
 
 ## When nobody answers
 
@@ -87,13 +87,13 @@ Each question waits **10 minutes** by default. A team can set a timeout from 1 t
 A question is marked **withdrawn** when its waiting call can no longer receive an answer. The card records the reason:
 
 - the agent's turn was interrupted, or its process ended;
-- Sculptured itself restarted while the agent waited.
+- CopperTide itself restarted while the agent waited.
 
-After a Sculptured restart, the agent's computer sends the waiting call again when it reconnects, so the question can appear again as a new one.
+After a CopperTide restart, the agent's computer sends the waiting call again when it reconnects, so the question can appear again as a new one.
 
 ## When the computer is offline
 
-Sculptured can record your answer while the agent's computer is offline. Delivery waits for the connection to return:
+CopperTide can record your answer while the agent's computer is offline. Delivery waits for the connection to return:
 
 1. The question **stays open**. You can still answer it.
 2. Your answer is kept.
@@ -103,7 +103,7 @@ Answers are kept for six hours for a computer that comes back. See [When the com
 
 ## Workflow decisions
 
-Teams with a workflow can include a stage where a person decides. Those items wait under **Work evidence** on the Run board, in **Waiting for you**. Each shows the stage's prompt, the latest evidence and one button per outcome. You can add an optional note. Each step in an item's history is labelled agent-reported, verified check, person's decision or Sculptured. See [Workflows](/guides/workflows).
+Teams with a workflow can include a stage where a person decides. Those items wait under **Work evidence** on the Run board, in **Waiting for you**. Each shows the stage's prompt, the latest evidence and one button per outcome. You can add an optional note. Each step in an item's history is labelled agent-reported, verified check, person's decision or CopperTide. See [Workflows](/guides/workflows).
 
 ## Next steps
 

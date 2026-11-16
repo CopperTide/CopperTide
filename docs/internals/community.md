@@ -1,6 +1,6 @@
 # Community
 
-Community (blocks, saves, profiles, reports) is its own service and database (`sculptured-community`). In the hosted app it is compiled into the gateway and served at `/api/community/*` for the signed-in Sculptured account. The web app's Community section lives in `web/src/community/`.
+Community (blocks, saves, profiles, reports) is its own service and database (`sculptured-community`). In the hosted app it is compiled into the gateway and served at `/api/community/*` for the signed-in CopperTide account. The web app's Community section lives in `web/src/community/`.
 
 ## Request path (hosted)
 

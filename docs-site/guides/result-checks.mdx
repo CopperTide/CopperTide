@@ -1,16 +1,16 @@
 ---
 title: Result checks
-description: Rules an agent's result must pass before its work is handed on. Sculptured checks them itself and sends a failing result back.
+description: Rules an agent's result must pass before its work is handed on. CopperTide checks them itself and sends a failing result back.
 ---
 
-When one agent's work feeds another, such as a buyer whose quote goes to an approver, you can require that the result carries certain facts, within limits, before it moves on. **Result checks** are those rules. Sculptured checks them itself, not the agent, so a result that passes is **verified**.
+When one agent's work feeds another, such as a buyer whose quote goes to an approver, you can require that the result carries certain facts, within limits, before it moves on. **Result checks** are those rules. CopperTide checks them itself, not the agent, so a result that passes is **verified**.
 
 ## How it works
 
 1. The agent is told before it starts to end its result with a fenced `json` block containing the fields you check.
-2. When it finishes its work, Sculptured reads the last `json` block in its reply and checks each rule.
+2. When it finishes its work, CopperTide reads the last `json` block in its reply and checks each rule.
 3. **Passes:** the work is handed on as usual.
-4. **Fails:** nothing is handed on. Sculptured sends the agent what failed and what its result must have, and it tries again. This happens up to three times.
+4. **Fails:** nothing is handed on. CopperTide sends the agent what failed and what its result must have, and it tries again. This happens up to three times.
 5. **Still failing after that:** the agent is shown as **stuck**, waiting for you. Send it a message, or choose **Hand over again** to pass its latest result on anyway.
 
 Every check is shown in the agent's conversation: **✓ Its result passed its checks**, or **✗ Its result did not pass its checks** with what failed.

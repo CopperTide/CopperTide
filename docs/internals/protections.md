@@ -1,6 +1,6 @@
 # Protections and contracts
 
-Protections are rules Sculptured applies between an agent and its tools, so an agent's context stays small. They refuse reading a large file whole, cap shell output, and move an agent whose context has grown past a ceiling into a fresh conversation built from its own notes. An agent's contract (MADL `data_access` and `authority`) says what it reads, writes and decides. Teammates are told the contract, and protections refuse file reads and writes outside it.
+Protections are rules CopperTide applies between an agent and its tools, so an agent's context stays small. They refuse reading a large file whole, cap shell output, and move an agent whose context has grown past a ceiling into a fresh conversation built from its own notes. An agent's contract (MADL `data_access` and `authority`) says what it reads, writes and decides. Teammates are told the contract, and protections refuse file reads and writes outside it.
 
 Sources: `crates/model/src/protection.rs`, `crates/model/src/contract.rs`, `crates/sculptured/src/guard.rs`, `crates/drivers/src/claude/mod.rs` (`protection_args`, `protection_env`), `crates/hostd/src/supervisor/lifecycle.rs` (`launch_spec`), `crates/controld/src/launch.rs` (`claude_settings`, `with_contract`), `crates/controld/src/collaboration/context_ceiling.rs`, `crates/controld/src/team_context.rs` (`contract_lines`), `crates/controld/src/hosts/mod.rs` (`drop_features`), `web/src/structure/ProtectionFields.tsx`, `web/src/structure/ContractFields.tsx`.
 
@@ -18,7 +18,7 @@ flowchart LR
 
 ## 1. Why a guard between the agent and its tools
 
-Every token an agent reads stays in its context and is read again at every later step. One whole read of a large log or data file can cost more than the rest of a task. The CLIs do not stop this themselves, so Sculptured adds a hook that refuses the expensive form of a call and says how to make the cheap one ("read it with `offset` and `limit`").
+Every token an agent reads stays in its context and is read again at every later step. One whole read of a large log or data file can cost more than the rest of a task. The CLIs do not stop this themselves, so CopperTide adds a hook that refuses the expensive form of a call and says how to make the cheap one ("read it with `offset` and `limit`").
 
 The layer is meant to grow: the same hook and the same `GuardRules` will carry safety rules. None exist yet (§6).
 

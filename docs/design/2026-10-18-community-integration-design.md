@@ -10,7 +10,7 @@ Success means three things. A signed-in person never signs in twice. Community l
 
 ## Goals
 
-1. **One identity.** The Sculptured account (the cloud gateway's `users` and `identities`) is the Community identity. Community's own Google sign-in is retired for app use.
+1. **One identity.** The CopperTide account (the cloud gateway's `users` and `identities`) is the Community identity. Community's own Google sign-in is retired for app use.
 2. **Community is a top-bar section in every build** (local `serve`, hosted beta, desktop), with these pages:
    - **Explore:** blocks, searchable by title, tag and author.
    - **People:** a directory of members who have a public profile.
@@ -49,7 +49,7 @@ Success means three things. A signed-in person never signs in twice. Community l
 
 ## Anti-goals (would make this a failure even if it works)
 
-- **Two sign-ins, or a "Community account" that differs from the Sculptured account.**
+- **Two sign-ins, or a "Community account" that differs from the CopperTide account.**
 - **The local app's browser calling a third-party origin directly.** All Community traffic goes through the app's own server (same origin, no CORS, no `SameSite=None` cookies).
 - **Any Community path that can reach a runner, files, transcripts or Git.** Community stays data-isolated: a separate database and no runner APIs, as it is today.
 - **Silently publishing.** Publishing remains an explicit, previewed action, and a profile shows only what the member filled in.
@@ -73,7 +73,7 @@ Success means three things. A signed-in person never signs in twice. Community l
 
 ### Local app (`sculptured serve`) and desktop
 
-- **"Sign in to Sculptured"** is on the Account page. It reuses the gateway's device pairing flow (`/gw/api/device/start`, `token`, `code`, `approve`): controld starts it, the page shows the code and link, the user approves at app.{domain}, and controld receives a key.
+- **"Sign in to CopperTide"** is on the Account page. It reuses the gateway's device pairing flow (`/gw/api/device/start`, `token`, `code`, `approve`): controld starts it, the page shows the code and link, the user approves at app.{domain}, and controld receives a key.
 - **The key is a new kind of device: scope `community`.** It authenticates as the user for Community requests only. It cannot open the runner link (`/host`) or reach the user's instance. It is listed and revocable on the Computers page as "Community access from ‘Alex's laptop’".
   - Storage: `~/.sculptured/community.json`, mode 0600, holding `{origin, device_id, key}`. This mirrors `device.json`. It is never sent to the browser.
 - **controld proxies `/api/community/*`** to `{origin}/api/community/*`:
@@ -83,7 +83,7 @@ Success means three things. A signed-in person never signs in twice. Community l
   - It caps request and response sizes.
   - It applies the local guard (Host and Origin) first.
 - **The gateway authenticates the bearer** with `devices::authenticate` (requiring scope `community`), then attaches the same gateway assertion as above.
-- **Opt-in on self-run installs (user's decision).** A local or desktop install makes no request to any Sculptured server until the user turns Community on.
+- **Opt-in on self-run installs (user's decision).** A local or desktop install makes no request to any CopperTide server until the user turns Community on.
   - The Community section's first screen is a short "Turn on Community" page. It says what turning it on sends: Community pages and searches you open, and, if you sign in, your publications and saves. It also says what never leaves the machine: projects, files, transcripts and runs.
   - It offers **Turn on and browse** and **Turn on and sign in**.
 - **Signed out but turned on:** controld proxies read-only GETs with no credentials, so Explore, People and profiles work.
@@ -117,7 +117,7 @@ Success means three things. A signed-in person never signs in twice. Community l
 ### Who can join (user's decision: anyone)
 
 - **Anyone can sign in** with Google or GitHub on the Community sign-in path, or with a password where the gateway supports it.
-  - This creates a **Community-only Sculptured account**, `users.workspace = false`. It gives a profile, saves, publishing and reporting, and no hosted workspace.
+  - This creates a **Community-only CopperTide account**, `users.workspace = false`. It gives a profile, saves, publishing and reporting, and no hosted workspace.
   - The hosted-beta invite flow is unchanged: redeeming an invite on an existing Community-only account sets `workspace = true`.
 - **Gateway changes:**
   - An invite-free sign-up path, limited to purpose `community`.
@@ -135,7 +135,7 @@ Success means three things. A signed-in person never signs in twice. Community l
 - On a member's first gateway sign-in with Google, the gateway's Google `identities` subject is matched to `community_users(issuer = google, subject)`.
 - The member's existing row is relinked to the gateway issuer and subject, keeping their blocks, saves and display name. This is done by a one-time, idempotent migration endpoint called by the gateway at sign-in.
 - **Transition window:** the old `community.{domain}` Google sign-in keeps working for one release plus 60 days.
-  - During it, a signed-in Sculptured user of any provider (Google, GitHub or password) can **claim** an old Community account. They sign in once more with that old Google identity from their profile page, which relinks the row.
+  - During it, a signed-in CopperTide user of any provider (Google, GitHub or password) can **claim** an old Community account. They sign in once more with that old Google identity from their profile page, which relinks the row.
   - Unclaimed accounts keep their published blocks after the window, attributed under their display name, without edit rights. An operator can relink on request.
 - After the window, the Community service's own OIDC code is removed. Its only auth is the gateway assertion.
 
@@ -165,7 +165,7 @@ Success means three things. A signed-in person never signs in twice. Community l
 - Community keeps no access to runners, files, transcripts or Git, and the docs say so.
 - **Docs to update:**
   - docs-site `guides/community.md` ("opens on its own site" changes)
-  - `security.md` and `privacy.md` (identity is now the Sculptured account, profiles are public, and what each profile field exposes)
+  - `security.md` and `privacy.md` (identity is now the CopperTide account, profiles are public, and what each profile field exposes)
   - `sculptured-community/docs/OPERATIONS.md`
   - `sculptured-cloud/docs/DEPLOY.md`: one Google redirect URI fewer, plus the new route
 - **Hosted-beta changes deploy from three repos:** keep each repo's tests green at every step. The gateway and Community changes must land together for `/api/community/*` routing.
@@ -187,7 +187,7 @@ Success means three things. A signed-in person never signs in twice. Community l
 - **Code home:** `sculptured-community` stays a private repo, compiled into the private cloud gateway as a library.
   - There is no standalone or self-hosted Community mode; its OIDC is removed after the transition window.
   - TS types for Community endpoints are generated in `sculptured-community` with ts-rs and copied into `sculptured/web/src/generated/community/` by a small export step in that repo (documented, so the public repo's copies have one source).
-- **Local default:** opt-in. Self-run installs contact no Sculptured server until the user turns Community on.
+- **Local default:** opt-in. Self-run installs contact no CopperTide server until the user turns Community on.
 
 ## Builder notes from the review
 

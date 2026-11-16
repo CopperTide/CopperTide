@@ -54,7 +54,7 @@ fn check_decidable(q: &QuestionRow) -> Result<(), ToolError> {
         QuestionSource::RequestInput | QuestionSource::NativeQuestion
     ) {
         return Err(crate::seat_tools::invalid(format!(
-            "question {:?} is a permission prompt; Sculptured records what happened to it",
+            "question {:?} is a permission prompt; CopperTide records what happened to it",
             q.id
         )));
     }
@@ -71,7 +71,7 @@ fn check_decidable(q: &QuestionRow) -> Result<(), ToolError> {
         )
     }) {
         return Err(crate::seat_tools::invalid(format!(
-            "Sculptured already recorded what happened to question {:?}",
+            "CopperTide already recorded what happened to question {:?}",
             q.id
         )));
     }

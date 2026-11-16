@@ -3,7 +3,7 @@ title: Connection interruptions
 description: What keeps going, what waits and what happens on reconnect when the computer running your agents loses its connection mid-run.
 ---
 
-A lost connection to Sculptured does not stop agents on a computer that is still running. The runner keeps their events and sends them when it reconnects. While the connection is down, the app shows the last known activity.
+A lost connection to CopperTide does not stop agents on a computer that is still running. The runner keeps their events and sends them when it reconnects. While the connection is down, the app shows the last known activity.
 
 Sleep and shutdown are different: sleep pauses the agents, and a shutdown ends their processes. Keep the computer awake for uninterrupted work.
 
@@ -11,9 +11,9 @@ Sleep and shutdown are different: sleep pauses the agents, and a shutdown ends t
 
 | Connection | If it drops | What you see |
 | --- | --- | --- |
-| **Your browser ↔ Sculptured** | Only the page stops updating. Agents are not affected. | "reconnecting" in the status line. On a team page that never got its first update: "Live updates for … aren't arriving." |
-| **Your computer ↔ Sculptured** | Agents keep running on the computer. Sculptured cannot see them for a while. | Agents show *unknown*. Status reads "reconnecting". |
-| **Sculptured itself restarts** | The computer reconnects to the new server on its own. | A short "reconnecting", then agents return. |
+| **Your browser ↔ CopperTide** | Only the page stops updating. Agents are not affected. | "reconnecting" in the status line. On a team page that never got its first update: "Live updates for … aren't arriving." |
+| **Your computer ↔ CopperTide** | Agents keep running on the computer. CopperTide cannot see them for a while. | Agents show *unknown*. Status reads "reconnecting". |
+| **CopperTide itself restarts** | The computer reconnects to the new server on its own. | A short "reconnecting", then agents return. |
 
 ## What keeps going
 
@@ -21,7 +21,7 @@ Sleep and shutdown are different: sleep pauses the agents, and a shutdown ends t
 sequenceDiagram
   participant A as Agent
   participant R as Runner on your computer
-  participant S as Sculptured
+  participant S as CopperTide
   participant Y as You
   A->>R: "request_input: Which colour?"
   R->>S: "the agent's call"
@@ -38,8 +38,8 @@ sequenceDiagram
 
 - **Agents keep running.** The runner on your computer, which you installed with the connect command, keeps supervising them. Nothing is stopped because the connection dropped.
 - **Events are kept.** The runner records what agents do while offline and sends it when it reconnects. It keeps the latest 10,000 events. If more were lost, Status says "N events lost — history has a gap".
-- **Agents' calls wait.** When an agent asks a question, reports findings or starts a helper, the runner keeps the call. It sends the call again on every new connection until it is answered. Sculptured acts on each call once, so a question is not asked twice.
-- **Questions stay open.** You can answer while the computer is away. The answer is kept for six hours and reaches the agent when the computer returns. If Sculptured itself restarted, an open question is withdrawn, then asked again as a new one when the computer reconnects. See [Questions and approvals](/guides/questions).
+- **Agents' calls wait.** When an agent asks a question, reports findings or starts a helper, the runner keeps the call. It sends the call again on every new connection until it is answered. CopperTide acts on each call once, so a question is not asked twice.
+- **Questions stay open.** You can answer while the computer is away. The answer is kept for six hours and reaches the agent when the computer returns. If CopperTide itself restarted, an open question is withdrawn, then asked again as a new one when the computer reconnects. See [Questions and approvals](/guides/questions).
 
 ## What you see while it is away
 
@@ -53,15 +53,15 @@ sequenceDiagram
 ## What you can still do
 
 <AccordionGroup>
-  <Accordion title="Start a team or send a message">If the connection dropped less than **45 seconds** ago, Sculptured waits for the computer to come back before it gives up. So a team started during a short drop launches as soon as the computer is back. If the computer stays away, or has been gone longer, the action fails and says why: "Sculptured could not reach this agent's host: …". A message that could not be sent is recorded as not delivered.</Accordion>
-  <Accordion title="Stop an agent or the team">Sculptured accepts stop requests while the computer is offline. The agent shows *stopping*, with "Stops as soon as its computer reconnects". When the computer returns, Sculptured stops it. If the agent had already ended meanwhile, it records "Its computer reconnected; the agent had already ended".</Accordion>
-  <Accordion title="Answer a question">Sculptured records your answer while the computer is offline and delivers it when the runner reconnects.</Accordion>
-  <Accordion title="Edit the design">Works as usual. Design edits are saved by Sculptured, not on the computer.</Accordion>
+  <Accordion title="Start a team or send a message">If the connection dropped less than **45 seconds** ago, CopperTide waits for the computer to come back before it gives up. So a team started during a short drop launches as soon as the computer is back. If the computer stays away, or has been gone longer, the action fails and says why: "CopperTide could not reach this agent's host: …". A message that could not be sent is recorded as not delivered.</Accordion>
+  <Accordion title="Stop an agent or the team">CopperTide accepts stop requests while the computer is offline. The agent shows *stopping*, with "Stops as soon as its computer reconnects". When the computer returns, CopperTide stops it. If the agent had already ended meanwhile, it records "Its computer reconnected; the agent had already ended".</Accordion>
+  <Accordion title="Answer a question">CopperTide records your answer while the computer is offline and delivers it when the runner reconnects.</Accordion>
+  <Accordion title="Edit the design">Works as usual. Design edits are saved by CopperTide, not on the computer.</Accordion>
 </AccordionGroup>
 
 ## When it comes back
 
-The runner reconnects on its own. It checks the connection every 25 seconds, gives up on a silent one after 75 seconds, and retries every few seconds. On reconnect it tells Sculptured which agents are still alive.
+The runner reconnects on its own. It checks the connection every 25 seconds, gives up on a silent one after 75 seconds, and retries every few seconds. On reconnect it tells CopperTide which agents are still alive.
 
 | On reconnect | Result |
 | --- | --- |
@@ -73,11 +73,11 @@ The runner reconnects on its own. It checks the connection every 25 seconds, giv
 
 ## If live updates never arrive
 
-If a team page stays on "Connecting to …" for 8 seconds, it says "Live updates for … aren't arriving." Sculptured keeps trying in the background. The agents are not affected. This is usually a dropped network connection, or a network that blocks live connections, such as some company proxies. Use **Try again**, or **Open the Design board** to keep working on the design.
+If a team page stays on "Connecting to …" for 8 seconds, it says "Live updates for … aren't arriving." CopperTide keeps trying in the background. The agents are not affected. This is usually a dropped network connection, or a network that blocks live connections, such as some company proxies. Use **Try again**, or **Open the Design board** to keep working on the design.
 
 ## If the computer was disconnected from your account
 
-If you remove a computer from the Computers page, its runner stops with "This computer was disconnected from its Sculptured account." Copy a new connect command from Computers and run it on that computer. See [Connect a computer](/connect-a-computer).
+If you remove a computer from the Computers page, its runner stops with "This computer was disconnected from its CopperTide account." Copy a new connect command from Computers and run it on that computer. See [Connect a computer](/connect-a-computer).
 
 ## Next steps
 

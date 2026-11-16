@@ -92,7 +92,7 @@ fn check(st: &AppState, req: &Request) -> Result<Target, ApiError> {
         return Err(ApiError::new(
             StatusCode::UNAUTHORIZED,
             "signed_out",
-            "Sign in to Sculptured to do this",
+            "Sign in to CopperTide to do this",
         ));
     }
     let query = req

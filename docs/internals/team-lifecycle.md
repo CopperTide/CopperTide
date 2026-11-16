@@ -1,6 +1,6 @@
 # Teams: design → compile → boot → handoffs → stop
 
-A team starts as a design the user edits on the board (a `TeamDraft`). Pressing **Start team** checks the design, compiles it to a `RigSpec`, and launches one agent process per agent (a "seat"), layer by layer. While it runs, Sculptured passes finished work along "hands work to" connections, asks the user the agents' questions, and records everything as events ([Event journal](events-and-storage.md)).
+A team starts as a design the user edits on the board (a `TeamDraft`). Pressing **Start team** checks the design, compiles it to a `RigSpec`, and launches one agent process per agent (a "seat"), layer by layer. While it runs, CopperTide passes finished work along "hands work to" connections, asks the user the agents' questions, and records everything as events ([Event journal](events-and-storage.md)).
 
 Sources:
 - `crates/model/src/{draft,status,question}.rs` (`TeamDraft`, `DraftIssue`, `SeatLifecycle`, `QuestionSource`)
@@ -73,7 +73,7 @@ classDiagram
 | `agents[].job` | The agent's standing work. A head agent's Job is its first message at Start. |
 | `folder`, `agents[].folder` | Working folder. An agent's own folder wins over the team's (`effective_folder`). |
 | `models`, `groups[].models`, `advanced.model` | Model per provider. The agent's own model wins, then its group's, then the team's. None means the CLI's default. |
-| `advanced` | `permission` (`unrestricted` or `restricted`), `resume`, `token_limit`, `check` (a command Sculptured runs, see [Workflows](workflows.md)) |
+| `advanced` | `permission` (`unrestricted` or `restricted`), `resume`, `token_limit`, `check` (a command CopperTide runs, see [Workflows](workflows.md)) |
 | `connections[].kind` | `hands-work-to`, `reports-to` or `watches` (§6) |
 | `workflow` | Optional dynamic workflow ([Workflows](workflows.md)) |
 | `schedules` | Messages sent to an agent every N minutes while the team runs (Advanced) |
@@ -112,7 +112,7 @@ The `x`, `y`, `w` and `h` fields are board positions only.
 | agent | seat `{group}.{agent}@{team}` (`seat_ids.rs`). Names become labels, so renaming keeps seat ids. |
 | hands work to / reports to / watches | `delegates_to` / `escalates_to` / `can_observe` edges |
 | restricted posture | permission policy `builtin:standard` |
-| `advanced.resume` | `restore_policy` (`resume_if_possible`, `relaunch_fresh`, `checkpoint_only`). Shapes the team's Resume answer after a restart: `relaunch_fresh` starts that agent fresh; `checkpoint_only` (shown as "wait for me to choose": Sculptured keeps no checkpoints) leaves it waiting for its own decision. |
+| `advanced.resume` | `restore_policy` (`resume_if_possible`, `relaunch_fresh`, `checkpoint_only`). Shapes the team's Resume answer after a restart: `relaunch_fresh` starts that agent fresh; `checkpoint_only` (shown as "wait for me to choose": CopperTide keeps no checkpoints) leaves it waiting for its own decision. |
 
 The compiler orders launches into `launch_layers`. Only `delegates_to` and `spawned_by` edges order them (`EdgeKind::orders_launch`): a giver starts before its receiver.
 
@@ -218,7 +218,7 @@ stateDiagram-v2
 - An agent's `report` is `agent-reported`. Its words are shown as reported, never as observed or verified.
 - Tool calls and results are captured verbatim.
 - The interpreter's reading of a call (`interpreter::classify`, `risks`) is a `heuristic` `action-interpreted` event. It never blocks a call.
-- A `check-ran` event is the command's own exit status as Sculptured observed it, not the agent's word.
+- A `check-ran` event is the command's own exit status as CopperTide observed it, not the agent's word.
 
 ## 8. Seat tools
 
@@ -256,7 +256,7 @@ hostd offers these tools to every Claude, Codex and Practice agent as an MCP ser
 ## 10. After a server restart
 
 What survives is what is in the store: drafts, rigs with their desired state, seats, messages, questions and the journal. In memory, controld keeps only boot claims, the request locks, the handoff sends in flight and the waiting tool calls.
-- When a runner reconnects, its Hello names the seats still alive. Those return to `running` or `launching`. Seats whose process is gone go to `attention` (heuristic), with a reason such as "This agent's process ended when Sculptured restarted. Start the team again to relaunch it."
+- When a runner reconnects, its Hello names the seats still alive. Those return to `running` or `launching`. Seats whose process is gone go to `attention` (heuristic), with a reason such as "This agent's process ended when CopperTide restarted. Start the team again to relaunch it."
 - If the team is still set to run, each lost seat gets a restore offer (`restore-needed`). The user answers once per team or per agent: Resume (the agent's own session, when its session id is known and its driver can resume), Start fresh, or Leave stopped. Nothing relaunches without that answer, and a failed resume never falls back to fresh.
 - After a resume or a fresh start, `handoffs::deliver_owed` sends the work the agent is still owed in the current start, once.
 - Waiting `request_input` and `approve` calls live in memory (`AppState::seat_waits`). Their questions are withdrawn when controld starts again. Native questions of agents that are still running are kept.

@@ -24,7 +24,7 @@ use tokio_tungstenite::tungstenite::http::header::AUTHORIZATION;
 type Ws =
     tokio_tungstenite::WebSocketStream<tokio_tungstenite::MaybeTlsStream<tokio::net::TcpStream>>;
 
-const OLDER: &str = "Sculptured's agent runner is from an older version. Stop all teams, then end the old agent runner: its process number is in the file hostd.pid, in the host-local folder of Sculptured's data folder. Sculptured starts the new runner within a minute.";
+const OLDER: &str = "CopperTide's agent runner is from an older version. Stop all teams, then end the old agent runner: its process number is in the file hostd.pid, in the host-local folder of CopperTide's data folder. CopperTide starts the new runner within a minute.";
 
 const SPEC: &str = r#"
 version: "0.2"
@@ -323,7 +323,7 @@ async fn an_older_runner_gets_an_unrestricted_agent_without_the_optional_feature
     );
     assert!(
         note.starts_with(
-            "This agent runs without Sculptured's agent tools and without its earlier usage count"
+            "This agent runs without CopperTide's agent tools and without its earlier usage count"
         ),
         "{note}"
     );

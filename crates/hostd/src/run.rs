@@ -25,7 +25,7 @@ pub struct HostdOptions {
 /// The `sculptured hostd` subcommand exits with code 75 (EX_TEMPFAIL) for it.
 pub const ALREADY_RUNNING: &str = "another hostd already owns this data dir";
 /// Why a connected computer's runner stopped: its account disconnected it (its key is refused).
-pub const DISCONNECTED: &str = "This computer was disconnected from its Sculptured account. Run `sculptured connect <address>` again to reconnect it.";
+pub const DISCONNECTED: &str = "This computer was disconnected from its CopperTide account. Run `sculptured connect <address>` again to reconnect it.";
 
 /// Holds an exclusive lock on `{data_dir}/hostd.lock` for the life of the process (flock on Unix,
 /// LockFileEx on Windows), so a controld restart can never produce two hostds driving the same seats.

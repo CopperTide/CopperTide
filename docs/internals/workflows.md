@@ -1,6 +1,6 @@
 # Workflows: stages, items, own copies, checks, merges and long-running teams
 
-A workflow (`model::Workflow`, run by `controld::workflow`) moves a batch of work items through stages. A dispatcher agent creates the batch, or Sculptured runs the workflow's dispatch command and its output is the batch. Agents, checks, people and merges each settle one stage, and an assembly agent finishes once every item is done. Everything here is durable: the run is one JSON row saved with each change, so a restart picks up where it stopped.
+A workflow (`model::Workflow`, run by `controld::workflow`) moves a batch of work items through stages. A dispatcher agent creates the batch, or CopperTide runs the workflow's dispatch command and its output is the batch. Agents, checks, people and merges each settle one stage, and an assembly agent finishes once every item is done. Everything here is durable: the run is one JSON row saved with each change, so a restart picks up where it stopped.
 
 Sources:
 - `crates/model/src/workflow.rs` (`Workflow`, `WorkflowStage`, `StageKind`, `TaskStatus`, `StepBy`, `Guard`, `Escalation`), `crates/model/src/dispatch.rs` (`WorkflowDispatch`, `DispatchRecord`), `crates/model/src/draft.rs` (`Schedule`, `decision_log`)
@@ -35,7 +35,7 @@ flowchart LR
 
 **Roles** (`Workflow`):
 - `dispatcher`: the only agent that may call `dispatch_work`. When the team starts, only the dispatcher gets a start message (`teams/run.rs`), and that message includes the **Input block** (`Workflow.input`, at most 64 KB of links, notes and goals). The board draws Input as its own box feeding the dispatcher.
-- `dispatch` (optional, instead of `dispatcher`): `{command, timeout_s?}`, a command Sculptured runs to make the batch (§1.1). With it, `dispatcher` is empty and no agent gets a start message.
+- `dispatch` (optional, instead of `dispatcher`): `{command, timeout_s?}`, a command CopperTide runs to make the batch (§1.1). With it, `dispatcher` is empty and no agent gets a start message.
 - `entry`: the first stage of every item. `collector`: the assembly agent.
 - `max_tasks` (1–64 items per batch) and `max_steps` (1–32 steps per item, a backstop on every loop).
 
@@ -54,11 +54,11 @@ A planner agent that only splits work and hands it out is deterministic work; `W
 
 - **When it runs.** `scheduler::process` finds a running team with no batch for this start; `dispatch::due` claims one `Kind::Dispatch` job unless a result for this start is already recorded. It runs once per start; a job lost to a restart runs again, and stopping the team aborts it with nothing recorded.
 - **Where.** On the team's computer, in the project folder, through `ops::run` with `LocalOp::RunDispatch {cwd, command, timeout_s}` (`localops/src/command.rs`). Unlike `RunCheck`, which keeps only the end of the output, it answers `CommandOutput {exit_code, timed_out, stdout, stderr, too_large}` with **the whole stdout** (up to 4 MB; more is reported as too large, never cut) and the last 4 KB of stderr. A connected computer's policy treats it like a check (`--enable checks`, allowed folders).
-- **Older connected computers.** `RunDispatch` is a new op, so a runner from before it refuses it as `unknown_op` instead of answering with a check's 8 KB tail. `dispatch::unrunnable` turns that into "This computer's Sculptured is too old to run a dispatch command. Update Sculptured on that computer and run `sculptured connect` again."
+- **Older connected computers.** `RunDispatch` is a new op, so a runner from before it refuses it as `unknown_op` instead of answering with a check's 8 KB tail. `dispatch::unrunnable` turns that into "This computer's CopperTide is too old to run a dispatch command. Update CopperTide on that computer and run `sculptured connect` again."
 - **What it prints.** JSON in `dispatch_work`'s shape: `{"batch_id"?, "summary", "tasks": [{id, title, context, mode?, depends_on?}]}` (unknown keys are refused). `batch_id` defaults to `batch-<start_seq>`. The batch goes through `tools::batch`, the same checks and constructor `dispatch_work` uses (summary 1–12000 bytes, 1–`max_tasks` tasks, `engine::new_run`, `topics::validate`).
-- **The record.** `DispatchRecord {command, at_ms, dispatched, evidence, problem?}` is saved per start in `workflow_dispatches`, in the same transaction as the batch when there is one. `evidence` is the command, exit status, time, output size and stderr tail. That Sculptured ran the command is observed; the items are the command's output, not an agent's report. `GET …/workflow` returns it as `dispatch`, with `dispatching` while the job runs and `start_seq`.
+- **The record.** `DispatchRecord {command, at_ms, dispatched, evidence, problem?}` is saved per start in `workflow_dispatches`, in the same transaction as the batch when there is one. `evidence` is the command, exit status, time, output size and stderr tail. That CopperTide ran the command is observed; the items are the command's output, not an agent's report. `GET …/workflow` returns it as `dispatch`, with `dispatching` while the job runs and `start_seq`.
 - **Failure.** A non-zero exit, a time-out, too much output, output that is not the JSON above, or a batch the checks refuse dispatches **nothing**: the record has `dispatched: false` and a `problem` that names the exit code or the parse or validation error, and the Workflow view shows "Blocked: the dispatch command made no work". It does not run again by itself. `POST …/workflow/dispatch/retry {start_seq}` (the "Run the dispatch command again" button) clears a failed record so the scheduler runs it again; starting the team again does too.
-- `dispatch_work` from any agent is refused while a dispatch command is set. The workflow briefing says Sculptured makes the batch.
+- `dispatch_work` from any agent is refused while a dispatch command is set. The workflow briefing says CopperTide makes the batch.
 - The board draws a "Dispatch command" box where the dispatcher agent would be, with the Dispatch route from it; the Input box is not drawn, since no agent reads it. The command and its time limit are under Workflow settings › Advanced.
 
 An **item** (`WorkflowTask`) keeps its input, current `stage`, `status`, current `assignment`, `history` of steps, `problem`, `waiting`, `copy`, `reviews` and `escalated`. The **assembly** is one extra item with the reserved id `assembly`. It is assigned to the collector only once every item is `Complete`, and its only outcomes are `done` and `blocked`. A dependent item is not scheduled until every item it `depends_on` is `Complete` (`topics::waiting`).
@@ -69,9 +69,9 @@ An **item** (`WorkflowTask`) keeps its input, current `stage`, `status`, current
 |---|---|---|---|
 | `agent` | `agent`, or any idle one of `workers` (1–8 in all) | any 1–8 names the design gives | `agent` (agent-reported) |
 | review panel: `agent` with `reviewers` | 2–6 reviewers, all on the same item | the stage's routes. With `join: all` (the default), the worst vote once all have voted, ranked by `priority`, else `blocked`, then the first vote that is not `approved`. With `join: any`, the first `approved` | `agent`, agent `panel`, with `votes` |
-| `check` | Sculptured runs `command` (timeout `timeout_s`, default 600, at most 3600) | exactly `passed`, `failed` | `check` (verified) |
+| `check` | CopperTide runs `command` (timeout `timeout_s`, default 600, at most 3600) | exactly `passed`, `failed` | `check` (verified) |
 | `human` | a person, through `POST …/workflow/decide` | 2–6 names | `person` |
-| `merge` | Sculptured merges the item's branch (needs `copies: per-item`) | exactly `merged`, `conflict` | `sculptured` |
+| `merge` | CopperTide merges the item's branch (needs `copies: per-item`) | exactly `merged`, `conflict` | `sculptured` |
 
 - A route value of `null` completes the item. `blocked` is reserved and always allowed.
 - Validation (`rigspec/src/draft/workflow.rs`) requires each kind's own fields and rejects other kinds' fields. It allows 1–16 stages and checks that every route and `on_limit` names an existing stage. It also requires that every stage can still reach completion.
@@ -176,7 +176,7 @@ sequenceDiagram
   L-->>S: settle merged, copy cleared, branch kept
 ```
 
-Every assignment message (`assignment::text`) lists the last six steps, newest first, each labelled by who settled it: "agent-reported", "verified: Sculptured ran the check", "a person's decision" or "Sculptured". An agent's report is therefore never presented as verification. Up to 1500 bytes of each step's evidence are repeated.
+Every assignment message (`assignment::text`) lists the last six steps, newest first, each labelled by who settled it: "agent-reported", "verified: CopperTide ran the check", "a person's decision" or "CopperTide". An agent's report is therefore never presented as verification. Up to 1500 bytes of each step's evidence are repeated.
 
 ## 5. Per-item copies and merges
 
@@ -188,7 +188,7 @@ With `copies: per-item`, each item gets its own git worktree and branch. The rul
 - **Lock:** `repo_writes` lets only one git write per repository run at a time, because git refuses concurrent writers. Reusing an existing copy takes no lock, and different repositories never wait for each other.
 - **Merge** (`merge_item`): first, if `into` is set it must be the project's current branch, else `wrong_branch`. Next, the copy's uncommitted work is committed (signed "Sculptured" if git has no user). Then `merge_branch` runs `git merge --no-ff`:
   - **The user's own merge is never undone.** If the project is mid-merge, rebase, cherry-pick or revert, the answer is `project_busy` and nothing is merged.
-  - **Conflict:** only a merge Sculptured started and that stopped on unmerged files is aborted. It routes `conflict`, and the item keeps its copy.
+  - **Conflict:** only a merge CopperTide started and that stopped on unmerged files is aborted. It routes `conflict`, and the item keeps its copy.
   - **Any other git refusal** is `merge_failed` ("nothing was changed"), which blocks the item. It is not called a conflict.
   - **Nothing to merge** routes `merged` with "Nothing to merge: … is already in this branch."
   - **Success:** the evidence is `git diff --stat`. The copy is removed, the branch is kept, and `task.copy` is cleared, so later stages, including checks, work in the project folder.
@@ -238,7 +238,7 @@ An assignment's id is its message id. `Store::assignment_usage` sums the `usage-
 - **Run view** (`WorkflowRunView.tsx`):
   - The item board appears only when `usesPipeline` holds: per-item copies, a non-agent kind, a panel or a round limit.
   - Decision cards appear only for Waiting items, the guard notice only after a failed guard, and the decision log only when it is on.
-  - Each step is labelled "agent-reported", "verified check", "person's decision" or "Sculptured".
+  - Each step is labelled "agent-reported", "verified check", "person's decision" or "CopperTide".
 
 ## 10. HTTP routes
 
@@ -268,7 +268,7 @@ Every workflow `POST` checks `start_seq` against the running batch. A request fr
 - The run and its assignment message are saved in one transaction, and an assignment is sent once and never resent automatically.
 - An agent holds at most one workflow assignment at a time.
 - Only `complete_work` advances an agent stage, and a plain reply never does.
-- A check's pass or fail is verified only when Sculptured ran the command. A check that could not run blocks the item and is not a failure.
+- A check's pass or fail is verified only when CopperTide ran the command. A check that could not run blocks the item and is not a failure.
 - Every outcome goes through `engine::advance`, so round, step and on_limit limits apply to agents, checks, panels and people alike.
 - A round limit never completes an item. It takes `on_limit` or blocks.
 - A merge never touches a project that is mid-merge, rebase or cherry-pick, and undoes only a merge it started.

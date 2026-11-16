@@ -10,7 +10,7 @@ description: Export a team as a Multi-Agent Descriptor Language file that other 
 - global settings, and settings for each agent;
 - the restrictions each agent works under.
 
-Use it to share a team with tools other than Sculptured, to keep a readable copy in a Git repository, or to bring in a system designed elsewhere.
+Use it to share a team with tools other than CopperTide, to keep a readable copy in a Git repository, or to bring in a system designed elsewhere.
 
 | | |
 | --- | --- |
@@ -19,9 +19,9 @@ Use it to share a team with tools other than Sculptured, to keep a readable copy
 
 ## What is kept
 
-A team exported from Sculptured and imported again comes back unchanged. Everything is in MADL's own fields, with nothing in a Sculptured-only extension, so another MADL tool sees the whole team.
+A team exported from CopperTide and imported again comes back unchanged. Everything is in MADL's own fields, with nothing in a CopperTide-only extension, so another MADL tool sees the whole team.
 
-| Sculptured | MADL |
+| CopperTide | MADL |
 | --- | --- |
 | Agents, their Jobs and kinds | `agents`, with `instructions` and `runtime: claude-code` or `codex` |
 | Groups | `groups`, and each agent's `groups` |
@@ -49,7 +49,7 @@ A team exported from Sculptured and imported again comes back unchanged. Everyth
 
 ## Importing a MADL file from elsewhere
 
-MADL can describe more than Sculptured runs today. Importing keeps what Sculptured can use and lists the rest by its place in the file, under **Not imported**:
+MADL can describe more than CopperTide runs today. Importing keeps what CopperTide can use and lists the rest by its place in the file, under **Not imported**:
 
 - **People** (`runtime: human`) are not board agents; people answer agents' questions from the app.
 - **Other runtimes**, such as CAMEL or CrewAI, are imported as Claude Code agents.

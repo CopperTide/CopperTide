@@ -3,7 +3,7 @@ title: Open models with OpenCode
 description: Run agents on open models such as Kimi, GLM, DeepSeek or GPT OSS, through OpenCode and an OpenRouter key.
 ---
 
-An agent can run on an open model instead of Claude or Codex. Sculptured drives [OpenCode](https://opencode.ai) for these agents, and OpenCode reaches the model through [OpenRouter](https://openrouter.ai), where one key covers many open models. On the board, these agents carry the OpenCode mark: code brackets around a dot.
+An agent can run on an open model instead of Claude or Codex. CopperTide drives [OpenCode](https://opencode.ai) for these agents, and OpenCode reaches the model through [OpenRouter](https://openrouter.ai), where one key covers many open models. On the board, these agents carry the OpenCode mark: code brackets around a dot.
 
 ## Before you start
 
@@ -13,14 +13,14 @@ OpenCode must be installed on the computer that runs the agent:
 curl -fsSL https://opencode.ai/install | bash
 ```
 
-On Windows, run `npm install -g opencode-ai`. If it is missing when you press **Start**, Sculptured says so before anything starts and shows the command to paste.
+On Windows, run `npm install -g opencode-ai`. If it is missing when you press **Start**, CopperTide says so before anything starts and shows the command to paste.
 
 ## Choose OpenCode for an agent
 
 Open the agent and set **Runs on** to **OpenCode**. Then choose its model:
 
 - **On the hosted service,** pick one of your OpenRouter connections, shown as **OpenCode via OpenRouter · *name***. The agent runs on that connection's model and key. To add a connection, open **Setup → Models**, fill in **Open models — OpenRouter** with your OpenRouter key and the model's OpenRouter name (for example `moonshotai/kimi-k2.7-code`), then choose **Save and check**.
-- **On Sculptured on your own computer,** OpenCode uses its own setup, the same way Claude Code uses your sign-in. Give OpenRouter your key with `opencode auth login`, or set `OPENROUTER_API_KEY`. Choose the model under **Model**, for example **Kimi K2.7 Code**, or type any model OpenCode knows under **Other…**, written as OpenCode names it: `openrouter/z-ai/glm-5.3`.
+- **On CopperTide on your own computer,** OpenCode uses its own setup, the same way Claude Code uses your sign-in. Give OpenRouter your key with `opencode auth login`, or set `OPENROUTER_API_KEY`. Choose the model under **Model**, for example **Kimi K2.7 Code**, or type any model OpenCode knows under **Other…**, written as OpenCode names it: `openrouter/z-ai/glm-5.3`.
 
 A team or a group can set a default OpenCode model the same way it sets Claude and Codex models.
 
@@ -28,7 +28,7 @@ If OpenCode does not know the model, the agent does not start and its card says 
 
 ## What the agent can do
 
-OpenCode agents work like Claude Code and Codex agents: they read and change files in their folder, run commands, hand work to other agents, and use Sculptured's agent tools, such as asking you a question, messaging a teammate and writing the status page. You can message, interrupt and stop them, and they pick up where they left off when you start the team again.
+OpenCode agents work like Claude Code and Codex agents: they read and change files in their folder, run commands, hand work to other agents, and use CopperTide's agent tools, such as asking you a question, messaging a teammate and writing the status page. You can message, interrupt and stop them, and they pick up where they left off when you start the team again.
 
 - **Sandboxed access** makes an OpenCode agent ask you before it changes a file, runs a command or uses the web. The question comes to you like any other; nobody answering in time lets it go ahead, as for Claude.
 - **A sandboxed computer** keeps it inside its folder.
@@ -36,7 +36,7 @@ OpenCode agents work like Claude Code and Codex agents: they read and change fil
 
 ## Costs
 
-Runs are billed to your OpenRouter account at OpenRouter's prices. Sculptured shows each turn's cost as OpenCode estimates it, labelled **OpenCode's own estimate**.
+Runs are billed to your OpenRouter account at OpenRouter's prices. CopperTide shows each turn's cost as OpenCode estimates it, labelled **OpenCode's own estimate**.
 
 Two things are shown as they are, not filled in:
 

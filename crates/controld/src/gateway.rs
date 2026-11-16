@@ -74,19 +74,19 @@ impl Gateway {
             .json(&serde_json::json!({ "connection_id": connection_id }))
             .send()
             .await
-            .map_err(|_| "Sculptured's server couldn't be reached".to_string())?;
+            .map_err(|_| "CopperTide's server couldn't be reached".to_string())?;
         match resp.status().as_u16() {
             200..=299 => {}
             404 => return Err("it no longer exists".into()),
-            401 | 403 => return Err("Sculptured's server refused to hand it over".into()),
-            code => return Err(format!("Sculptured's server answered {code}")),
+            401 | 403 => return Err("CopperTide's server refused to hand it over".into()),
+            code => return Err(format!("CopperTide's server answered {code}")),
         }
         let got: ConnectionEnv = resp
             .json()
             .await
-            .map_err(|_| "Sculptured's server sent an answer that couldn't be read".to_string())?;
+            .map_err(|_| "CopperTide's server sent an answer that couldn't be read".to_string())?;
         if !host_proto::model_env_allowed(&got.env) {
-            return Err("it asks for settings Sculptured doesn't give agents".into());
+            return Err("it asks for settings CopperTide doesn't give agents".into());
         }
         Ok(got)
     }

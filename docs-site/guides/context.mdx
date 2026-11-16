@@ -3,7 +3,7 @@ title: Context and communication
 description: Inspect captured context, tool results, messages and usage, with the source of each claim.
 ---
 
-Sculptured's progress views summarize captured messages, tool calls, file changes and checks. Use them to understand a run, then follow individual entries back to their recorded evidence when you need more detail.
+CopperTide's progress views summarize captured messages, tool calls, file changes and checks. Use them to understand a run, then follow individual entries back to their recorded evidence when you need more detail.
 
 | View | Where | Answers |
 | --- | --- | --- |
@@ -15,15 +15,15 @@ Sculptured's progress views summarize captured messages, tool calls, file change
 
 ## Read the evidence labels
 
-Each label identifies how Sculptured obtained the information. It does not assign a general confidence score.
+Each label identifies how CopperTide obtained the information. It does not assign a general confidence score.
 
 | Label | Meaning | Example |
 | --- | --- | --- |
 | **Captured** | Recorded word for word as it happened | A tool's input and result |
 | **Observed** | Seen by the computer running the agent | The process started or ended |
 | **Agent-reported** | The agent said so | "Done", or findings from `report` |
-| **Heuristic** | Sculptured's inference | "Stalled", a stale agent, an estimate |
-| **Verified check** | A command Sculptured ran itself, with its real exit status | Your test command passed |
+| **Heuristic** | CopperTide's inference | "Stalled", a stale agent, an estimate |
+| **Verified check** | A command CopperTide ran itself, with its real exit status | Your test command passed |
 
 <Note>A file existing, a tool succeeding or an agent saying "done" does not make the work correct. Only a check that ran shows a check passed, and only for what that check tests.</Note>
 
@@ -40,7 +40,7 @@ Pick any item to jump to that moment in the **Transcript**. The Transcript then 
 
 ## An agent's context
 
-The **Context** section of Visual progress shows what Sculptured captured going into the agent, by category:
+The **Context** section of Visual progress shows what CopperTide captured going into the agent, by category:
 
 | Category | What it holds |
 | --- | --- |
@@ -55,7 +55,7 @@ Each category shows records, characters, and **≈ tokens**, estimated as charac
 
 Above the categories is the **last reported context usage**, labelled "CLI-reported usage" or "CLI-derived estimate", with its time. If the CLI has not reported yet, it says so.
 
-<Warning>Captured content is not the whole context. Hidden system instructions, the CLI's own compaction, helpers the CLI starts by itself, and anything Sculptured did not capture stay unknown. A path or URL appearing in text does not prove the agent read it.</Warning>
+<Warning>Captured content is not the whole context. Hidden system instructions, the CLI's own compaction, helpers the CLI starts by itself, and anything CopperTide did not capture stay unknown. A path or URL appearing in text does not prove the agent read it.</Warning>
 
 ## Team communication
 

@@ -54,13 +54,13 @@ function page({ title, description, content, nav, current }) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(title)} · Sculptured docs</title>
+<title>${esc(title)} · CopperTide docs</title>
 <meta name="description" content="${esc(description ?? '')}">
-<link rel="icon" href="/images/sculptured-coastal-emblem.png">
+<link rel="icon" href="/images/coppertide-mark.png">
 <style>${CSS}</style>
 </head>
 <body>
-<header><a class="brand" href="/"><img src="/images/sculptured-coastal-emblem.png" alt="" width="28" height="28">Sculptured docs</a></header>
+<header><a class="brand" href="/"><img src="/images/coppertide-mark.png" alt="" width="28" height="28">CopperTide docs</a></header>
 <div class="layout">
 <nav aria-label="Documentation">${sidebar}</nav>
 <main>
@@ -182,7 +182,7 @@ export async function build(out = path.join(here, 'dist')) {
   }
   // llms.txt (https://llmstxt.org): an index coding agents can read, and every page's source in one file.
   const index = nav.map((g) => `## ${g.group}\n\n${g.pages.map((p) => `- [${p.title}](/${p.id}.md)${p.description ? `: ${p.description}` : ''}`).join('\n')}`);
-  fs.writeFileSync(path.join(out, 'llms.txt'), `# Sculptured\n\n> ${config.description ?? ''}\n\n${index.join('\n\n')}\n`);
+  fs.writeFileSync(path.join(out, 'llms.txt'), `# CopperTide\n\n> ${config.description ?? ''}\n\n${index.join('\n\n')}\n`);
   fs.writeFileSync(path.join(out, 'llms-full.txt'), [...pages.values()].map((p) => `# ${p.title}\n\n${p.body.trim()}\n`).join('\n'));
   for (const p of pages.values()) fs.writeFileSync(path.join(out, `${p.id}.md`), `# ${p.title}\n\n${p.description ? `> ${p.description}\n\n` : ''}${p.body.trim()}\n`);
   const first = config.navigation.groups[0].pages[0];

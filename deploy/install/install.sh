@@ -11,7 +11,7 @@ ORIGIN="__ORIGIN__"
 RELEASES="__RELEASES__"
 
 say() { printf '%s\n' "$*"; }
-die() { printf 'Sculptured install: %s\n' "$*" >&2; exit 1; }
+die() { printf 'CopperTide install: %s\n' "$*" >&2; exit 1; }
 
 target() {
   case "$(uname -s)-$(uname -m)" in
@@ -22,7 +22,7 @@ target() {
       if [ "$(sysctl -n sysctl.proc_translated 2>/dev/null || true)" = 1 ]; then echo aarch64-apple-darwin
       else echo x86_64-apple-darwin; fi ;;
     Darwin-arm64 | Darwin-aarch64) echo aarch64-apple-darwin ;;
-    *) die "unsupported system: $(uname -s) $(uname -m). Sculptured runs on Linux and macOS for now." ;;
+    *) die "unsupported system: $(uname -s) $(uname -m). CopperTide runs on Linux and macOS for now." ;;
   esac
 }
 
@@ -44,9 +44,9 @@ main() {
   asset="sculptured-$t.tar.gz"
   tmp=$(mktemp -d)
   trap 'rm -rf "$tmp"' EXIT
-  say "Downloading Sculptured for $t…"
+  say "Downloading CopperTide for $t…"
   ( fetch "$RELEASES/$asset" "$tmp/$asset" ) 2>/dev/null \
-    || die "there is no Sculptured build for $t at $RELEASES yet. Nothing was installed."
+    || die "there is no CopperTide build for $t at $RELEASES yet. Nothing was installed."
   fetch "$RELEASES/$asset.sha256" "$tmp/$asset.sha256"
   want=$(cut -d' ' -f1 < "$tmp/$asset.sha256")
   got=$(sha256 "$tmp/$asset")

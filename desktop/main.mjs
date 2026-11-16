@@ -44,7 +44,7 @@ async function answering() {
 
 function startServer() {
   const { bin, web } = resources();
-  if (!existsSync(bin)) throw new Error(`The Sculptured program is missing: ${bin}`);
+  if (!existsSync(bin)) throw new Error(`The CopperTide program is missing: ${bin}`);
   const args = ['serve', '--port', String(PORT), '--web-dir', web];
   if (process.env.SCULPTURED_DATA_DIR) args.push('--data-dir', process.env.SCULPTURED_DATA_DIR);
   server = spawn(bin, args, { stdio: ['ignore', 'inherit', 'pipe'] });
@@ -52,7 +52,7 @@ function startServer() {
   server.stderr.on('data', (d) => { tail = (tail + d.toString()).slice(-4000); });
   server.on('exit', (code) => {
     server = null;
-    if (!app.isQuitting) fail(`Sculptured stopped (${code}).\n${tail}`);
+    if (!app.isQuitting) fail(`CopperTide stopped (${code}).\n${tail}`);
   });
 }
 
@@ -61,18 +61,18 @@ async function waitReady() {
     if (await answering()) return;
     await new Promise((r) => setTimeout(r, 500));
   }
-  throw new Error('Sculptured did not become ready within 30 seconds.');
+  throw new Error('CopperTide did not become ready within 30 seconds.');
 }
 
 function fail(message) {
-  dialog.showErrorBox('Sculptured', message);
+  dialog.showErrorBox('CopperTide', message);
   app.quit();
 }
 
 /** The allowed origins (and sign-in providers' pages) stay in the window; other web links (such as a CLI sign-in page) open in the system browser. */
 function openWindow(allowed, start) {
   window = new BrowserWindow({
-    width: 1280, height: 850, minWidth: 640, minHeight: 480, show: false, title: 'Sculptured',
+    width: 1280, height: 850, minWidth: 640, minHeight: 480, show: false, title: 'CopperTide',
     backgroundColor: '#10141c', autoHideMenuBar: true,
     icon: path.join(app.getAppPath(), 'icon.png'),
     webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true, spellcheck: false },
@@ -95,7 +95,7 @@ function openWindow(allowed, start) {
 function choose() {
   return new Promise((resolve) => {
     const w = new BrowserWindow({
-      width: 640, height: 600, title: 'Sculptured', backgroundColor: '#10141c', autoHideMenuBar: true,
+      width: 640, height: 600, title: 'CopperTide', backgroundColor: '#10141c', autoHideMenuBar: true,
       webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true, preload: path.join(app.getAppPath(), 'src', 'chooser-preload.cjs') },
     });
     let chosen = false;
@@ -123,7 +123,7 @@ function confirmStopAgents() {
   if (!runner || app.agentsStopConfirmed) return true;
   const choice = dialog.showMessageBoxSync(window ?? undefined, {
     type: 'question', buttons: ['Quit and stop agents', 'Cancel'], defaultId: 1, cancelId: 1,
-    message: 'Quit Sculptured?', detail: 'Agents running on this computer for your account will stop.',
+    message: 'Quit CopperTide?', detail: 'Agents running on this computer for your account will stop.',
   });
   app.agentsStopConfirmed = choice === 0;
   return app.agentsStopConfirmed;
@@ -132,7 +132,7 @@ function confirmStopAgents() {
 /** Account mode: connect this computer with the bundled runner, approving the code in the window. */
 function connectThisComputer(origin) {
   const { bin } = resources();
-  if (!existsSync(bin)) throw new Error(`The Sculptured program is missing: ${bin}`);
+  if (!existsSync(bin)) throw new Error(`The CopperTide program is missing: ${bin}`);
   runner = startRunner({ bin, origin, dataDir: path.join(app.getPath('userData'), 'runner'), name: os.hostname() });
   runner.onCode((code) => window?.loadURL(`${origin}/connect?code=${encodeURIComponent(code)}`));
   runner.onConnected(() => { if (window && !window.webContents.getURL().startsWith(origin + '/')) window.loadURL(origin); });
@@ -142,7 +142,7 @@ function connectThisComputer(origin) {
 function menu() {
   Menu.setApplicationMenu(Menu.buildFromTemplate([
     {
-      label: 'Sculptured',
+      label: 'CopperTide',
       submenu: [
         { label: 'Switch mode…', click: () => { rmSync(path.join(app.getPath('userData'), 'mode.json'), { force: true }); app.relaunch(); app.quit(); } },
         { type: 'separator' },

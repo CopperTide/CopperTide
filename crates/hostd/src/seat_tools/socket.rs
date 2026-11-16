@@ -44,13 +44,13 @@ impl Default for SocketLimits {
 }
 
 /// The words an agent reads when the socket refuses its call.
-pub const TOO_LARGE: &str = "This call is too large for Sculptured (the limit is 1 MiB). Send a shorter question or report.";
-pub const TOO_SLOW: &str = "Sculptured did not receive the whole tool call in time.";
+pub const TOO_LARGE: &str = "This call is too large for CopperTide (the limit is 1 MiB). Send a shorter question or report.";
+pub const TOO_SLOW: &str = "CopperTide did not receive the whole tool call in time.";
 pub const TOO_MANY: &str =
-    "Sculptured is handling too many tool calls right now. Try again in a moment.";
+    "CopperTide is handling too many tool calls right now. Try again in a moment.";
 pub const TOO_MANY_FOR_AGENT: &str =
-    "This agent already has too many Sculptured tool calls waiting. Wait for one to finish.";
-pub const NOT_TEXT: &str = "Sculptured could not read this tool call: it is not UTF-8 text.";
+    "This agent already has too many CopperTide tool calls waiting. Wait for one to finish.";
+pub const NOT_TEXT: &str = "CopperTide could not read this tool call: it is not UTF-8 text.";
 pub const NO_APPROVE: &str = "The approve tool is not available to this agent.";
 const NOT_VALID: &str = "this agent's tool token is not valid (its process is not running)";
 
@@ -246,7 +246,7 @@ async fn read_call(
     };
     let line = String::from_utf8(bytes).map_err(|_| NOT_TEXT.to_string())?;
     let req: ToolRequest = serde_json::from_str(&line)
-        .map_err(|e| format!("Sculptured could not read this tool call: {e}"))?;
+        .map_err(|e| format!("CopperTide could not read this tool call: {e}"))?;
     let (seat, approve) = sup.tool_grant(&req.token).ok_or(NOT_VALID)?;
     // `approve` is only for an agent launched with it (a restricted Claude agent), whatever its shim says.
     if req.tool == "approve" && !approve {

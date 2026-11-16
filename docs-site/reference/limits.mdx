@@ -51,14 +51,14 @@ On by default; change them in the team's **Settings** → **More settings** → 
 
 | Stop | What happens |
 | --- | --- |
-| **Soft stop** | Sculptured interrupts the current turn if there is one, then asks the agent for a summary "within approximately 5,000 additional output tokens". The agent stops when that wrap-up turn ends, after about 5,000 more output tokens, or after 5 minutes, whichever comes first. |
+| **Soft stop** | CopperTide interrupts the current turn if there is one, then asks the agent for a summary "within approximately 5,000 additional output tokens". The agent stops when that wrap-up turn ends, after about 5,000 more output tokens, or after 5 minutes, whichever comes first. |
 | **Hard stop** | The process is stopped with no further turn, along with every subagent it started. |
 
 Usage reports can arrive late, so a soft stop can overshoot its 5,000-token estimate. See [Control live agents](/guides/control).
 
 ## Subagents
 
-An agent can start tracked helpers with the `spawn_agent` tool ([agent tools](/reference/agent-tools)). Sculptured sets no limits on them. A team can set its own in its **Settings**, under **More settings**; blank means no limit:
+An agent can start tracked helpers with the `spawn_agent` tool ([agent tools](/reference/agent-tools)). CopperTide sets no limits on them. A team can set its own in its **Settings**, under **More settings**; blank means no limit:
 
 | Team setting | Refusal the agent gets |
 | --- | --- |
@@ -71,15 +71,15 @@ A spawn is also refused when the parent's budget is used up, the parent is stopp
 
 ## Plan usage holds
 
-Claude Code and Codex report how much of your Claude or ChatGPT plan is used. When the fullest window that has not reset yet is at **90% or more**, Sculptured holds **new** work:
+Claude Code and Codex report how much of your Claude or ChatGPT plan is used. When the fullest window that has not reset yet is at **90% or more**, CopperTide holds **new** work:
 
 - **Start team** is held. The Design page explains why and offers **Start anyway**.
 - `spawn_agent` is refused. The agent is told to finish with the agents it has, or ask you.
 - Work already running is **not** stopped.
 
-These readings are for your whole account, so they include use outside Sculptured. Claude Code reports usage only after a Claude agent has run, so before that there is no reading and no hold.
+These readings are for your whole account, so they include use outside CopperTide. Claude Code reports usage only after a Claude agent has run, so before that there is no reading and no hold.
 
-When a turn hits the provider's own limit, Sculptured shows the CLI's message and the reset time if the CLI gave one. Nothing retries it for you; send "continue" after the reset.
+When a turn hits the provider's own limit, CopperTide shows the CLI's message and the reset time if the CLI gave one. Nothing retries it for you; send "continue" after the reset.
 
 ## Questions and messages
 

@@ -356,7 +356,7 @@ pub(crate) fn write_plugin(dir: &Path, skills: &[Skill]) -> std::io::Result<()> 
         std::fs::remove_dir_all(dir)?;
     }
     std::fs::create_dir_all(dir.join(".claude-plugin"))?;
-    let manifest = serde_json::json!({ "name": PLUGIN, "version": "1.0.0", "description": "This agent's skills, from its Sculptured team" });
+    let manifest = serde_json::json!({ "name": PLUGIN, "version": "1.0.0", "description": "This agent's skills, from its CopperTide team" });
     std::fs::write(dir.join(".claude-plugin/plugin.json"), manifest.to_string())?;
     for s in skills {
         // Names were checked by the server; a name that could leave the folder is skipped anyway.

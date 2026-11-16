@@ -1477,7 +1477,7 @@ fn answered(id: &str) -> EventBody {
 fn answer_failed(id: &str) -> EventBody {
     EventBody::QuestionAnswerFailed {
         question_id: id.into(),
-        reason: "Sculptured's agent runner is not connected".into(),
+        reason: "CopperTide's agent runner is not connected".into(),
     }
 }
 

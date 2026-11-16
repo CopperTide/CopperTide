@@ -32,7 +32,7 @@ pub struct SeatToolsHost {
 }
 
 /// What a waiting tool call returns when its agent's process ended first (nobody reads it then).
-pub const CALL_ENDED: &str = "This agent's process ended before Sculptured answered.";
+pub const CALL_ENDED: &str = "This agent's process ended before CopperTide answered.";
 
 impl Supervisor {
     /// The seat a seat-tools token belongs to, while that seat's process runs.

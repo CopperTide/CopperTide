@@ -95,7 +95,7 @@ pub fn spawn(st: AppState, rig: String, start: i64, job: Job) {
 /// Why the command could not run at all, in words a person can act on.
 fn unrunnable(e: crate::error::ApiError) -> String {
     if e.code == "unknown_op" {
-        return "This computer's Sculptured is too old to run a dispatch command. Update Sculptured on that computer and run `sculptured connect` again.".into();
+        return "This computer's CopperTide is too old to run a dispatch command. Update CopperTide on that computer and run `sculptured connect` again.".into();
     }
     format!(
         "The dispatch command did not run: {} Nothing was dispatched.",
@@ -219,7 +219,7 @@ fn a_computer_whose_sculptured_predates_dispatch_commands_is_told_to_update() {
         localops::LocalError::bad("unknown_op", "unknown variant `run-dispatch`").into();
     let why = unrunnable(e);
     assert!(
-        why.contains("too old") && why.contains("Update Sculptured on that computer"),
+        why.contains("too old") && why.contains("Update CopperTide on that computer"),
         "{why}"
     );
 }

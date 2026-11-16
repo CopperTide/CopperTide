@@ -780,7 +780,7 @@ fn unknown_server_requests_are_refused_not_ignored() {
         assert_eq!((&r["id"], r["error"]["code"].as_i64()), (&id, Some(-32601)));
         assert_eq!(
             r["error"]["message"],
-            format!("Sculptured does not handle {method}")
+            format!("CopperTide does not handle {method}")
         );
         assert!(
             matches!(&parsed.events[..], [DriverEvent::Unrecognized { .. }]),

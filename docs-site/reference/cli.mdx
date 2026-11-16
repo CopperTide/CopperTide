@@ -3,7 +3,7 @@ title: CLI reference
 description: Every command and flag of the sculptured program, with defaults and examples.
 ---
 
-`sculptured` is one program with several commands. On a connected computer it runs as a background service, so you rarely type it yourself. Use these pages when you want to change what a computer allows, run Sculptured entirely on your own machine, or script a setup.
+`sculptured` is one program with several commands. On a connected computer it runs as a background service, so you rarely type it yourself. Use these pages when you want to change what a computer allows, run CopperTide entirely on your own machine, or script a setup.
 
 ```bash
 sculptured <command> [options]
@@ -11,10 +11,10 @@ sculptured <command> [options]
 
 | Command | What it does |
 | --- | --- |
-| [`connect`](#sculptured-connect) | Link this computer to a Sculptured account and run that account's agents here. |
+| [`connect`](#sculptured-connect) | Link this computer to a CopperTide account and run that account's agents here. |
 | [`allow`](#sculptured-allow) | Let agents from your account work in one more folder on this computer. |
-| [`serve`](#sculptured-serve) | Run a complete Sculptured on this computer: the app, its data and a local runner. |
-| [`hostd`](#sculptured-hostd) | Run only the agent runner, dialling a Sculptured server. `serve` normally starts it for you. |
+| [`serve`](#sculptured-serve) | Run a complete CopperTide on this computer: the app, its data and a local runner. |
+| [`hostd`](#sculptured-hostd) | Run only the agent runner, dialling a CopperTide server. `serve` normally starts it for you. |
 
 `sculptured --version` prints the version. `sculptured <command> --help` prints the flags of one command.
 
@@ -24,7 +24,7 @@ flowchart LR
     C["sculptured connect<br/>(runner)"] -- "starts" --> A["Claude Code / Codex agents"]
     AL["sculptured allow"] -- "edits runner.json" --> C
   end
-  C -- "outbound websocket" --> H["Sculptured account<br/>(hosted)"]
+  C -- "outbound websocket" --> H["CopperTide account<br/>(hosted)"]
   subgraph self["Self-hosted"]
     S["sculptured serve"] -- "starts" --> HD["hostd (local runner)"]
     HD -- "starts" --> A2["agents"]
@@ -165,7 +165,7 @@ Keeps a secret that a component names as `${NAME}` (such as a remote MCP server'
 
 ## `sculptured serve`
 
-Runs a complete Sculptured on your own computer: the web app, its database and a local runner that starts your agents. See [Run it yourself](/operations).
+Runs a complete CopperTide on your own computer: the web app, its database and a local runner that starts your agents. See [Run it yourself](/operations).
 
 ```bash
 sculptured serve [options]
@@ -173,7 +173,7 @@ sculptured serve [options]
 
 | Flag | Default | Meaning |
 | --- | --- | --- |
-| `--port <PORT>` | `4410` | The port to listen on. Sculptured listens on `127.0.0.1` only. |
+| `--port <PORT>` | `4410` | The port to listen on. CopperTide listens on `127.0.0.1` only. |
 | `--data-dir <DIR>` | `~/.sculptured` | Where projects, transcripts and settings are kept. Also read from `SCULPTURED_DATA_DIR`. |
 | `--web-dir <DIR>` | `web/dist` | The built web app to serve. An installed copy uses `~/.sculptured/web`. |
 | `--claude-program <PATH>` | found on `PATH` | The Claude Code program to run. |
@@ -192,7 +192,7 @@ Then open `http://127.0.0.1:4410`. The runner is started in its own session, so 
 
 ## `sculptured hostd`
 
-Runs only the agent runner and dials a Sculptured server. `serve` starts one for you; run it yourself only when you know you need a separate runner.
+Runs only the agent runner and dials a CopperTide server. `serve` starts one for you; run it yourself only when you know you need a separate runner.
 
 | Flag | Default | Meaning |
 | --- | --- | --- |
@@ -217,7 +217,7 @@ Runs only the agent runner and dials a Sculptured server. `serve` starts one for
 
 <CardGroup cols={2}>
   <Card title="Connect a computer" icon="plug" href="/connect-a-computer">Copy the connect command and run it on macOS, Windows or Linux.</Card>
-  <Card title="Run it yourself" icon="server" href="/operations">Run Sculptured with `serve`, back it up and upgrade it.</Card>
+  <Card title="Run it yourself" icon="server" href="/operations">Run CopperTide with `serve`, back it up and upgrade it.</Card>
   <Card title="Security boundaries" icon="shield" href="/security">What a connected computer allows, and what it never exposes.</Card>
   <Card title="Troubleshooting" icon="wrench" href="/troubleshooting">Fix a computer that does not connect or an agent that does not start.</Card>
 </CardGroup>

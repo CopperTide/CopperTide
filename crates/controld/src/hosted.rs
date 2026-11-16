@@ -29,7 +29,7 @@ pub fn local_only(method: &str, path: &str) -> bool {
 pub fn needs_computer() -> ApiError {
     ApiError::conflict(
         "needs_computer",
-        "This works only in Sculptured run on your own computer, not in the hosted app.",
+        "This works only in CopperTide run on your own computer, not in the hosted app.",
     )
 }
 
@@ -45,7 +45,7 @@ pub fn verify(
         ApiError::new(
             StatusCode::UNAUTHORIZED,
             "login_required",
-            "sign in to use Sculptured",
+            "sign in to use CopperTide",
         )
     };
     let (Some(user), Some(ts), Some(sig)) = (

@@ -92,7 +92,7 @@ async fn a_garbled_socket_request_gets_a_plain_error() {
         reply["error"]
             .as_str()
             .unwrap()
-            .starts_with("Sculptured could not read this tool call"),
+            .starts_with("CopperTide could not read this tool call"),
         "{reply}"
     );
 }

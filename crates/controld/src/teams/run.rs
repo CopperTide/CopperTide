@@ -259,7 +259,7 @@ pub(crate) async fn start_for_event(
     }
     Err(err["error"]["message"]
         .as_str()
-        .unwrap_or("Sculptured could not start the team")
+        .unwrap_or("CopperTide could not start the team")
         .to_string())
 }
 

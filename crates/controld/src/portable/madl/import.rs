@@ -120,7 +120,7 @@ impl Cx<'_> {
             self.drop(
                 format!("{at}/preferences/models/{r}"),
                 format!(
-                    "Sculptured runs Claude Code and Codex agents; the model for `{r}` was not kept"
+                    "CopperTide runs Claude Code and Codex agents; the model for `{r}` was not kept"
                 ),
             );
         }
@@ -183,7 +183,7 @@ impl Cx<'_> {
             self.drop(
                 format!("/groups/{i}/parent"),
                 format!(
-                    "Group `{}` was inside another; Sculptured's groups sit side by side",
+                    "Group `{}` was inside another; CopperTide's groups sit side by side",
                     g.id
                 ),
             );
@@ -246,7 +246,7 @@ impl Cx<'_> {
             .and_then(|d| d.restrictions.as_ref()?.approvals.as_ref());
         let (posture, others) = care::posture_in(approvals);
         if !others.is_empty() {
-            self.drop("/defaults/restrictions/approvals/required_for", format!("Sculptured asks a person about what the agent's runtime asks permission for; approvals for {} were not kept", others.join(", ")));
+            self.drop("/defaults/restrictions/approvals/required_for", format!("CopperTide asks a person about what the agent's runtime asks permission for; approvals for {} were not kept", others.join(", ")));
         }
         PortableSettings {
             posture,

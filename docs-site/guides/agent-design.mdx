@@ -68,17 +68,17 @@ Under **Advanced** in the agent's details:
 | **unrestricted** (the default) | Runs without permission prompts | Approvals off, no sandbox |
 | **restricted** | Permission prompts come to you as approvals | Asks before untrusted actions |
 
-Sculptured's own tools, including questions, reports and workflow calls, do not raise permission prompts. **Restricted** adds the CLI's approval controls; it does not make an agent read-only. Claude tool approvals are allowed automatically if their timeout expires. Read [Questions and approvals](/guides/questions) before relying on those controls.
+CopperTide's own tools, including questions, reports and workflow calls, do not raise permission prompts. **Restricted** adds the CLI's approval controls; it does not make an agent read-only. Claude tool approvals are allowed automatically if their timeout expires. Read [Questions and approvals](/guides/questions) before relying on those controls.
 
 ### Token limit
 
-**Token limit** caps the tokens an agent uses in one run. Choose which tokens count (**all tokens**, **all except cache reads**, or **output only**) and whether the limit should **include agents it spawns**. When the agent reaches the limit, Sculptured asks it to wrap up with a summary, then stops it.
+**Token limit** caps the tokens an agent uses in one run. Choose which tokens count (**all tokens**, **all except cache reads**, or **output only**) and whether the limit should **include agents it spawns**. When the agent reaches the limit, CopperTide asks it to wrap up with a summary, then stops it.
 
 <Warning>Usage is reported after each turn, so an agent can go over its limit by up to one turn. Leave that margin when you set it.</Warning>
 
 ### Check
 
-**Check** is a command Sculptured runs in the agent's folder after each turn the agent finishes, for example `npm test`. Exit code 0 shows "check passed"; anything else shows "check failed", with its output. A check result is verified by Sculptured; the agent's own "done" is only agent-reported. The command runs as you, with your permissions.
+**Check** is a command CopperTide runs in the agent's folder after each turn the agent finishes, for example `npm test`. Exit code 0 shows "check passed"; anything else shows "check failed", with its output. A check result is verified by CopperTide; the agent's own "done" is only agent-reported. The command runs as you, with your permissions.
 
 ### Briefing
 

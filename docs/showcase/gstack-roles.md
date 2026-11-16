@@ -49,7 +49,7 @@ matching gstack skill (for example `/review` or `/qa`) and that it is not requir
 - gstack installs into `~/.claude/skills`, so its skills are visible to **every** Claude agent on
   this computer, not only this team.
 - Its setup also registers Claude Code hooks (for example a Stop hook and AskUserQuestion hooks).
-  Nobody has yet checked whether these interfere with Sculptured's question routing or turn-end
+  Nobody has yet checked whether these interfere with CopperTide's question routing or turn-end
   handoffs. Run one small check before relying on it.
 - gstack writes its own logs and analytics on your computer. Read its README for what it records.
 - gstack's Codex support is experimental. Codex agents would ignore the skill names in the jobs.
@@ -60,13 +60,13 @@ Not built. The idea is to attach skills (any folder with a `SKILL.md`, not only 
 or a group under Advanced, show them on the block (name, description, source file, where it came
 from), and make them visible only to that agent when it starts. Open questions:
 
-1. Copy attached skills into Sculptured (portable and shareable, but we store third-party files) or
+1. Copy attached skills into CopperTide (portable and shareable, but we store third-party files) or
    reference them by path (lighter, not portable)?
 2. Attach per agent, per group (inherited), or both?
 3. A Codex agent with Claude skills attached: refuse to start, warn and ignore, or pass the skill
    text in as instructions?
 4. When a globally installed gstack (hooks, analytics, auto-update) affects every Claude agent, is
-   that acceptable, or should Sculptured warn when it finds one?
+   that acceptable, or should CopperTide warn when it finds one?
 5. How does the installed Claude Code load skills for one session only (`--add-dir`, a plugin
    folder)? This needs a spike against the real CLI before choosing a design.
 6. Many skills depend on other files (gstack's need its `bin/` scripts, Bun and sibling skills).

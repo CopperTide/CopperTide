@@ -146,7 +146,7 @@ pub(crate) fn briefing_with(d: &TeamDraft, seat: &str, message: &str) -> Option<
     if let Some(w) = &d.workflow {
         lines.push(workflow_line(w));
     }
-    lines.push("Work only on your assigned job. A leader plans and coordinates the configured team; it does not replace the other agents or implement their jobs unless explicitly assigned. Sculptured automatically delivers completed replies along 'hands work to' connections. Use spawn_agent to create helpers; all child agents must be managed through this tool so their lifecycle and communication appear on the board. Do not create untracked agents through native CLI delegation, shell processes or external tools. Do not replace configured teammates. Use team_status and send_agent_message to ask teammates for help, request features, report results and coordinate shared interfaces. Include exact artifact revisions and task context. 'Reports to' and 'watches' are descriptive only, not automatic routing. Report missing instructions or blocked dependencies rather than guessing. A reported result is not independently verified. Send no acknowledgements or status-only messages: each one makes the receiver re-read its whole conversation. Mark a status note that needs no action with fyi: it reaches the receiver with its next message. Never mark results, questions or requests fyi. To wait for a teammate, end your turn: a message wakes you; do not sleep or poll team_status.".into());
+    lines.push("Work only on your assigned job. A leader plans and coordinates the configured team; it does not replace the other agents or implement their jobs unless explicitly assigned. CopperTide automatically delivers completed replies along 'hands work to' connections. Use spawn_agent to create helpers; all child agents must be managed through this tool so their lifecycle and communication appear on the board. Do not create untracked agents through native CLI delegation, shell processes or external tools. Do not replace configured teammates. Use team_status and send_agent_message to ask teammates for help, request features, report results and coordinate shared interfaces. Include exact artifact revisions and task context. 'Reports to' and 'watches' are descriptive only, not automatic routing. Report missing instructions or blocked dependencies rather than guessing. A reported result is not independently verified. Send no acknowledgements or status-only messages: each one makes the receiver re-read its whole conversation. Mark a status note that needs no action with fyi: it reaches the receiver with its next message. Never mark results, questions or requests fyi. To wait for a teammate, end your turn: a message wakes you; do not sleep or poll team_status.".into());
     lines.push(EFFICIENCY.into());
     lines.extend(crate::skills::briefing_lines(d, me));
     lines.push("Use downstream jobs to decide your handoff: when another agent owns implementation, provide its plan and inputs instead of doing that agent's work. Respect project-wide constraints stated in the jobs (such as output folders or no publishing) throughout the team. Ask the operator about conflicting instructions.".into());
@@ -161,7 +161,7 @@ pub(crate) fn briefing_with(d: &TeamDraft, seat: &str, message: &str) -> Option<
 /// How the dynamic workflow works, for every agent of a team with one.
 pub(super) fn workflow_line(w: &Workflow) -> String {
     let who = match &w.dispatch {
-        Some(_) => "Sculptured makes the batch by running the workflow's dispatch command once per project start; no agent calls dispatch_work.".to_string(),
+        Some(_) => "CopperTide makes the batch by running the workflow's dispatch command once per project start; no agent calls dispatch_work.".to_string(),
         None => format!("Only agent {} calls dispatch_work(batch_id, summary, tasks:[{{id,title,context,mode,depends_on}}]) once per project start. It chooses N within 1–{}.", w.dispatcher, w.max_tasks),
     };
     format!(
@@ -242,7 +242,7 @@ pub(super) fn own_contract(me: &DraftAgent) -> Option<String> {
         .map(|r| format!(" Why: {}", r.trim()))
         .unwrap_or_default();
     Some(format!(
-        "Your data contract: {}.{why} Stay within it: Sculptured refuses file reads and writes outside it where it can tell.",
+        "Your data contract: {}.{why} Stay within it: CopperTide refuses file reads and writes outside it where it can tell.",
         parts.join("; ")
     ))
 }

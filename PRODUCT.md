@@ -13,7 +13,7 @@ Three audiences, all confirmed:
 Sessions vary. Sometimes the user designs and steers closely, with the board open and frequent intervention. Sometimes they set a team up, start it and check back over hours while doing other work. Both patterns are equally common.
 
 ## Product Purpose
-Sculptured is a visual workspace for teams of agents doing complex tasks. You give each agent a job and a folder, connect their handoffs, and follow the work from one board. Opening any agent shows its conversation, lets you answer its questions and lets you send guidance. Success means a newcomer can run a first team without learning internal concepts, and an expert can design, run and steer large teams quickly.
+CopperTide is a visual workspace for teams of agents doing complex tasks. You give each agent a job and a folder, connect their handoffs, and follow the work from one board. Opening any agent shows its conversation, lets you answer its questions and lets you send guidance. Success means a newcomer can run a first team without learning internal concepts, and an expert can design, run and steer large teams quickly.
 
 ## Positioning
 The team is a board. A multi-agent team is designed and steered visually: each agent's job, its folder and who hands work to whom are laid out on one board, and the user can open and talk to any agent from that board. Visualizations are the primary interface. Raw events stay available beside them as evidence.
@@ -31,7 +31,7 @@ The team is a board. A multi-agent team is designed and steered visually: each a
 - **Feature depth:** advanced features (workflows, stages, review panels, checks, merges, schedules, decision log, budgets) must stay reachable without burdening newcomers.
 
 ## Brand Commitments
-- The name is Sculptured.
+- The name is CopperTide.
 - Existing assets are the logo and banner in `docs/images/` and `web/public`, plus the brand mark component.
 
 ## Evidence on Hand

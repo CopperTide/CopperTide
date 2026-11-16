@@ -1,6 +1,6 @@
 ---
 title: Concepts
-description: The words Sculptured uses, how the parts connect, and what each status means.
+description: The words CopperTide uses, how the parts connect, and what each status means.
 ---
 
 A **project** holds a team's design and run history. Its **agents** work in folders you choose and pass results along the connections you draw. This page explains those parts and the labels you will see as the team runs.
@@ -23,7 +23,7 @@ Arrows on the board say how agents relate.
 
 | Arrow | Effect |
 | --- | --- |
-| **hands work to** | When the source agent finishes a work turn, Sculptured passes its final reply to the receiving agent. The source starts first. |
+| **hands work to** | When the source agent finishes a work turn, CopperTide passes its final reply to the receiving agent. The source starts first. |
 | **reports to** | Design intent only. It documents the hierarchy; nothing is enforced. |
 | **watches** | Design intent only. Nothing is enforced. |
 
@@ -37,9 +37,9 @@ A **workflow** replaces ordinary arrows with stages. A **dispatcher** agent read
 | --- | --- |
 | **Agent** | An agent, which reports the outcome. |
 | **Review panel** | Several reviewers, whose verdicts are combined. |
-| **Check** | A command Sculptured runs, such as `npm test`. Its result is verified evidence. |
+| **Check** | A command CopperTide runs, such as `npm test`. Its result is verified evidence. |
 | **Person decides** | You, with approve or rework and an optional note. |
-| **Merge** | Sculptured, merging the item's branch back. A conflict sends it back. |
+| **Merge** | CopperTide, merging the item's branch back. A conflict sends it back. |
 
 An **assembly** agent finishes once every item is done. See [Workflows](/guides/workflows).
 
@@ -51,7 +51,7 @@ An **assembly** agent finishes once every item is done. See [Workflows](/guides/
 | **Design** and **Run** | The two views of a project. **Design** is the editable board. **Run** shows the agents that are running now, what each is doing, and the handoffs between them. |
 | **Run** | One start-to-stop of a team. Each run's history is kept. |
 | **Question** | An agent asking you for a decision. It shows as **needs you** until you answer, or until it times out and the agent decides for itself. See [Questions and approvals](/guides/questions). |
-| **Managed subagent** | An agent another agent started with Sculptured's tools while the team runs. It shows in Run under its parent. |
+| **Managed subagent** | An agent another agent started with CopperTide's tools while the team runs. It shows in Run under its parent. |
 | **Own copy** | An agent's own Git working copy of the project, so agents working at once don't overwrite each other. |
 | **Token use** | The tokens each agent's CLI reports, shown live. Limits and estimates are on [Limits and usage](/reference/limits). |
 
@@ -71,15 +71,15 @@ The server can ask a computer to do something, but the computer has the last wor
 
 ## Evidence and provenance
 
-Progress labels describe where the work stands: **Planned**, **In progress** or **Blocked**, for example. Evidence labels describe how Sculptured obtained a fact. Read them together: an agent can finish a task without its result having been checked.
+Progress labels describe where the work stands: **Planned**, **In progress** or **Blocked**, for example. Evidence labels describe how CopperTide obtained a fact. Read them together: an agent can finish a task without its result having been checked.
 
 | Word | Meaning |
 | --- | --- |
 | **Agent-reported** | The agent said so, for example "done" or "tests pass". A claim, not proof. |
-| **Captured** | Sculptured recorded it directly, such as a tool call and its result. |
+| **Captured** | CopperTide recorded it directly, such as a tool call and its result. |
 | **Observed** | Seen on disk or in Git, such as a changed file. |
 | **Estimated** | Worked out by a rule of thumb, such as a token count from text length. |
-| **Verified** | A check Sculptured ran passed; the result covers what that check tests. |
+| **Verified** | A check CopperTide ran passed; the result covers what that check tests. |
 | **Unknown** | No supporting information is available. |
 
 <Note>A file existing, a tool succeeding or an agent saying "done" does not show that the work is correct. Only a check that ran counts as verified.</Note>
@@ -100,7 +100,7 @@ Progress labels describe where the work stands: **Planned**, **In progress** or 
 ```mermaid
 flowchart LR
   B["Your browser"] -- "HTTPS, signed in" --> G["Gateway: app.usesculptured.com"]
-  G -- "your requests only" --> I["Your own Sculptured: board, journal, workflows"]
+  G -- "your requests only" --> I["Your own CopperTide: board, journal, workflows"]
   R["Runner on your computer"] -- "connects out through the gateway" --> I
   I -- "start, message, stop" --> R
   R --> C["Claude Code"]
@@ -109,7 +109,7 @@ flowchart LR
   X -- "read and edit" --> F
 ```
 
-The hosted service signs you in and provides a separate Sculptured instance for your account's projects and run history. Your computer's **runner** opens an outbound connection to the service, so you do not need to open an inbound port. Agents run on your computer using its CLI sign-ins and folder permissions.
+The hosted service signs you in and provides a separate CopperTide instance for your account's projects and run history. Your computer's **runner** opens an outbound connection to the service, so you do not need to open an inbound port. Agents run on your computer using its CLI sign-ins and folder permissions.
 
   </Tab>
   <Tab title="Self-hosted">

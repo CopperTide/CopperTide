@@ -1,16 +1,16 @@
 ---
 title: Run it yourself
-description: Build Sculptured from source, run it on your own computer, and back up, upgrade and roll back your data.
+description: Build CopperTide from source, run it on your own computer, and back up, upgrade and roll back your data.
 ---
 
-Run Sculptured locally to keep the app, runner and run history on your computer without a Sculptured account. The `sculptured serve` command serves the app on port 4410 and starts the runner. Sculptured stores its data in `~/.sculptured/`; agents work in the project folders you choose. The app and runner are open source under Apache 2.0.
+Run CopperTide locally to keep the app, runner and run history on your computer without a CopperTide account. The `sculptured serve` command serves the app on port 4410 and starts the runner. CopperTide stores its data in `~/.sculptured/`; agents work in the project folders you choose. The app and runner are open source under Apache 2.0.
 
 <Tabs>
   <Tab title="On your own computer">
     The app, database and agents run on your machine. Team designs and run history are stored locally, with no usage analytics. Claude Code and Codex still send context to their providers.
   </Tab>
-  <Tab title="With a Sculptured account">
-    The hosted beta runs your Sculptured for you, and your agents run on the computers you connect. See [Connect a computer](/connect-a-computer). You don't need anything on this page.
+  <Tab title="With a CopperTide account">
+    The hosted beta runs your CopperTide for you, and your agents run on the computers you connect. See [Connect a computer](/connect-a-computer). You don't need anything on this page.
   </Tab>
 </Tabs>
 
@@ -27,9 +27,9 @@ flowchart LR
 
 | You need | Why |
 | --- | --- |
-| Linux or macOS | `sculptured serve` runs on Linux and macOS. On Windows, Sculptured runs only as a connected computer for a Sculptured account. |
+| Linux or macOS | `sculptured serve` runs on Linux and macOS. On Windows, CopperTide runs only as a connected computer for a CopperTide account. |
 | Rust 1.95 or newer and Node.js 24 | To build the program and the web app. |
-| Claude Code or Codex, signed in as your own user | Sculptured uses their existing sign-in and never stores provider credentials. |
+| Claude Code or Codex, signed in as your own user | CopperTide uses their existing sign-in and never stores provider credentials. |
 | Git | For agents' own copies of a repository and the Git panel. |
 
 
@@ -60,7 +60,7 @@ cd Sculptured
     ```bash
     ./target/release/sculptured serve --port 4410 --web-dir web/dist
     ```
-    Open http://127.0.0.1:4410. If Sculptured is already running, open that address instead of starting a second copy.
+    Open http://127.0.0.1:4410. If CopperTide is already running, open that address instead of starting a second copy.
   </Step>
 </Steps>
 
@@ -69,12 +69,12 @@ cd Sculptured
 | Option | Default | Meaning |
 | --- | --- | --- |
 | `--port` | `4410` | Port on `127.0.0.1`. |
-| `--data-dir` | `~/.sculptured` | Where Sculptured stores its data. Also read from `SCULPTURED_DATA_DIR`. |
+| `--data-dir` | `~/.sculptured` | Where CopperTide stores its data. Also read from `SCULPTURED_DATA_DIR`. |
 | `--web-dir` | `web/dist` | The built web app. |
 | `--claude-program` | found on `PATH` | Full path to Claude Code, if it is not on `PATH`. |
 | `--codex-program` | found on `PATH` | Full path to Codex, if it is not on `PATH`. |
 
-Sculptured logs to the terminal. Set `RUST_LOG=debug` for more detail. See the [CLI reference](/reference/cli) for every command.
+CopperTide logs to the terminal. Set `RUST_LOG=debug` for more detail. See the [CLI reference](/reference/cli) for every command.
 
 <Warning>Do not expose port 4410 to the Internet or put it behind a public reverse proxy. The local app controls your agents and reads your project files. It accepts only requests addressed to `127.0.0.1` or `localhost`, so a public proxy would either fail or defeat that protection.</Warning>
 
@@ -86,13 +86,13 @@ Sculptured logs to the terminal. Set `RUST_LOG=debug` for more detail. See the [
 | `host-token` | The secret the local runner uses to connect to the app. Private to your user. |
 | `host-local/` | The local runner's own state: its journal, its lock, the address of the running app, and each agent's skills (`skills/`) and Signet-Eval rules (`signet/`). |
 | `copies/` | Agents' own copies of your repositories, when a team uses them. They can hold work not yet merged. |
-| `runner/` | Only on a computer connected to a Sculptured account: its identity and the folders it allows. |
+| `runner/` | Only on a computer connected to a CopperTide account: its identity and the folders it allows. |
 
 The runner can outlive the app. If you restart `serve`, the running runner finds the new app on its own, and running agents keep going.
 
 ## Back up
 
-The database uses SQLite's write-ahead log, so copying only `controld.sqlite` while Sculptured runs is not a reliable backup. Pick one:
+The database uses SQLite's write-ahead log, so copying only `controld.sqlite` while CopperTide runs is not a reliable backup. Pick one:
 
 <Tabs>
   <Tab title="While it runs">
@@ -101,7 +101,7 @@ The database uses SQLite's write-ahead log, so copying only `controld.sqlite` wh
     ```
   </Tab>
   <Tab title="Stopped">
-    Stop Sculptured, then copy the whole `~/.sculptured/` folder.
+    Stop CopperTide, then copy the whole `~/.sculptured/` folder.
   </Tab>
 </Tabs>
 
@@ -120,11 +120,11 @@ You can also keep a team outside the database: **Export team file** saves it as 
 
 ## Roll back
 
-Database upgrades are not reversed automatically. To go back to an older version, stop Sculptured, restore the backup you took before upgrading, and start the older program.
+Database upgrades are not reversed automatically. To go back to an older version, stop CopperTide, restore the backup you took before upgrading, and start the older program.
 
 ## After a restart
 
-Sculptured keeps teams, runs, messages and questions in its database. After a restart:
+CopperTide keeps teams, runs, messages and questions in its database. After a restart:
 
 - Agents whose process is still alive return to **running**.
 - Agents whose process ended show **needs attention** with a reason, and the team offers **Resume** (the agent's own session, when it can be resumed), **Start fresh** or **Leave stopped**. Nothing relaunches until you choose.
@@ -134,7 +134,7 @@ See [States and evidence](/reference/states).
 
 ## Other computers
 
-A self-hosted Sculptured runs agents on the computer it runs on. To run agents on other computers, such as a Windows PC or a second laptop, connect them to a Sculptured account. See [Connect a computer](/connect-a-computer).
+A self-hosted CopperTide runs agents on the computer it runs on. To run agents on other computers, such as a Windows PC or a second laptop, connect them to a CopperTide account. See [Connect a computer](/connect-a-computer).
 
 ## Next steps
 

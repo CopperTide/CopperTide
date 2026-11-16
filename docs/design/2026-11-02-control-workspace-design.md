@@ -5,7 +5,7 @@ controller decided it; everything else the user said or confirmed.
 
 ## Intent
 
-Sculptured is becoming a platform for testing, watching, controlling and deploying agent teams.
+CopperTide is becoming a platform for testing, watching, controlling and deploying agent teams.
 The user wants it to feel like the control software of a mission-control room or a ship's bridge:
 one dense screen where the operator watches a running deployment and steps in, arranged however
 the operator likes. That is "a custom deployment space": every window is a pane that can be
@@ -18,7 +18,7 @@ gets a good screen on first open.
 
 Two pages that share one look and one docking system.
 
-1. **Control**: one per project, at `/p/:team/control`. It is the control system for a Sculptured
+1. **Control**: one per project, at `/p/:team/control`. It is the control system for a CopperTide
    deployment (a team running for real) and also the interface for a **simulated deployment** (a team
    running in Arena). Both open the same workspace. A simulated one adds rewind controls.
 2. **Arena control**: a separate page for running Arena itself: worlds and their integrations,
@@ -72,7 +72,7 @@ Two pages that share one look and one docking system.
 
 ## Anti-goals
 
-- A dashboard that looks impressive but hides or overstates the truth. Sculptured's honesty rules
+- A dashboard that looks impressive but hides or overstates the truth. CopperTide's honesty rules
   apply in every pane:
   - status is a glyph plus a word, never colour alone;
   - what an agent reports about itself is "reported";
@@ -150,7 +150,7 @@ Two pages that share one look and one docking system.
 Panes don't call the server directly. They read a **source** with one interface, and there are
 two implementations:
 
-- **A deployment source**, for a Sculptured team. It is built on what exists:
+- **A deployment source**, for a CopperTide team. It is built on what exists:
   - the shell's live stream (`shell.teams`, `RigState`) and `useTeamEvents`;
   - questions and changes;
   - usage and budget;

@@ -34,7 +34,7 @@ pub fn call(st: &AppState, seat: &str, tool: &str, args: &Value) -> Result<Value
                 .as_ref()
                 .ok_or("This project has no dynamic workflow.")?;
             if w.dispatch.is_some() {
-                return Err("This workflow's batch comes from its dispatch command, which Sculptured runs; no agent dispatches it.".into());
+                return Err("This workflow's batch comes from its dispatch command, which CopperTide runs; no agent dispatches it.".into());
             }
             if w.dispatcher != agent.id {
                 return Err("Only the configured dispatcher can create a batch.".into());

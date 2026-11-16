@@ -1,11 +1,11 @@
 ---
 title: Quickstart
-description: Set up Sculptured, create a team and follow its first run.
+description: Set up CopperTide, create a team and follow its first run.
 ---
 
 Start with a small task in a project folder you know. This guide uses a **Builder → Reviewer** team: one agent does the work, then a second reviews the result.
 
-## Set up Sculptured
+## Set up CopperTide
 
 Choose the setup that matches how you want to run the app. Both lead to the same team creation steps below.
 
@@ -21,7 +21,7 @@ Choose the setup that matches how you want to run the app. Both lead to the same
     The command installs the runner without admin rights and allows agents to start in your home folder. The runner stays in the background and starts again when you log in. See [Connect a computer](/connect-a-computer) for installation details and folder access.
   </Tab>
   <Tab title="Self-hosted">
-    You need Linux or an Apple silicon Mac, Rust 1.95 or newer, Node.js 24 and Git. Install Claude Code or Codex and sign in as the user who will run Sculptured.
+    You need Linux or an Apple silicon Mac, Rust 1.95 or newer, Node.js 24 and Git. Install Claude Code or Codex and sign in as the user who will run CopperTide.
 
     ```bash
     git clone https://github.com/Sculptured/Sculptured.git
@@ -74,7 +74,7 @@ Choose the setup that matches how you want to run the app. Both lead to the same
   <Step title="Start the team">
     Choose **Start team**, at the right of the project's tab row, and review the confirmation. Agents use your own Claude Code or Codex sign-in and may incur charges or consume plan usage. You can set a per-agent **Token limit** before starting; see [Limits and usage](/reference/limits).
 
-    Once you confirm, Sculptured opens the **Run** view. The builder receives its Job first. When it finishes a work turn, its final reply is passed to the reviewer along with the reviewer's Job.
+    Once you confirm, CopperTide opens the **Run** view. The builder receives its Job first. When it finishes a work turn, its final reply is passed to the reviewer along with the reviewer's Job.
 
     <Frame caption="The Run board shows each agent's state. Answer opens an agent's pending question.">
       ![An example Run board with a Planner marked needs you and an Answer button, alongside two builders marked done](/images/quickstart/run-board.png)
@@ -92,7 +92,7 @@ Choose the setup that matches how you want to run the app. Both lead to the same
   <Step title="Review the result and stop">
     Read the reviewer's findings and inspect the changes and check results. An agent marked **done** has finished a turn; that alone does not establish that the work is correct.
 
-    Choose **Stop team** and confirm to close the agents' sessions. Sculptured keeps the run history for later review.
+    Choose **Stop team** and confirm to close the agents' sessions. CopperTide keeps the run history for later review.
   </Step>
 </Steps>
 

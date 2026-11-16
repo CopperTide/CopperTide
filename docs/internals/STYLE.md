@@ -1,6 +1,6 @@
 # How internals pages are written
 
-These pages are for people changing Sculptured. They follow four well-tested models:
+These pages are for people changing CopperTide. They follow four well-tested models:
 
 - [Diátaxis](https://diataxis.fr/): keep **explanation** (why it is shaped this way), **reference** (exact facts: messages, tables, routes) and **how-to** (steps to do one task) apart. A page may hold more than one, but each in its own section with its own heading.
 - [C4 model](https://c4model.com/): draw at the zoom level the reader needs. The [overview](overview.md) is context and containers; each page zooms into one container's components. Never mix levels in one diagram.

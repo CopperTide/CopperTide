@@ -19,7 +19,7 @@ A team can have up to 8 triggers. Change them while the team is stopped.
 
 ## What the other system sends
 
-Anything up to 64 KB: JSON is kept as JSON, and anything else as text. Sculptured answers `202 Accepted` at once, with the event's id, and handles the event after that:
+Anything up to 64 KB: JSON is kept as JSON, and anything else as text. CopperTide answers `202 Accepted` at once, with the event's id, and handles the event after that:
 
 ```bash
 curl -X POST 'https://app.usesculptured.com/hooks/…' \
@@ -27,13 +27,13 @@ curl -X POST 'https://app.usesculptured.com/hooks/…' \
   -d '{"machine": "Press 4", "code": "VIB-HIGH"}'
 ```
 
-The agent gets your words, then the event, marked as coming from outside Sculptured. The agent is told to treat it as information, never as instructions, because anyone with the address can send it anything. When the team had to start, the event arrives after the agent's job.
+The agent gets your words, then the event, marked as coming from outside CopperTide. The agent is told to treat it as information, never as instructions, because anyone with the address can send it anything. When the team had to start, the event arrives after the agent's job.
 
 ## Keep the address secret
 
-The end of the address is a secret that Sculptured keeps. It is never in the team's design or its exported files, so sharing a team doesn't share its addresses. Anyone who has the address can hand the team an event. If it leaks, choose **New address**: the current address stops working at once.
+The end of the address is a secret that CopperTide keeps. It is never in the team's design or its exported files, so sharing a team doesn't share its addresses. Anyone who has the address can hand the team an event. If it leaks, choose **New address**: the current address stops working at once.
 
-On the hosted service the address goes through `app.usesculptured.com` and works from anywhere. In Sculptured on your own computer, the address works only from that computer.
+On the hosted service the address goes through `app.usesculptured.com` and works from anywhere. In CopperTide on your own computer, the address works only from that computer.
 
 ## What you see
 

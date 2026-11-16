@@ -198,7 +198,7 @@ fn older_runner(e: ApiError) -> ApiError {
     }
     ApiError::conflict(
         "runner_without_reports",
-        "This computer's Sculptured runner is older than reports of where tokens went. Reinstall it from Computers.",
+        "This computer's CopperTide runner is older than reports of where tokens went. Reinstall it from Computers.",
     )
 }
 

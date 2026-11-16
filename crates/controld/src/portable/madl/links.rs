@@ -35,7 +35,7 @@ impl Cx<'_> {
             || c.mode.is_some()
             || !c.carries.is_empty()
         {
-            self.drop(&at, "Sculptured keeps who works with whom; this connection's channel, protocol, condition and contents were not kept");
+            self.drop(&at, "CopperTide keeps who works with whom; this connection's channel, protocol, condition and contents were not kept");
         }
         let id = c
             .id
@@ -64,13 +64,13 @@ impl Cx<'_> {
             m::ConnectionKind::Report => Some(ConnectionKind::ReportsTo),
             m::ConnectionKind::Watch => Some(ConnectionKind::Watches),
             m::ConnectionKind::Delegate | m::ConnectionKind::Review => {
-                self.drop(at, "Sculptured draws this as hands work to");
+                self.drop(at, "CopperTide draws this as hands work to");
                 Some(ConnectionKind::HandsWorkTo)
             }
             m::ConnectionKind::Ask | m::ConnectionKind::Approve => {
                 self.drop(
                     at,
-                    "Sculptured has no ask or approve connection; agents ask people from the app",
+                    "CopperTide has no ask or approve connection; agents ask people from the app",
                 );
                 None
             }
@@ -93,7 +93,7 @@ impl Cx<'_> {
         for (i, extra) in matching_inputs {
             self.drop(
                 format!("/inputs/{i}"),
-                format!("Sculptured has one Input; `{}` was not kept", extra.id),
+                format!("CopperTide has one Input; `{}` was not kept", extra.id),
             );
         }
         let (_, first) = inputs.first()?;
@@ -139,7 +139,7 @@ impl Cx<'_> {
             self.drop(
                 format!("/channels/{i}"),
                 format!(
-                    "Sculptured does not use channels yet; `{}` was not kept",
+                    "CopperTide does not use channels yet; `{}` was not kept",
                     c.id
                 ),
             );
@@ -151,7 +151,7 @@ impl Cx<'_> {
         {
             self.drop(
                 "/communication",
-                "Sculptured does not enforce communication rules yet; they were not kept",
+                "CopperTide does not enforce communication rules yet; they were not kept",
             );
         }
         let indexed_steps = doc.steps.iter().enumerate();
@@ -159,7 +159,7 @@ impl Cx<'_> {
             self.drop(
                 format!("/steps/{i}"),
                 format!(
-                    "Step `{}` stands outside a workflow; Sculptured has no place for it",
+                    "Step `{}` stands outside a workflow; CopperTide has no place for it",
                     s.id
                 ),
             );
@@ -173,7 +173,7 @@ impl Cx<'_> {
         ];
         for (field, set) in parts {
             if set {
-                self.drop(format!("/policies/{field}"), format!("Sculptured does not use `policies.{field}` outside a workflow; it was not kept"));
+                self.drop(format!("/policies/{field}"), format!("CopperTide does not use `policies.{field}` outside a workflow; it was not kept"));
             }
         }
     }

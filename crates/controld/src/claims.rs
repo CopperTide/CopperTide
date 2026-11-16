@@ -110,7 +110,7 @@ fn check_turn(st: &AppState, seat: &str, turn_id: &str) {
     for f in found {
         if let Err(e) = store.add_decision(
             team,
-            "Sculptured (heuristic claim check)",
+            "CopperTide (heuristic claim check)",
             &format!("{who} {f}."),
             SOURCE,
         ) {

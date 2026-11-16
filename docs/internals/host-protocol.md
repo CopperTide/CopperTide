@@ -1,6 +1,6 @@
 # Host protocol message reference
 
-The host protocol is how controld (a user's Sculptured) talks to an agent runner (hostd). It is JSON text frames over one WebSocket at `/host`. The runner dials out, says `Hello`, and then streams journaled events while controld sends commands and operations back. This page is a **reference**: every message, its fields and its reply.
+The host protocol is how controld (a user's CopperTide) talks to an agent runner (hostd). It is JSON text frames over one WebSocket at `/host`. The runner dials out, says `Hello`, and then streams journaled events while controld sends commands and operations back. This page is a **reference**: every message, its fields and its reply.
 
 Sources:
 - `crates/host-proto/src/lib.rs` (every type on this page), `crates/host-proto/tests/proto.rs`
@@ -71,7 +71,7 @@ In hosted mode the first row also stops a computer from connecting as `local`, t
 | `hello` | `host_id: String`, `protocol: u32`, `drivers: Vec<DriverInfo>`, `live_seats: Vec<String>`, `launching_seats: Vec<String>` (default `[]`), `features: Vec<String>` (default `[]`), `policy: Option<HostPolicyInfo>` (default `None`) | First frame on every connection | `Welcome`, or a close frame (§2). A repeated Hello is ignored |
 | `event` | `event: HostEvent` | Replay after Welcome, then each live event | `Ack {upto: host_seq}` once ingested. If ingesting fails, controld drops the connection |
 | `command-result` | `command_id: String`, `ok: bool`, `error: Option<String>` | When a `Command` finishes (commands run concurrently) | None |
-| `seat-tool` | `call_id: String`, `seat: String`, `tool: String`, `args: Value` | An agent called one of Sculptured's tools | `SeatToolReply` with the same `call_id` |
+| `seat-tool` | `call_id: String`, `seat: String`, `tool: String`, `args: Value` | An agent called one of CopperTide's tools | `SeatToolReply` with the same `call_id` |
 | `op-result` | `op_id: String`, `ok: bool`, `value: Value` (default `null`), `error: Option<OpError>` (default `None`) | When an `Op` finishes | None. Ignored if nobody waits for that `op_id` on that host |
 
 `live_seats` lists seats with a process, including ones still starting. `launching_seats` is the subset still starting. controld re-attaches them on Hello (`restore::on_hello`).
@@ -136,7 +136,7 @@ There is one version number, `PROTOCOL_VERSION = 1`, and it must match exactly. 
 | `posture` | Honours `LaunchParams.posture` | A launch or restart whose posture is not `unrestricted` |
 | `restart` | Handles `HostCommand::Restart` | `restart` |
 | `answer` | Handles `HostCommand::Answer` | `answer` |
-| `seat-tools` | Offers Sculptured's tools to agents | `LaunchParams.seat_tools` set |
+| `seat-tools` | Offers CopperTide's tools to agents | `LaunchParams.seat_tools` set |
 | `usage-baseline` | Seeds a resumed session's usage | `LaunchParams.usage_baseline` set |
 | `local-ops` | Answers `ToHost::Op` and `RunCheck` | `op`, `run-check`, `LaunchParams.own_copy` set |
 | `claude-setup` | Honours `LaunchParams.claude_setup` (leaves out the person's own Claude Code setup) | `LaunchParams.claude_setup` set |

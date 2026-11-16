@@ -29,12 +29,12 @@ An agent on a computer whose runner predates skills runs without them, and its p
 
 ## Components: tools on the agent's computer
 
-A **component** is something an agent is given besides Sculptured's own tools. Each is described by a small manifest rather than built into Sculptured, so anyone can write one and share it. There are five kinds:
+A **component** is something an agent is given besides CopperTide's own tools. Each is described by a small manifest rather than built into CopperTide, so anyone can write one and share it. There are five kinds:
 
 | Kind | What the agent gets | Where it comes from |
 | --- | --- | --- |
-| MCP server on the computer (`mcp`) | Its tools, next to Sculptured's | A program on the agent's computer, such as Kindex's `kin-mcp` |
-| Remote MCP server (`mcp-remote`) | Its tools, next to Sculptured's | A web address, such as a hosted OpenFOAM server, with its secrets kept on the agent's computer |
+| MCP server on the computer (`mcp`) | Its tools, next to CopperTide's | A program on the agent's computer, such as Kindex's `kin-mcp` |
+| Remote MCP server (`mcp-remote`) | Its tools, next to CopperTide's | A web address, such as a hosted OpenFOAM server, with its secrets kept on the agent's computer |
 | Skill pack (`skills`) | More skills, added to the agent's own | The manifest itself; nothing runs |
 | Claude plugin (`claude-plugin`) | The plugin's skills, hooks and servers, for that agent only | A plugin installed on the agent's computer with `claude plugin install` |
 | Tool hook (`tool-hook`) | A check on every tool call, such as Signet-Eval | A program on the agent's computer |
@@ -63,7 +63,7 @@ The computer's owner sets the value once, on that computer:
 sculptured set-secret OPENFOAM_TOKEN
 ```
 
-The runner fills it in when it starts the agent, so the team, the server and Community never see it. On your own local Sculptured, an environment variable of the same name works too.
+The runner fills it in when it starts the agent, so the team, the server and Community never see it. On your own local CopperTide, an environment variable of the same name works too.
 
 ### A component is something your computer runs
 
@@ -73,7 +73,7 @@ On a computer connected to your account, a component that is not built in runs o
 sculptured approve-component <digest>
 ```
 
-The digest is a fingerprint of that exact manifest: if anything in it changes, it needs approving again. Secrets are not part of it, so changing a key needs no new approval. Running agents are not restarted. On your own local Sculptured, the teams are yours, so nothing extra is asked.
+The digest is a fingerprint of that exact manifest: if anything in it changes, it needs approving again. Secrets are not part of it, so changing a key needs no new approval. Running agents are not restarted. On your own local CopperTide, the teams are yours, so nothing extra is asked.
 
 ### Writing a manifest
 
@@ -108,22 +108,22 @@ A runner from before remote servers and plugins starts the agent without them, a
 ## Kindex
 
 
-[Kindex](https://github.com/wandercom/kindex) is a knowledge graph that lives on the agent's computer and outlasts any one team: decisions, constraints and discoveries that agents search and add to across sessions. Sculptured's own [Knowledge](/guides/knowledge) covers one team's work; Kindex keeps knowledge for later work in the project.
+[Kindex](https://github.com/wandercom/kindex) is a knowledge graph that lives on the agent's computer and outlasts any one team: decisions, constraints and discoveries that agents search and add to across sessions. CopperTide's own [Knowledge](/guides/knowledge) covers one team's work; Kindex keeps knowledge for later work in the project.
 
 <Steps>
   <Step title="Install it on the agent's computer">Run `pip install 'kindex[mcp]'` (or `uv tool install 'kindex[mcp]'`) on the computer that runs the agent.</Step>
   <Step title="Turn it on for the agent">In the agent's **Advanced** settings, tick **Kindex memory**. It is one of the built-in [components](#components-tools-on-the-agents-computer).</Step>
 </Steps>
 
-At its next start the agent gets Kindex's tools next to Sculptured's, and its briefing says what Kindex is for. The runner finds `kin-mcp` on that computer itself; Sculptured never sends it a command to run. If Kindex is not installed there, the agent starts anyway and its page says how to install it. Kindex's own question and learning features call a model and cost usage; its search and storage do not.
+At its next start the agent gets Kindex's tools next to CopperTide's, and its briefing says what Kindex is for. The runner finds `kin-mcp` on that computer itself; CopperTide never sends it a command to run. If Kindex is not installed there, the agent starts anyway and its page says how to install it. Kindex's own question and learning features call a model and cost usage; its search and storage do not.
 
 ## Signet-Eval
 
-[Signet-Eval](https://github.com/wandercom/signet-eval) checks every tool call against a policy, with no model and in milliseconds. Sculptured's own [safety rules](/guides/budgets#safety-rules) use its rule format; give an agent the full tool when you also want its vault, spending limits and locked self-protection rules.
+[Signet-Eval](https://github.com/wandercom/signet-eval) checks every tool call against a policy, with no model and in milliseconds. CopperTide's own [safety rules](/guides/budgets#safety-rules) use its rule format; give an agent the full tool when you also want its vault, spending limits and locked self-protection rules.
 
 <Steps>
   <Step title="Install it on the agent's computer">Run `cargo install signet-eval` there.</Step>
   <Step title="Turn it on for the agent">In the agent's **Advanced** settings, tick **Signet-Eval policy checks**. Kindex comes with it.</Step>
 </Steps>
 
-The runner adds `signet-eval` as a second hook after Sculptured's guard, with the team's safety rules as its rules; its own system policy (`~/.signet/policy.yaml`, or its built-in one) still applies. Its built-in locked rules refuse edits until the agent has used Kindex and refuse Claude's task-list tools, which is why Kindex comes with it. Claude Code agents only: Codex runs hooks only after you trust them on each computer.
+The runner adds `signet-eval` as a second hook after CopperTide's guard, with the team's safety rules as its rules; its own system policy (`~/.signet/policy.yaml`, or its built-in one) still applies. Its built-in locked rules refuse edits until the agent has used Kindex and refuse Claude's task-list tools, which is why Kindex comes with it. Claude Code agents only: Codex runs hooks only after you trust them on each computer.

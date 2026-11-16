@@ -1,9 +1,9 @@
 ---
 title: Team files
-description: Save a team or a group as a file, open it in another Sculptured, and edit it with completion in your editor.
+description: Save a team or a group as a file, open it in another CopperTide, and edit it with completion in your editor.
 ---
 
-A team file is a whole team in one [MADL](/guides/madl) file: its agents and their Jobs, groups, arrows, workflow and settings. MADL is an open format, so other tools can read the same file. Use it to keep a copy, send a team to a colleague, move it to another Sculptured, or keep it in a Git repository next to the code it works on.
+A team file is a whole team in one [MADL](/guides/madl) file: its agents and their Jobs, groups, arrows, workflow and settings. MADL is an open format, so other tools can read the same file. Use it to keep a copy, send a team to a colleague, move it to another CopperTide, or keep it in a Git repository next to the code it works on.
 
 There are three kinds of file:
 
@@ -16,7 +16,7 @@ There are three kinds of file:
 ```mermaid
 flowchart LR
   T["Team on the board"] -- "Export team file" --> F[".madl.yaml"]
-  F -- "Import" --> T2["New team in any Sculptured"]
+  F -- "Import" --> T2["New team in any CopperTide"]
   G["Group in Reusable groups"] -- "Export" --> GF[".group.json"]
   GF -- "Import group file" --> G2["Group, reviewed then saved"]
   GF -- "Publish" --> C["Community"]
@@ -49,7 +49,7 @@ What import does with a file:
 
 - **Refused** only when the file does not hold together: not valid MADL, or broken ids and arrows. The message names the field and the problem, and nothing is created.
 - **Imported with warnings** for anything the board would also flag, such as a Claude agent without a folder. Those only stop the team from starting, so you can fix them on the board.
-- **Kept:** agent, group and arrow ids; Jobs; positions; the workflow; and the team's settings (permissions, own copies, question timeout). A file written by another tool may hold things Sculptured can't use; they are listed under **Not imported**. See [MADL files](/guides/madl#importing-a-madl-file-from-elsewhere).
+- **Kept:** agent, group and arrow ids; Jobs; positions; the workflow; and the team's settings (permissions, own copies, question timeout). A file written by another tool may hold things CopperTide can't use; they are listed under **Not imported**. See [MADL files](/guides/madl#importing-a-madl-file-from-elsewhere).
 - **Not kept:** which computer runs the team. You choose that after import.
 
 Importing the same file twice makes two teams. Retrying a request that did not answer does not.
@@ -76,7 +76,7 @@ cargo install --git https://github.com/Sculptured/Multi-Agent-Descriptor-Languag
 madl validate my-team.madl.yaml
 ```
 
-Every field is described in [MADL's specification](https://github.com/Sculptured/Multi-Agent-Descriptor-Language/tree/main/spec/draft); [MADL files](/guides/madl) lists where each part of a Sculptured team goes.
+Every field is described in [MADL's specification](https://github.com/Sculptured/Multi-Agent-Descriptor-Language/tree/main/spec/draft); [MADL files](/guides/madl) lists where each part of a CopperTide team goes.
 
 ## Keep a team in Git
 

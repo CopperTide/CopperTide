@@ -4,15 +4,15 @@
 
 ## The pitch
 
-Two AI builders, one Claude Code and one Codex, race to build the same small library from a spec. Each works in its own isolated copy of the repo. An examiner wrote acceptance tests the builders never see. Sculptured runs those tests itself and marks results **verified**, not "the agent said done". A judge compares the two and merges the winner. You can watch it all from your phone while the agents run on your laptop, and send the whole run to someone else to replay.
+Two AI builders, one Claude Code and one Codex, race to build the same small library from a spec. Each works in its own isolated copy of the repo. An examiner wrote acceptance tests the builders never see. CopperTide runs those tests itself and marks results **verified**, not "the agent said done". A judge compares the two and merges the winner. You can watch it all from your phone while the agents run on your laptop, and send the whole run to someone else to replay.
 
-## Why it shows what Sculptured is
+## Why it shows what CopperTide is
 
-| A single prompt / vibe coding | n8n-style workflows | Sculptured |
+| A single prompt / vibe coding | n8n-style workflows | CopperTide |
 |---|---|---|
 | One agent, one attempt, "done" taken on trust | Fixed pipelines of API calls; no autonomous coding in real repos | A *team* of autonomous coding agents, each with its own tools, working in real repos on your machine |
 | No isolation: one working copy | n/a | **Own copies**: each builder gets its own git worktree and branch, so the builders can't interfere |
-| Proof is whatever the agent writes | Step outputs | **Checks** that Sculptured runs itself, shown as *verified*, with the test output as evidence |
+| Proof is whatever the agent writes | Step outputs | **Checks** that CopperTide runs itself, shown as *verified*, with the test output as evidence |
 | Linear chat | A static graph | A live, visual team: **who hands work to whom**, start order, status, questions you answer mid-run |
 | Hard to share or audit | Logs | A **run file** that anyone can import and replay in History: every handoff, check and token count |
 | Your machine only | Server-side | **Hosted control of local agents**: run on your laptop, watch and answer from any device |
@@ -61,7 +61,7 @@ Two AI builders, one Claude Code and one Codex, race to build the same small lib
 - **Setup:** the main build (000538d) on a separate local instance. The team was made with *Describe it* (Claude Code), set up in Design, and started from the UI.
 - **Recording:** a real headless-Chrome screen capture of the app, made from every frame Chrome painted. Setup and wrap-up play at 2× speed, the agents' 26 minutes as a ×20 time-lapse, and each stretch is labelled on screen. The video (3:31) is at `~/bakeoff/bakeoff-recording.mp4`. The run file (`rate-limiter-bake-off-run-1.sculptured-session.jsonl`, 287 KB) was downloaded from History.
 - **Outcome:**
-  - both builders passed 64/64 hidden tests, verified by Sculptured's own check runs;
+  - both builders passed 64/64 hidden tests, verified by CopperTide's own check runs;
   - the Judge picked **Opus Builder** on diff size (114 lines against 121);
   - I merged its copy from the Git page, and merged `main` also passes 64/64 when I run the tests myself;
   - neither builder touched the hidden folder except to run `run.mjs` (from the captured tool calls).
@@ -72,7 +72,7 @@ Two AI builders, one Claude Code and one Codex, race to build the same small lib
 
 ## Describe it (generator)
 1. **Good:** the questions step (10 s) asked four relevant questions; three alternatives in 68 s; one in 27 s. The Thorough option proposed an "Integrity Referee", unprompted, for peeking.
-2. **The generator doesn't know Sculptured's features:** the first draft set up git worktrees by hand inside the Examiner's job, because the CLI sees only the description. Fix idea: tell the generator which features exist (own copies, checks, token limits) and let the sketch set team settings.
+2. **The generator doesn't know CopperTide's features:** the first draft set up git worktrees by hand inside the Examiner's job, because the CLI sees only the description. Fix idea: tell the generator which features exist (own copies, checks, token limits) and let the sketch set team settings.
 3. **No project-folder option** on the form (the spec had one), so every agent arrived with "needs a folder".
 4. **Form layout:** no right margin; the Agent kinds select and the Next button touch the edge.
 
@@ -92,4 +92,4 @@ Two AI builders, one Claude Code and one Codex, race to build the same small lib
 15. **Tokens show "unknown" until a turn ends.** The Examiner's first turn ran for 22 minutes with no usage visible.
 16. **A builder's passed check shows only as a dark dot beside "done"** on its Run card, not as readable text.
 17. **The Git page needs a *project* folder.** With four agents sharing one folder but no project folder set, it says "Choose a project folder first" and lists no copies, so there's no Merge button for the winner.
-18. **Result:** both builders passed 64/64 hidden tests (verified by Sculptured's checks, 2–3 s each). Opus Builder won on diff size (114 against 121). Neither builder touched ~/bakeoff/hidden except to run run.mjs (Opus made 5 tool calls, Sonnet 9). Reported tokens: Examiner 42.7k out, Opus 9.5k, Sonnet 4.6k, Judge 5.1k (cache reads not included; the Judge's turn was 229k including them). Wall time was 26 minutes, 22 of them the Examiner's.
+18. **Result:** both builders passed 64/64 hidden tests (verified by CopperTide's checks, 2–3 s each). Opus Builder won on diff size (114 against 121). Neither builder touched ~/bakeoff/hidden except to run run.mjs (Opus made 5 tool calls, Sonnet 9). Reported tokens: Examiner 42.7k out, Opus 9.5k, Sonnet 4.6k, Judge 5.1k (cache reads not included; the Judge's turn was 229k including them). Wall time was 26 minutes, 22 of them the Examiner's.

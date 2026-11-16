@@ -16,7 +16,7 @@ impl Cx<'_> {
         let at = format!("/agents/{i}");
         let runtime = r.settings.preferences.runtime.as_deref();
         if runtime == Some("human") {
-            self.drop(&at, format!("`{}` is a person; Sculptured's board holds agents, and people answer from the app", a.id));
+            self.drop(&at, format!("`{}` is a person; CopperTide's board holds agents, and people answer from the app", a.id));
             return None;
         }
         let kind = crate::portable::madl::import::kind_of(runtime).unwrap_or_else(|| {
@@ -74,7 +74,7 @@ impl Cx<'_> {
         if a.checks.len() > 1 {
             self.drop(
                 format!("{at}/checks/1"),
-                "Sculptured runs one check per agent; the first was kept",
+                "CopperTide runs one check per agent; the first was kept",
             );
         }
         self.unkept_agent_parts(at, a);
@@ -153,7 +153,7 @@ impl Cx<'_> {
         {
             self.drop(
                 format!("{at}/model"),
-                "Sculptured uses one model per agent; the fallbacks were not kept",
+                "CopperTide uses one model per agent; the fallbacks were not kept",
             );
         }
         let source = r
@@ -220,7 +220,7 @@ impl Cx<'_> {
             } else if !self.doc.tools.iter().any(|t| t.id == id) {
                 self.drop(
                     format!("{at}/tools/{i}"),
-                    format!("Sculptured has no tool `{id}`; it was not kept"),
+                    format!("CopperTide has no tool `{id}`; it was not kept"),
                 );
             }
         }
@@ -239,7 +239,7 @@ impl Cx<'_> {
             if set {
                 self.drop(
                     format!("{at}/{field}"),
-                    format!("Sculptured does not use an agent's `{field}` yet; it was not kept"),
+                    format!("CopperTide does not use an agent's `{field}` yet; it was not kept"),
                 );
             }
         }

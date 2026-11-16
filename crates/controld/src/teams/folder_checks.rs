@@ -99,7 +99,7 @@ fn agent_issue(a: &DraftAgent, code: &str, message: String, detail: Option<Strin
 
 /// macOS keeps Desktop, Documents and Downloads from background programs until they're allowed.
 fn macos_hint() -> Option<String> {
-    cfg!(target_os = "macos").then(|| "In System Settings → Privacy & Security, allow Sculptured under Files and Folders or Full Disk Access.".into())
+    cfg!(target_os = "macos").then(|| "In System Settings → Privacy & Security, allow CopperTide under Files and Folders or Full Disk Access.".into())
 }
 
 /// A blank or relative folder is `rigspec`'s issue (folder-missing, folder-not-absolute).
@@ -136,7 +136,7 @@ fn folder_issue(home: Option<&Home>, a: &DraftAgent, folder: Option<&str>) -> Op
                 "folder_unreadable" => agent_issue(
                     a,
                     "folder-unreadable",
-                    format!("Sculptured can't read {who}'s folder: {f}"),
+                    format!("CopperTide can't read {who}'s folder: {f}"),
                     macos_hint(),
                 ),
                 // `.`/`..` components, NUL bytes, link loops, names that are too long.

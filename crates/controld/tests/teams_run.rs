@@ -260,7 +260,7 @@ async fn an_agent_that_cannot_start_gets_its_job_recorded_as_not_sent() {
     let builder = format!("team.builder@{id}");
     crate::common::wait_for("job recorded as not sent", || {
         events(&st, &builder).iter().any(|e| {
-            matches!(&e.body, EventBody::MessageFailed { reason, .. } if reason.starts_with("not sent: the agent did not start (Sculptured's agent runner is not connected)"))
+            matches!(&e.body, EventBody::MessageFailed { reason, .. } if reason.starts_with("not sent: the agent did not start (CopperTide's agent runner is not connected)"))
         })
     })
     .await;
@@ -1122,7 +1122,7 @@ async fn after_a_host_restart_agents_say_why_and_start_runs_the_team_again() {
         assert_eq!(
             reason.as_deref(),
             Some(
-                "This agent's process ended when Sculptured restarted. Start the team again to relaunch it."
+                "This agent's process ended when CopperTide restarted. Start the team again to relaunch it."
             ),
             "{s}"
         );

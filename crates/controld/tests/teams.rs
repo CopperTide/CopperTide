@@ -581,7 +581,7 @@ async fn agent_folders_inside_home_report_missing_files_and_unreadable() {
         [(
             "builder".to_string(),
             format!(
-                "Sculptured can't read Builder's folder: {}",
+                "CopperTide can't read Builder's folder: {}",
                 locked.join("inner").display()
             )
         )],

@@ -80,7 +80,7 @@ sequenceDiagram
 
 ## 3. The sketch: what the AI fills in
 
-The AI never writes ids or board coordinates. It fills a small sketch, and Sculptured turns it into a team file:
+The AI never writes ids or board coordinates. It fills a small sketch, and CopperTide turns it into a team file:
 
 ```json
 { "name": "Docs site", "groups": [{ "name": "Writers" }],

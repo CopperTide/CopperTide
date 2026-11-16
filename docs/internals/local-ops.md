@@ -1,6 +1,6 @@
 # Local operations on the user's computer
 
-Folders, git, agents' own copies, checks, CLI sign-in and plan usage all touch files or run programs. On a local `serve`, they run on this machine. In the hosted beta, the user's Sculptured runs on the server, where those files don't exist, so the same operations run on the user's connected computer instead.
+Folders, git, agents' own copies, checks, CLI sign-in and plan usage all touch files or run programs. On a local `serve`, they run on this machine. In the hosted beta, the user's CopperTide runs on the server, where those files don't exist, so the same operations run on the user's connected computer instead.
 
 Sources:
 - `crates/localops/src/{lib,folders,git,copies,checks,clis,plan}.rs`
@@ -51,7 +51,7 @@ flowchart TB
 sequenceDiagram
   participant B as Browser
   participant G as Gateway
-  participant C as User's Sculptured (controld)
+  participant C as User's CopperTide (controld)
   participant R as Runner on the computer
   B->>G: POST /api/teams/t1/git/action {action: commit}
   G->>C: signed request
@@ -76,7 +76,7 @@ sequenceDiagram
 |---|---|---|
 | No computer, several and none chosen, or the team's computer offline | `409 needs_computer` | "Connect a computer first…", "Choose which computer…", "<id> is not connected…" |
 | Link dropped while waiting | `409 needs_computer` | "<id> disconnected. Open Computers to reconnect it." |
-| Runner without `local-ops` | `409 older_runner` | "<id>'s Sculptured is too old for this…" |
+| Runner without `local-ops` | `409 older_runner` | "<id>'s CopperTide is too old for this…" |
 | No answer in time | `504 computer_timeout` | "<id> did not answer in N s." |
 | Policy refused | `403 not_allowed_here` | the runner's reason, for example "Git is turned off on this computer (sculptured connect … --enable git)" |
 | The operation itself failed | the runner's status and code | unchanged from local mode |
@@ -112,7 +112,7 @@ Path fields are resolved by the runner, as described in [Connected computers §4
 | `project-map` | `path` | Every team start (`knowledge::refresh`, [Knowledge](knowledge.md)) | – | `path` | 30 s (controld waits 20 s) |
 | `keep-lesson` | `path, text` | Confirming a lesson (`knowledge::keep_in_project`) | – | `path` | 15 s |
 
-Timeouts are set in `ops::timeout_for`. A runner from before `analyze-run` answers `unknown_op`; controld turns that into `runner_without_reports` (reinstall the runner). A runner from before `run-dispatch` answers `unknown_op` too, and the workflow's dispatch record says to update Sculptured on that computer; it is never sent as a `run-check`, which would cut the output to its end. Copies get 120 s because creating or merging a worktree in a large repository can take that long.
+Timeouts are set in `ops::timeout_for`. A runner from before `analyze-run` answers `unknown_op`; controld turns that into `runner_without_reports` (reinstall the runner). A runner from before `run-dispatch` answers `unknown_op` too, and the workflow's dispatch record says to update CopperTide on that computer; it is never sent as a `run-check`, which would cut the output to its end. Copies get 120 s because creating or merging a worktree in a large repository can take that long.
 
 **Browsing a connected computer** (`Supervisor::run_op`):
 - `list-folder` with no path answers with the allowed folders as entries and `path: ""`. The folder picker shows this level as "Folders this computer allows" and disables *Choose* and *New folder* there.

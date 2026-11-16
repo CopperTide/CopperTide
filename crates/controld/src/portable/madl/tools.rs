@@ -106,7 +106,7 @@ pub fn tool_in(t: &m::Tool) -> Result<Component, String> {
     };
     if !t.runtimes.is_empty() && !c.claude_only {
         return Err(format!(
-            "works with {}; Sculptured gives a component to every agent, or to Claude Code agents only",
+            "works with {}; CopperTide gives a component to every agent, or to Claude Code agents only",
             t.runtimes.join(", ")
         ));
     }
@@ -132,12 +132,12 @@ pub fn tool_in(t: &m::Tool) -> Result<Component, String> {
         }
         (.., Some(b)) => {
             return Err(format!(
-                "`{b}` is one of a runtime's own tools; Sculptured's agents already have their runtime's tools"
+                "`{b}` is one of a runtime's own tools; CopperTide's agents already have their runtime's tools"
             ));
         }
         _ => {
             return Err(
-                "names a tool the runner provides, and Sculptured provides none by that name"
+                "names a tool the runner provides, and CopperTide provides none by that name"
                     .into(),
             );
         }
@@ -148,7 +148,7 @@ pub fn tool_in(t: &m::Tool) -> Result<Component, String> {
 fn mcp_in(mcp: &m::McpServer, c: &mut Component, args: Vec<String>) -> Result<(), String> {
     if !mcp.env.is_empty() {
         return Err(
-            "sets environment values for its server, which Sculptured's components do not carry"
+            "sets environment values for its server, which CopperTide's components do not carry"
                 .into(),
         );
     }

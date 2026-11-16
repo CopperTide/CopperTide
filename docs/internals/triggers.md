@@ -4,9 +4,9 @@ Triggers (`TeamDraft.triggers`, `crates/controld/src/triggers.rs`) give a team a
 
 ## Addresses
 
-- **The key is a secret Sculptured keeps.** Each trigger's address ends in a 64-hex-character key: two random v4 UUIDs, simple form. Keys live in the store (`trigger_keys`, one per team and trigger), never in the draft, so exports, MADL and Community never carry them.
+- **The key is a secret CopperTide keeps.** Each trigger's address ends in a 64-hex-character key: two random v4 UUIDs, simple form. Keys live in the store (`trigger_keys`, one per team and trigger), never in the draft, so exports, MADL and Community never carry them.
 - **Keys are made lazily** by `GET /api/teams/{id}/triggers`. `POST /api/teams/{id}/triggers/{trigger}/new-address` replaces a key, and the old one stops working at once.
-- **The local address** is `POST /api/hooks/{key}`. Local Sculptured allows every request (`auth.rs`).
+- **The local address** is `POST /api/hooks/{key}`. Local CopperTide allows every request (`auth.rs`).
 - **The hosted address** is `POST /hooks/{user}/{key}` on the gateway (`sculptured-cloud/src/hooks.rs`). It takes no session and needs no Origin.
   - The gateway checks that the user exists, isn't disabled and has a workspace.
   - It allows 600 calls an hour per user (`limits`).

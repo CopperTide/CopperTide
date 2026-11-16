@@ -1,5 +1,5 @@
 ---
-name: Sculptured
+name: CopperTide
 description: A visual workspace for teams of agents. One token layer, three looks (Coastal, Standard and Mission), with honest status.
 colors:
   # Coastal (default look, dark only). :root in web/src/tokens.css
@@ -216,17 +216,17 @@ components:
     height: "36px"
 ---
 
-# Design System: Sculptured
+# Design System: CopperTide
 
 ## Overview
 
 **Creative North Star: "The Honest Board"**
 
-Sculptured is a working instrument: a board where a team of agents is laid out, started, watched and steered. The system exists so that the board, and the state of each agent on it, reads at a glance and never overstates what is known. The chrome around the board stays quiet. The board (dot grid, tinted groups, cards, handoff lines) is the only expressive surface. Density is that of a desktop tool: a 13px default UI size (user-adjustable 12 to 16px), 30px controls and rows, and tabular numbers wherever counts, clocks, tokens or costs change.
+CopperTide is a working instrument: a board where a team of agents is laid out, started, watched and steered. The system exists so that the board, and the state of each agent on it, reads at a glance and never overstates what is known. The chrome around the board stays quiet. The board (dot grid, tinted groups, cards, handoff lines) is the only expressive surface. Density is that of a desktop tool: a 13px default UI size (user-adjustable 12 to 16px), 30px controls and rows, and tabular numbers wherever counts, clocks, tokens or costs change.
 
 The system ships three looks over one token layer. **Coastal** is the default and incumbent identity: dark only, "ink, chalk and quiet sea-glass", with translucent glass bars, soft depth and a pale sea-glass accent. **Standard** is the category standard played straight, with Linear and GitHub Primer as the craft bar: neutral, flat and exact, white or near-black surfaces, hairline borders, one indigo accent, light and dark. Standard refuses the dark-glass AI-dashboard look: it has no glass, no gradients, and shadows only on things that float. **Mission** is the control-room look of the Control workspaces: near-black, hairline lines, one cyan accent and bright status hues, flat and dark only. All looks render the same components from the same CSS. Only tokens change, plus three Standard-only elements (the header status pill, the footer usage strip, and the plain brand mark).
 
-Honesty is the one rule above taste. Status is always a glyph plus a word, never colour alone. What an agent says about itself is "reported" and grey. Green is reserved for a check Sculptured ran that passed. Missing information says "unknown".
+Honesty is the one rule above taste. Status is always a glyph plus a word, never colour alone. What an agent says about itself is "reported" and grey. Green is reserved for a check CopperTide ran that passed. Missing information says "unknown".
 
 **Key Characteristics:**
 - One token layer (`web/src/tokens.css`). Component CSS reads tokens only. There is no raw hex outside the token file, except a third-party sign-in button in `hosted/hosted.css`.
@@ -286,14 +286,14 @@ Each look has a quiet neutral ground, one accent, and four status hues that only
 ### Status hues
 - **Red** (`*-red`): needs you, blocked, failed. Also danger buttons and error text.
 - **Amber** (`*-amber`): waiting, needs setup, and heuristic provenance. In Standard, a needs-you card is tinted with amber-soft over the raised surface.
-- **Green** (`*-green`): verified. A check Sculptured ran has passed.
+- **Green** (`*-green`): verified. A check CopperTide ran has passed.
 - **Violet** (`*-violet`): unknown.
 - Providers (`--claude`, `--codex`, `--practice`, `--other`) colour vendor marks, the working accent of a card (its 2px top rule and running chips), and the vendor name. They are identity, never status.
 
 ### Named Rules
 **The Shape-Plus-Word Rule.** Colour only ever adds to a glyph and a word. Every state has a mark (`◉ needs you`, `▲ stuck`, `⧗ waiting for a slot`, `⣟ working`, `✓ done (reported)`, `○ idle`, `∅ unknown`, `◌ launching`, `◑ stopping`, `■ stopped`, `✕ failed`, `○ planned`), and a selected card carries a `✓` badge as well as the accent ring.
 
-**The Grey Done Rule.** "done (reported)" means a turn ended. It is coloured `--status-done`, which is `--muted` (grey), never green. Green (`--status-verified`) is the only green agent status, and it means a check that Sculptured ran has passed. Run summaries say "N reported done · M verified" and never more.
+**The Grey Done Rule.** "done (reported)" means a turn ended. It is coloured `--status-done`, which is `--muted` (grey), never green. Green (`--status-verified`) is the only green agent status, and it means a check that CopperTide ran has passed. Run summaries say "N reported done · M verified" and never more.
 
 **The One Accent Rule.** Each look has exactly one accent. Provider colours and data series are categorical identity, not a second accent.
 
@@ -426,7 +426,7 @@ Simple to start, deep when needed. Nothing is removed, and every closed disclosu
 ### Transcript and composer
 - **Meta lines:** a turn end ("Turn completed · 3.5s · 1.5k tokens") is one small muted line with no rules. A run of session events folds to one muted summary ("Restarted · new conversation") that opens on click to the verbatim chain, marked `data-raw-evidence`. A search hit inside opens it, and an alarm always shows in full.
 - **Composer:** the message box and Send, nothing else. How the message is delivered (inform waits for the turn to end, instruct may interrupt; "Interrupt current turn") sits behind the `⋯` beside Send, and a small accent chip ("instruct", "interrupts now") names a choice that is not the default. Expand editor shows on the box you point at or type in.
-- **Run summary (Results):** a heading that never overstates (Run finished only once every agent has stayed finished; else Run in progress or Last run) and one short sentence, then per agent its name (which opens it), its state and its reply, clamped, behind a small quote icon whose tooltip says "agent-reported". Files changed (filesystem-observed, or unknown with its reason) and Checks follow as their own sections; a check is verified only when Sculptured ran it and it passed, and the verdict says what is verified once. Stop team stays in the project tab row.
+- **Run summary (Results):** a heading that never overstates (Run finished only once every agent has stayed finished; else Run in progress or Last run) and one short sentence, then per agent its name (which opens it), its state and its reply, clamped, behind a small quote icon whose tooltip says "agent-reported". Files changed (filesystem-observed, or unknown with its reason) and Checks follow as their own sections; a check is verified only when CopperTide ran it and it passed, and the verdict says what is verified once. Stop team stays in the project tab row.
 
 ### Command palette (Ctrl K)
 - **Way in:** a quiet search box with the text "Search or run a command" and a `Ctrl K` key cap (`⌘K` on Mac). It sits in the top bar in both looks (an icon only on a phone). It uses `--well` (or `--panel` in the Standard header), a `--line` border and `--radius-md`.
@@ -466,7 +466,7 @@ Control, a simulated Arena run and Arena control share one workspace (`web/src/w
 - **Do** read every colour, size, radius, shadow and duration from `web/src/tokens.css`. Component CSS holds no raw values.
 - **Do** add a look as one `:root[data-look='<name>']` block that overrides canonical (and material) tokens, and let derived tokens follow through `color-mix`.
 - **Do** pair every status colour with a glyph and a word, and give every selection a shape (a `✓` badge or check) as well as the accent ring.
-- **Do** colour "done (reported)" with `--status-done` (grey). Use `--status-verified` (green) only when a check Sculptured ran has passed.
+- **Do** colour "done (reported)" with `--status-done` (grey). Use `--status-verified` (green) only when a check CopperTide ran has passed.
 - **Do** label provenance with the tier mark and word (`◆ verified`, `◆ observed`, `◇ reported`, `≈ heuristic`, `∅ unknown`), and write "unknown" with a reason when data is missing.
 - **Do** use tabular numbers for every live or aligned figure.
 - **Do** keep a disabled control's reason visible in text beside it, or as its tooltip and description where the reason is a standing fact.

@@ -40,7 +40,7 @@ pub fn briefing_line(_d: &model::TeamDraft, me: &model::DraftAgent) -> Option<St
     (!checks.is_empty()).then(|| {
         format!(
             "When you finish your work, end your reply with a fenced json block whose fields are:\n- {}\n\
-             Sculptured checks it before your work is handed on; a result that fails is sent back to you.",
+             CopperTide checks it before your work is handed on; a result that fails is sent back to you.",
             model::result_check::wanted(checks).join("\n- ")
         )
     })

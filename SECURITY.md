@@ -11,7 +11,7 @@ Include what you found, how to reproduce it, and the version or commit. You will
 
 ## Scope
 
-Sculptured runs coding agents on your own computer with your own Claude Code and Codex sign-in. Reports we especially want:
+CopperTide runs coding agents on your own computer with your own Claude Code and Codex sign-in. Reports we especially want:
 
 - A way for a web page, another local user or a remote party to reach `sculptured serve` (it must only listen on loopback) or drive agents without the user.
 - Reading or writing files outside the folders a team is allowed to use.

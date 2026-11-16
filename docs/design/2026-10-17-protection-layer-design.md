@@ -6,7 +6,7 @@ Status: built, 17 October 2026.
 
 The 16 October C172 run spent 57 M tokens in 80 minutes. 96% of them were cache re-reads of agents' own growing context. Developers on Opus averaged 126k–156k tokens of context per call over about 80 calls each. Where the growth came from: files printed through the shell (31% of all tokens), the agents' own replies (18%) and script output (12%). Claude Code limits how much one Read or one shell command returns, but nothing stops an agent from reading a 400 KB file whole, or from carrying a 150k context through 80 calls. Sonnet is not good enough for the developers' CAD work, so the way to fit more Opus work into a plan window is to make each Opus call smaller.
 
-Protections are rules Sculptured applies between an agent and its tools. The first rules are about efficiency. The same layer is where safety rules go later (none now).
+Protections are rules CopperTide applies between an agent and its tools. The first rules are about efficiency. The same layer is where safety rules go later (none now).
 
 ## Goals
 
@@ -21,11 +21,11 @@ Protections are rules Sculptured applies between an agent and its tools. The fir
 ## Non-goals (now)
 
 - Safety rules. The rule list has room for them; it ships empty.
-- Enforcing MADL `restrictions.tools` (allow / deny). Today Sculptured ignores them on import. This layer is where they will be enforced; that is a later change.
+- Enforcing MADL `restrictions.tools` (allow / deny). Today CopperTide ignores them on import. This layer is where they will be enforced; that is a later change.
 - Per-agent thresholds. Team-wide only for now.
 - Rewriting tool output after a call (Claude Code's `updatedToolOutput`). The output cap covers the main case.
 - Stopping to ask the person. Refusals only explain; an "ask" outcome is for later safety rules.
-- Building Sculptured's own harness.
+- Building CopperTide's own harness.
 
 ## Anti-goals (a failure even if it technically works)
 
@@ -49,7 +49,7 @@ Protections are rules Sculptured applies between an agent and its tools. The fir
 |---|---|---|
 | Large file read whole | Refuse a read with no line range of a file over **100 KB**. Reason names the file's size and says to search with `grep -n`, then read with offset and limit | Claude `Read`; shell whole-file printers on Claude and Codex |
 | Shell output cap | **8,000** characters per command reach the context | Claude (`bashOutputMaxChars`); Codex if it has an equivalent |
-| Context ceiling | At **60,000** tokens of context, the agent writes its notes and continues in a fresh conversation | Claude and Codex (Sculptured's own, see below); Claude also gets `--autocompact 100000` as a backstop |
+| Context ceiling | At **60,000** tokens of context, the agent writes its notes and continues in a fresh conversation | Claude and Codex (CopperTide's own, see below); Claude also gets `--autocompact 100000` as a backstop |
 
 Images, PDFs and notebooks are exempt from the size rule (by file extension, never by reading the file). An image cannot be read in pieces, and Claude Code already requires a page range for long PDFs. Refusing them would make an agent retry forever. (My call, 17 October.)
 
@@ -74,14 +74,14 @@ Images, PDFs and notebooks are exempt from the size rule (by file extension, nev
 - When an agent's context passes the ceiling, at the end of its current turn controld sends it the existing checkpoint instruction (write `.sculptured/notes/<agent>.md`: done, checks run, next, files) and then restarts it fresh with its job and that note. This reuses `control_agent(.., Checkpoint)` and the budget pause's `restart` (made `pub(crate)`) and `continuation` text. It follows the pattern of `collaboration/token_limits.rs`, which already watches per-agent limits.
 - It acts only past twice the conversation's starting size as well, so a fresh conversation (which starts at that size again) can never trip it at once and restart in a loop. The note's turn is the first turn to end after the ceiling is recorded. (Both found in a live run, 17 October.)
 - It never interrupts a turn mid-way and never stops the run. The agent's page shows "context 61k of 60k: continuing fresh from notes" as evidence.
-- Codex: the same guard as a `PreToolUse` hook through the thread `config` overrides, if Codex's hook trust can be granted to Sculptured's own hook without `--dangerously-bypass-hook-trust` (that flag would also run the person's own untrusted hooks, so it is not used). If it cannot, Codex gets only what Sculptured sets from outside (an output limit and compaction threshold if Codex has them), and the Advanced settings say which protections apply to Codex agents.
+- Codex: the same guard as a `PreToolUse` hook through the thread `config` overrides, if Codex's hook trust can be granted to CopperTide's own hook without `--dangerously-bypass-hook-trust` (that flag would also run the person's own untrusted hooks, so it is not used). If it cannot, Codex gets only what CopperTide sets from outside (an output limit and compaction threshold if Codex has them), and the Advanced settings say which protections apply to Codex agents.
 
 ### Evidence (decided)
 
 - The Claude parser recognises a tool result starting with `Sculptured protection:` and the runner records a new event, `protection-applied` (rule, tool, a short detail such as the file and its size), on the agent.
 - A fresh restart at the ceiling is recorded as an event (`context-ceiling-reached`, with the size), alongside the restart's usual tenure events.
 - The Claude parser also emits the existing `ContextReported` event per model call (input + cache read + cache write of that call), so the agent's page can show its context size against the ceiling. Today no driver emits it.
-- The agent's conversation shows refusals as a short line ("Sculptured refused reading parts.csv whole: 412 KB"), with the raw event as evidence. "Where tokens went" counts refusals and compactions per agent.
+- The agent's conversation shows refusals as a short line ("CopperTide refused reading parts.csv whole: 412 KB"), with the raw event as evidence. "Where tokens went" counts refusals and compactions per agent.
 
 ### Settings UI (decided)
 
@@ -95,7 +95,7 @@ It says per agent kind what actually applies, for example "Codex agents: output 
 2. A hook's `deny` is honored under `--dangerously-skip-permissions`. ✓ The JSON reply is enough; exit code 2 is not needed.
 3. A refused call reaches the agent as a `tool_result` with `is_error: true` and content `PreToolUse:Read hook error: <our reason>`, so the runner looks for `Sculptured protection:` inside the text, not at its start. The final `result` line also lists it in `permission_denials`.
 4. `bashOutputMaxChars: 3000` in `--settings` works: a 19.5 KB shell output reached the agent as a saved file path plus a 2 KB preview.
-5. `--autocompact` accepts only `auto` or 100k–1M tokens, so a 60k ceiling cannot use it. `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` is accepted but showed no compaction within one turn at 70k tokens. Hence Sculptured's own ceiling above.
+5. `--autocompact` accepts only `auto` or 100k–1M tokens, so a 60k ceiling cannot use it. `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` is accepted but showed no compaction within one turn at 70k tokens. Hence CopperTide's own ceiling above.
 
 The hook's stdin carried the documented fields (`session_id`, `cwd`, `hook_event_name`, `tool_name`, `tool_input`, `tool_use_id`, and others).
 

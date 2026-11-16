@@ -28,7 +28,7 @@ pub async fn auth(State(st): State<AppState>, req: Request, next: Next) -> Respo
         AuthPolicy::DenyAll => ApiError::new(
             StatusCode::UNAUTHORIZED,
             "login_required",
-            "sign in to use Sculptured",
+            "sign in to use CopperTide",
         )
         .into_response(),
         AuthPolicy::Gateway { secret } => {

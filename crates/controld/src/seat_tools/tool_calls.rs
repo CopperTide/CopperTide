@@ -99,7 +99,7 @@ pub(super) fn record(
         body,
     )
     .map(|_| ())
-    .map_err(|e| ToolError::Failed(format!("Sculptured could not record this: {e}")))
+    .map_err(|e| ToolError::Failed(format!("CopperTide could not record this: {e}")))
 }
 
 /// Records an event about a seat-tool call as Sculptured (system:controld).

@@ -1,14 +1,14 @@
 ---
 title: Connect a computer
-description: Install Sculptured's runner with one command, choose which folders agents may use, and keep it running in the background.
+description: Install CopperTide's runner with one command, choose which folders agents may use, and keep it running in the background.
 ---
 
-In the hosted beta, your agents run on **your own computer**, never on Sculptured's servers. A small program, the **runner**, starts Claude Code or Codex there, captures what they do and sends it to your account. You install and connect it with one command from the **Computers** page.
+In the hosted beta, your agents run on **your own computer**, never on CopperTide's servers. A small program, the **runner**, starts Claude Code or Codex there, captures what they do and sends it to your account. You install and connect it with one command from the **Computers** page.
 
 ```mermaid
 sequenceDiagram
   participant B as Computers page
-  participant G as Sculptured (your account)
+  participant G as CopperTide (your account)
   participant T as Terminal on your computer
   B->>G: Copy connect command
   G-->>B: a one-time key, valid 30 minutes
@@ -77,15 +77,15 @@ sequenceDiagram
     - **The app:** download it and sign in there. Agents run while the app is open. See [Install the Mac app](#install-the-mac-app) below.
     - **Terminal:** copy the connect command, as on Linux, and paste it into Terminal. The runner keeps itself running in the background with a LaunchAgent, `~/Library/LaunchAgents/dev.sculptured.runner.plist`, even when no window is open.
 
-    macOS keeps Desktop, Documents and Downloads from background programs until you allow them. If a project is in one of those, allow Sculptured in *System Settings → Privacy & Security*, under **Files and Folders** or **Full Disk Access**. Folders elsewhere in your home folder need nothing.
+    macOS keeps Desktop, Documents and Downloads from background programs until you allow them. If a project is in one of those, allow CopperTide in *System Settings → Privacy & Security*, under **Files and Folders** or **Full Disk Access**. Folders elsewhere in your home folder need nothing.
 
-    Self-hosted Sculptured already runs on Apple silicon Macs: see [Run it yourself](/operations).
+    Self-hosted CopperTide already runs on Apple silicon Macs: see [Run it yourself](/operations).
   </Tab>
 </Tabs>
 
 ## Install the Mac app
 
-On a Mac, the sign-in page and the Computers page both offer **Download Sculptured for Mac**. One download works on Apple silicon and Intel Macs.
+On a Mac, the sign-in page and the Computers page both offer **Download CopperTide for Mac**. One download works on Apple silicon and Intel Macs.
 
 <Steps>
   <Step title="Move it to Applications">
@@ -97,7 +97,7 @@ On a Mac, the sign-in page and the Computers page both offer **Download Sculptur
     Open *System Settings → Privacy & Security* and scroll down to **Security**. Next to *“Sculptured” was blocked to protect your Mac*, click **Open Anyway**, enter your Mac password, then click **Open**. You only do this once; after that it opens normally.
   </Step>
   <Step title="Sign in and approve">
-    In the app, under **Sculptured account**, the address is already filled in. Choose **Sign in to my account**, sign in, and approve this computer. It appears on the Computers page, and agents run on it while the app is open.
+    In the app, under **CopperTide account**, the address is already filled in. Choose **Sign in to my account**, sign in, and approve this computer. It appears on the Computers page, and agents run on it while the app is open.
   </Step>
 </Steps>
 
@@ -165,7 +165,7 @@ Turn one off with `--disable <capability>` (or on with `--enable`) when you run 
 
 ## Sign in Claude Code and Codex
 
-Agents use the Claude Code and Codex sign-ins **on the computer that runs them**. Install them there first. Sculptured finds them on your PATH and in the usual install places, including when you install one after connecting. When one is missing, Sculptured shows its official install command for each system:
+Agents use the Claude Code and Codex sign-ins **on the computer that runs them**. Install them there first. CopperTide finds them on your PATH and in the usual install places, including when you install one after connecting. When one is missing, CopperTide shows its official install command for each system:
 
 | | Mac or Linux (Terminal) | Windows (PowerShell) |
 |---|---|---|
@@ -179,8 +179,8 @@ If one isn't signed in, sign it in once, from any browser (it doesn't have to be
 
 You can start a sign-in from:
 
-- **Start team**: before a team starts, Sculptured checks that its computer has the Claude Code or Codex its agents use, signed in. If not, it says which and lets you sign in right there, then **Start team** again;
-- the **Computers** page (or **Account** when Sculptured runs on your own computer): **Sign in** next to it;
+- **Start team**: before a team starts, CopperTide checks that its computer has the Claude Code or Codex its agents use, signed in. If not, it says which and lets you sign in right there, then **Start team** again;
+- the **Computers** page (or **Account** when CopperTide runs on your own computer): **Sign in** next to it;
 - an agent that stopped because it isn't signed in: **Sign in to Claude Code** (or Codex), then **Hand over again**; or
 - a terminal on that computer: run `claude` or `codex login`.
 
@@ -196,25 +196,25 @@ A team runs on the computer chosen under **Run on** in its Design panel. Any age
 - **Start needs every computer it uses.** If one is not connected, Start says which, and which agent runs there.
 - **Agents an agent starts** run on the same computer as the agent that started them.
 
-<Note>Run Sculptured only where the computer's owner allows long-running programs. Many clusters forbid them on login nodes: ask your cluster's support first.</Note>
+<Note>Run CopperTide only where the computer's owner allows long-running programs. Many clusters forbid them on login nodes: ask your cluster's support first.</Note>
 
 ### Add a cluster from the web app
 
-On the hosted service you can connect a cluster without installing anything yourself: Sculptured's server signs in to the login node over SSH, sets up the runner there and keeps it running.
+On the hosted service you can connect a cluster without installing anything yourself: CopperTide's server signs in to the login node over SSH, sets up the runner there and keeps it running.
 
 1. **Check your site's rules first.** Many clusters limit long-running programs, or AI tools, on login nodes. The runner is small and mostly waits, but some sites want it under `scrontab` or on a service node instead.
 2. On **Computers**, choose **Add a cluster**. Give the login node's host name, the port (22 unless your site says otherwise), your user name there and, if you reach it through a jump host (bastion), that host too.
-3. Choose how Sculptured signs in. Each choice is a card; the selected one is highlighted.
-   - **Key Sculptured makes** (recommended where the site takes keys). Sculptured makes a key pair just for this cluster and shows its public half, with the exact line to add to `~/.ssh/authorized_keys` on the login node, a command that adds it, and the line for the jump host (which allows a connection to the login node only). Add it, then choose **Connect**. The private half never leaves the server. If the site takes no keys at all, the card says so and tells you to add the cluster again with **Password**.
+3. Choose how CopperTide signs in. Each choice is a card; the selected one is highlighted.
+   - **Key CopperTide makes** (recommended where the site takes keys). CopperTide makes a key pair just for this cluster and shows its public half, with the exact line to add to `~/.ssh/authorized_keys` on the login node, a command that adds it, and the line for the jump host (which allows a connection to the login node only). Add it, then choose **Connect**. The private half never leaves the server. If the site takes no keys at all, the card says so and tells you to add the cluster again with **Password**.
    - **Password**, for sites that take no keys. Codes and Duo pushes are asked for when you connect.
-   - **Certificate from your site**: a private key and its `-cert.pub` file, from NERSC's `sshproxy`, Smallstep's `step ssh`, or a Teleport-style CA. The card shows whom the certificate names and when it ends; from 2 hours before then it asks you to paste a new one (**Paste a new certificate**), and Sculptured never tries one that has ended.
+   - **Certificate from your site**: a private key and its `-cert.pub` file, from NERSC's `sshproxy`, Smallstep's `step ssh`, or a Teleport-style CA. The card shows whom the certificate names and when it ends; from 2 hours before then it asks you to paste a new one (**Paste a new certificate**), and CopperTide never tries one that has ended.
    - **Your own private key**, with its passphrase if it has one. The passphrase is used once to read the key and is not kept.
 
-   Sculptured tries what the login node offers in this order: the key or certificate, then questions (keyboard-interactive), then the password, and goes on through a chain such as a password followed by a code.
+   CopperTide tries what the login node offers in this order: the key or certificate, then questions (keyboard-interactive), then the password, and goes on through a chain such as a password followed by a code.
 
    Saved keys and passwords are encrypted with a server key kept outside the database, are never shown again, and are deleted when you remove the cluster.
-4. If the cluster asks for a code when anyone signs in (Duo, an OTP), the card shows its question; type the answer there. It is used once and never stored. The card shows every question the site asks at once, hides answers the site asks to hide, turns a sign-in link (a web or device-code sign-in) into a link, and counts down the time left to answer. For a Duo push, type `1` (or `push`) and approve on your phone: Sculptured waits up to 2 minutes for the approval. If a site asks for your password and a code in one field, type both as the site says.
-5. Choose how long Sculptured stays signed in (**Keep signed in for**, 12 hours unless you change it, at most 7 days; 0 keeps nothing). After you answer a code once, Sculptured keeps that SSH connection open and restarts the runner over it without asking again. The card says **Signed in until …**; **Sign out** closes the connection, and so does removing the cluster. Many sites end sessions sooner, and a restart of Sculptured's server closes it too: the next restart then asks for your code.
+4. If the cluster asks for a code when anyone signs in (Duo, an OTP), the card shows its question; type the answer there. It is used once and never stored. The card shows every question the site asks at once, hides answers the site asks to hide, turns a sign-in link (a web or device-code sign-in) into a link, and counts down the time left to answer. For a Duo push, type `1` (or `push`) and approve on your phone: CopperTide waits up to 2 minutes for the approval. If a site asks for your password and a code in one field, type both as the site says.
+5. Choose how long CopperTide stays signed in (**Keep signed in for**, 12 hours unless you change it, at most 7 days; 0 keeps nothing). After you answer a code once, CopperTide keeps that SSH connection open and restarts the runner over it without asking again. The card says **Signed in until …**; **Sign out** closes the connection, and so does removing the cluster. Many sites end sessions sooner, and a restart of CopperTide's server closes it too: the next restart then asks for your code.
 
 **Sites we know.**
 
@@ -225,19 +225,19 @@ On the hosted service you can connect a cluster without installing anything your
 
 Both sites let you start agents from a login node, for light work only: compute goes through Slurm (`sbatch`, `srun`). NERSC asks that agents run under your supervision, work in `$HOME` or `$SCRATCH`, and not change `$CFS` without your permission ([NERSC's guidance on coding agents](https://docs.nersc.gov/development/coding-agents/)). Delta stops programs that look like applications on its login nodes ([Delta's login-node rules](https://docs.ncsa.illinois.edu/systems/delta/en/latest/user_guide/citizenship.html)).
 
-**What can't work from a web app.** Hardware security keys (FIDO keys such as `sk-ed25519`), Kerberos (GSSAPI) tickets and SSH agent forwarding all need your own computer, so Sculptured's server cannot use them. If your site requires one of them, [set up the cluster yourself](#set-up-a-cluster-yourself).
+**What can't work from a web app.** Hardware security keys (FIDO keys such as `sk-ed25519`), Kerberos (GSSAPI) tickets and SSH agent forwarding all need your own computer, so CopperTide's server cannot use them. If your site requires one of them, [set up the cluster yourself](#set-up-a-cluster-yourself).
 
-Sculptured then copies the runner to `~/.sculptured/bin` on the login node, writes its own key to `~/.sculptured/runner/device.json` (readable only by you), starts it in a tmux session named `sculptured-runner` (with `nohup` where there is no tmux), runs `sculptured doctor` there and shows the report. From then on the cluster is one of your computers: agents can run on it, and messages and handoffs reach them as on any other computer.
+CopperTide then copies the runner to `~/.sculptured/bin` on the login node, writes its own key to `~/.sculptured/runner/device.json` (readable only by you), starts it in a tmux session named `sculptured-runner` (with `nohup` where there is no tmux), runs `sculptured doctor` there and shows the report. From then on the cluster is one of your computers: agents can run on it, and messages and handoffs reach them as on any other computer.
 
-**Keeping it running.** If the cluster's runner loses its link for more than a few minutes, for example after the login node restarts, Sculptured signs in again and restarts it. While the connection is still signed in, this needs no code. Otherwise a cluster that asks for a code at sign-in can't be reconnected without you: its card says **Reconnect needs your code** until you choose **Reconnect** and answer.
+**Keeping it running.** If the cluster's runner loses its link for more than a few minutes, for example after the login node restarts, CopperTide signs in again and restarts it. While the connection is still signed in, this needs no code. Otherwise a cluster that asks for a code at sign-in can't be reconnected without you: its card says **Reconnect needs your code** until you choose **Reconnect** and answer.
 
-**What Sculptured did.** Each cluster's card lists every SSH action with its time: connected, signed in, installed, paired, started or restarted, and anything that failed, with the reason. It also shows the login node's host key fingerprint. Sculptured saves that key the first time it connects and refuses to sign in if it ever changes.
+**What CopperTide did.** Each cluster's card lists every SSH action with its time: connected, signed in, installed, paired, started or restarted, and anything that failed, with the reason. It also shows the login node's host key fingerprint. CopperTide saves that key the first time it connects and refuses to sign in if it ever changes.
 
 **Remove** deletes the saved key or password and revokes the runner's key; the runner on the cluster stops by itself. Remove the line you added to `~/.ssh/authorized_keys`, and `~/.sculptured` if you like.
 
 ### Set up a cluster yourself
 
-1. Install Sculptured on the login node and run `sculptured doctor`. Under **This computer** it says whether the runner keeps running after you log out, whether the node reaches your Sculptured account, Anthropic and OpenAI, and which proxy settings are set (names only).
+1. Install CopperTide on the login node and run `sculptured doctor`. Under **This computer** it says whether the runner keeps running after you log out, whether the node reaches your CopperTide account, Anthropic and OpenAI, and which proxy settings are set (names only).
 2. If user services don't run there (common on clusters), keep the runner in tmux, where your site allows it: `tmux new -d -s sculptured 'sculptured connect <your Sculptured address>'`. Some sites offer scheduled jobs for this instead, such as NERSC's `scrontab`.
 3. Give the agent that runs there what it needs to know about the scheduler: add Slurm or PBS skills with **Add from a catalog** (an HPC centre's catalog, or any GitHub repository of skills), or an existing Slurm or PBS MCP server with **From the MCP Registry**. The agent then submits and watches jobs itself (`sbatch`, `squeue`, `sacct`, or `qsub`, `qstat`), and every call shows in its timeline.
 
@@ -245,15 +245,15 @@ Compute nodes often have no internet; an agent can run only where the node reach
 
 ## Use one computer with several accounts
 
-A computer can run agents for more than one account, for example your own and a test account. Copy the connect command from the other account's **Computers** page and run it on the same computer. Sculptured sees that the computer is already connected to a different account and adds this one beside it: each account gets its own runner, its own folder (`~/.sculptured/runners/<id>`) and its own background service, so both run at once. Running an account's command again reconnects its existing runner instead of adding the computer twice.
+A computer can run agents for more than one account, for example your own and a test account. Copy the connect command from the other account's **Computers** page and run it on the same computer. CopperTide sees that the computer is already connected to a different account and adds this one beside it: each account gets its own runner, its own folder (`~/.sculptured/runners/<id>`) and its own background service, so both run at once. Running an account's command again reconnects its existing runner instead of adding the computer twice.
 
 The new runner starts with the same allowed folders and access as the computer's first one; change them with `sculptured allow … --data-dir ~/.sculptured/runners/<id>`.
 
 ## Stop agents when something stops responding
 
-**Stop** and **Stop everything now** always finish in Sculptured, even when the computer running the agents is offline. Its agents are marked stopped at once. If one is still running on that computer, the computer ends it as soon as it reconnects.
+**Stop** and **Stop everything now** always finish in CopperTide, even when the computer running the agents is offline. Its agents are marked stopped at once. If one is still running on that computer, the computer ends it as soon as it reconnects.
 
-To end them on the computer itself, without Sculptured, run this there. It works while the computer is offline:
+To end them on the computer itself, without CopperTide, run this there. It works while the computer is offline:
 
 ```bash
 sculptured stop
@@ -294,7 +294,7 @@ You can also run `sculptured connect https://app.usesculptured.com` yourself. It
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title="“There's no Sculptured build for … yet”">
+  <Accordion title="“There's no CopperTide build for … yet”">
     The Computers page offers a command only for systems with a published build: today, Windows on x64, Linux and macOS. The installers also stop, without installing anything, on Windows on Arm or on an unsupported Linux processor.
   </Accordion>
   <Accordion title="“This connect command was already used or has expired”">
@@ -306,7 +306,7 @@ You can also run `sculptured connect https://app.usesculptured.com` yourself. It
   <Accordion title="An agent says Claude Code or Codex isn't signed in">
     The CLI is installed but has no sign-in on that computer. Choose **Sign in to Claude Code** (or Codex) on the agent, finish signing in, then choose **Hand over again**. See [Sign in Claude Code and Codex](#sign-in-claude-code-and-codex).
   </Accordion>
-  <Accordion title="Sculptured says Claude Code or Codex isn't installed">
+  <Accordion title="CopperTide says Claude Code or Codex isn't installed">
     Install it on the computer that runs the team, then start the agent again. You don't need to reconnect: the runner looks for the CLI each time an agent starts.
   </Accordion>
   <Accordion title="“… is not in a folder this computer allows”">
@@ -316,7 +316,7 @@ You can also run `sculptured connect https://app.usesculptured.com` yourself. It
     Folder paths must be full paths on the computer that runs the team, such as `/home/you/project` or `C:\Users\you\project`. Check the spelling, or choose **Browse…**.
   </Accordion>
   <Accordion title="“Live updates for … aren't arriving”">
-    The browser lost its live connection to your account. Your agents are not affected and keep working. Sculptured keeps trying; choose **Try again** to reload. This usually means a dropped network connection, or a network that blocks live connections.
+    The browser lost its live connection to your account. Your agents are not affected and keep working. CopperTide keeps trying; choose **Try again** to reload. This usually means a dropped network connection, or a network that blocks live connections.
   </Accordion>
   <Accordion title="My computer went to sleep or lost Wi-Fi during a run">
     Nothing is lost. Agents' calls wait for the connection to return, questions stay open, and a **Stop team** you press meanwhile happens as soon as the computer is back. See [When a computer goes offline](/guides/offline).

@@ -166,7 +166,7 @@ fn seat_tool_client_reports_a_missing_socket_plainly() {
     )
     .unwrap_err();
     assert!(
-        err.starts_with("cannot reach Sculptured's agent runner"),
+        err.starts_with("cannot reach CopperTide's agent runner"),
         "{err}"
     );
 }

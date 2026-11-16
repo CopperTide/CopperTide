@@ -7,16 +7,16 @@ $ErrorActionPreference = 'Stop'
 $Origin = '__ORIGIN__'
 $Releases = '__RELEASES__'
 
-function Fail($why) { Write-Host "Sculptured install: $why" -ForegroundColor Red; exit 1 }
+function Fail($why) { Write-Host "CopperTide install: $why" -ForegroundColor Red; exit 1 }
 
-if ($env:PROCESSOR_ARCHITECTURE -ne 'AMD64') { Fail "this computer is $($env:PROCESSOR_ARCHITECTURE); Sculptured's Windows build is for 64-bit Intel/AMD (x64) for now." }
+if ($env:PROCESSOR_ARCHITECTURE -ne 'AMD64') { Fail "this computer is $($env:PROCESSOR_ARCHITECTURE); CopperTide's Windows build is for 64-bit Intel/AMD (x64) for now." }
 $target = 'x86_64-pc-windows-gnu'
 $asset = "sculptured-$target.tar.gz"
 $tmp = Join-Path ([IO.Path]::GetTempPath()) ("sculptured-" + [guid]::NewGuid())
 New-Item -ItemType Directory -Path $tmp | Out-Null
 try {
-  Write-Host "Downloading Sculptured for Windows..."
-  try { Invoke-WebRequest -UseBasicParsing "$Releases/$asset" -OutFile "$tmp\$asset" } catch { Fail "there is no Sculptured build for Windows at $Releases yet. Nothing was installed." }
+  Write-Host "Downloading CopperTide for Windows..."
+  try { Invoke-WebRequest -UseBasicParsing "$Releases/$asset" -OutFile "$tmp\$asset" } catch { Fail "there is no CopperTide build for Windows at $Releases yet. Nothing was installed." }
   Invoke-WebRequest -UseBasicParsing "$Releases/$asset.sha256" -OutFile "$tmp\$asset.sha256"
   $want = ((Get-Content "$tmp\$asset.sha256" -Raw).Trim() -split '\s+')[0].ToLower()
   $got = (Get-FileHash -Algorithm SHA256 "$tmp\$asset").Hash.ToLower()
@@ -35,7 +35,7 @@ try {
   # Ending the task can leave the runner itself running (Windows then refuses to replace its files):
   # stop the old runner, only the copies installed in this folder.
   $old = Get-Process -Name 'sculptured', 'sculptured-background' -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path.StartsWith($bin, [StringComparison]::OrdinalIgnoreCase) }
-  if ($old) { Write-Host "Stopping the running Sculptured runner to update it..."; $old | Stop-Process -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 1 }
+  if ($old) { Write-Host "Stopping the running CopperTide runner to update it..."; $old | Stop-Process -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 1 }
   Copy-Item "$tmp\sculptured.exe", "$tmp\sculptured-background.exe" -Destination $bin -Force
   Write-Host "Installed $bin\sculptured.exe"
   $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')

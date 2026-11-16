@@ -1,6 +1,6 @@
 # Release verification — 17 October 2026
 
-Scope: the Sculptured core at `96e9000` (with the Community repo at `8c2e386` and the cloud repo at `9b8642c`), and the documentation commit that follows it. This records what was checked and what was not; it is not a security audit.
+Scope: the CopperTide core at `96e9000` (with the Community repo at `8c2e386` and the cloud repo at `9b8642c`), and the documentation commit that follows it. This records what was checked and what was not; it is not a security audit.
 
 ## What changed since the last verified release
 

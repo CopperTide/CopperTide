@@ -35,7 +35,7 @@ pub(crate) fn record_lifecycle(
 /// agent runner", another one "Host {id}".
 pub(super) fn runner(host: &str) -> String {
     if host == LOCAL_HOST {
-        "Sculptured's agent runner".into()
+        "CopperTide's agent runner".into()
     } else {
         format!("Host {host}")
     }
@@ -47,7 +47,7 @@ pub(super) fn runner(host: &str) -> String {
 /// runner holds the data folder. Teams are stopped first so no agent outlives its runner.
 pub(super) fn update_steps(host: &str) -> String {
     if host == LOCAL_HOST {
-        "Stop all teams, then end the old agent runner: its process number is in the file hostd.pid, in the host-local folder of Sculptured's data folder. Sculptured starts the new runner within a minute.".into()
+        "Stop all teams, then end the old agent runner: its process number is in the file hostd.pid, in the host-local folder of CopperTide's data folder. CopperTide starts the new runner within a minute.".into()
     } else {
         format!("Stop the agents on host {host}, then end its agent runner and start the new one.")
     }
@@ -57,7 +57,7 @@ pub(super) fn update_steps(host: &str) -> String {
 #[must_use]
 pub fn older_runner(host: &str) -> String {
     let what = if host == LOCAL_HOST {
-        "Sculptured's agent runner".to_string()
+        "CopperTide's agent runner".to_string()
     } else {
         format!("Host {host}'s agent runner")
     };
@@ -91,7 +91,7 @@ pub fn fit_params(
         "This agent runs without {}, because {} is from an older version. To get them back: {}",
         lost.join(" and without "),
         if host == LOCAL_HOST {
-            "Sculptured's agent runner".to_string()
+            "CopperTide's agent runner".to_string()
         } else {
             format!("host {host}'s agent runner")
         },
@@ -119,7 +119,7 @@ pub(super) fn drop_features(params: &mut LaunchParams, missing: &[&str]) -> Vec<
         match *f {
             features::SEAT_TOOLS => {
                 params.seat_tools = None;
-                lost.push("Sculptured's agent tools");
+                lost.push("CopperTide's agent tools");
             }
             features::USAGE_BASELINE => {
                 params.usage_baseline = None;
@@ -134,7 +134,7 @@ pub(super) fn drop_features(params: &mut LaunchParams, missing: &[&str]) -> Vec<
             features::PROTECTION => {
                 params.protection = None;
                 lost.push(
-                    "Sculptured's protections (reinstall the runner from Computers to get them)",
+                    "CopperTide's protections (reinstall the runner from Computers to get them)",
                 );
             }
             features::SKILLS => {
@@ -212,12 +212,12 @@ mod tests {
     fn host_words_are_plain() {
         assert_eq!(
             not_connected(LOCAL_HOST),
-            "Sculptured's agent runner is not connected"
+            "CopperTide's agent runner is not connected"
         );
         assert_eq!(not_connected("box"), "Host box is not connected");
         assert_eq!(
             format!("{} did not reply within 30 s", runner(LOCAL_HOST)),
-            "Sculptured's agent runner did not reply within 30 s"
+            "CopperTide's agent runner did not reply within 30 s"
         );
     }
 }

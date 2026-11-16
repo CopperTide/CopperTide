@@ -1,6 +1,6 @@
 # Overview and component map
 
-Sculptured is a web control plane for teams of local coding agents. A user designs a team on a board, starts it, and watches and talks to its Claude Code and Codex agents live. It runs either on the user's own machine (`sculptured serve`) or as a hosted beta, where the server holds the user's teams and the agents still run on the user's own computer.
+CopperTide is a web control plane for teams of local coding agents. A user designs a team on a board, starts it, and watches and talks to its Claude Code and Codex agents live. It runs either on the user's own machine (`sculptured serve`) or as a hosted beta, where the server holds the user's teams and the agents still run on the user's own computer.
 
 Sources:
 - `Cargo.toml` (workspace), `crates/*/Cargo.toml`, the top doc comment of each crate's `lib.rs` or `main.rs`
@@ -10,7 +10,7 @@ Sources:
 
 ## 1. Bird's-eye view
 
-There are two ways to run Sculptured:
+There are two ways to run CopperTide:
 
 | Mode | What runs where |
 |---|---|
@@ -22,7 +22,7 @@ In both modes the same controld code serves the same `/api/*`, and the same host
 ```mermaid
 flowchart TB
   U["User"] -- "designs, starts, watches" --> B["Browser: React web app"]
-  B -- "HTTP and live stream" --> S["Sculptured"]
+  B -- "HTTP and live stream" --> S["CopperTide"]
   S -- "starts, messages, stops" --> CC["Claude Code CLI"]
   S -- "starts, messages, stops" --> CX["Codex CLI"]
   CC -- "reads and edits" --> R["Git repos and folders"]
@@ -32,7 +32,7 @@ flowchart TB
   B -- "opens links, publishes blocks" --> CS["Community site"]
 ```
 
-The diagram is C4 level 1 (context). Sculptured never calls a model itself; the CLIs do, on the user's own sign-in.
+The diagram is C4 level 1 (context). CopperTide never calls a model itself; the CLIs do, on the user's own sign-in.
 
 ## 2. Containers in local mode
 
@@ -52,7 +52,7 @@ flowchart LR
 
 - controld depends on `host-proto` but not on `hostd` or `drivers` (they are dev-dependencies only). It never spawns an agent CLI; hostd does.
 - hostd keeps agents running when controld is unreachable. Events wait in its journal until controld acknowledges them (`crates/hostd/src/lib.rs`).
-- The desktop app uses a Sculptured already answering on `127.0.0.1:4410`, or starts the bundled `serve` ([Desktop and installers](desktop-and-installers.md)).
+- The desktop app uses a CopperTide already answering on `127.0.0.1:4410`, or starts the bundled `serve` ([Desktop and installers](desktop-and-installers.md)).
 
 ## 3. Containers in hosted mode
 
@@ -60,7 +60,7 @@ flowchart LR
 flowchart LR
   B["Browser"] -- "HTTPS, cookie" --> G["Gateway"]
   G -- "users, sessions, invites" --> PG[("Postgres")]
-  G -- "loopback, HMAC-signed" --> I["User's Sculptured: serve --hosted"]
+  G -- "loopback, HMAC-signed" --> I["User's CopperTide: serve --hosted"]
   I -- "reads and writes" --> DB[("per-user controld.sqlite")]
   RN["Runner on user's computer: sculptured connect"] -- "WebSocket /host, device key" --> G
   G -- "forwards link, signed" --> I
@@ -120,7 +120,7 @@ The Cargo workspace is `crates/*` (`spikes/` is excluded). The hosted gateway an
 - The gateway does not link controld. It reaches each user's instance over loopback with an HMAC signature (`signing`).
 - TypeScript API types come only from Rust (`cargo test --workspace export_bindings`).
 - OpenRig words (rig, pod, seat, edge, runtime…) appear in the UI only inside `data-advanced` or raw evidence (`web/src/vocab.ts`, `web/src/test-vocab.ts`).
-- Deliberately absent: no routine test calls a model or a third party ([Testing](testing.md)); Sculptured itself makes no model calls.
+- Deliberately absent: no routine test calls a model or a third party ([Testing](testing.md)); CopperTide itself makes no model calls.
 
 ## 6. Where to read next
 
@@ -149,7 +149,7 @@ The user-facing word comes first, the code name second.
 | **Stage** (`WorkflowStage`, `StageKind`) | One step of a workflow, run by an agent, a check, a person or a merge. |
 | **Item** (`WorkflowTask`, `TaskStatus`) | One piece of work moving through stages: queued, assigned, waiting, complete or blocked. Agent-stage completion is agent-reported. |
 | **Own copy** (`localops::copies`, `CopiesMode`) | An agent's own git worktree, so agents don't overwrite each other. |
-| **Check** | A configured command Sculptured runs; its result is `Verified` evidence. |
+| **Check** | A configured command CopperTide runs; its result is `Verified` evidence. |
 | **Runner** (`hostd`) | The process that runs agents on one machine and streams their events. |
 | **Computer** (device) | A user's machine linked to a hosted account with `sculptured connect`. |
 | **Gateway** | The hosted beta's multi-user front door. |

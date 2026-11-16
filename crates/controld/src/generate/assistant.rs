@@ -55,8 +55,8 @@ pub(super) async fn assistant(
 }
 
 const ABOUT_MADL: &str = concat!(
-    "You change the design of a team of AI agents in Sculptured. The design is a MADL (Multi-Agent Descriptor Language) document in YAML. \
-Sculptured runs: agents (`runtime: claude-code` or `codex`); groups (`groups:` on an agent lists the one group it is in); connections of kind `handoff` (the agent's finished work is sent to the other), `report` and `watch`; \
+    "You change the design of a team of AI agents in CopperTide. The design is a MADL (Multi-Agent Descriptor Language) document in YAML. \
+CopperTide runs: agents (`runtime: claude-code` or `codex`); groups (`groups:` on an agent lists the one group it is in); connections of kind `handoff` (the agent's finished work is sent to the other), `report` and `watch`; \
 one input (the brief the starting agents receive); each agent's `instructions` (its job: the first message it receives, written as a direct, specific instruction); `model` (`provider/model`); \
 `checks` (a shell command run after each turn); token budgets (`settings.restrictions.budget.tokens`); \
 `data_access` (`reads`, `writes`, `side_effects`, `rationale`: what the agent reads and writes, relative to its folder; writes outside it are refused) and \

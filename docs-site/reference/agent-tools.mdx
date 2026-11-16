@@ -1,20 +1,20 @@
 ---
 title: Agent tools
-description: The tools Sculptured gives every Claude Code and Codex agent, what each one does, and what you see when an agent uses it.
+description: The tools CopperTide gives every Claude Code and Codex agent, what each one does, and what you see when an agent uses it.
 ---
 
-Every agent Sculptured starts gets a small set of extra tools, next to the CLI's own. Agents use them to ask you questions, report findings, work with teammates and move work through a workflow. You do not call these tools yourself. This page explains what each one does, so you can write [Jobs](/guides/agent-design) that use them and read what you see on the agent's page.
+Every agent CopperTide starts gets a small set of extra tools, next to the CLI's own. Agents use them to ask you questions, report findings, work with teammates and move work through a workflow. You do not call these tools yourself. This page explains what each one does, so you can write [Jobs](/guides/agent-design) that use them and read what you see on the agent's page.
 
 ## How agents get the tools
 
-When the runner starts Claude Code or Codex, it adds one MCP server named `rig`. The CLI starts `sculptured seat-tools` for it, and each call travels over a private connection to the runner and then to your Sculptured.
+When the runner starts Claude Code or Codex, it adds one MCP server named `rig`. The CLI starts `sculptured seat-tools` for it, and each call travels over a private connection to the runner and then to your CopperTide.
 
 ```mermaid
 sequenceDiagram
   participant A as Agent (Claude Code / Codex)
   participant T as rig tools (seat-tools)
   participant R as Runner on your computer
-  participant S as Sculptured
+  participant S as CopperTide
   participant P as You
   A->>T: request_input {question}
   T->>R: the call, over a private socket
@@ -28,7 +28,7 @@ sequenceDiagram
 
 In Claude Code the tools appear as `mcp__rig__request_input` and so on; in Codex as `rig` tools.
 
-If the computer's connection drops while a call is waiting, the runner keeps the call and sends it again when the computer reconnects. Sculptured answers each call once, so a resent question is not asked twice. See [When a computer goes offline](/guides/offline).
+If the computer's connection drops while a call is waiting, the runner keeps the call and sends it again when the computer reconnects. CopperTide answers each call once, so a resent question is not asked twice. See [When a computer goes offline](/guides/offline).
 
 ## Summary
 
@@ -107,7 +107,7 @@ Claude Code's permission prompt, routed to you. It is given only to Claude Code 
 
 <Note>A permission prompt that nobody answers within the question timeout is **allowed**, and the decision is recorded. Set a longer timeout, or keep agents unrestricted only where that is acceptable.</Note>
 
-Codex agents do not get `approve`. A restricted Codex agent asks through Codex's own approval requests, and Sculptured shows those to you as questions in the same way.
+Codex agents do not get `approve`. A restricted Codex agent asks through Codex's own approval requests, and CopperTide shows those to you as questions in the same way.
 
 ## Working with teammates
 
@@ -217,7 +217,7 @@ When you confirm a lesson or constraint, it is also kept with the project for la
 
 ### `propose_change`
 
-Proposes a change to a business system, such as an order, a schedule or a record in the ERP, and waits for the decision; see [Changes to business systems](/guides/changes). Sculptured checks the team's rules against `payload` itself, then approves the change or asks a person. The reply says whether it is approved, by whom, each rule's result, and the proposal's id. Nobody answering in time means not approved. Proposing changes nothing by itself.
+Proposes a change to a business system, such as an order, a schedule or a record in the ERP, and waits for the decision; see [Changes to business systems](/guides/changes). CopperTide checks the team's rules against `payload` itself, then approves the change or asks a person. The reply says whether it is approved, by whom, each rule's result, and the proposal's id. Nobody answering in time means not approved. Proposing changes nothing by itself.
 
 | Parameter | Type | Required | Meaning |
 | --- | --- | --- | --- |
@@ -261,10 +261,10 @@ Loads one of the agent's [skills](/guides/skills) in full. Only Codex agents wit
 
 | Limit | Value | What the agent is told |
 | --- | --- | --- |
-| Size of one call | 1 MiB | "This call is too large for Sculptured (the limit is 1 MiB). Send a shorter question or report." |
-| Calls one agent may have waiting | 16 | "This agent already has too many Sculptured tool calls waiting. Wait for one to finish." |
-| Calls waiting on one computer | 256 | "Sculptured is handling too many tool calls right now. Try again in a moment." |
-| Time to send a call | 10 seconds | "Sculptured did not receive the whole tool call in time." |
+| Size of one call | 1 MiB | "This call is too large for CopperTide (the limit is 1 MiB). Send a shorter question or report." |
+| Calls one agent may have waiting | 16 | "This agent already has too many CopperTide tool calls waiting. Wait for one to finish." |
+| Calls waiting on one computer | 256 | "CopperTide is handling too many tool calls right now. Try again in a moment." |
+| Time to send a call | 10 seconds | "CopperTide did not receive the whole tool call in time." |
 
 A call with wrong arguments is refused and kept as evidence on the agent, so you can see what it tried.
 

@@ -1,13 +1,13 @@
 # Portable formats: team files and run files
 
-Two versioned file formats let a team, or a run, leave one Sculptured and arrive in another:
+Two versioned file formats let a team, or a run, leave one CopperTide and arrive in another:
 
 | Format | File | What it holds | Where |
 |---|---|---|---|
 | `sculptured.team/v1` | `<team>.sculptured-team.json` | Every structural detail of a team | Design → Team → Advanced → *Export team file*; *Start from…* → Advanced → *Import* |
 | `sculptured.session/v1` | `<team>-run-<n>.sculptured-session.jsonl` | One run: the team as it started, then every event in order | History → *Download run*; *Start from…* → Advanced → *Import a past run* |
 
-The team file is also the output format of the AI team generator. The run file is also the target of importing Claude Code and Codex sessions that ran outside Sculptured (§5a).
+The team file is also the output format of the AI team generator. The run file is also the target of importing Claude Code and Codex sessions that ran outside CopperTide (§5a).
 
 Sources:
 - `crates/controld/src/portable/{mod,team,session}.rs`
@@ -19,7 +19,7 @@ Sources:
 
 Both formats are Rust types: `TeamFile`, `SessionHeader` and `SessionLine`. The JSON Schemas are generated from those same types with `schemars`, so the schema cannot drift from what the server reads and writes.
 
-- **Published at:** `/schema/team-v1.json` and `/schema/session-v1.json`. The files live in `web/public/schema/`, so every place that serves the web app serves them: a local Sculptured, the hosted app and Community. The public docs site serves them too, at `https://docs.usesculptured.com/schema/`.
+- **Published at:** `/schema/team-v1.json` and `/schema/session-v1.json`. The files live in `web/public/schema/`, so every place that serves the web app serves them: a local CopperTide, the hosted app and Community. The public docs site serves them too, at `https://docs.usesculptured.com/schema/`.
 - **Named in the file:** an exported team file starts with `"$schema": "https://docs.usesculptured.com/schema/team-v1.json"`, so editors such as VS Code validate and complete it. Import accepts any `$schema` value (or none).
 - **Kept current by:** `crates/controld/tests/portable_schema.rs`. It fails when a file is stale; `UPDATE_SCHEMAS=1 cargo test -p controld --test portable_schema` rewrites them.
 - **Session schema:** it describes one *line*: `oneOf [SessionHeader, SessionLine]`. Line 1 is the header; every later line is an event.
@@ -136,7 +136,7 @@ flowchart LR
 
 ## 5a. Converting Claude Code and Codex sessions
 
-`crates/controld/src/portable/convert/` turns a session that ran outside Sculptured into a run file. That file then goes through the import in §5 unchanged.
+`crates/controld/src/portable/convert/` turns a session that ran outside CopperTide into a run file. That file then goes through the import in §5 unchanged.
 
 ```mermaid
 flowchart LR
@@ -216,8 +216,8 @@ Every event line carries two labels that answer different questions:
 
 | Label | Answers | Values | Set by |
 |---|---|---|---|
-| `origin` (on the line) | How did this line come to be? | `observed`: Sculptured recorded it while the run happened. `converted`: translated from another tool's session file. `ai-reconstructed`: inferred by AI where the file is silent (team structure, roles, handoffs). | The exporter (always `observed` for Sculptured runs) or the session converter (`converted`, §5a) |
-| `provenance` (on the event) | What kind of evidence is it? | `protocol-observed`, `agent-reported`, `filesystem-observed`, `captured-tool`, `verified`, `heuristic`, `operator` | Whatever recorded the event, as everywhere else in Sculptured |
+| `origin` (on the line) | How did this line come to be? | `observed`: CopperTide recorded it while the run happened. `converted`: translated from another tool's session file. `ai-reconstructed`: inferred by AI where the file is silent (team structure, roles, handoffs). | The exporter (always `observed` for CopperTide runs) or the session converter (`converted`, §5a) |
+| `provenance` (on the event) | What kind of evidence is it? | `protocol-observed`, `agent-reported`, `filesystem-observed`, `captured-tool`, `verified`, `heuristic`, `operator` | Whatever recorded the event, as everywhere else in CopperTide |
 
 The header's `source` says where the run happened (`sculptured`, `imported:claude-code`, `imported:codex`). History labels imported runs "Imported · <source>", so an imported run is never mistaken for one that ran here.
 

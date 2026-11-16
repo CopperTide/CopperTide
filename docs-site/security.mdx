@@ -3,7 +3,7 @@ title: Security
 description: Where your code, credentials and agents live, what the server can ask your computer to do, and what your computer refuses.
 ---
 
-Your agents run on **your own computers**, never on a Sculptured server. Each computer keeps its own rules: which folders agents may start in, and how much they may do. The server can ask for less than a computer allows, never more.
+Your agents run on **your own computers**, never on a CopperTide server. Each computer keeps its own rules: which folders agents may start in, and how much they may do. The server can ask for less than a computer allows, never more.
 
 <CardGroup cols={3}>
   <Card title="Your computer decides" icon="laptop" href="#what-your-computer-refuses">Allowed folders and access level are set only on the computer.</Card>
@@ -21,9 +21,9 @@ flowchart LR
     A["Claude Code / Codex"]
     F[("Folders you allowed")]
   end
-  subgraph SV["Sculptured account: server"]
+  subgraph SV["CopperTide account: server"]
     G["Gateway: sign-in, computers"]
-    I["Your own Sculptured: teams, runs, history"]
+    I["Your own CopperTide: teams, runs, history"]
   end
   B -- "HTTPS, session cookie" --> G
   G -- "only your requests" --> I
@@ -36,12 +36,12 @@ flowchart LR
 | What | Where it lives |
 | --- | --- |
 | Your code and files | In the folders you allowed, on your computer. They reach the server only as results you ask for, such as a folder listing, Git status or a diff. |
-| Claude Code and Codex sign-in | In the CLIs' own settings on your computer. Sculptured never reads or stores them. **Sign in** only starts the CLI's own sign-in. |
-| Teams, runs, messages and transcripts | In your own Sculptured. With an account, that is one private instance per user on the server. Running it yourself, it is `~/.sculptured/` on your computer. |
+| Claude Code and Codex sign-in | In the CLIs' own settings on your computer. CopperTide never reads or stores them. **Sign in** only starts the CLI's own sign-in. |
+| Teams, runs, messages and transcripts | In your own CopperTide. With an account, that is one private instance per user on the server. Running it yourself, it is `~/.sculptured/` on your computer. |
 | Your computer's key | `~/.sculptured/runner/device.json` on that computer, readable only by your user. The server keeps only a hash. |
 | Your account password | Stored as an argon2id hash. Google and GitHub sign-in store no password. |
 
-See [Privacy](/privacy) for what is recorded about how you use Sculptured.
+See [Privacy](/privacy) for what is recorded about how you use CopperTide.
 
 ## Running it yourself
 
@@ -108,27 +108,27 @@ The Computers page shows each computer's folders, access and capabilities as the
 
 ## Agents and their tools
 
-- Each agent gets its own token for Sculptured's tools. It works only while that agent's process runs, so one agent cannot use another's tools.
+- Each agent gets its own token for CopperTide's tools. It works only while that agent's process runs, so one agent cannot use another's tools.
 - The runner's own secret is removed from every agent's environment.
 - An invalid tool call is recorded as evidence and answered with an error. It never interrupts the agent.
 - A restricted agent is never launched unrestricted. If a runner cannot honour restricted, the launch is refused.
 - [Safety rules](/guides/budgets#safety-rules) refuse the tool calls you name, for Claude agents, with no model call. They are a speed bump, not a sandbox: an agent can still reach the same result another way, so they add to the computer's own limits rather than replace them.
 - The integrations an agent is given (Kindex, Signet-Eval) are programs the runner finds on its own computer; the server never sends a program to run.
-- Sculptured's own files in a project folder are under `.sculptured/`: the project map, agents' notes, and lessons you confirmed. When agents work in their own copies, Git also records those copies in the project's `.git` folder. Skills and Signet-Eval rules are written in the runner's own data folder, never in the project.
+- CopperTide's own files in a project folder are under `.sculptured/`: the project map, agents' notes, and lessons you confirmed. When agents work in their own copies, Git also records those copies in the project's `.git` folder. Skills and Signet-Eval rules are written in the runner's own data folder, never in the project.
 
 ## Accounts and sessions
 
 - **Invite-only.** Joining needs an invite. Invites are single use, expire and can be revoked.
 - **Sessions** end after 30 days without use; each use renews them. Sign out from the Account page.
-- **Every change** from the browser must come from the Sculptured site itself and carry a CSRF token tied to your session.
+- **Every change** from the browser must come from the CopperTide site itself and carry a CSRF token tied to your session.
 - **Password sign-in** is rate-limited, and unknown emails get the same answer as wrong passwords.
 - **Google and GitHub sign-in** are bound to the browser that started them and cannot be replayed.
-- **Your Sculptured** accepts only requests the gateway signed for you. You reach only your own teams and computers.
+- **Your CopperTide** accepts only requests the gateway signed for you. You reach only your own teams and computers.
 - **Admins** manage invites, users and computers. They cannot open your teams or your files.
 
 ## Community
 
-Community holds published blocks, saves and public profiles, in its own database. It is served by Sculptured's own server for your signed-in account: your browser never calls another site for it, and Community never sees your session cookie. It has no access to your runner, transcripts, files or Git. Publishing strips machine-specific folders, model overrides and workflow input, but a job's text can still contain private details. Review it before you publish. See [Community](/guides/community).
+Community holds published blocks, saves and public profiles, in its own database. It is served by CopperTide's own server for your signed-in account: your browser never calls another site for it, and Community never sees your session cookie. It has no access to your runner, transcripts, files or Git. Publishing strips machine-specific folders, model overrides and workflow input, but a job's text can still contain private details. Review it before you publish. See [Community](/guides/community).
 
 ## Not covered
 

@@ -91,7 +91,7 @@ pub fn run_in(b: Option<&m::RunBudget>) -> (RunBudget, Vec<(String, String)>) {
     };
     let mut dropped = vec![];
     if b.cost_usd.is_some() {
-        dropped.push(("/system/budget/cost_usd".into(), "Sculptured budgets plan shares, tokens and time, not money; the cost limit was not kept".into()));
+        dropped.push(("/system/budget/cost_usd".into(), "CopperTide budgets plan shares, tokens and time, not money; the cost limit was not kept".into()));
     }
     let budget = RunBudget {
         plan: b

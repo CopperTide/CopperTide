@@ -17,13 +17,13 @@ Three changes, built in this order, each pushed and deployed when its tests pass
 | Where skills live | On each agent. No shared library. |
 | Scope | All three, budgets first. |
 
-Sculptured still sets no limits of its own: every budget and limit here is off until the person sets it.
+CopperTide still sets no limits of its own: every budget and limit here is off until the person sets it.
 
 ## A. Enforced budgets
 
 ### What can be promised
 
-The CLIs report usage after each model call, and plan readings are account-wide, so they include the person's own use outside Sculptured. No system can promise "never past 30%" exactly. This design promises a **bounded overshoot**: once the estimate reaches the budget, at most one model call per agent that was working at that moment completes. The person controls that bound with "Most agents working at once", and the Start confirmation states it.
+The CLIs report usage after each model call, and plan readings are account-wide, so they include the person's own use outside CopperTide. No system can promise "never past 30%" exactly. This design promises a **bounded overshoot**: once the estimate reaches the budget, at most one model call per agent that was working at that moment completes. The person controls that bound with "Most agents working at once", and the Start confirmation states it.
 
 Counting the account-wide change means use outside the run counts against the run. That is the safe direction for "I can't use more than 30%".
 
@@ -53,8 +53,8 @@ An agent's limits only tighten the team's: an agent can never be given more than
 ### A2. Measuring
 
 1. **In-turn usage.** The Claude driver counts usage on every model call: `assistant` lines carry `message.usage`, repeated on each line of one message, so it is counted once per `message.id`. These are recorded as provisional `usage-progress` events. At the turn's `result`, the turn's `modelUsage` delta replaces the provisional sum, so totals stay exact. Codex's `thread/tokenUsage/updated` arrives during the turn already; a fixture test confirms it arrives per model call.
-2. **Plan baseline.** At Start, Sculptured records each budgeted window's reading (`used_percent`, `resets_at`). The run's share is `current − baseline`. If no reading exists yet (Claude keeps no usage file), the first reading during the run becomes the baseline. The Start confirmation then says "Claude's share is measured from its first report".
-3. **Estimating between readings.** Readings arrive irregularly. Sculptured learns each provider's percent-per-token rate from consecutive readings and the tokens counted between them: within this run first, then the last run's stored rate. The estimate is `last reading + tokens since × rate`. Enforcement uses the higher of the estimate and the latest reading.
+2. **Plan baseline.** At Start, CopperTide records each budgeted window's reading (`used_percent`, `resets_at`). The run's share is `current − baseline`. If no reading exists yet (Claude keeps no usage file), the first reading during the run becomes the baseline. The Start confirmation then says "Claude's share is measured from its first report".
+3. **Estimating between readings.** Readings arrive irregularly. CopperTide learns each provider's percent-per-token rate from consecutive readings and the tokens counted between them: within this run first, then the last run's stored rate. The estimate is `last reading + tokens since × rate`. Enforcement uses the higher of the estimate and the latest reading.
 4. **Window reset.** When `resets_at` passes, the budget applies to the new window and counting restarts from its first reading. The Run board says so.
 
 ### A3. Enforcing
@@ -90,7 +90,7 @@ stateDiagram-v2
 
 Today a hard stop closes the agent's input, waits up to 5 s for the CLI to finish its turn (it may keep calling the model meanwhile), then force-kills. A hard stop becomes immediate:
 
-1. **Interrupt at once.** Each agent's CLI already runs in a process group Sculptured created for that agent alone, with the CLI as its leader. That group holds the CLI and every command it started (builds, scripts, servers), and nothing else: not the runner, not the person's terminal or desktop session. A hard stop sends that group SIGINT, exactly what Ctrl+C in a terminal sends, so the CLI abandons the model call in flight and its commands stop too. On Windows, agents run without a console, so no Ctrl+C or Ctrl+Break can reach them; there a hard stop goes straight to step 2.
+1. **Interrupt at once.** Each agent's CLI already runs in a process group CopperTide created for that agent alone, with the CLI as its leader. That group holds the CLI and every command it started (builds, scripts, servers), and nothing else: not the runner, not the person's terminal or desktop session. A hard stop sends that group SIGINT, exactly what Ctrl+C in a terminal sends, so the CLI abandons the model call in flight and its commands stop too. On Windows, agents run without a console, so no Ctrl+C or Ctrl+Break can reach them; there a hard stop goes straight to step 2.
 2. **Force after 2 s.** Whatever is still alive in that group gets SIGKILL. On Windows, `taskkill /T /F` ends the CLI's process tree at once.
 3. **Report.** The agent is recorded as hard-stopped with the reason (which budget, or the person) and the time. A model call cut off mid-way may still be billed by the provider for what it had produced; the history notes that the stop interrupted a call.
 
@@ -106,7 +106,7 @@ The person can do the same by hand: **Stop now** on any agent (with its children
 
 ### A5. MADL
 
-MADL change: `restrictions.budget` gains `plan: [{provider, window, percent}]` and `turns`, and `restrictions` gains `concurrency: { max_working }`. Validation follows existing rules: restrictions only tighten, and reach applies to self, subagents and descendants. Sculptured's import and export map these, and the pinned MADL revision moves.
+MADL change: `restrictions.budget` gains `plan: [{provider, window, percent}]` and `turns`, and `restrictions` gains `concurrency: { max_working }`. Validation follows existing rules: restrictions only tighten, and reach applies to self, subagents and descendants. CopperTide's import and export map these, and the pinned MADL revision moves.
 
 ### A6. Tests (fixture CLIs only)
 
@@ -131,7 +131,7 @@ MADL change: `restrictions.budget` gains `plan: [{provider, window, percent}]` a
 | Expected output | new; what it produces and where | first message; available to checks |
 | Tools allowed / banned | MADL restrictions | Claude: `--allowedTools` / `--disallowedTools`. Codex: per-MCP-server tool settings; built-in Codex tools it cannot restrict are marked "not enforced" on the panel |
 | Model and reasoning effort | model exists; effort new | CLI flags |
-| Limits | A1 | enforced by Sculptured |
+| Limits | A1 | enforced by CopperTide |
 | Permissions, check, resume | unchanged | unchanged |
 
 Migration: `job` becomes `context` on load; old team files keep importing, and MADL `instructions` maps to Additional context. The card shows the role and skill chips.
@@ -145,7 +145,7 @@ Migration: `job` becomes `context` on load; old team files keep importing, and M
 Skills load natively, so only names and descriptions sit in the agent's context until a skill is used. That also saves tokens.
 
 - **Claude Code:** a per-agent plugin folder in the runner's data dir (`skills/<name>/SKILL.md`), passed with `--plugin-dir` for that session only. Nothing is written into the person's project.
-- **Codex** (skills are on in 0.162): the first build step confirms which folder Codex reads skills from for one session. If no per-session folder exists, skills are listed in the first message and their bodies placed in a Sculptured-owned folder the agent may read, never the person's project.
+- **Codex** (skills are on in 0.162): the first build step confirms which folder Codex reads skills from for one session. If no per-session folder exists, skills are listed in the first message and their bodies placed in a CopperTide-owned folder the agent may read, never the person's project.
 
 ### B4. MADL
 
@@ -201,7 +201,7 @@ Exit codes: 0 every agent finished; 1 an agent failed; 2 stopped by a budget; 3 
 - `sculptured run` on a fixture team ends with code 0 and prints the event lines.
 - A budget stop exits 2; an invalid file exits 4 with the MADL code.
 - One Ctrl+C (SIGINT to the `sculptured run` process in the test) wraps up; a second stops every fixture agent within 2.5 s.
-- A file starting with the shebang validates in MADL and imports in Sculptured.
+- A file starting with the shebang validates in MADL and imports in CopperTide.
 - `--budget` above the file's value is refused.
 
 ## Documentation

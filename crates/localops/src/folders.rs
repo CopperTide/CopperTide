@@ -84,7 +84,7 @@ fn bad_path(message: impl Into<String>) -> LocalError {
 }
 
 fn unreadable() -> LocalError {
-    LocalError::forbidden("folder_unreadable", "Sculptured can't read that folder")
+    LocalError::forbidden("folder_unreadable", "CopperTide can't read that folder")
 }
 
 #[cfg(unix)]
@@ -434,7 +434,7 @@ pub fn create(home: &Home, parent: &str, name: &str) -> Result<FolderEntry, Loca
             format!("A folder called {name} already exists here"),
         ),
         ErrorKind::PermissionDenied => {
-            LocalError::forbidden("folder_unwritable", "Sculptured can't create a folder here")
+            LocalError::forbidden("folder_unwritable", "CopperTide can't create a folder here")
         }
         _ => LocalError::bad(
             "folder_not_created",

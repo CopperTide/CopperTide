@@ -4,13 +4,13 @@ Date: 2026-10-19. Status: agreed with the user ("add it in the next slot"; obser
 
 ## Intent
 
-People who already use an observability tool can see a team's runs there. Sculptured sends each run as one OpenTelemetry trace to an endpoint the team chooses: Laminar first (it is open source and reads standard OTLP), and any OTLP/HTTP collector (Langfuse, Datadog, Honeycomb, a company's own) the same way. Sculptured's own board stays the main view.
+People who already use an observability tool can see a team's runs there. CopperTide sends each run as one OpenTelemetry trace to an endpoint the team chooses: Laminar first (it is open source and reads standard OTLP), and any OTLP/HTTP collector (Langfuse, Datadog, Honeycomb, a company's own) the same way. CopperTide's own board stays the main view.
 
 ## Goals
 
 - Opt-in per team, off by default. Team Settings → **Send traces**: on/off, destination (Laminar, or another OTLP/HTTP address), the project's API key, and what to send.
 - Two levels: **Timings, tokens and costs** (default) or **Also prompts and outputs** (texts capped at 4 KB each).
-- Spans built from Sculptured's own events, so Claude Code and Codex both work without their own telemetry:
+- Spans built from CopperTide's own events, so Claude Code and Codex both work without their own telemetry:
   - **run** (root): the team, its budget outcome; span events for budget changes, questions asked and answered, hand-overs, stalls and checks;
   - **agent** (one per session of an agent): the agent's name and kind, the computer;
   - **turn**: model (as observed), tokens in/out/cache, cost when priced, the turn's status; `lmnr.span.type = LLM` and `gen_ai.*` attributes;

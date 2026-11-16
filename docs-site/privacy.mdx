@@ -3,9 +3,9 @@ title: Privacy
 description: Understand the difference between usage analytics, stored run history and data on your computer.
 ---
 
-Sculptured stores team designs and run history so you can run agents and review their work. In the hosted beta, that operational data is stored in your account's Sculptured instance. In local mode, it is stored on your computer.
+CopperTide stores team designs and run history so you can run agents and review their work. In the hosted beta, that operational data is stored in your account's CopperTide instance. In local mode, it is stored on your computer.
 
-The hosted beta also collects **usage analytics**: feature use, team structure, run statistics, token totals and errors. Analytics exclude prompts, messages, jobs, agent output, file names and file contents. Self-hosted Sculptured does not collect usage analytics.
+The hosted beta also collects **usage analytics**: feature use, team structure, run statistics, token totals and errors. Analytics exclude prompts, messages, jobs, agent output, file names and file contents. Self-hosted CopperTide does not collect usage analytics.
 
 <Check>The same list is in the app: open **What we record** from your account. Every event is checked against that list before it is stored; anything else is refused.</Check>
 
@@ -22,29 +22,29 @@ The hosted beta also collects **usage analytics**: feature use, team structure, 
 
 | Event | From | What it says |
 | --- | --- | --- |
-| `auth.signin` | Sculptured site | You signed in, and how (password, Google or GitHub) |
-| `invite.used` | Sculptured site | An invite was used to join |
-| `device.paired` | Sculptured site | A computer was connected, and its operating system |
-| `device.revoked` | Sculptured site | A computer was disconnected |
-| `api` | Sculptured site | A request: its kind, the page or action with names removed (for example `/api/teams/:id/git`), its status and how long it took |
-| `session.start` | Your browser | You opened Sculptured |
+| `auth.signin` | CopperTide site | You signed in, and how (password, Google or GitHub) |
+| `invite.used` | CopperTide site | An invite was used to join |
+| `device.paired` | CopperTide site | A computer was connected, and its operating system |
+| `device.revoked` | CopperTide site | A computer was disconnected |
+| `api` | CopperTide site | A request: its kind, the page or action with names removed (for example `/api/teams/:id/git`), its status and how long it took |
+| `session.start` | Your browser | You opened CopperTide |
 | `session.end` | Your browser | You left |
 | `page.active` | Your browser | Every 15 seconds while the tab is in front: which kind of page (names removed) |
 | `ui.action` | Your browser | You used a feature such as Describe it, Token use or Download run (its name only) |
-| `team.created` | Your Sculptured | A team was made, and from what (a template, a file, a description) |
-| `team.saved` | Your Sculptured | A team's shape (counts only: agents by kind, groups, arrows; whether checks, limits, copies or a workflow are used), at most every 10 minutes |
-| `team.started` | Your Sculptured | A team started: how many agents, which programs, how many models, its shape |
-| `team.stopped` | Your Sculptured | A team stopped |
-| `run.summary` | Your Sculptured | A finished run: duration, tokens in and out, agents, spawned agents, failed agents |
-| `check.ran` | Your Sculptured | A check ran, and whether it passed (never the command or its output) |
-| `copies.enabled` | Your Sculptured | Agents' own copies were turned on |
-| `plan.held` | Your Sculptured | A start waited because a plan was near its limit |
+| `team.created` | Your CopperTide | A team was made, and from what (a template, a file, a description) |
+| `team.saved` | Your CopperTide | A team's shape (counts only: agents by kind, groups, arrows; whether checks, limits, copies or a workflow are used), at most every 10 minutes |
+| `team.started` | Your CopperTide | A team started: how many agents, which programs, how many models, its shape |
+| `team.stopped` | Your CopperTide | A team stopped |
+| `run.summary` | Your CopperTide | A finished run: duration, tokens in and out, agents, spawned agents, failed agents |
+| `check.ran` | Your CopperTide | A check ran, and whether it passed (never the command or its output) |
+| `copies.enabled` | Your CopperTide | Agents' own copies were turned on |
+| `plan.held` | Your CopperTide | A start waited because a plan was near its limit |
 
 Analytics events are kept for **180 days**. After that, only daily totals remain.
 
 ## Data stored to run your teams
 
-Analytics are separate from the data Sculptured needs to run your teams. With an account:
+Analytics are separate from the data CopperTide needs to run your teams. With an account:
 
 ```mermaid
 flowchart LR
@@ -53,7 +53,7 @@ flowchart LR
     C["Claude Code / Codex sign-in"]
     A["Agents"]
   end
-  subgraph SV["Your Sculptured on the server"]
+  subgraph SV["Your CopperTide on the server"]
     T[("Teams, runs, messages, transcripts")]
   end
   subgraph AN["Analytics"]
@@ -66,10 +66,10 @@ flowchart LR
 
 | Data | Where | Why |
 | --- | --- | --- |
-| Your teams' designs, including jobs | Your own Sculptured on the server | To show and run your teams. |
-| Messages, agent replies, tool calls and results, questions and answers | Your own Sculptured on the server | So you can watch a run, inspect its evidence and come back to its history. |
+| Your teams' designs, including jobs | Your own CopperTide on the server | To show and run your teams. |
+| Messages, agent replies, tool calls and results, questions and answers | Your own CopperTide on the server | So you can watch a run, inspect its evidence and come back to its history. |
 | Your files and repositories | On your computer | Agents work there. Requested folder listings, Git status and diffs can reach the server. File content may also appear in captured tool results and agent replies. |
-| Claude Code and Codex sign-in | Only on your computer | Sculptured never reads or stores them. |
+| Claude Code and Codex sign-in | Only on your computer | CopperTide never reads or stores them. |
 | Your name, email, sign-in methods, and a password hash if you use a password | The account database | To sign you in. |
 | Your computers: name, operating system, last seen | The account database | For the Computers page. |
 
@@ -77,7 +77,7 @@ The server's data is backed up every night. Admins can see account details, comp
 
 ## What your agents send
 
-Claude Code and Codex send your agents' prompts and the files they read to Anthropic or OpenAI, as they do when you use them directly. That traffic goes from your computer to the provider, under your own Claude or ChatGPT plan or API key. Sculptured is not a party to it.
+Claude Code and Codex send your agents' prompts and the files they read to Anthropic or OpenAI, as they do when you use them directly. That traffic goes from your computer to the provider, under your own Claude or ChatGPT plan or API key. CopperTide is not a party to it.
 
 ## Traces you choose to send
 
@@ -85,7 +85,7 @@ If you turn on [Send traces](/guides/send-traces) for a team, its runs go to the
 
 ## Community
 
-Community uses your Sculptured account. Publishing a block makes its definition public: its agents' roles and jobs, its connections, and the title and license you choose. Machine-specific folders, model overrides and workflow input are removed first, but review the jobs for private details before you publish.
+Community uses your CopperTide account. Publishing a block makes its definition public: its agents' roles and jobs, its connections, and the title and license you choose. Machine-specific folders, model overrides and workflow input are removed first, but review the jobs for private details before you publish.
 
 Your profile is public too: your name, handle, bio, links, picture, when you joined, your published blocks and their counts. Empty fields are not shown. Reports can be about a block or a profile. See [Community](/guides/community#your-profile).
 

@@ -246,7 +246,7 @@ pub fn windows_task(args: &[String], user: &str) -> String {
     format!(
         r#"<?xml version="1.0" encoding="UTF-16"?>
 <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
-<RegistrationInfo><Description>Keeps this computer connected to Sculptured so agents can run here.</Description></RegistrationInfo>
+<RegistrationInfo><Description>Keeps this computer connected to CopperTide so agents can run here.</Description></RegistrationInfo>
 <Triggers><LogonTrigger><Enabled>true</Enabled><UserId>{user}</UserId></LogonTrigger></Triggers>
 <Principals><Principal id="Author"><UserId>{user}</UserId><LogonType>InteractiveToken</LogonType><RunLevel>LeastPrivilege</RunLevel></Principal></Principals>
 <Settings><MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy><DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries><StopIfGoingOnBatteries>false</StopIfGoingOnBatteries><ExecutionTimeLimit>PT0S</ExecutionTimeLimit><RestartOnFailure><Interval>PT1M</Interval><Count>999</Count></RestartOnFailure><StartWhenAvailable>true</StartWhenAvailable></Settings>
@@ -431,7 +431,7 @@ pub fn service_unit_for(
         ));
         let exec: Vec<String> = args.iter().map(|a| systemd_quote(a)).collect();
         let text = format!(
-            "[Unit]\nDescription=Sculptured runner\nAfter=network-online.target\n\n[Service]\nEnvironment={}\nExecStart={}\nRestart=always\nRestartSec=5\nRestartPreventExitStatus={DISCONNECTED_EXIT}\n\n[Install]\nWantedBy=default.target\n",
+            "[Unit]\nDescription=CopperTide runner\nAfter=network-online.target\n\n[Service]\nEnvironment={}\nExecStart={}\nRestart=always\nRestartSec=5\nRestartPreventExitStatus={DISCONNECTED_EXIT}\n\n[Install]\nWantedBy=default.target\n",
             systemd_quote(&format!("PATH={path_env}")),
             exec.join(" ")
         );
@@ -649,7 +649,7 @@ pub async fn run_connect(a: ConnectArgs) -> Result<(), String> {
             .fold(true, |ok, (i, c)| run(c) || i == 0 && ok);
         if ok {
             println!(
-                "Connected to {origin}. Sculptured now runs in the background and starts again whenever you log in."
+                "Connected to {origin}. CopperTide now runs in the background and starts again whenever you log in."
             );
             println!(
                 "Agents may work in: {}",

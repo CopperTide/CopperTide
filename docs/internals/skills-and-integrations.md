@@ -69,5 +69,5 @@ flowchart LR
 ## Not built yet
 
 - The design assistant does not propose skills yet.
-- Codex native per-session skills: not used, because Codex 0.162 has no per-session skill folder Sculptured could confirm; Codex agents use `read_skill`.
+- Codex native per-session skills: not used, because Codex 0.162 has no per-session skill folder CopperTide could confirm; Codex agents use `read_skill`.
 - Role, expected output, reasoning effort and allowed/banned tools from the same design (part B) are not built.

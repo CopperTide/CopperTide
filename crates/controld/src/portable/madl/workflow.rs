@@ -115,7 +115,7 @@ pub fn workflow_in(doc: &m::Document) -> (Option<Workflow>, Vec<(String, String)
         .map(|i| {
             (
                 format!("/workflows/{i}"),
-                "Sculptured runs one workflow per team; the first was kept".into(),
+                "CopperTide runs one workflow per team; the first was kept".into(),
             )
         })
         .collect();
@@ -146,7 +146,7 @@ pub fn workflow_in(doc: &m::Document) -> (Option<Workflow>, Vec<(String, String)
     dropped.extend((1..guards.len()).map(|i| {
         (
             format!("/policies/guards/{i}"),
-            "Sculptured's workflow has one guard; the first was kept".into(),
+            "CopperTide's workflow has one guard; the first was kept".into(),
         )
     }));
     let flow = Workflow {
@@ -202,7 +202,7 @@ fn stage_in(
             Err(_) => dropped.push((
                 format!("{path}/personas/{agent}"),
                 format!(
-                    "Sculptured has no reviewer angle `{p}`; the reviewer uses its own judgement"
+                    "CopperTide has no reviewer angle `{p}`; the reviewer uses its own judgement"
                 ),
             )),
         }

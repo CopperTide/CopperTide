@@ -1,6 +1,6 @@
 # Event journal, projections and the SQLite schema
 
-Everything an agent does, and everything the operator or Sculptured decides, is appended to one event journal (the `events` table). The tables the boards read, such as seats, messages, questions and interpreted actions, are projections of that journal, written in the same transaction as the event. The browser loads a snapshot, then follows new events over server-sent events (SSE).
+Everything an agent does, and everything the operator or CopperTide decides, is appended to one event journal (the `events` table). The tables the boards read, such as seats, messages, questions and interpreted actions, are projections of that journal, written in the same transaction as the event. The browser loads a snapshot, then follows new events over server-sent events (SSE).
 
 Sources:
 - `crates/model/src/{event,status}.rs` (`EventRecord`, `EventBody`, `Actor`, `Subject`, `Provenance`)
