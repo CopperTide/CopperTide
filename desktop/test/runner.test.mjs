@@ -14,7 +14,7 @@ test('the pairing code and the connected line are read from the runner', () => {
 
 test('the bundled runner reports its code, then that it is connected, and stops on request', async () => {
   const dir = mkdtempSync(path.join(tmpdir(), 'sc-runner-'));
-  const bin = path.join(dir, 'fake-sculptured.mjs');
+  const bin = path.join(dir, 'fake-coppertide.mjs');
   writeFileSync(bin, `#!/usr/bin/env node
 console.log('enter the code BCDF-2345 at ' + process.argv[3] + '/connect');
 setTimeout(() => console.log('Connected to ' + process.argv[3] + '. Agents start here.'), 100);

@@ -1,4 +1,4 @@
-// The bundled `sculptured connect` in account mode: pairs this computer with your account (the code
+// The bundled `coppertide connect` in account mode: pairs this computer with your account (the code
 // is approved in the app's own window) and runs your agents here while the app is open.
 import { spawn } from 'node:child_process';
 

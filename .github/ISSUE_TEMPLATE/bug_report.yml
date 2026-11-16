@@ -18,7 +18,7 @@ body:
     id: version
     attributes:
       label: Version or commit
-      description: "`sculptured --version`, or the commit you built"
+      description: "`coppertide --version`, or the commit you built"
     validations: { required: true }
   - type: dropdown
     id: agents

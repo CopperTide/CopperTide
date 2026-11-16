@@ -1,23 +1,26 @@
 // CopperTide desktop. Two modes, chosen on first launch and remembered (menu: Switch mode…):
-// - On this computer: a window on the local workspace. It starts the bundled `sculptured serve` (which
+// - On this computer: a window on the local workspace. It starts the bundled `coppertide serve` (which
 //   starts the agent runner) unless one already answers on the port. Agents keep running when the
 //   window closes; the runner owns them. Community stays off until it is turned on in the app.
 // - CopperTide account: the account's site, with this computer connected by the bundled runner
-//   (`sculptured connect`), approved in this window, and stopped when the app quits.
+//   (`coppertide connect`), approved in this window, and stopped when the app quits.
 // Teams and settings are not synced between the two (later).
 import { app, BrowserWindow, dialog, ipcMain, Menu, shell } from 'electron';
 import { spawn } from 'node:child_process';
 import { existsSync, readFileSync, rmSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { allowedOrigins, defaultAccountOrigin, loadMode, mayStay, saveMode, validOrigin } from './src/mode.mjs';
+import { allowedOrigins, defaultAccountOrigin, envVar, loadMode, mayStay, saveMode, validOrigin } from './src/mode.mjs';
 import { startRunner } from './src/runner.mjs';
 
+// The app was called Sculptured: its settings and this computer's connection stay where they were.
+const oldUserData = path.join(app.getPath('appData'), 'Sculptured');
+if (!existsSync(app.getPath('userData')) && existsSync(oldUserData)) app.setPath('userData', oldUserData);
 // Read by the chooser's preload, which starts after this.
-process.env.SCULPTURED_ACCOUNT_ORIGIN = defaultAccountOrigin(process.env, JSON.parse(readFileSync(path.join(app.getAppPath(), 'package.json'), 'utf8')));
-const PORT = Number(process.env.SCULPTURED_PORT || 4410);
+process.env.COPPERTIDE_ACCOUNT_ORIGIN = defaultAccountOrigin(process.env, JSON.parse(readFileSync(path.join(app.getAppPath(), 'package.json'), 'utf8')));
+const PORT = Number(envVar(process.env, 'PORT') || 4410);
 const ORIGIN = `http://127.0.0.1:${PORT}`;
-const DEV = process.env.SCULPTURED_DEV === '1';
+const DEV = envVar(process.env, 'DEV') === '1';
 let server = null;
 let runner = null;
 let window = null;
@@ -25,9 +28,9 @@ let window = null;
 /** The bundled binary and web build when packaged; the repository's release build in development. */
 function resources() {
   const root = app.isPackaged ? process.resourcesPath : path.join(app.getAppPath(), '..');
-  const exe = process.platform === 'win32' ? 'sculptured.exe' : 'sculptured';
+  const exe = process.platform === 'win32' ? 'coppertide.exe' : 'coppertide';
   return {
-    bin: process.env.SCULPTURED_BIN || (app.isPackaged ? path.join(root, 'bin', exe) : path.join(root, 'target', 'release', exe)),
+    bin: envVar(process.env, 'BIN') || (app.isPackaged ? path.join(root, 'bin', exe) : path.join(root, 'target', 'release', exe)),
     web: app.isPackaged ? path.join(root, 'web') : path.join(root, 'web', 'dist'),
   };
 }
@@ -46,7 +49,7 @@ function startServer() {
   const { bin, web } = resources();
   if (!existsSync(bin)) throw new Error(`The CopperTide program is missing: ${bin}`);
   const args = ['serve', '--port', String(PORT), '--web-dir', web];
-  if (process.env.SCULPTURED_DATA_DIR) args.push('--data-dir', process.env.SCULPTURED_DATA_DIR);
+  if (envVar(process.env, 'DATA_DIR')) args.push('--data-dir', envVar(process.env, 'DATA_DIR'));
   server = spawn(bin, args, { stdio: ['ignore', 'inherit', 'pipe'] });
   let tail = '';
   server.stderr.on('data', (d) => { tail = (tail + d.toString()).slice(-4000); });
@@ -102,13 +105,13 @@ function choose() {
     w.on('closed', () => { if (!chosen) app.quit(); });
     w.webContents.on('will-navigate', (e) => e.preventDefault());
     w.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
-    ipcMain.handle('sculptured:choose', (_e, { mode, origin }) => {
+    ipcMain.handle('coppertide:choose', (_e, { mode, origin }) => {
       const o = origin ? validOrigin(origin, { dev: DEV }) : null;
       if (mode === 'account' && !o) return 'Enter your account address, starting with https://';
       if (mode === 'local' && origin && !o) return 'That address must start with https:// (or leave it empty)';
       const m = mode === 'account' ? { mode, origin: o } : o ? { mode: 'local', origin: o } : { mode: 'local' };
       saveMode(app.getPath('userData'), m);
-      ipcMain.removeHandler('sculptured:choose');
+      ipcMain.removeHandler('coppertide:choose');
       chosen = true;
       resolve(m);
       w.close();

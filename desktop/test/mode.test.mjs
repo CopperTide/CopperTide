@@ -49,6 +49,7 @@ test('the account address is pre-filled from the environment, else from the buil
   const { defaultAccountOrigin } = await import('../src/mode.mjs');
   assert.equal(defaultAccountOrigin({}, {}), '');
   assert.equal(defaultAccountOrigin({}, { accountOrigin: 'https://app.example.com' }), 'https://app.example.com');
-  assert.equal(defaultAccountOrigin({ SCULPTURED_ACCOUNT_ORIGIN: 'https://mine.example.com' }, { accountOrigin: 'https://app.example.com' }), 'https://mine.example.com');
+  assert.equal(defaultAccountOrigin({ COPPERTIDE_ACCOUNT_ORIGIN: 'https://mine.example.com' }, { accountOrigin: 'https://app.example.com' }), 'https://mine.example.com');
+  assert.equal(defaultAccountOrigin({ SCULPTURED_ACCOUNT_ORIGIN: 'https://old.example.com' }, {}), 'https://old.example.com', 'the name from before the rename still works');
   assert.equal(defaultAccountOrigin({}, { accountOrigin: 'http://evil.example.com/x' }), '');
 });

@@ -1,6 +1,6 @@
 {
-  "name": "sculptured-desktop",
-  "productName": "Sculptured",
+  "name": "coppertide-desktop",
+  "productName": "CopperTide",
   "version": "0.1.0",
   "private": true,
   "description": "CopperTide desktop app: design, run and watch teams of agents performing complex tasks",
@@ -17,7 +17,7 @@
   },
   "build": {
     "appId": "dev.sculptured.desktop",
-    "productName": "Sculptured",
+    "productName": "CopperTide",
     "directories": {
       "output": "dist"
     },
@@ -32,8 +32,8 @@
         "from": "../target/release",
         "to": "bin",
         "filter": [
-          "sculptured",
-          "sculptured.exe"
+          "coppertide",
+          "coppertide.exe"
         ]
       },
       {
@@ -46,7 +46,7 @@
         "deb",
         "AppImage"
       ],
-      "maintainer": "Sculptured",
+      "maintainer": "CopperTide",
       "category": "Development",
       "icon": "icon.png"
     },

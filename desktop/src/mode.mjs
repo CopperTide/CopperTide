@@ -17,10 +17,15 @@ export function validOrigin(s, { dev = false } = {}) {
   return u.origin;
 }
 
-/** The address the chooser pre-fills: SCULPTURED_ACCOUNT_ORIGIN, else the one a build was made for
+/** `COPPERTIDE_<name>` from `env`, else its name from before the rename (`SCULPTURED_<name>`). */
+export function envVar(env, name) {
+  return env[`COPPERTIDE_${name}`] || env[`SCULPTURED_${name}`] || '';
+}
+
+/** The address the chooser pre-fills: COPPERTIDE_ACCOUNT_ORIGIN, else the one a build was made for
  * (package.json `accountOrigin`, set by the Mac build the Computers page offers). */
 export function defaultAccountOrigin(env, pkg) {
-  return validOrigin(env.SCULPTURED_ACCOUNT_ORIGIN || pkg.accountOrigin || '') || '';
+  return validOrigin(envVar(env, 'ACCOUNT_ORIGIN') || pkg.accountOrigin || '') || '';
 }
 
 const file = (dir) => path.join(dir, 'mode.json');
