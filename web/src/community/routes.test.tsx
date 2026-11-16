@@ -106,7 +106,7 @@ it('a profile that cannot be read says why instead of asking you to sign in', as
 
 const local: HostedSession = { kind: 'local' };
 const linkOff = { enabled: false, origin: null, signed_in: false, account: null };
-const linkOn = (signed_in = false) => ({ enabled: true, origin: 'https://app.usesculptured.com', signed_in, account: signed_in ? { name: 'You Example', handle: null } : null });
+const linkOn = (signed_in = false) => ({ enabled: true, origin: 'https://app.coppertide.ai', signed_in, account: signed_in ? { name: 'You Example', handle: null } : null });
 
 it('this computer: the community section asks first and fetches nothing while off', async () => {
   const { resetCommunityLink } = await import('./link');
@@ -154,14 +154,14 @@ it('this computer: "Turn on and sign in" shows the code to approve above the pag
   fakeFetch({
     'GET /api/community-link': () => [200, on ? linkOn() : linkOff],
     'POST /api/community-link/enable': () => { on = true; return [200, linkOn()]; },
-    'POST /api/community-link/pair': () => [200, { user_code: 'ABCD-EFGH', verify_url: 'https://app.usesculptured.com/connect?code=ABCD-EFGH', expires_in: 600 }],
+    'POST /api/community-link/pair': () => [200, { user_code: 'ABCD-EFGH', verify_url: 'https://app.coppertide.ai/connect?code=ABCD-EFGH', expires_in: 600 }],
     'GET /api/community-link/pair': () => [200, { status: 'pending' }],
     'GET /api/community/blocks?q=&offset=0': () => [200, { blocks: [] }],
   });
   at('/community', local);
   (await screen.findByRole('button', { name: 'Turn on and sign in' })).click();
   expect(await screen.findByText('ABCD-EFGH')).toBeVisible();
-  expect(screen.getByRole('link', { name: 'Open the sign-in page' })).toHaveAttribute('href', 'https://app.usesculptured.com/connect?code=ABCD-EFGH');
+  expect(screen.getByRole('link', { name: 'Open the sign-in page' })).toHaveAttribute('href', 'https://app.coppertide.ai/connect?code=ABCD-EFGH');
   resetCommunityLink();
 });
 
@@ -189,7 +189,7 @@ it('this computer: once the code is approved the panel says who you are signed i
   fakeFetch({
     'GET /api/community-link': () => [200, on ? linkOn(approved) : linkOff],
     'POST /api/community-link/enable': () => { on = true; return [200, linkOn()]; },
-    'POST /api/community-link/pair': () => [200, { user_code: 'ABCD-EFGH', verify_url: 'https://app.usesculptured.com/connect?code=ABCD-EFGH', expires_in: 600 }],
+    'POST /api/community-link/pair': () => [200, { user_code: 'ABCD-EFGH', verify_url: 'https://app.coppertide.ai/connect?code=ABCD-EFGH', expires_in: 600 }],
     'GET /api/community-link/pair': () => { approved = true; return [200, { status: 'approved' }]; },
     'GET /api/community/me': () => [200, { user: meUser() }],
     'GET /api/community/blocks?q=&offset=0': () => [200, { blocks: [] }],
@@ -215,7 +215,7 @@ it('this computer: the Turn on page offers an address an older version saved', a
 it('this computer: the Turn on page says when a sign-in may remain on the server', async () => {
   const { resetCommunityLink } = await import('./link');
   resetCommunityLink();
-  fakeFetch({ 'GET /api/community-link': () => [200, { ...linkOff, key_left_on: 'https://app.usesculptured.com' }] });
+  fakeFetch({ 'GET /api/community-link': () => [200, { ...linkOff, key_left_on: 'https://app.coppertide.ai' }] });
   at('/community', local);
   expect(await screen.findByText(/could not remove this computer’s Community sign-in/)).toBeVisible();
   resetCommunityLink();

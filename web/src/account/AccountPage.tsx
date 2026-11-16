@@ -33,7 +33,7 @@ export function AccountPage() {
       </section>
       <section aria-label="Your usage">
         <h2>Your usage</h2>
-        <p className="muted">Everything your agents used in Sculptured, from what Claude Code and Codex reported.</p>
+        <p className="muted">Everything your agents used in CopperTide, from what Claude Code and Codex reported.</p>
         {error && <p className="tone-red" role="alert">{error}</p>}
         {usage ? <UsageSummary u={usage} /> : !error && <p className="muted">Loading…</p>}
       </section>

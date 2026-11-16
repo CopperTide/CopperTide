@@ -21,7 +21,7 @@ permissions:
   contents: write
 
 env:
-  ACCOUNT_ORIGIN: https://app.usesculptured.com
+  ACCOUNT_ORIGIN: https://app.coppertide.ai
 
 jobs:
   build:

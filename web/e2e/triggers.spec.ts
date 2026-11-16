@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 /**
  * Triggers in the real app, Practice agents only: a plant team has a trigger for machine alarms; another
- * system posts an alarm to its address while the team is stopped; Sculptured starts the team and the
+ * system posts an alarm to its address while the team is stopped; CopperTide starts the team and the
  * dispatcher gets the alarm after its job. Settings shows the address and the event with what came of
  * it. Screenshots land in web/test-results/screens/triggers/.
  */

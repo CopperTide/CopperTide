@@ -1,6 +1,6 @@
 # Testing strategy and how to run each suite
 
-Sculptured is tested from pure Rust unit tests up to Playwright flows against the real binary. No routine test calls a model or a third party: fake CLIs stand in for Claude Code and Codex, and Practice agents stand in for agents in the browser tests. This page says what each suite covers and the exact command to run it.
+CopperTide is tested from pure Rust unit tests up to Playwright flows against the real binary. No routine test calls a model or a third party: fake CLIs stand in for Claude Code and Codex, and Practice agents stand in for agents in the browser tests. This page says what each suite covers and the exact command to run it.
 
 Sources:
 - `Cargo.toml` (workspace members and `[profile.dev]`), `crates/*/tests/`, `#[cfg(test)] mod tests` in `crates/*/src`

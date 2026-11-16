@@ -139,7 +139,7 @@ it('adds a certificate cluster, keeps it signed in 12 hours by default, and says
   expect(screen.getByText(/hardware security keys/i)).toBeInTheDocument();
   expect(screen.getByText(/Kerberos/)).toBeInTheDocument();
   expect(screen.getByText(/agent forwarding/i)).toBeInTheDocument();
-  expect(screen.getByRole('link', { name: 'Set up a cluster yourself' })).toHaveAttribute('href', 'https://docs.usesculptured.com/connect-a-computer#set-up-a-cluster-yourself');
+  expect(screen.getByRole('link', { name: 'Set up a cluster yourself' })).toHaveAttribute('href', 'https://docs.coppertide.ai/connect-a-computer#set-up-a-cluster-yourself');
   expect(screen.getByLabelText('Keep signed in for (hours)')).toHaveValue(12);
   expect(screen.getByText(/many sites limit how long a session/i)).toBeInTheDocument();
   await userEvent.type(screen.getByLabelText('Login node'), 'perlmutter.nersc.gov');

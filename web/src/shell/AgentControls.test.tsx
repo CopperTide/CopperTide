@@ -115,12 +115,12 @@ describe('Agent controls', () => {
   });
 
   it('renews the request id after the server rejects a send', async () => {
-    vi.mocked(api.send).mockRejectedValueOnce(new ApiError(502, 'host_unreachable', "Sculptured's agent runner is not connected"));
+    vi.mocked(api.send).mockRejectedValueOnce(new ApiError(502, 'host_unreachable', "CopperTide's agent runner is not connected"));
     render(<SeatControls name="a" seat={seatView('a')} />);
     fireEvent.change(screen.getByLabelText('Message'), { target: { value: 'hello' } });
     const form = screen.getByRole('form', { name: 'Send a message' });
     fireEvent.submit(form);
-    expect(await screen.findByRole('alert')).toHaveTextContent("Sculptured's agent runner is not connected");
+    expect(await screen.findByRole('alert')).toHaveTextContent("CopperTide's agent runner is not connected");
     vi.mocked(api.send).mockResolvedValue({ message_id: 'm2' });
     fireEvent.submit(form);
     const calls = vi.mocked(api.send).mock.calls;

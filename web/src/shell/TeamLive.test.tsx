@@ -231,7 +231,7 @@ describe('RigView stop rig', () => {
   it('lists the seats it could not stop, with their reasons, as an alert', async () => {
     vi.mocked(api.stopRig).mockResolvedValue({
       failed: [
-        { seat: 'dev.b@r', reason: "Sculptured's agent runner is not connected" },
+        { seat: 'dev.b@r', reason: "CopperTide's agent runner is not connected" },
         { seat: 'dev.a@r', reason: 'host did not reply within 30s' },
       ],
     });
@@ -243,7 +243,7 @@ describe('RigView stop rig', () => {
     expect(alert).toHaveTextContent('2 agents could not be stopped');
     const items = screen.getAllByRole('listitem').filter((li) => alert.contains(li));
     expect(items.map((li) => li.textContent)).toEqual([
-      "b — Sculptured's agent runner is not connected",
+      "b — CopperTide's agent runner is not connected",
       'a — host did not reply within 30s',
     ]);
   });

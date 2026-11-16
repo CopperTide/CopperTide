@@ -63,7 +63,7 @@ describe('the frame: one top bar, then a project tab row, then the page', () => 
     expect(within(nav).getByRole('link', { name: 'Community' })).toHaveAttribute('href', '/community');
     expect(within(nav).getByRole('link', { name: /Account/ })).toHaveAttribute('href', '/account');
     const docs = within(nav).getByRole('link', { name: /Docs/ });
-    expect(docs).toHaveAttribute('href', 'https://docs.usesculptured.com');
+    expect(docs).toHaveAttribute('href', 'https://docs.coppertide.ai');
     expect(docs).toHaveAttribute('target', '_blank');
     expect(within(bar).getByRole('button', { name: /Search or run a command/ })).toBeInTheDocument();
     expect(screen.queryByRole('navigation', { name: 'Agents' })).toBeNull();

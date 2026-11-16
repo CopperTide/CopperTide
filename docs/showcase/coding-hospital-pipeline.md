@@ -1,19 +1,19 @@
-# Showcase 2: a "coding hospital" on Sculptured
+# Showcase 2: a "coding hospital" on CopperTide
 
 **Source:** Cockroach Labs, [The experiment: running a hospital for code](https://www.cockroachlabs.com/blog/experiment-running-hospital-code/) ("MOLT Sinai").
 - **What it is:** a GitHub Actions pipeline of Claude agents.
 - **Roles:** Triage Nurse, Fellow (workup, then treatment), Review Attending (plan review, then parallel code reviewers), Discharge Nurse, plus humans as "Chiefs".
 - **Results:** over five months, about 1,238 PRs and more than 1M lines landed, with 7 reverts, at about $84 per issue. The IBM Db2 support work took under two days and $4,172 in tokens.
 
-**The idea:** rebuild their pipeline on Sculptured on a small open-source repo, run the same kind of work, and compare evidence, cost and human time.
+**The idea:** rebuild their pipeline on CopperTide on a small open-source repo, run the same kind of work, and compare evidence, cost and human time.
 
-## What their diagram needs, and what Sculptured has today
+## What their diagram needs, and what CopperTide has today
 
-| In the diagram | In Sculptured now | Gap |
+| In the diagram | In CopperTide now | Gap |
 |---|---|---|
 | Patients (issues) flowing through stages, many at once | **Workflow engine:** a dispatcher creates tasks; stages with an agent and parallel `workers`; per-task history; `max_tasks` and `max_steps` | Intake from an issue tracker; the runs are long-lived (days) rather than a team you start and stop |
 | Outcome routing: approved → next; rejected or changes requested → back (dashed arrows) | **Stage `routes`:** an outcome picks the next stage, loops allowed | Outcomes are agent-reported only; no schema for each stage's note (treatment plan, I-PASS) |
-| CI: "red: bounce back" | **Checks:** commands Sculptured runs itself, marked *verified* | A check as a **stage**: its pass/fail result picks the route |
+| CI: "red: bounce back" | **Checks:** commands CopperTide runs itself, marked *verified* | A check as a **stage**: its pass/fail result picks the route |
 | Code review with **parallel reviewers** on one PR | Parallel `workers` (different items), checks | **Fan-out on one item and a join** (all approve / any blocks) |
 | Human lane: Chief admits, decides escalations, signs off, Won't fix | Agents can **ask a person** (questions, answerable on a phone); team posture settings | **Human stages:** a person picks the outcome in the UI (admit, approve, won't fix), with a queue of items waiting on people |
 | Circuit breaker: after 4 or 6 rework rounds, escalate | Global `max_steps` | **Per-item round limits** with an "escalate" route |
@@ -37,20 +37,20 @@
 9. model escalation;
 10. per-item cost analytics.
 
-## Why Sculptured instead of GitHub Actions
+## Why CopperTide instead of GitHub Actions
 
 GitHub Actions is a fair choice for them. It has the repo, issues and PRs built in, needs no infrastructure, comes with GitHub's audit trail and secrets, and spreads easily across runners. Its costs show up in the post:
-- **Every stage is a cold, stateless job.** It re-reads its instructions (the Discharge Nurse loads about 29k tokens on *every* run), re-checks out the repo, and rebuilds context from labels and comments. Sculptured keeps role sessions alive: context carries over, prompt caching helps, and nothing is re-cloned.
-- **State is hacked into labels and HTML-comment sentinels.** Sculptured has a typed state machine per item, visible live.
-- **Observability is by hand.** They audited prompt bloat, found the eleven-round one-line fix, and spent $631 of $1,046 in one window on three issues, all after the fact. Sculptured can show, per item, stage, role and model:
+- **Every stage is a cold, stateless job.** It re-reads its instructions (the Discharge Nurse loads about 29k tokens on *every* run), re-checks out the repo, and rebuilds context from labels and comments. CopperTide keeps role sessions alive: context carries over, prompt caching helps, and nothing is re-cloned.
+- **State is hacked into labels and HTML-comment sentinels.** CopperTide has a typed state machine per item, visible live.
+- **Observability is by hand.** They audited prompt bloat, found the eleven-round one-line fix, and spent $631 of $1,046 in one window on three issues, all after the fact. CopperTide can show, per item, stage, role and model:
   - cost and rounds, send-back and rejection rates, escalation reasons;
   - instruction tokens per run;
   - time waiting on humans.
 
-  It can alert *while* a loop is running (a live circuit breaker) instead of in a weekly safety review. Coding-agent observability is an emerging category, and cost per merged PR is becoming the headline metric. Most tools there only observe; Sculptured also controls.
-- **The human loop happens in GitHub comments.** Sculptured gives people a queue of items waiting for them, one-tap decisions on a phone, and clear evidence: verified checks, diffs and run replay.
-- **The environment is GitHub's runners.** Sculptured runs on your machines (any always-on box can be a connected computer), with your real databases, Docker and tools. It uses your Claude and Codex *plans* rather than per-token API billing.
-- **Hard to share and reuse.** Their pipeline became its own repo, "Sinai", with 25 skill files (about 100k words). On Sculptured the whole hospital is a **team file**, with a generator and templates.
+  It can alert *while* a loop is running (a live circuit breaker) instead of in a weekly safety review. Coding-agent observability is an emerging category, and cost per merged PR is becoming the headline metric. Most tools there only observe; CopperTide also controls.
+- **The human loop happens in GitHub comments.** CopperTide gives people a queue of items waiting for them, one-tap decisions on a phone, and clear evidence: verified checks, diffs and run replay.
+- **The environment is GitHub's runners.** CopperTide runs on your machines (any always-on box can be a connected computer), with your real databases, Docker and tools. It uses your Claude and Codex *plans* rather than per-token API billing.
+- **Hard to share and reuse.** Their pipeline became its own repo, "Sinai", with 25 skill files (about 100k words). On CopperTide the whole hospital is a **team file**, with a generator and templates.
 - **Keep GitHub as the system of record.** Integrate with GitHub (issues in, PRs out, labels mirrored) rather than replacing it.
 
 **Similar efforts to know about:**

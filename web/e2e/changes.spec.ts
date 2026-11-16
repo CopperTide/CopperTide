@@ -3,7 +3,7 @@ import { expect, test, type APIRequestContext } from '@playwright/test';
 /**
  * Proposed changes in the real app, Practice agents only: a buyer proposes a purchase order over the team's
  * limit, it waits for a person in the project's Questions, the person approves it, and Results → Changes
- * shows the change, the rules as Sculptured checked them and who approved it. A second order within the
+ * shows the change, the rules as CopperTide checked them and who approved it. A second order within the
  * rules is approved by them without asking. Screenshots land in web/test-results/screens/changes/.
  */
 const SHOTS = 'test-results/screens/changes';

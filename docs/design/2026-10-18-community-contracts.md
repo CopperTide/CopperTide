@@ -152,7 +152,7 @@ Block list and detail responses also carry `kind: "group" | "component"` (added 
 | Method & path | Response |
 |---|---|
 | GET `/api/community-link` | `{enabled: bool, origin: string\|null, signed_in: bool, account: {name, handle\|null}\|null}` |
-| POST `/api/community-link/enable` | `{origin?: string}` → as GET (`origin` defaults to `https://app.usesculptured.com`; it must be https, or `http://127.0.0.1\|localhost:` in dev) |
+| POST `/api/community-link/enable` | `{origin?: string}` → as GET (`origin` defaults to `https://app.coppertide.ai`; it must be https, or `http://127.0.0.1\|localhost:` in dev) |
 | POST `/api/community-link/pair` | `{user_code, verify_url, expires_in}`, which starts device pairing with scope `community` |
 | GET `/api/community-link/pair` | `{status: "pending"\|"approved"\|"expired"\|"denied"}`; controld polls the gateway itself and stores the key once approved; `denied` follows the gateway's `access_denied` |
 | DELETE `/api/community-link` | `{enabled:false}`; best-effort revoke on the gateway, then deletes `community.json` and the origin |

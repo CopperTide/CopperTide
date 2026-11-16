@@ -42,7 +42,7 @@ describe('things moved out of view stay one Ctrl K away', () => {
     const real = window.open;
     window.open = ((...a: unknown[]) => { opened.push(a); return null; }) as typeof window.open;
     try { find('app.docs').run(); } finally { window.open = real; }
-    expect(opened).toEqual([['https://docs.usesculptured.com', '_blank', 'noopener']]);
+    expect(opened).toEqual([['https://docs.coppertide.ai', '_blank', 'noopener']]);
     expect(find('app.docs').words).toMatch(/help/);
   });
 

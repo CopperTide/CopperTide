@@ -304,13 +304,13 @@ async function scriptedArenaTeam(context: BrowserContext, request: APIRequestCon
   await context.addInitScript((t) => localStorage.setItem('sculptured.tests.team.v1', t), JSON.stringify(team));
 }
 
-test('video 4: Arena control, a run’s Replay and a fork', async ({ browser, request, baseURL }, info) => {
+test('video 4: Shakedown control, a run’s Replay and a fork', async ({ browser, request, baseURL }, info) => {
   desktopOnly(info.project.name);
   test.skip(!(await arenaUp(request)), 'no arenad answers (start one and set SCULPTURED_ARENA_URL)');
   const { context, page } = await recorder(browser, info, baseURL!);
   await scriptedArenaTeam(context, request);
   await page.goto('/arena');
-  await caption(page, 'Arena control: the runs, the world and the engine at a glance');
+  await caption(page, 'Shakedown control: the runs, the world and the engine at a glance');
   await expect(page.getByRole('table', { name: 'Runs' })).toBeVisible();
   await beat(page, 3000);
   await caption(page, 'Start a run: a task and a team. The run opens on Replay');
@@ -346,13 +346,13 @@ test('video 4: Arena control, a run’s Replay and a fork', async ({ browser, re
   await keepVideo(context, page, info, 'control-4-arena', 44);
 });
 
-test('screenshots: Arena control, Storage, a simulated run’s Replay and a fork', async ({ browser, request, baseURL }, info) => {
+test('screenshots: Shakedown control, Storage, a simulated run’s Replay and a fork', async ({ browser, request, baseURL }, info) => {
   desktopOnly(info.project.name);
   test.skip(!(await arenaUp(request)), 'no arenad answers (start one and set SCULPTURED_ARENA_URL)');
   const { context, page } = await stills(browser, baseURL!);
   await scriptedArenaTeam(context, request);
   await page.goto('/arena');
-  await caption(page, 'Arena control: the runs, the world and the engine at a glance');
+  await caption(page, 'Shakedown control: the runs, the world and the engine at a glance');
   await expect(page.getByRole('row', { name: 'Run of task 27' }).first()).toBeVisible();
   await beat(page, 2000);
   await guideShot(page, 'arena-control');

@@ -53,7 +53,7 @@ The contracts win where they refine the design.
 
 | What | Value |
 |---|---|
-| Default origin | `https://app.usesculptured.com` |
+| Default origin | `https://app.coppertide.ai` |
 | Allowed origins | `https://…`, or `http://127.0.0.1:<port>` / `http://localhost:<port>` |
 | Proxy request body | ≤ 1.1 MB (`1100000` bytes, Community's own limit) |
 | Proxy response | ≤ 2 MB (`2097152` bytes) |
@@ -399,7 +399,7 @@ git add crates/fixtures && git commit -m "Add a stub gateway and Community upstr
 
 ```rust
 // community/mod.rs
-pub const DEFAULT_ORIGIN: &str = "https://app.usesculptured.com";
+pub const DEFAULT_ORIGIN: &str = "https://app.coppertide.ai";
 pub const PROXY_TIMEOUT: Duration = Duration::from_secs(15);
 pub const REVOKE_TIMEOUT: Duration = Duration::from_secs(5);
 pub const ACCOUNT_TTL: Duration = Duration::from_secs(60);
@@ -777,7 +777,7 @@ export const COMMUNITY_ERROR_WORDS: Record<string, string> = {
   community_timeout: 'Community did not answer within 15 seconds. Try again.',
   community_too_large: 'That is too large to send to Community (the limit is 1.1 MB).',
   community_bad_answer: 'Community answered in a way CopperTide does not accept. Try again later.',
-  community_origin_invalid: 'Use an https:// address, such as https://app.usesculptured.com.',
+  community_origin_invalid: 'Use an https:// address, such as https://app.coppertide.ai.',
   // C3 generic and new codes
   account_disabled: 'This Community account is disabled. Contact CopperTide support if you think this is a mistake.',
   rate_limited: 'Too many requests to Community just now. Wait a minute, then try again.',
@@ -928,7 +928,7 @@ git commit -m "web: Community data layer, link state, words and test helpers"
 
 ```tsx
 it('says what is sent and what never leaves, and turns on only when asked', async () => {
-  const { calls } = fakeFetch({ 'POST /api/community-link/enable': () => [200, { enabled: true, origin: 'https://app.usesculptured.com', signed_in: false, account: null }] });
+  const { calls } = fakeFetch({ 'POST /api/community-link/enable': () => [200, { enabled: true, origin: 'https://app.coppertide.ai', signed_in: false, account: null }] });
   const onDone = vi.fn(); render(<TurnOnCommunity onDone={onDone} />);
   for (const t of [COMMUNITY_WORDS.optIn.title, ...COMMUNITY_WORDS.optIn.sends, COMMUNITY_WORDS.optIn.never]) expect(screen.getByText(t)).toBeInTheDocument();
   expect(calls).toEqual([]);

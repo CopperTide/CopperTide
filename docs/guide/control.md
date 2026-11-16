@@ -2,14 +2,14 @@
 
 Control is a project's mission-control page. It shows the live board, what every agent is doing, what waits for you and what went wrong, and it holds the controls for the whole team: Start, Pause all, Resume all, Stop team… and Emergency stop. You arrange it yourself: panes dock beside each other or as tabs, and each layout is kept in this browser.
 
-Every picture and video on this page comes from a recording of the real app. The teams in them are small practice teams whose agents follow fixed scripts instead of calling a model, so their replies read "stub received: …". The Arena runs use a scripted stand-in in place of a model, which plays the same steps every time. The desktop screenshots are taken during the same recorded steps and include their step captions; the phone screenshots have none.
+Every picture and video on this page comes from a recording of the real app. The teams in them are small practice teams whose agents follow fixed scripts instead of calling a model, so their replies read "stub received: …". The Shakedown runs use a scripted stand-in in place of a model, which plays the same steps every time. The desktop screenshots are taken during the same recorded steps and include their step captions; the phone screenshots have none.
 
 **Videos** (each under a minute):
 
 1. [Open a project on Control and start the team](../videos/control-1-open-and-start.mp4)
 2. [Rearrange panes and switch layouts](../videos/control-2-rearrange.mp4)
 3. [An alarm, an approval, pause, resume and emergency stop](../videos/control-3-trouble.mp4)
-4. [Arena control: a run's Replay and a fork](../videos/control-4-arena.mp4)
+4. [Shakedown control: a run's Replay and a fork](../videos/control-4-arena.mp4)
 
 The same videos are also in `docs/videos/` as WebM.
 
@@ -25,7 +25,7 @@ Click an agent on the board (or press Enter on it) to open it in an **Agent deta
 
 The header reads left to right.
 
-**Status strip.** Every reading is a mark and a word, never colour alone, and anything Sculptured does not know says "unknown".
+**Status strip.** Every reading is a mark and a word, never colour alone, and anything CopperTide does not know says "unknown".
 
 | Tile | What it says |
 |---|---|
@@ -159,9 +159,9 @@ Below tablet width, Control shows one pane at a time. Pick it from the **Pane** 
 Left to right: the one-line header, the rest of the header opened, and the **Pane** list showing Status.
 
 
-## 7. Simulated runs (Arena)
+## 7. Simulated runs (Shakedown)
 
-An Arena run is a team working in a simulated world. Arena saves the world after each step that changes it, so a run can be replayed and forked. A run's branch opens in the same Control workspace, at `/arena/runs/<run>/<branch>`. Its first layout is **Replay**: the Timeline large, with World state and Compare below it. **Live** and **Cost** are there too.
+A Shakedown run is a team working in a simulated world. Shakedown saves the world after each step that changes it, so a run can be replayed and forked. A run's branch opens in the same Control workspace, at `/arena/runs/<run>/<branch>`. Its first layout is **Replay**: the Timeline large, with World state and Compare below it. **Live** and **Cost** are there too.
 
 
 **Step through the run:**
@@ -191,20 +191,20 @@ The fork runs on its own branch. It may start at an earlier step than the one yo
 
 [Video 4](../videos/control-4-arena.mp4) starts a run, steps through it, forks it with changed instructions and compares the two branches.
 
-**Header.** A simulated run's header reads the same way. Arena runs cannot be paused or stopped from Control yet, and the header says so. Start a new run from Arena control.
+**Header.** A simulated run's header reads the same way. Shakedown runs cannot be paused or stopped from Control yet, and the header says so. Start a new run from Shakedown control.
 
-## 8. Arena control
+## 8. Shakedown control
 
-**Arena** in the top bar opens Arena control (`/arena`), the same kind of workspace for Arena itself. Its strip shows whether Arena is up, how many parts of the world answer, how much of the save limit is used, and how many branches are running.
+**Shakedown** in the top bar opens Shakedown control (`/arena`), the same kind of workspace for Shakedown itself. Its strip shows whether Shakedown is up, how many parts of the world answer, how much of the save limit is used, and how many branches are running.
 
 
 **Overview** layout:
 
 - **Runs:** pick a task and a team (**Edit team** changes it) and press **Start run**. The run opens on Replay. Each run lists its branches and how long it took. **Delete** asks first. **Compare** opens a comparison of two finished branches.
-- **World:** each part of the world, its integration, how it restores (exact from a save, by replay, or approximate), whether it uses Arena's clock, and its tools.
-- **Engine:** Arena's health, which kinds of agent it can run, its benchmark and its tasks.
+- **World:** each part of the world, its integration, how it restores (exact from a save, by replay, or approximate), whether it uses Shakedown's clock, and its tools.
+- **Engine:** Shakedown's health, which kinds of agent it can run, its benchmark and its tasks.
 
-![Arena control in the Overview layout: Runs with a new-run bar, World and Engine](../images/control/arena-control.png)
+![Shakedown control in the Overview layout: Runs with a new-run bar, World and Engine](../images/control/arena-control.png)
 
 **Storage** layout:
 
@@ -213,6 +213,6 @@ The fork runs on its own branch. It may start at an earlier step than the one yo
 
 ![The Storage layout: saves against the 5 GB limit by integration, and the fork tree of two runs](../images/control/arena-storage.png)
 
-If Arena is not running, every Arena pane says "Arena is not running" and how to start it, and checks again every 15 seconds.
+If Shakedown is not running, every Shakedown pane says "Shakedown is not running" and how to start it, and checks again every 15 seconds.
 
 <!-- Recorded with web/e2e/control-video.spec.ts (RECORD_VIDEOS=1); see docs/internals/workspace.md. -->

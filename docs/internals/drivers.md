@@ -1,6 +1,6 @@
 # Agent drivers: Claude Code, Codex and OpenCode
 
-A driver starts one coding CLI for one agent, sends it the operator's messages and turns everything the CLI prints into one shared list of events (`DriverEvent`). Sculptured has four drivers: Claude Code (`claude-stream`), Codex (`codex-app-server`), OpenCode (`opencode-acp`, open models) and the Practice driver (`stub`), which calls no model. The runner on each computer (`hostd`) owns the drivers. controld only names a driver and sends launch parameters.
+A driver starts one coding CLI for one agent, sends it the operator's messages and turns everything the CLI prints into one shared list of events (`DriverEvent`). CopperTide has four drivers: Claude Code (`claude-stream`), Codex (`codex-app-server`), OpenCode (`opencode-acp`, open models) and the Practice driver (`stub`), which calls no model. The runner on each computer (`hostd`) owns the drivers. controld only names a driver and sends launch parameters.
 
 Sources:
 - `crates/drivers/src/{lib,process,stub}.rs`
@@ -55,7 +55,7 @@ flowchart LR
 | `--resume <id>` | resuming; never combined with `--session-id` |
 | `--model <m>` | the agent has a model set |
 | `--mcp-config <file or JSON>` and `--disallowedTools Agent,Task` | seat tools are on (the `rig` MCP server) |
-| `--allowedTools mcp__rig__…` | restricted posture with seat tools: Sculptured's own tools never ask permission |
+| `--allowedTools mcp__rig__…` | restricted posture with seat tools: CopperTide's own tools never ask permission |
 | `--permission-prompt-tool mcp__rig__approve` | restricted posture and the `approve` tool is offered |
 | `--add-dir <dir>` | each extra folder (a team's items folder) |
 | `--setting-sources <list>`, and `--strict-mcp-config` without `user` | the team leaves out part of the person's own Claude Code setup (`ClaudeSetup::claude_args`) |
@@ -63,7 +63,7 @@ flowchart LR
 | `--plugin-dir <dir>` | the agent has skills: the runner's per-agent plugin folder ([Skills](skills-and-integrations.md)) |
 | a second `--mcp-config <JSON>` | the agent has integrations (Kindex's `kin-mcp`) |
 
-- The seat-tools config is written to a 0600 file when hostd names one, so the seat token never appears in `/proc/<pid>/cmdline`. `MCP_TOOL_TIMEOUT` is set to 86 700 000 ms so Sculptured's own question timeout always fires first.
+- The seat-tools config is written to a 0600 file when hostd names one, so the seat token never appears in `/proc/<pid>/cmdline`. `MCP_TOOL_TIMEOUT` is set to 86 700 000 ms so CopperTide's own question timeout always fires first.
 - A message is one stdin line: `{"type":"user","message":{"role":"user","content":[{"type":"text","text":…}]}}`.
 - `SessionReady` is sent at spawn. Claude's `system/init` arrives only after the first message and repeats every turn, so it is ignored.
 - A turn starts at the first replayed operator message (`isReplay: true` and `parent_tool_use_id: null`) or assistant line. It ends at the `result` line.

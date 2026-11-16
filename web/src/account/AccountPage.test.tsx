@@ -110,14 +110,14 @@ it('local: shows the Community card and turns Community off', async () => {
     const m = init?.method ?? 'GET';
     calls.push(`${m} ${u}`);
     if (u.endsWith('/api/account/usage')) return reply(200, usage);
-    if (u.endsWith('/api/community-link') && m === 'GET') return reply(200, on ? { enabled: true, origin: 'https://app.usesculptured.com', signed_in: true, account: { name: 'You Example', handle: 'you-example' } } : { enabled: false, origin: null, signed_in: false, account: null });
+    if (u.endsWith('/api/community-link') && m === 'GET') return reply(200, on ? { enabled: true, origin: 'https://app.coppertide.ai', signed_in: true, account: { name: 'You Example', handle: 'you-example' } } : { enabled: false, origin: null, signed_in: false, account: null });
     if (u.endsWith('/api/community-link') && m === 'DELETE') { on = false; return reply(200, { enabled: false }); }
     return reply(200, {});
   });
   render(<MemoryRouter><AccountPage /></MemoryRouter>);
   const card = await screen.findByRole('region', { name: 'Community' });
   expect(await within(card).findByText('Signed in as You Example (@you-example)')).toBeInTheDocument();
-  expect(within(card).getByText(/app\.usesculptured\.com/)).toBeInTheDocument();
+  expect(within(card).getByText(/app\.coppertide\.ai/)).toBeInTheDocument();
   await userEvent.click(within(card).getByRole('button', { name: 'Turn off Community' }));
   expect(calls).toContain('DELETE /api/community-link');
   expect(await within(card).findByRole('link', { name: 'Open Community' })).toHaveAttribute('href', '/community');

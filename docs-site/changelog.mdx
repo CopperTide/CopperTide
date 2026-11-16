@@ -1,6 +1,6 @@
 ---
 title: Changelog
-description: What changed in Sculptured, newest first.
+description: What changed in CopperTide, newest first.
 ---
 
 Changes you can see or use, by date. The open-source core's full history is on [GitHub](https://github.com/CopperTide/CopperTide/commits/main).
@@ -13,24 +13,24 @@ Changes you can see or use, by date. The open-source core's full history is on [
 
 ### Result checks
 
-- **Result checks between agents:** an agent's result must end with a JSON block that passes the rules you set, such as *price is at most 5000* or *part number is filled in*, before its work is handed on. Sculptured checks the rules itself. A failing result goes back to the agent with what failed, up to three times; after that the agent waits for you. Set them under the agent's **Setup → Advanced → Result checks**. See [Result checks](/guides/result-checks).
+- **Result checks between agents:** an agent's result must end with a JSON block that passes the rules you set, such as *price is at most 5000* or *part number is filled in*, before its work is handed on. CopperTide checks the rules itself. A failing result goes back to the agent with what failed, up to three times; after that the agent waits for you. Set them under the agent's **Setup → Advanced → Result checks**. See [Result checks](/guides/result-checks).
 
 ## 26 October 2026
 
 ### Changes to business systems
 
-- **Agents propose before they change a business system.** With the new `propose_change` tool, an agent describes an order, a schedule or another change before making it. Sculptured checks the team's rules itself, such as a spending limit or approved suppliers, and approves the change or asks you in **Needs you** with **Approve** and **Reject**. Nobody answering in time means not approved. Set the rules under **Settings → Changes to business systems**; every change is kept under **Results → Changes**. See [Changes to business systems](/guides/changes).
+- **Agents propose before they change a business system.** With the new `propose_change` tool, an agent describes an order, a schedule or another change before making it. CopperTide checks the team's rules itself, such as a spending limit or approved suppliers, and approves the change or asks you in **Needs you** with **Approve** and **Reject**. Nobody answering in time means not approved. Set the rules under **Settings → Changes to business systems**; every change is kept under **Results → Changes**. See [Changes to business systems](/guides/changes).
 
 ### Open models with OpenCode
 
-- **Agents on open models:** an agent can now run on **OpenCode**, with models such as Kimi, GLM, DeepSeek and GPT OSS through an OpenRouter key. Choose **OpenCode** under **Runs on**; on the hosted service, add an **Open models — OpenRouter** key under **Setup → Models** and pick **OpenCode via OpenRouter**. OpenCode agents use Sculptured's agent tools, ask before acting when access is sandboxed, can be interrupted and resume where they left off. Each turn's cost is shown as OpenCode estimates it. See [Open models with OpenCode](/guides/open-models).
+- **Agents on open models:** an agent can now run on **OpenCode**, with models such as Kimi, GLM, DeepSeek and GPT OSS through an OpenRouter key. Choose **OpenCode** under **Runs on**; on the hosted service, add an **Open models — OpenRouter** key under **Setup → Models** and pick **OpenCode via OpenRouter**. OpenCode agents use CopperTide's agent tools, ask before acting when access is sandboxed, can be interrupted and resume where they left off. Each turn's cost is shown as OpenCode estimates it. See [Open models with OpenCode](/guides/open-models).
 
 ## 21 October 2026
 
 ### Setup and model connections
 
 - **Setup after sign-up:** the hosted service walks you through connecting a computer and adding a model connection, then optionally more computers and a first-project tour. Your progress is saved on the server. See [Set up your account](/guides/setup).
-- **Model connections:** a Claude agent can run with a Claude subscription, your own Anthropic API key or OpenRouter. Keys are sealed on Sculptured's server and sent only to the agent's process when it starts; they are never shown again. Runs with a key are billed to your own Anthropic or OpenRouter account. If a key can't be read, the agent doesn't start and says why.
+- **Model connections:** a Claude agent can run with a Claude subscription, your own Anthropic API key or OpenRouter. Keys are sealed on CopperTide's server and sent only to the agent's process when it starts; they are never shown again. Runs with a key are billed to your own Anthropic or OpenRouter account. If a key can't be read, the agent doesn't start and says why.
 
 ### Fewer things to fix
 
@@ -49,7 +49,7 @@ Changes you can see or use, by date. The open-source core's full history is on [
 ### Clusters from the web app
 
 - **More ways to sign in to a cluster:** certificates from your site (NERSC sshproxy, step-ca), with their end shown and a place to paste a new one; staying signed in after one code (12 hours by default, up to 7 days, **Sign out** on the card), so restarts don't ask again; every question of a sign-in round with its links, a Duo push hint and a countdown; and chains such as a password then a code. The Add dialog says what a web app can't use (hardware security keys, Kerberos, agent forwarding). See [Add a cluster from the web app](/connect-a-computer#add-a-cluster-from-the-web-app).
-- **Add a cluster** on the Computers page: give the login node, your user name and how to sign in (a key Sculptured makes, a private key or a password; a jump host if you need one). Sculptured's server connects over SSH, installs and starts the runner there (in tmux), runs `sculptured doctor` and keeps it running. Cluster codes such as Duo are asked for on the card and never stored, and every SSH action is listed on it. See [Add a cluster from the web app](/connect-a-computer#add-a-cluster-from-the-web-app).
+- **Add a cluster** on the Computers page: give the login node, your user name and how to sign in (a key CopperTide makes, a private key or a password; a jump host if you need one). CopperTide's server connects over SSH, installs and starts the runner there (in tmux), runs `sculptured doctor` and keeps it running. Cluster codes such as Duo are asked for on the card and never stored, and every SSH action is listed on it. See [Add a cluster from the web app](/connect-a-computer#add-a-cluster-from-the-web-app).
 
 ## 19 October 2026
 
@@ -80,18 +80,18 @@ Changes you can see or use, by date. The open-source core's full history is on [
 
 - **Raise a limit while a team runs.** On the Run board, **Raise** gives the run more tokens, time or plan share, and **Raise and continue** carries on a run that wrapped up or stopped at that limit. An agent's own token, turn or minute limit can be raised the same way. Raises are for this run only; the saved budget is unchanged. See [Raise a limit while the team runs](/guides/budgets#raise-a-limit-while-the-team-runs).
 
-### Community inside Sculptured
+### Community inside CopperTide
 
-- **Community is a section of Sculptured**, under **Community** in the top bar, with your Sculptured account: no second sign-in. Browse it signed out; sign in to save, publish and edit your profile. See [Community](/guides/community).
+- **Community is a section of CopperTide**, under **Community** in the top bar, with your CopperTide account: no second sign-in. Browse it signed out; sign in to save, publish and edit your profile. See [Community](/guides/community).
 - **Profiles and People:** choose a handle, a bio, up to 3 links and a picture. **People** lists everyone with a handle; every block shows who published it, linking to their profile. Search Explore by author too.
 - **Add to project** puts a reviewed copy straight into a project, and **Save to Library** keeps one that knows where it came from, with **Update to v2** when there is a newer version.
 - **Publish from your Library** directly, after choosing a handle. New accounts can publish 5 blocks in their first day.
 - **Report a profile** as well as a block; moderators can reset a profile's bio, picture or handle, or disable an account.
-- Members of the old Community site get their account back the first time they sign in to Sculptured with the same Google account.
+- Members of the old Community site get their account back the first time they sign in to CopperTide with the same Google account.
 
 ### Getting started
 
-- **Sign Claude Code and Codex in from any browser.** Codex shows a one-time code to enter on its sign-in page from any phone or computer; for Claude Code, paste the code its sign-in page shows into Sculptured. Before, the sign-in page had to open on the computer that runs the agents. See [Sign in Claude Code and Codex](/connect-a-computer#sign-in-claude-code-and-codex).
+- **Sign Claude Code and Codex in from any browser.** Codex shows a one-time code to enter on its sign-in page from any phone or computer; for Claude Code, paste the code its sign-in page shows into CopperTide. Before, the sign-in page had to open on the computer that runs the agents. See [Sign in Claude Code and Codex](/connect-a-computer#sign-in-claude-code-and-codex).
 - **Start team checks first.** If the team's computer is missing Claude Code or Codex, or it isn't signed in, Start says which and lets you sign in (or shows the install command) right there, instead of the agents stopping at their first turn.
 - **A first-run checklist on the home page:** connect a computer, sign in to Claude Code or Codex, start an example team. Each step ticks itself off; hide it any time.
 - **Stay signed in for 30 days.** A session now lasts 30 days from when you last used it, instead of 3 days unused or 14 days in all.
@@ -100,7 +100,7 @@ Changes you can see or use, by date. The open-source core's full history is on [
 
 ### Components
 
-- **Kindex and Signet-Eval are now components:** programs on the agent's computer described by a small manifest instead of built into Sculptured. Add your own, or one from Community, in the team's **Settings** → **More settings** → **Components**, and give it to agents in their Advanced settings; agent cards show a chip for each. Share yours with **Share to Community**. See [Components](/guides/skills#components-tools-on-the-agents-computer).
+- **Kindex and Signet-Eval are now components:** programs on the agent's computer described by a small manifest instead of built into CopperTide. Add your own, or one from Community, in the team's **Settings** → **More settings** → **Components**, and give it to agents in their Advanced settings; agent cards show a chip for each. Share yours with **Share to Community**. See [Components](/guides/skills#components-tools-on-the-agents-computer).
 - **A component that is not built in runs on a connected computer only after its owner approves it there**, with `sculptured approve-component`.
 - **A refused start pops up** with its reason, and a plan hold offers **Start anyway**.
 - **More kinds of components:** remote MCP servers at a web address (such as a hosted OpenFOAM server), skill packs, and Claude plugins installed on the agent's computer. **New component** makes one from a short form. A remote server's key stays on the agent's computer: the manifest names it as `${NAME}`, and the computer's owner sets it with `sculptured set-secret NAME`.
@@ -108,7 +108,7 @@ Changes you can see or use, by date. The open-source core's full history is on [
 - **Urgent questions first:** an agent can mark its question urgent or low; urgent ones come first in Needs you, marked as the agent's own word. An idea from Gas Town.
 - **Waves on the item board:** when a workflow's items depend on each other, the Run view shows them as waves, each done, in progress or waiting. An idea from Gas Town's convoys.
 - **`sculptured doctor`** checks a computer for its agents: Claude Code and Codex installed and signed in, allowed folders, component programs, approvals and secret names. See [CLI](/reference/cli#sculptured-doctor).
-- **Briefings survive compaction:** when Claude Code compacts a Claude agent's conversation, Sculptured gives the agent its briefing back (with protections on). An idea from Gas Town.
+- **Briefings survive compaction:** when Claude Code compacts a Claude agent's conversation, CopperTide gives the agent its briefing back (with protections on). An idea from Gas Town.
 - **A cap for the whole computer:** on the **Computers** page, **Most agents working at once** limits each computer across all your teams, so several teams together stay within your plan. An idea from Gas Town. See [Budgets](/guides/budgets#a-cap-for-the-whole-computer).
 - **An agent that goes quiet is flagged:** no output for 30 minutes in the middle of its turn shows it as **Stalled (heuristic)** and under Needs you, with **Nudge** and **Soft stop**. Nothing happens on its own. An idea from Gas Town.
 - **The agent's components are grouped** into MCP servers, skill packs, and plugins and hooks, with a search when there are many. Claude-only ones are offered to Claude agents only.
@@ -183,11 +183,11 @@ Changes you can see or use, by date. The open-source core's full history is on [
 ### Stopping always works
 
 - **Stop finishes even when the agents' computer is offline.** The agents are marked stopped at once instead of waiting for a computer that may never come back, so their project can go to the Trash. If an agent is still running there, the computer ends it when it reconnects.
-- **`sculptured stop`** ends every agent a computer's runner started, on that computer, without Sculptured. See [Connect a computer](/connect-a-computer#stop-agents-when-something-stops-responding). Reinstall the runner from **Computers** to get it.
+- **`sculptured stop`** ends every agent a computer's runner started, on that computer, without CopperTide. See [Connect a computer](/connect-a-computer#stop-agents-when-something-stops-responding). Reinstall the runner from **Computers** to get it.
 
 ### Delete forever
 
-- **Projects in the Trash can be deleted forever.** In the sidebar's **Trash**, **Delete forever** asks once more, then removes the project's design, runs, history and reports from Sculptured. Your project folder and agents' git copies are not touched.
+- **Projects in the Trash can be deleted forever.** In the sidebar's **Trash**, **Delete forever** asks once more, then removes the project's design, runs, history and reports from CopperTide. Your project folder and agents' git copies are not touched.
 
 ## 15 October 2026
 
@@ -211,7 +211,7 @@ Changes you can see or use, by date. The open-source core's full history is on [
 
 ### Leaner agents, and resuming a team
 
-- **Claude agents no longer load your own Claude Code setup** (your plugins, skills, hooks, settings and MCP servers in `~/.claude`). Every agent re-read it on every model call; in one 26-agent run it was about 40% of each agent's starting context. Team **Advanced** → **Claude Code setup for agents** turns it back on, and turns the project's own `.claude` settings off. Sculptured's agent tools load either way. A runner that has not been reinstalled still loads everything, and the agent says so.
+- **Claude agents no longer load your own Claude Code setup** (your plugins, skills, hooks, settings and MCP servers in `~/.claude`). Every agent re-read it on every model call; in one 26-agent run it was about 40% of each agent's starting context. Team **Advanced** → **Claude Code setup for agents** turns it back on, and turns the project's own `.claude` settings off. CopperTide's agent tools load either way. A runner that has not been reinstalled still loads everything, and the agent says so.
 - **Start fresh or resume.** When a stopped team's agents have a last conversation, the Start confirmation asks whether each agent should continue it or begin a new one. Starting fresh is the default; a resumed agent re-reads its earlier conversation on every step, so it costs more.
 
 ### Budgets
@@ -249,7 +249,7 @@ Changes you can see or use, by date. The open-source core's full history is on [
 ### MADL files
 
 - **Export as MADL.** Any team can be saved as a [MADL](/guides/madl) file, an open format other multi-agent tools can read. A team exported and imported again comes back unchanged.
-- **Import MADL files** from **Start from… → Advanced → Import**. Parts Sculptured can't run yet are listed under **Not imported**.
+- **Import MADL files** from **Start from… → Advanced → Import**. Parts CopperTide can't run yet are listed under **Not imported**.
 
 ### The Design board
 
@@ -262,18 +262,18 @@ Changes you can see or use, by date. The open-source core's full history is on [
 - **Practice agents are no longer offered** for new agents. Teams that have them keep them.
 - **Loops of arrows** are allowed once an agent outside the loop hands work into it. Work coming back round a loop arrives as **More work**, at most 3 times for one piece of work. See [Connect work](/guides/board#connect-work).
 
-### Sculptured on Mac
+### CopperTide on Mac
 
 - **Connect a Mac.** Apple silicon and Intel Macs with macOS 11 or later can run your agents. Download the Mac app, or paste the connect command into Terminal. See [Install the Mac app](/connect-a-computer#install-the-mac-app).
 - **The sign-in page on a Mac** offers the app first, with **Continue in the browser** below it.
 - **The first time**, macOS asks you to allow the app in *System Settings → Privacy & Security* (**Open Anyway**), because it isn't signed with an Apple Developer ID yet.
-- **Folders macOS protects:** if Sculptured can't read a folder in Desktop, Documents or Downloads, the message says where to allow it.
+- **Folders macOS protects:** if CopperTide can't read a folder in Desktop, Documents or Downloads, the message says where to allow it.
 
 ## 13 October 2026
 
 ### Import a Claude Code or Codex session
 
-- **Bring in sessions you ran outside Sculptured.** Under *Start from… → Advanced → Import a past run*, choose a Claude Code session file (plus its `subagents` folder) or Codex rollouts. You see what was found before anything is created. See [Import a session](/guides/import-a-session).
+- **Bring in sessions you ran outside CopperTide.** Under *Start from… → Advanced → Import a past run*, choose a Claude Code session file (plus its `subagents` folder) or Codex rollouts. You see what was found before anything is created. See [Import a session](/guides/import-a-session).
 - **A run and a team.** The session opens in History as a run, subagents included. It also becomes a team you can start again: one agent per agent, arrows to the subagents it started, and each agent's own task as its job.
 - **Improve it with AI.** Under the team's **Advanced**, your own Claude Code or Codex proposes a reusable version from a summary of the session. It's shown as a diff labelled AI-reconstructed, and nothing changes until you apply it.
 
@@ -321,15 +321,15 @@ See [When a computer drops off](/guides/offline).
 - **Live updates:** when they aren't arriving, the board says so after a few seconds, with **Try again**, instead of showing "Connecting…" forever.
 - **Rename a project** by double-clicking its name.
 - **Team status** sits in the toolbar and no longer overlaps **Stop team**; **Runs on** fits its panel.
-- A new **account card** in the sidebar, and **Back to Sculptured** from Computers, Account and What we record.
+- A new **account card** in the sidebar, and **Back to CopperTide** from Computers, Account and What we record.
 - **Account page:** sign out there, and see your usage across every team.
 - A hosted team with no connected computer shows **Needs setup**, and the app says "connect your computer" instead of a bare error.
 - Nicer **Reusable groups** library and Community connect card.
 
 ### Teams and Community
 
-- **Team files name their JSON Schema** (`sculptured.team/v1`), published at `docs.usesculptured.com/schema/team-v1.json`, so editors can check and complete them. See [Team file reference](/reference/team-file).
-- **Example teams in Community:** a gstack-style product team and the Coding hospital, published as Sculptured examples. See [Examples](/guides/examples).
+- **Team files name their JSON Schema** (`sculptured.team/v1`), published at `docs.coppertide.ai/schema/team-v1.json`, so editors can check and complete them. See [Team file reference](/reference/team-file).
+- **Example teams in Community:** a gstack-style product team and the Coding hospital, published as CopperTide examples. See [Examples](/guides/examples).
 
 ### Docs
 
@@ -340,7 +340,7 @@ See [When a computer drops off](/guides/offline).
 
 ### First public release
 
-Sculptured's core is open source under Apache-2.0.
+CopperTide's core is open source under Apache-2.0.
 
 - **Design a team on a board:** agents, groups, inputs and "hands work to" arrows, with things to fix pinned to the part they are about.
 - **Run it and watch it:** each agent's live state, transcript, tool calls, questions and handoffs, with reported, observed and verified evidence kept apart.

@@ -17,7 +17,7 @@ export const STARTING_REASON = 'Starting… you can stop the team once it has st
 const RELOAD = 'Reload the page and try again.';
 
 /** What every Arena pane says when arenad is not answering, and how to start it. */
-export const ARENA_DOWN = 'Arena is not running';
+export const ARENA_DOWN = 'Shakedown is not running';
 export const ARENA_START_COMMAND = 'cd core && cargo run -p arenad';
 export const ARENA_START = `Start it in the arena folder with ${ARENA_START_COMMAND}, then try again.`;
 
@@ -67,7 +67,7 @@ export const COMMUNITY_ERROR_WORDS: Record<string, string> = {
   community_unreachable: 'Could not reach Community. Check your internet connection, then try again.',
   community_timeout: 'Community did not answer within 15 seconds. Try again.',
   community_too_large: 'That is too large to send to Community (the limit is 1.1 MB).',
-  community_origin_invalid: 'Use an https:// address, such as https://app.usesculptured.com.',
+  community_origin_invalid: 'Use an https:// address, such as https://app.coppertide.ai.',
   bad_scope: `CopperTide refused this kind of sign-in. ${RELOAD}`,
   too_many_attempts: 'Too many sign-in attempts. Wait a few minutes, then try again.',
 };
@@ -142,9 +142,9 @@ export const ERROR_WORDS: Record<string, string> = {
   arena_unreachable: `${ARENA_DOWN}. ${ARENA_START}`,
   arena_not_found: 'That run or branch no longer exists. It may have been deleted.',
   arena_busy: 'A branch of this run is still running. Wait for it to finish, then try again.',
-  arena_full: "Arena's saves have reached their space limit. Delete old runs or clean up saves to make room.",
-  arena_refused: 'Arena did not accept this request.',
-  arena_failed: 'Arena hit a problem with this request.',
+  arena_full: "Shakedown's saves have reached their space limit. Delete old runs or clean up saves to make room.",
+  arena_refused: 'Shakedown did not accept this request.',
+  arena_failed: 'Shakedown hit a problem with this request.',
   // Everything else.
   internal: 'CopperTide hit an internal problem. Try again; if it keeps happening, restart CopperTide.',
   login_required: 'Sign in to use CopperTide.',

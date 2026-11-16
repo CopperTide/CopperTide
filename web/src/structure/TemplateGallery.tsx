@@ -136,8 +136,8 @@ function ImportFromFile({ onCreated }: { onCreated: (id: string) => void }) {
     setError(null);
     setDone(null);
     try {
-      // A MADL file (YAML or JSON), a Sculptured team file (JSON), or else an OpenRig YAML spec.
-      // JSON is a MADL document or an older Sculptured team file; the server reads both.
+      // A MADL file (YAML or JSON), a CopperTide team file (JSON), or else an OpenRig YAML spec.
+      // JSON is a MADL document or an older CopperTide team file; the server reads both.
       const madl = isMadl(yaml) || yaml.trim().startsWith('{');
       if (madl && yaml.trim().startsWith('{')) {
         try {

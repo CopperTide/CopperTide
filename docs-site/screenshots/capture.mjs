@@ -18,7 +18,7 @@ const arg = (name, fallback) => {
   const i = process.argv.indexOf(name);
   return i > 0 ? process.argv[i + 1] : fallback;
 };
-// Required: the demo server to drive. There is no default, so the script never touches a Sculptured you use.
+// Required: the demo server to drive. There is no default, so the script never touches a CopperTide you use.
 const base = arg('--base', null);
 if (!base) {
   console.error('usage: node screenshots/capture.mjs --base http://127.0.0.1:<demo port> [--session-folder <dir>] [--only <step>] [--from <step>]');

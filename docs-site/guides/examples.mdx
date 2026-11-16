@@ -1,6 +1,6 @@
 ---
 title: Examples and templates
-description: Every starting point that ships with Sculptured — what each agent does, how work flows, and when to pick it.
+description: Every starting point that ships with CopperTide — what each agent does, how work flows, and when to pick it.
 ---
 
 Pick the smallest example that fits your work, then change it. Every agent, Job, folder and arrow stays editable on the [Design board](/guides/board) before you start.
@@ -32,11 +32,11 @@ The last three are small teaching exercises with fictional inputs written into t
 
 ## Official examples in Community
 
-Two complete teams are published in [Community](/guides/community) by **Sculptured examples**. Open Community, find the block, and press **Add to project**. The block arrives in your [Library](/guides/groups) for review, then goes into a project like any saved group.
+Two complete teams are published in [Community](/guides/community) by **CopperTide examples**. Open Community, find the block, and press **Add to project**. The block arrives in your [Library](/guides/groups) for review, then goes into a project like any saved group.
 
 ### gstack-style product team
 
-Eight Claude agents take one feature through a small product team's sprint. The roles and order are inspired by [gstack](https://github.com/garrytan/gstack) by Garry Tan (MIT). Every Job is written in Sculptured's own words, and the example is not made or endorsed by the gstack author. gstack doesn't need to be installed.
+Eight Claude agents take one feature through a small product team's sprint. The roles and order are inspired by [gstack](https://github.com/garrytan/gstack) by Garry Tan (MIT). Every Job is written in CopperTide's own words, and the example is not made or endorsed by the gstack author. gstack doesn't need to be installed.
 
 ```mermaid
 flowchart LR
@@ -81,16 +81,16 @@ How an item moves:
 
 1. **Admit?** A person admits the issue, or closes it as `not-a-bug` or `wont-fix`.
 2. **Workup → Plan review.** The Fellow plans; the Review Attending approves or sends it back.
-3. **Treatment → Tests.** The Fellow fixes it; Sculptured runs `npm test`. A failure goes back to Treatment.
+3. **Treatment → Tests.** The Fellow fixes it; CopperTide runs `npm test`. A failure goes back to Treatment.
 4. **Code review.** A two-reviewer panel; any `changes` vote sends it back.
-5. **Sign-off → Merge.** A person ships it; Sculptured merges the item's branch into main. A conflict goes back to Treatment.
+5. **Sign-off → Merge.** A person ships it; CopperTide merges the item's branch into main. A conflict goes back to Treatment.
 6. **Escalation.** After 4 Treatment rounds, a person decides: `retry` or `wont-fix`.
 
 It also turns on per-item copies and branches, a guard (`npm test` every 15 minutes) and a decision log. The full diagram is on the [workflows page](/guides/workflows#worked-example-the-coding-hospital).
 
 **Use it for** a backlog of small, well-described issues in a repository with tests. **Before you start:** the project folder must be a git repository with an `ISSUES.md` and an `npm test` script, or change the check and guard commands to your own. People decide at Admit?, Sign-off and Escalation, so plan to answer [decision cards](/guides/questions).
 
-<Info>The Sculptured source repository includes a practice patient: `docs/showcase/hospital-target/setup.sh` copies a tiny Node library and its ISSUES.md into a new git folder (default `~/sculptured-hospital`). `npm test` passes on `main` because the failing tests for the issues are marked todo.</Info>
+<Info>The CopperTide source repository includes a practice patient: `docs/showcase/hospital-target/setup.sh` copies a tiny Node library and its ISSUES.md into a new git folder (default `~/sculptured-hospital`). `npm test` passes on `main` because the failing tests for the issues are marked todo.</Info>
 
 ## Choose an example
 

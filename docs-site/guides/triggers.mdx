@@ -22,7 +22,7 @@ A team can have up to 8 triggers. Change them while the team is stopped.
 Anything up to 64 KB: JSON is kept as JSON, and anything else as text. CopperTide answers `202 Accepted` at once, with the event's id, and handles the event after that:
 
 ```bash
-curl -X POST 'https://app.usesculptured.com/hooks/…' \
+curl -X POST 'https://app.coppertide.ai/hooks/…' \
   -H 'content-type: application/json' \
   -d '{"machine": "Press 4", "code": "VIB-HIGH"}'
 ```
@@ -33,7 +33,7 @@ The agent gets your words, then the event, marked as coming from outside CopperT
 
 The end of the address is a secret that CopperTide keeps. It is never in the team's design or its exported files, so sharing a team doesn't share its addresses. Anyone who has the address can hand the team an event. If it leaks, choose **New address**: the current address stops working at once.
 
-On the hosted service the address goes through `app.usesculptured.com` and works from anywhere. In CopperTide on your own computer, the address works only from that computer.
+On the hosted service the address goes through `app.coppertide.ai` and works from anywhere. In CopperTide on your own computer, the address works only from that computer.
 
 ## What you see
 

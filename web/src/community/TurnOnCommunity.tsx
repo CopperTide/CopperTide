@@ -57,7 +57,7 @@ function ServerField({ value, onChange, problem, open }: { value: string; onChan
       <summary>{W.otherServer}</summary>
       <label>
         Server address
-        <input value={value} onChange={(e) => onChange(e.target.value)} placeholder="https://app.usesculptured.com" inputMode="url" autoComplete="off" aria-invalid={problem !== '' || undefined} aria-describedby={problem ? 'cm-server-problem' : undefined} />
+        <input value={value} onChange={(e) => onChange(e.target.value)} placeholder="https://app.coppertide.ai" inputMode="url" autoComplete="off" aria-invalid={problem !== '' || undefined} aria-describedby={problem ? 'cm-server-problem' : undefined} />
       </label>
       {problem && <p id="cm-server-problem" className="tone-red" role="alert">{problem}</p>}
     </details>

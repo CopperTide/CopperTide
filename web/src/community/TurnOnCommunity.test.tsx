@@ -11,7 +11,7 @@ import { TurnOnCommunity } from './TurnOnCommunity';
 afterEach(() => vi.restoreAllMocks());
 
 it('says what is sent and what never leaves, and turns on only when asked', async () => {
-  const { calls } = fakeFetch({ 'POST /api/community-link/enable': () => [200, { enabled: true, origin: 'https://app.usesculptured.com', signed_in: false, account: null }] });
+  const { calls } = fakeFetch({ 'POST /api/community-link/enable': () => [200, { enabled: true, origin: 'https://app.coppertide.ai', signed_in: false, account: null }] });
   const onDone = vi.fn();
   render(<MemoryRouter><TurnOnCommunity onDone={onDone} /></MemoryRouter>);
   for (const t of [COMMUNITY_WORDS.optIn.title, ...COMMUNITY_WORDS.optIn.sends, COMMUNITY_WORDS.optIn.never]) expect(screen.getByText(t)).toBeInTheDocument();

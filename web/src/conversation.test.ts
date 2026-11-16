@@ -40,10 +40,10 @@ describe('conversationItems', () => {
 
     const failed = conversationItems([
       ev(1, { type: 'message-queued', message_id: 'm2', intent: 'inform', text: 'x' }),
-      ev(2, { type: 'message-failed', message_id: 'm2', reason: "Sculptured's agent runner is not connected" }),
+      ev(2, { type: 'message-failed', message_id: 'm2', reason: "CopperTide's agent runner is not connected" }),
       ev(3, { type: 'message-delivered', message_id: 'm2' }),
     ]);
-    expect(failed[0]).toMatchObject({ state: 'failed', reason: "Sculptured's agent runner is not connected" });
+    expect(failed[0]).toMatchObject({ state: 'failed', reason: "CopperTide's agent runner is not connected" });
   });
 
   it('keeps unrecognized events and turns lifecycle changes into notices', () => {

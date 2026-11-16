@@ -54,8 +54,8 @@ describe('errorText: server errors in plain words', () => {
   });
 
   it('keeps a host reason verbatim, as runtime evidence', () => {
-    expect(errorText(new ApiError(502, 'host_unreachable', "Sculptured's agent runner is not connected"))).toBe(
-      "CopperTide could not reach this agent's host: Sculptured's agent runner is not connected",
+    expect(errorText(new ApiError(502, 'host_unreachable', "CopperTide's agent runner is not connected"))).toBe(
+      "CopperTide could not reach this agent's host: CopperTide's agent runner is not connected",
     );
   });
 

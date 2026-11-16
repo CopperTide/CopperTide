@@ -24,7 +24,7 @@ sequenceDiagram
 
 <Steps>
   <Step title="Open Computers">
-    Sign in at **app.usesculptured.com** and open **Computers** from the **⋯** menu at the top right.
+    Sign in at **app.coppertide.ai** and open **Computers** from the **⋯** menu at the top right.
   </Step>
   <Step title="Pick the system">
     Under **Connect a computer**, the tab for the system you're browsing from is already selected. Choose another tab if you're connecting a different machine.
@@ -33,7 +33,7 @@ sequenceDiagram
     Choose **Copy connect command**. It contains a one-time key, so the computer connects without a code to approve. If your browser won't copy it, the command appears on the page for you to select.
   </Step>
   <Step title="Paste it on that computer">
-    Open a terminal on the computer, paste the command and press Enter. When it finishes, it prints `Connected to https://app.usesculptured.com.` and the folders agents may work in.
+    Open a terminal on the computer, paste the command and press Enter. When it finishes, it prints `Connected to https://app.coppertide.ai.` and the folders agents may work in.
   </Step>
   <Step title="Check it">
     Back on the Computers page, the computer shows **Connected**, with its access level, its allowed folders and whether Claude Code and Codex are installed and signed in.
@@ -45,7 +45,7 @@ sequenceDiagram
     Open **PowerShell** (Start menu, type *PowerShell*, press Enter). Paste with right-click or Ctrl+V, then press Enter. The command looks like this:
 
     ```powershell
-    $env:SCULPTURED_KEY="<one-time key>"; irm https://app.usesculptured.com/install.ps1 | iex
+    $env:SCULPTURED_KEY="<one-time key>"; irm https://app.coppertide.ai/install.ps1 | iex
     ```
 
     | | |
@@ -61,7 +61,7 @@ sequenceDiagram
     Open a terminal. Paste with Ctrl+Shift+V, then press Enter. The command looks like this:
 
     ```bash
-    curl -fsSL https://app.usesculptured.com/install.sh | sh -s -- --key <one-time key>
+    curl -fsSL https://app.coppertide.ai/install.sh | sh -s -- --key <one-time key>
     ```
 
     | | |
@@ -287,7 +287,7 @@ There is no uninstall command yet. To remove the runner by hand after disconnect
 
 ## Connect without a key
 
-You can also run `sculptured connect https://app.usesculptured.com` yourself. It prints a link and a code such as `WXYZ-2345` and opens your browser. Check that the code matches, then choose **Allow**. Add `--install-service` to keep it running in the background, `--allow <folder>` to choose folders up front, and `--name` to set how it appears on the Computers page. All options are on the [CLI reference](/reference/cli).
+You can also run `sculptured connect https://app.coppertide.ai` yourself. It prints a link and a code such as `WXYZ-2345` and opens your browser. Check that the code matches, then choose **Allow**. Add `--install-service` to keep it running in the background, `--allow <folder>` to choose folders up front, and `--name` to set how it appears on the Computers page. All options are on the [CLI reference](/reference/cli).
 
 <Warning>Only approve a code you just saw on your own computer. Approving a code someone sent you would connect *their* machine to your account.</Warning>
 
@@ -301,7 +301,7 @@ You can also run `sculptured connect https://app.usesculptured.com` yourself. It
     Each command works once, for 30 minutes. Choose **Copy connect command** again and paste the new one.
   </Accordion>
   <Accordion title="The command finished, but the computer doesn't show Connected">
-    Wait ten seconds; the page refreshes itself. If it still doesn't connect, run the command again. It stops any old runner before replacing it. On Linux, `systemctl --user status sculptured-runner` shows whether the service is running. If the command printed "Wrote …, but could not start it", start the service yourself, or run `sculptured connect https://app.usesculptured.com` to stay connected while the terminal is open.
+    Wait ten seconds; the page refreshes itself. If it still doesn't connect, run the command again. It stops any old runner before replacing it. On Linux, `systemctl --user status sculptured-runner` shows whether the service is running. If the command printed "Wrote …, but could not start it", start the service yourself, or run `sculptured connect https://app.coppertide.ai` to stay connected while the terminal is open.
   </Accordion>
   <Accordion title="An agent says Claude Code or Codex isn't signed in">
     The CLI is installed but has no sign-in on that computer. Choose **Sign in to Claude Code** (or Codex) on the agent, finish signing in, then choose **Hand over again**. See [Sign in Claude Code and Codex](#sign-in-claude-code-and-codex).

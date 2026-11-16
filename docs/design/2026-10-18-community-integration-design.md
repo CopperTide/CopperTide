@@ -89,7 +89,7 @@ Success means three things. A signed-in person never signs in twice. Community l
 - **Signed out but turned on:** controld proxies read-only GETs with no credentials, so Explore, People and profiles work.
 - **`community_url`:** the existing setting becomes `sculptured_origin`.
   - It defaults to unset, which means Community is off.
-  - Turning Community on sets it to `https://app.usesculptured.com`. A self-hoster can change it in Settings.
+  - Turning Community on sets it to `https://app.coppertide.ai`. A self-hoster can change it in Settings.
   - The old `community_url` key is read once and migrated. A value pointing at `community.{domain}` maps to `app.{domain}`.
   - Turning Community off clears the origin and the stored key, and revokes the key on the server when reachable.
 - **Tests:** routine tests use a stub Community upstream in `crates/fixtures`. No real network (AGENTS.md).
