@@ -73,7 +73,7 @@ function fail(message) {
 function openWindow(allowed, start) {
   window = new BrowserWindow({
     width: 1280, height: 850, minWidth: 640, minHeight: 480, show: false, title: 'CopperTide',
-    backgroundColor: '#10141c', autoHideMenuBar: true,
+    backgroundColor: '#100e0c', autoHideMenuBar: true,
     icon: path.join(app.getAppPath(), 'icon.png'),
     webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true, spellcheck: false },
   });
@@ -95,7 +95,7 @@ function openWindow(allowed, start) {
 function choose() {
   return new Promise((resolve) => {
     const w = new BrowserWindow({
-      width: 640, height: 600, title: 'CopperTide', backgroundColor: '#10141c', autoHideMenuBar: true,
+      width: 640, height: 600, title: 'CopperTide', backgroundColor: '#100e0c', autoHideMenuBar: true,
       webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true, preload: path.join(app.getAppPath(), 'src', 'chooser-preload.cjs') },
     });
     let chosen = false;

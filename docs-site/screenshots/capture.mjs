@@ -8,7 +8,7 @@
 //   2. node screenshots/capture.mjs --base http://127.0.0.1:4499 --session-folder <home>/app
 //
 // Every team, prompt and session in the shots is a made-up demo; nothing personal is shown.
-// The app's default look (Coastal) and board style (Cards) are used: each browser here starts fresh.
+// The app's default look (CopperTide) and board style (Cards) are used: each browser here starts fresh.
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';

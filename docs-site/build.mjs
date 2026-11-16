@@ -57,6 +57,9 @@ function page({ title, description, content, nav, current }) {
 <title>${esc(title)} · CopperTide docs</title>
 <meta name="description" content="${esc(description ?? '')}">
 <link rel="icon" href="/images/coppertide-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
 <style>${CSS}</style>
 </head>
 <body>
@@ -111,10 +114,10 @@ await mermaid.run();
 </script>`;
 
 const CSS = `
-:root { --bg:#fbfcfc; --panel:#f1f5f5; --text:#16211f; --muted:#52615e; --line:#d6e0de; --accent:#477C80; --accent-soft:#e3efee; --warn:#8a5a00; --warn-soft:#fff4dc; }
-@media (prefers-color-scheme: dark) { :root { --bg:#0f1716; --panel:#162220; --text:#e4ecea; --muted:#9db0ac; --line:#2a3a37; --accent:#8fc4bd; --accent-soft:#1c2f2d; --warn:#f0c46a; --warn-soft:#2f2614; } }
+:root { --bg:#fbf9f5; --panel:#f3eee6; --text:#100e0c; --muted:#5e5850; --line:#e5ddd1; --accent:#a4461a; --accent-soft:#f8e6d9; --warn:#7a5e00; --warn-soft:#f8efd2; }
+@media (prefers-color-scheme: dark) { :root { --bg:#100e0c; --panel:#181512; --text:#f6f2eb; --muted:#b9b1a6; --line:#2e2924; --accent:#ee7a3a; --accent-soft:#2a1c14; --warn:#e9cd75; --warn-soft:#2a2414; } }
 * { box-sizing: border-box; }
-body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
+body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif; }
 a { color:var(--accent); }
 header { padding:12px 16px; border-bottom:1px solid var(--line); }
 .brand { display:inline-flex; align-items:center; gap:10px; font-weight:600; color:var(--text); text-decoration:none; }
@@ -128,7 +131,7 @@ main { padding:24px 32px 64px; min-width:0; }
 h1 { margin:0 0 4px; font-size:2rem; line-height:1.2; }
 .lede { color:var(--muted); font-size:1.1rem; margin-top:0; }
 pre { background:var(--panel); padding:12px 14px; border-radius:8px; overflow-x:auto; }
-code { font-family:ui-monospace, "SF Mono", Menlo, monospace; font-size:.9em; }
+code { font-family:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace; font-size:.9em; }
 table { border-collapse:collapse; display:block; overflow-x:auto; }
 th, td { border:1px solid var(--line); padding:6px 10px; text-align:left; }
 .cards { display:grid; grid-template-columns:repeat(var(--cols), minmax(0,1fr)); gap:12px; margin:16px 0; }

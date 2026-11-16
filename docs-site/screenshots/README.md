@@ -1,6 +1,6 @@
 # Docs screenshots
 
-`capture.mjs` takes every screenshot in `../images/{quickstart,guides,import}`, and the README's board picture `../../docs/images/board.png`, from the real, running app. Nothing is drawn or mocked. Re-run it after a UI change. It uses the app's defaults: the Coastal look and the Cards board style, at 1280×800 (the README board at 1440×860, twice the pixels).
+`capture.mjs` takes every screenshot in `../images/{quickstart,guides,import}`, and the README's board picture `../../docs/images/board.png`, from the real, running app. Nothing is drawn or mocked. Re-run it after a UI change. It uses the app's defaults: the CopperTide look and the Cards board style, at 1280×800 (the README board at 1440×860, twice the pixels).
 
 1. Build the app and its web UI: `cargo build -p sculptured && npm --prefix web run build`.
 2. Make an empty data folder and a home folder with an `app` folder in it (the demo session "ran" there), for example `/tmp/docsd` and `/tmp/docshome/app`. Keep the data folder's path short: the agents' tool socket lives in it, and socket paths are limited to about 100 characters.

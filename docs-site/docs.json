@@ -3,9 +3,18 @@
   "theme": "mint",
   "name": "CopperTide",
   "colors": {
-    "primary": "#477C80",
-    "light": "#ADD5CE",
-    "dark": "#244D55"
+    "primary": "#A4461A",
+    "light": "#EE7A3A",
+    "dark": "#A4461A"
+  },
+  "background": {
+    "color": {
+      "light": "#FBF9F5",
+      "dark": "#100E0C"
+    }
+  },
+  "fonts": {
+    "family": "Instrument Sans"
   },
   "favicon": "/images/coppertide-mark.png",
   "appearance": {
