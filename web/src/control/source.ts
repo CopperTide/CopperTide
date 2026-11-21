@@ -4,7 +4,7 @@ import type { Branch, BranchDetail, Change, Comparison, ProviderStatus, RestoreM
 
 /**
  * What the Control panes read: one interface over a deployment (a CopperTide team running for real)
- * and a simulated deployment (an Arena run branch). Panes never call the server themselves.
+ * and a simulated deployment (an Shakedown run branch). Panes never call the server themselves.
  */
 
 /**
@@ -111,10 +111,10 @@ export type SimulatedTimeline = {
 };
 
 /**
- * The Arena run behind a simulated source: the branch (absent until it loads, or when it can't),
+ * The Shakedown run behind a simulated source: the branch (absent until it loads, or when it can't),
  * its run's branches with their short names, what each part of the world says about itself (null
- * until Arena answers), and whether OpenRouter agents can run. `error` is why the branch is not
- * on screen (Arena not answering, or another failure); `compare(other)` reads another branch against
+ * until Shakedown answers), and whether OpenRouter agents can run. `error` is why the branch is not
+ * on screen (Shakedown not answering, or another failure); `compare(other)` reads another branch against
  * this one (so its change column is what this branch changed).
  */
 export type SimulatedRun = {
@@ -125,12 +125,12 @@ export type SimulatedRun = {
   names: Map<string, string>;
   parts: WorldPartInfo[] | null;
   openAvailable: boolean;
-  /** The health check's model providers (local servers not checked), when Arena lists them. */
+  /** The health check's model providers (local servers not checked), when Shakedown lists them. */
   providers?: ProviderStatus[];
   error?: unknown;
-  /** The task's own words for what the run had to do, when Arena has them. */
+  /** The task's own words for what the run had to do, when Shakedown has them. */
   reason?: string;
-  /** Counts Arena answering again after not answering: panes read again when it changes. */
+  /** Counts Shakedown answering again after not answering: panes read again when it changes. */
   reconnects: number;
   compare(other: string): Promise<Comparison>;
 };
@@ -144,7 +144,7 @@ export type ControlSource = {
   startedAt?: number;
   /** When a run that has finished ended (a simulated branch); the header then shows how long it ran. */
   endedAt?: number;
-  /** Nothing about the run could be read yet (Arena not answering, or still loading): readings say unknown, not none. */
+  /** Nothing about the run could be read yet (Shakedown not answering, or still loading): readings say unknown, not none. */
   unread?: true;
   /** Only the latest events are loaded: what happened before this time may be missing (absent: all of it is). */
   historySince?: number;
@@ -159,7 +159,7 @@ export type ControlSource = {
   team: TeamActions;
   /**
    * Tokens and cost are absent when unknown. `tokens` is the total where only that was reported (an
-   * Arena run's agents). `toolCallsPerMin`: the last 15 minutes, oldest first.
+   * Shakedown run's agents). `toolCallsPerMin`: the last 15 minutes, oldest first.
    */
   metrics: { tokensIn?: number; tokensOut?: number; tokens?: number; costUsd?: number; toolCallsPerMin: (number | null)[] };
   /** What could not be loaded, in plain words (the rest of the source is then incomplete). */
@@ -176,6 +176,6 @@ export type ControlSource = {
     rows(key?: string): Promise<Record<string, unknown>>;
     read(seq: number, keys: string[], part?: string): Promise<Record<string, unknown>>;
   };
-  /** Simulated only: the Arena run. */
-  arena?: SimulatedRun;
+  /** Simulated only: the Shakedown run. */
+  shakedown?: SimulatedRun;
 };

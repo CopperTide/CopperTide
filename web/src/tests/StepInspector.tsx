@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
-import { ArenaProblem } from '../arena/gate';
+import { ShakedownProblem } from '../shakedown/gate';
 import { Btn } from '../shell/ui';
 import { costIsUnknown, providerName } from './providers';
 import { costSource, diffHunks, dollars, jsonDiff, rowKeys, stepBefore, type Step } from './model';
@@ -63,7 +63,7 @@ function DiffLines({ a, b }: { a: unknown; b: unknown }) {
 /** Each row this write changed, as it was before the step and just after. */
 function RowChanges({ branch, seq, keys, part }: { branch: BranchDetail; seq: number; keys: string[]; part?: string }) {
   const { rows, error } = useBeforeAfter(seq, stepBefore(branch.events, seq), keys, part);
-  if (error) return <ArenaProblem error={error} />;
+  if (error) return <ShakedownProblem error={error} />;
   if (!rows) return <p className="muted tst-small">Reading the rows before and after this step…</p>;
   return (
     <>
@@ -92,7 +92,7 @@ function RowsRead({ branch, seq, keys, more, part }: { branch: BranchDetail; seq
         setBusy(true);
         load(seq, keys, part).then(setRows).catch(setError).finally(() => setBusy(false));
       }} disabled={busy}>{busy ? 'Reading…' : 'Show these rows'}</Btn>}
-      <ArenaProblem error={error} />
+      <ShakedownProblem error={error} />
       {rows && Object.entries(rows).map(([k, doc]) => (
         <div key={k} className="tst-rowdiff">
           <div className="mono tst-small">{k}{doc === null && <span className="muted"> (absent)</span>}</div>

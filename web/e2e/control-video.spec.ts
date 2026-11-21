@@ -9,9 +9,9 @@ import { beat, caption, glide, keepVideo, press, recorder, shot, SHOTS, stills }
  *   RECORD_VIDEOS=1 npx playwright test control-video.spec.ts
  *
  * Screenshots go to docs/images/control/, videos to docs/videos/ (WebM and, with ffmpeg, MP4). The
- * Arena captures need a running arenad that serve reaches (COPPERTIDE_ARENA_URL) with the retail
- * example and a scripted OpenAI-compatible stand-in as a local model server (ARENA_LOCAL_MODELS), like
- * the fake upstream of arena's own tests, so no real model is called; without them they are skipped
+ * Shakedown captures need a running shaked that serve reaches (COPPERTIDE_SHAKEDOWN_URL) with the retail
+ * example and a scripted OpenAI-compatible stand-in as a local model server (SHAKEDOWN_LOCAL_MODELS), like
+ * the fake upstream of shakedown's own tests, so no real model is called; without them they are skipped
  * and say so. The screenshots expect at least one finished run of task 27.
  */
 
@@ -284,32 +284,32 @@ test('screenshots: Control on a phone', async ({ page, request }, info) => {
   await stop(request, id);
 });
 
-/** True when serve reaches an arenad (COPPERTIDE_ARENA_URL). */
-async function arenaUp(request: APIRequestContext) {
-  const r = await request.get('/api/arena/health').catch(() => null);
+/** True when serve reaches an shaked (COPPERTIDE_SHAKEDOWN_URL). */
+async function shakedownUp(request: APIRequestContext) {
+  const r = await request.get('/api/shakedown/health').catch(() => null);
   return !!r?.ok();
 }
 
 /**
- * Keeps Arena's suggested team in this browser (as Edit team would), each agent in API mode on the
- * first local model server arenad offers. The guide's arenad has a scripted stand-in there
- * (ARENA_LOCAL_MODELS), so no real model is called; without one, the Arena captures are skipped.
+ * Keeps Shakedown's suggested team in this browser (as Edit team would), each agent in API mode on the
+ * first local model server shaked offers. The guide's shaked has a scripted stand-in there
+ * (SHAKEDOWN_LOCAL_MODELS), so no real model is called; without one, the Shakedown captures are skipped.
  */
-async function scriptedArenaTeam(context: BrowserContext, request: APIRequestContext) {
-  const providers: { id: string; kind: string; available: boolean; models?: string[] }[] = await (await request.get('/api/arena/providers')).json();
+async function scriptedShakedownTeam(context: BrowserContext, request: APIRequestContext) {
+  const providers: { id: string; kind: string; available: boolean; models?: string[] }[] = await (await request.get('/api/shakedown/providers')).json();
   const local = providers.find((p) => p.kind === 'local' && p.available && p.models?.length);
-  test.skip(!local, 'arenad offers no local model server (ARENA_LOCAL_MODELS) for a scripted stand-in');
-  const team = await (await request.get('/api/arena/team/default')).json();
+  test.skip(!local, 'shaked offers no local model server (SHAKEDOWN_LOCAL_MODELS) for a scripted stand-in');
+  const team = await (await request.get('/api/shakedown/team/default')).json();
   for (const a of team.agents) Object.assign(a, { kind: 'open', provider: local!.id, model: local!.models![0] });
   await context.addInitScript((t) => localStorage.setItem('sculptured.tests.team.v1', t), JSON.stringify(team));
 }
 
 test('video 4: Shakedown control, a run’s Replay and a fork', async ({ browser, request, baseURL }, info) => {
   desktopOnly(info.project.name);
-  test.skip(!(await arenaUp(request)), 'no arenad answers (start one and set COPPERTIDE_ARENA_URL)');
+  test.skip(!(await shakedownUp(request)), 'no shaked answers (start one and set COPPERTIDE_SHAKEDOWN_URL)');
   const { context, page } = await recorder(browser, info, baseURL!);
-  await scriptedArenaTeam(context, request);
-  await page.goto('/arena');
+  await scriptedShakedownTeam(context, request);
+  await page.goto('/shakedown');
   await caption(page, 'Shakedown control: the runs, the world and the engine at a glance');
   await expect(page.getByRole('table', { name: 'Runs' })).toBeVisible();
   await beat(page, 3000);
@@ -317,7 +317,7 @@ test('video 4: Shakedown control, a run’s Replay and a fork', async ({ browser
   await glide(page, page.getByRole('region', { name: 'New run' }));
   await beat(page, 1500);
   await press(page, page.getByRole('button', { name: 'Start run' }));
-  await expect(page).toHaveURL(/\/arena\/runs\//, { timeout: 30_000 });
+  await expect(page).toHaveURL(/\/shakedown\/runs\//, { timeout: 30_000 });
   await caption(page, 'The timeline fills in as the agents work (a scripted stand-in plays the model here)');
   await expect(page.getByText('Passed the check').first()).toBeVisible({ timeout: 90_000 });
   await beat(page, 2000);
@@ -343,23 +343,23 @@ test('video 4: Shakedown control, a run’s Replay and a fork', async ({ browser
   await expect(page.getByText('Passed the check').first()).toBeVisible({ timeout: 90_000 });
   await caption(page, 'The fork runs on its own branch; Compare shows how it differs');
   await beat(page, 4000);
-  await keepVideo(context, page, info, 'control-4-arena', 44);
+  await keepVideo(context, page, info, 'control-4-shakedown', 44);
 });
 
 test('screenshots: Shakedown control, Storage, a simulated run’s Replay and a fork', async ({ browser, request, baseURL }, info) => {
   desktopOnly(info.project.name);
-  test.skip(!(await arenaUp(request)), 'no arenad answers (start one and set COPPERTIDE_ARENA_URL)');
+  test.skip(!(await shakedownUp(request)), 'no shaked answers (start one and set COPPERTIDE_SHAKEDOWN_URL)');
   const { context, page } = await stills(browser, baseURL!);
-  await scriptedArenaTeam(context, request);
-  await page.goto('/arena');
+  await scriptedShakedownTeam(context, request);
+  await page.goto('/shakedown');
   await caption(page, 'Shakedown control: the runs, the world and the engine at a glance');
   await expect(page.getByRole('row', { name: 'Run of task 27' }).first()).toBeVisible();
   await beat(page, 2000);
-  await guideShot(page, 'arena-control');
+  await guideShot(page, 'shakedown-control');
   await caption(page, 'Storage: saves against the limit, and each run’s fork tree');
   await page.getByRole('tab', { name: 'Storage' }).click();
   await beat(page, 2000);
-  await guideShot(page, 'arena-storage');
+  await guideShot(page, 'shakedown-storage');
   await page.getByRole('tab', { name: 'Overview' }).click();
   await page.getByRole('row', { name: 'Run of task 27' }).first().getByRole('link').first().click();
   await expect(page.getByText('Passed the check').first()).toBeVisible({ timeout: 30_000 });
@@ -367,11 +367,11 @@ test('screenshots: Shakedown control, Storage, a simulated run’s Replay and a 
   await page.getByRole('button', { name: 'Previous step' }).click();
   await page.getByRole('button', { name: 'Previous step' }).click();
   await beat(page, 1500);
-  await guideShot(page, 'arena-replay');
+  await guideShot(page, 'shakedown-replay');
   await caption(page, 'Fork from here: the plan says how each part of the world is restored');
   await page.getByRole('button', { name: /Fork from here/ }).first().click();
   await expect(page.getByRole('region', { name: /^Fork from step/ })).toBeVisible();
   await beat(page, 1500);
-  await guideShot(page, 'arena-fork');
+  await guideShot(page, 'shakedown-fork');
   await context.close();
 });

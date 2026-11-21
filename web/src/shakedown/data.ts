@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ApiError } from '../api';
 import { usePaneContext } from '../workspace/registry';
-import { arena } from '../tests/api';
-import { HEALTH_CHANGED, useArenaHealth } from '../tests/shared';
+import { shakedown } from '../tests/api';
+import { HEALTH_CHANGED, useShakedownHealth } from '../tests/shared';
 import type { Health, RunSummary, UsageResponse, WorldResponse } from '../tests/types';
 
 /** The last answer (kept when a later read fails) and the last read's error. */
 export type Loaded<T> = { value: T | null; error: unknown };
 
-/** A cleanup run from this browser: when, and what it freed. Arena's own startup cleanup is not known here. */
+/** A cleanup run from this browser: when, and what it freed. Shakedown's own startup cleanup is not known here. */
 export type Cleanup = { at: number; freed_bytes: number };
 
-/** What every Arena control pane and the status strip share. */
-export type ArenaCtx = {
-  /** Undefined while asking, null when Arena is not answering (see `healthError`). */
+/** What every Shakedown control pane and the status strip share. */
+export type ShakedownCtx = {
+  /** Undefined while asking, null when Shakedown is not answering (see `healthError`). */
   health: Health | null | undefined;
   healthError: unknown;
   runs: Loaded<RunSummary[]>;
@@ -25,10 +25,10 @@ export type ArenaCtx = {
   cleanedUp(c: Cleanup): void;
 };
 
-/** Arena's own "not answering": controld could not reach arenad. */
-export const isArenaDown = (e: unknown) => e instanceof ApiError && e.code === 'arena_unreachable';
+/** Shakedown's own "not answering": controld could not reach shaked. */
+export const isShakedownDown = (e: unknown) => e instanceof ApiError && e.code === 'shakedown_unreachable';
 
-const CLEANUP_KEY = 'sculptured.arena.cleanup.v1';
+const CLEANUP_KEY = 'sculptured.shakedown.cleanup.v1';
 
 function readCleanup(): Cleanup | null {
   try {
@@ -61,12 +61,12 @@ function usePollWhileRunning(runs: RunSummary[] | null, reload: () => void) {
  * The page's context for its panes (the main window and each popped-out one read their own). Runs,
  * usage and the world are read on every health check (15 s, and after a delete or cleanup).
  */
-export function useArenaData(): ArenaCtx {
-  const { health, error: healthError } = useArenaHealth();
+export function useShakedownData(): ShakedownCtx {
+  const { health, error: healthError } = useShakedownHealth();
   const up = !!health;
-  const runs = useLoaded(arena.runs, health, up);
-  const usage = useLoaded(arena.usage, health, up);
-  const world = useLoaded(arena.world, health, up);
+  const runs = useLoaded(shakedown.runs, health, up);
+  const usage = useLoaded(shakedown.usage, health, up);
+  const world = useLoaded(shakedown.world, health, up);
   usePollWhileRunning(runs.state.value, runs.reload);
   const [lastCleanup, setLastCleanup] = useState(readCleanup);
   const cleanedUp = useCallback((c: Cleanup) => {
@@ -79,4 +79,4 @@ export function useArenaData(): ArenaCtx {
   }), [health, healthError, runs.state, world.state, usage.state, lastCleanup, runs.reload, cleanedUp]);
 }
 
-export const useArena = () => usePaneContext<ArenaCtx>();
+export const useShakedown = () => usePaneContext<ShakedownCtx>();

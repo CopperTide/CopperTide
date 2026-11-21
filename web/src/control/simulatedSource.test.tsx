@@ -3,20 +3,20 @@ import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { FakeEventSource } from '../test-fixtures';
-import { arenaFake, branchB1, ev, resetArena } from './simHarness';
+import { shakedownFake, branchB1, ev, resetShakedown } from './simHarness';
 import { DECIDED_BY_AGENTS } from './simulatedFeed';
-import { ARENA_CANT_CONTROL, NO_MESSAGES, START_IN_ARENA, useSimulatedSource } from './simulatedSource';
+import { SHAKEDOWN_CANT_CONTROL, NO_MESSAGES, START_IN_SHAKEDOWN, useSimulatedSource } from './simulatedSource';
 import { ActionError } from './source';
 
-beforeEach(resetArena);
+beforeEach(resetShakedown);
 afterEach(() => vi.unstubAllGlobals());
 
-const wrapper = ({ children }: { children: ReactNode }) => <MemoryRouter initialEntries={['/arena/runs/r1/b1']}>{children}</MemoryRouter>;
+const wrapper = ({ children }: { children: ReactNode }) => <MemoryRouter initialEntries={['/shakedown/runs/r1/b1']}>{children}</MemoryRouter>;
 
 async function source() {
   const hook = renderHook(() => useSimulatedSource('r1', 'b1'), { wrapper });
-  await waitFor(() => expect(hook.result.current.arena?.branch).toBeDefined());
-  await waitFor(() => expect(hook.result.current.arena?.branches.length).toBe(1));
+  await waitFor(() => expect(hook.result.current.shakedown?.branch).toBeDefined());
+  await waitFor(() => expect(hook.result.current.shakedown?.branches.length).toBe(1));
   return hook;
 }
 
@@ -48,17 +48,17 @@ describe('useSimulatedSource', () => {
     expect(tl.saves).toEqual([3, 7, 8, 9]);
     expect(tl.cursor).toBe(11);
     expect(s.world?.save).toBe(9);
-    expect(s.arena?.parts?.map((p) => p.name)).toEqual(['retail', 'plant', 'desk']);
-    await waitFor(() => expect(result.current.arena?.reason).toBe('Exchange the hiking boots for a larger size.'));
+    expect(s.shakedown?.parts?.map((p) => p.name)).toEqual(['retail', 'plant', 'desk']);
+    await waitFor(() => expect(result.current.shakedown?.reason).toBe('Exchange the hiking boots for a larger size.'));
     // Rows through the source: any step's, in a given part.
     await expect(result.current.world!.read(7, ['orders/#W1'], 'retail')).resolves.toEqual({ 'orders/#W1': { status: 'exchange requested' } });
-    expect(arenaFake.calls.at(-1)?.url).toBe('/api/arena/branches/b1/rows?seq=7&keys=orders%2F%23W1&part=retail');
+    expect(shakedownFake.calls.at(-1)?.url).toBe('/api/shakedown/branches/b1/rows?seq=7&keys=orders%2F%23W1&part=retail');
   });
 
   it('has no approvals without a CopperTide part in its world', async () => {
     const b = branchB1();
     b.events[0] = ev(0, 0, null, 'run_start', { task_id: '27', world: [{ part: 'retail', integration: 'mongo' }] });
-    arenaFake.branches.b1 = b;
+    shakedownFake.branches.b1 = b;
     const { result } = await source();
     expect(result.current.approvals).toEqual([]);
   });
@@ -66,20 +66,20 @@ describe('useSimulatedSource', () => {
   it('controls_unavailable_with_reason', async () => {
     const { result } = await source();
     const s = result.current;
-    for (const k of ['pauseAll', 'resumeAll', 'stop', 'emergencyStop'] as const) expect(s.team[k].can).toEqual({ ok: false, why: ARENA_CANT_CONTROL });
-    expect(s.team.start.can).toEqual({ ok: false, why: START_IN_ARENA });
+    for (const k of ['pauseAll', 'resumeAll', 'stop', 'emergencyStop'] as const) expect(s.team[k].can).toEqual({ ok: false, why: SHAKEDOWN_CANT_CONTROL });
+    expect(s.team.start.can).toEqual({ ok: false, why: START_IN_SHAKEDOWN });
     // Pressed anyway: a refusal in words, never a success, and nothing is sent.
-    await expect(s.team.emergencyStop.run()).resolves.toEqual({ text: ARENA_CANT_CONTROL, skipped: [], refused: true });
-    for (const a of ['pause', 'resume', 'stop'] as const) expect(s.agentControl('triage', a).can).toEqual({ ok: false, why: ARENA_CANT_CONTROL });
+    await expect(s.team.emergencyStop.run()).resolves.toEqual({ text: SHAKEDOWN_CANT_CONTROL, skipped: [], refused: true });
+    for (const a of ['pause', 'resume', 'stop'] as const) expect(s.agentControl('triage', a).can).toEqual({ ok: false, why: SHAKEDOWN_CANT_CONTROL });
     expect(s.message('triage', 'hi').can).toEqual({ ok: false, why: NO_MESSAGES });
     await expect(s.decide('c1', { allow: true })).rejects.toBeInstanceOf(ActionError);
-    expect(arenaFake.calls.filter((c) => c.method !== 'GET')).toEqual([]);
+    expect(shakedownFake.calls.filter((c) => c.method !== 'GET')).toEqual([]);
   });
 
   it('a failed agent raises one alarm, by status and by event alike', async () => {
     const b = branchB1();
     b.events[4] = ev(5, 7, 'triage', 'agent_end', { ok: false, error: 'exit 1', tokens: null, cost_usd: null, cost_source: null, seconds: 7 });
-    arenaFake.branches.b1 = b;
+    shakedownFake.branches.b1 = b;
     const { result } = await source();
     const triage = result.current.agents[0];
     expect(triage.status.word).toBe('failed');
@@ -93,7 +93,7 @@ describe('useSimulatedSource', () => {
     b.status = 'running';
     b.ended_at = null;
     b.events = b.events.slice(0, 8);
-    arenaFake.branches.b1 = b;
+    shakedownFake.branches.b1 = b;
     const { result } = await source();
     expect(result.current.running).toBe(true);
     expect(result.current.agents[1].status).toMatchObject({ word: 'working', tone: 'ok' });
@@ -104,16 +104,16 @@ describe('useSimulatedSource', () => {
     expect(result.current.agents[1].activity).toBe('calling its model');
   });
 
-  it('simulated_arena_down_is_plain', async () => {
-    arenaFake.down = true;
+  it('simulated_shakedown_down_is_plain', async () => {
+    shakedownFake.down = true;
     const hook = renderHook(() => useSimulatedSource('r1', 'b1'), { wrapper });
-    await waitFor(() => expect(hook.result.current.arena?.error).toBeDefined());
-    expect(hook.result.current.arena?.branch).toBeUndefined();
-    expect((hook.result.current.arena?.error as { code?: string }).code).toBe('arena_unreachable');
-    // Arena comes back: the branch is read again on the next health check.
-    arenaFake.down = false;
+    await waitFor(() => expect(hook.result.current.shakedown?.error).toBeDefined());
+    expect(hook.result.current.shakedown?.branch).toBeUndefined();
+    expect((hook.result.current.shakedown?.error as { code?: string }).code).toBe('shakedown_unreachable');
+    // Shakedown comes back: the branch is read again on the next health check.
+    shakedownFake.down = false;
     act(() => { window.dispatchEvent(new Event('sculptured:tests-health')); });
-    await waitFor(() => expect(hook.result.current.arena?.branch?.id).toBe('b1'));
-    expect(hook.result.current.arena?.error).toBeUndefined();
+    await waitFor(() => expect(hook.result.current.shakedown?.branch?.id).toBe('b1'));
+    expect(hook.result.current.shakedown?.error).toBeUndefined();
   });
 });

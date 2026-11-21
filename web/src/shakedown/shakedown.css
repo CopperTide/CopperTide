@@ -1,0 +1,99 @@
+/* Shakedown control (`/shakedown`): the page around its workspace, its status strip, and the bodies of its
+   panes, kept dense like an operations console. Tokens only. */
+
+.shakedown-page { display: flex; flex-direction: column; flex: 1; min-height: 0; height: 100%; }
+.shakedown-page > .workspace { flex: 1; }
+.shakedown-popout { height: 100vh; }
+.shakedown-num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.shakedown-warn { color: var(--status-waiting); }
+
+/* Header: title, then the status strip. */
+.shakedown-head { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2) var(--space-4); padding: 6px var(--space-3); }
+.shakedown-title { margin: 0; display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--text-md); font-weight: var(--weight-semibold); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--text); }
+.shakedown-strip { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px; }
+
+/* Shakedown down: one alarm across the page; panes say "Offline". */
+.shakedown-alarm { display: flex; flex-wrap: wrap; align-items: center; gap: 4px var(--space-3); padding: 6px var(--space-3); border-top: 1px solid var(--red-line); border-bottom: 1px solid var(--red-line); background: var(--red-soft); }
+.shakedown-alarm-head { font-weight: var(--weight-semibold); color: var(--status-blocked); text-transform: uppercase; letter-spacing: var(--tracking-caps); }
+.shakedown-alarm code, .shakedown-offline code { padding: 1px 6px; border-radius: var(--radius-sm); background: var(--panel); border: 1px solid var(--line); }
+.shakedown-offline { margin: 0; color: var(--muted); font-family: var(--font-mono); font-size: var(--text-sm); }
+.shakedown-offline span { color: var(--status-blocked); }
+
+/* Pane bodies */
+.shakedown-pane { display: flex; flex-direction: column; gap: var(--space-2); padding: 4px; min-width: 0; font-size: var(--text-sm); container-type: inline-size; }
+.shakedown-pad { padding: var(--space-2); }
+.shakedown-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin: 0; }
+.shakedown-inline { display: inline-flex; align-items: center; gap: var(--space-2); }
+.shakedown-inline select { font: inherit; color: var(--text); background: var(--well); border: 1px solid var(--line-2); border-radius: var(--radius-sm); padding: 3px 6px; max-width: 280px; }
+.shakedown-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.shakedown-item { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--well); padding: 6px var(--space-2); min-width: 0; }
+.shakedown-item-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px var(--space-2); min-width: 0; }
+.shakedown-item p { margin: 4px 0 0; }
+
+/* Tables: thin caps headers, hairline rows, numbers right-aligned in mono. */
+.shakedown-table-wrap { overflow-x: auto; min-width: 0; }
+.shakedown-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+.shakedown-table th { text-align: left; font-weight: var(--weight-medium); font-size: var(--text-xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--muted); padding: 4px var(--space-2); border-bottom: 1px solid var(--line-2); white-space: nowrap; }
+.shakedown-table td { padding: 5px var(--space-2); border-bottom: 1px solid var(--line); vertical-align: middle; }
+.shakedown-table tbody tr:hover td { background: var(--hover); }
+.shakedown-table th.shakedown-num { text-align: right; }
+.shakedown-subrow td { padding-top: 0; color: var(--muted); }
+.shakedown-task { width: 100%; max-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.shakedown-table td { white-space: nowrap; }
+.shakedown-table .shakedown-subrow td { white-space: normal; }
+.shakedown-actions { text-align: right; white-space: nowrap; }
+.shakedown-counts { display: inline-flex; gap: 0 4px; white-space: nowrap; }
+.shakedown-count { color: var(--c); font-variant-numeric: tabular-nums; }
+.shakedown-sep { color: var(--muted); margin-right: 4px; }
+
+/* New run: one line */
+.shakedown-bar-new { display: flex; flex-direction: column; gap: var(--space-2); padding: 6px var(--space-2); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--well); }
+.shakedown-chain { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.shakedown-team { display: flex; flex-direction: column; gap: var(--space-2); }
+
+/* World */
+.shakedown-chips { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.shakedown-chip { padding: 0 8px; border-radius: var(--radius-pill); border: 1px solid var(--accent-line); background: var(--accent-soft); white-space: nowrap; }
+.shakedown-chip-none { border: 1px dashed var(--status-waiting); background: transparent; color: var(--status-waiting); }
+.shakedown-tools summary { cursor: pointer; }
+.shakedown-tools ul { margin: 4px 0 0; padding-left: var(--space-4); text-align: left; }
+
+/* Saves and disk: one bar split by integration, a tick at the limit. */
+.shakedown-total p { margin: 0 0 4px; }
+.shakedown-stack { position: relative; display: flex; height: 12px; border: 1px solid var(--line-2); border-radius: var(--radius-sm); background: var(--well); overflow: visible; }
+.shakedown-seg { height: 100%; background: var(--seg); }
+.shakedown-seg + .shakedown-seg { box-shadow: inset 1px 0 0 var(--bg); }
+.shakedown-limit { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; background: var(--text); }
+.shakedown-limit-note { margin: 2px 0 0; text-align: right; font-family: var(--font-mono); font-size: var(--text-xs); color: var(--muted); }
+.shakedown-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--seg); vertical-align: middle; }
+.shakedown-cleanup { display: flex; flex-direction: column; gap: var(--space-2); }
+
+/* Engine */
+.shakedown-grid { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px var(--space-3); margin: 0; }
+.shakedown-grid dt { color: var(--muted); font-size: var(--text-xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; align-self: center; }
+.shakedown-grid dd { margin: 0; }
+.shakedown-grid dd.shakedown-num { text-align: left; }
+.shakedown-grid-row { display: contents; }
+.shakedown-up { color: var(--status-verified); font-weight: var(--weight-semibold); }
+
+/* Fork tree */
+.shakedown-tree { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.shakedown-tree li { display: flex; flex-wrap: wrap; align-items: center; gap: 2px var(--space-2); }
+.shakedown-tree .shakedown-num { min-width: 72px; }
+
+.shakedown-compare { display: flex; flex-direction: column; gap: var(--space-2); }
+.shakedown-compare p { margin: 0; }
+
+/* A narrow pane (a phone, or a pane squeezed by the layout): each table row becomes a wrapped line, numbers labelled. */
+@container (max-width: 560px) {
+  .shakedown-table thead { display: none; }
+  .shakedown-table, .shakedown-table tbody { display: block; }
+  .shakedown-table tr { display: flex; flex-wrap: wrap; align-items: center; gap: 2px var(--space-2); padding: 6px var(--space-1); border-bottom: 1px solid var(--line); }
+  .shakedown-table td { display: block; padding: 0; border: 0; }
+  .shakedown-table td.shakedown-num { text-align: left; }
+  .shakedown-table td[data-label]::before { content: attr(data-label) ' '; color: var(--muted); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: var(--tracking-caps); }
+  .shakedown-task { width: auto; max-width: none; flex-basis: 100%; white-space: normal; }
+  .shakedown-table td { white-space: normal; }
+  .shakedown-actions { margin-left: auto; }
+  .shakedown-subrow td { white-space: normal; }
+}

@@ -17,9 +17,9 @@ it('signed in where hosted Shakedown is on, Shakedown opens it at /sd/', () => {
 });
 
 it('elsewhere Shakedown stays the workspace’s own page', () => {
-  expect(new Set(bar({ kind: 'signed-in', user, csrf: 'c', shakedown: false }))).toEqual(new Set(['/arena']));
+  expect(new Set(bar({ kind: 'signed-in', user, csrf: 'c', shakedown: false }))).toEqual(new Set(['/shakedown']));
 });
 
 it('locally Shakedown stays the workspace’s own page', () => {
-  expect(new Set(bar({ kind: 'local' }))).toEqual(new Set(['/arena']));
+  expect(new Set(bar({ kind: 'local' }))).toEqual(new Set(['/shakedown']));
 });

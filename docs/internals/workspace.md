@@ -1,24 +1,24 @@
 # The Control workspace
 
-Control (`/p/:team/control`), a simulated Shakedown run (`/arena/runs/:run/:branch`) and Shakedown control (`/arena`) are one dockable workspace with different panes. The workspace is a tree of splits and tabbed stacks, saved per page in localStorage. Panes come from a registry, share a selection over a `BroadcastChannel`, and can pop out into their own windows. Panes never call the server: they read a **source**, a deployment (a CopperTide team) or a simulated run (a Shakedown branch). The user guide is [docs/guide/control.md](../guide/control.md).
+Control (`/p/:team/control`), a simulated Shakedown run (`/shakedown/runs/:run/:branch`) and Shakedown control (`/shakedown`) are one dockable workspace with different panes. The workspace is a tree of splits and tabbed stacks, saved per page in localStorage. Panes come from a registry, share a selection over a `BroadcastChannel`, and can pop out into their own windows. Panes never call the server: they read a **source**, a deployment (a CopperTide team) or a simulated run (a Shakedown branch). The user guide is [docs/guide/control.md](../guide/control.md).
 
 Sources:
 - `web/src/workspace/`: `model.ts`, `store.ts`, `layouts.ts`, `registry.ts`, `slots.tsx`, `selection.tsx`, `usePopOut.ts`, `PopOutPane.tsx`, `WorkspacePage.tsx`, `Workspace.tsx`, `StackView.tsx`, `PaneMenu.tsx`, `AddPane.tsx`, `LayoutTabs.tsx`, `Splitter.tsx`, `useDrag.ts`, `DropOverlay.tsx`, `MobileWorkspace.tsx`
 - `web/src/control/`: `ControlPage.tsx`, `ControlHeader.tsx`, `EmergencyStop.tsx`, `ActionButton.tsx`, `registry.ts`, `defaults.ts`, `context.ts`, `source.ts`, `deploymentSource.ts`, `deploymentData.ts`, `deploymentFeed.ts`, `deploymentAgents.ts`, `simulatedSource.ts`, `simulatedFeed.ts`, `SimulatedControlPage.tsx`, `SimGate.tsx`, `alarms.ts`, `useAlarms.ts`, `panes/`
-- `web/src/arena/`: `ArenaControlPage.tsx`, `registry.ts`, `defaults.ts`, `data.ts`, `gate.tsx`, `panes/`
-- `crates/controld/src/collaboration/{pausing,team_pausing,controls}.rs` (pause, resume, stop-now), `crates/controld/src/arena.rs` (the `/api/arena/*` proxy)
+- `web/src/shakedown/`: `ShakedownControlPage.tsx`, `registry.ts`, `defaults.ts`, `data.ts`, `gate.tsx`, `panes/`
+- `crates/controld/src/collaboration/{pausing,team_pausing,controls}.rs` (pause, resume, stop-now), `crates/controld/src/shakedown.rs` (the `/api/shakedown/*` proxy)
 - `web/e2e/control.spec.ts`, `web/e2e/control-video.spec.ts`, `web/e2e/fixtures/{control-team,recording}.ts`
 
 ```mermaid
 flowchart LR
-  P["Page: ControlPage, SimulatedControlPage, ArenaControlPage"] -- "page key, registry, ctx, defaults" --> W["WorkspacePage"]
+  P["Page: ControlPage, SimulatedControlPage, ShakedownControlPage"] -- "page key, registry, ctx, defaults" --> W["WorkspacePage"]
   W -- "load, save" --> S[("localStorage sculptured.workspace.v1.page")]
   W -- "layout tree" --> V["Workspace: splits, StackView, Splitter"]
   V -- "pane type" --> R["Registry: PaneType list"]
   R -- "Body, Settings" --> B["Pane bodies"]
   B -- "useControl()" --> C["ControlCtx: source, alarms, show"]
   C --> D["deployment source: shell stream, events, questions, usage, control routes"]
-  C --> M["simulated source: /api/arena/* branch, stream, plan, fork, compare"]
+  C --> M["simulated source: /api/shakedown/* branch, stream, plan, fork, compare"]
   B -- "select" --> L["Selection channel (BroadcastChannel)"]
   L -- "selection, out, back, close" --> X["Pop-out window: PopOutPane"]
 ```
@@ -48,7 +48,7 @@ flowchart LR
 - **Clean-up.** Duplicate pane ids keep their first occurrence, and unknown pane types are dropped (`dropUnknown`). A layout left with no known pane becomes the default of the same id.
 - **Saving.** `saveLayouts` writes on every change. A failed write (storage full, private mode) is ignored; the page keeps working.
 
-Page keys: `control.<team>` for a project's Control, `arena-run` shared by every Shakedown run, and `arena` for Shakedown control. Each Shakedown branch talks over a channel of its own (`arena-run.<branch>`), so two branches open in two tabs never steer each other.
+Page keys: `control.<team>` for a project's Control, `shakedown-run` shared by every Shakedown run, and `shakedown` for Shakedown control. Each Shakedown branch talks over a channel of its own (`shakedown-run.<branch>`), so two branches open in two tabs never steer each other.
 
 ## 3. The registry and the shell
 
@@ -102,13 +102,13 @@ A `PaneType` (`registry.ts`) declares:
 
 Start and Stop team… go through the project bar's own handle (`shell.refs.run`), with its confirmations. Until the stream has answered, every team action says "Connecting…". A design that has never started has no stream, so it is not waiting for one: Start is offered at once.
 
-**The simulated source** (`simulatedSource.ts`) reads the branch, its stream, rows, the restore plan, fork and compare through `/api/arena/*`. Shakedown runs cannot be paused or stopped from Control yet; those actions say so. While Shakedown does not answer, `SimGate` shows "Shakedown is not running" in each pane, with how to start it.
+**The simulated source** (`simulatedSource.ts`) reads the branch, its stream, rows, the restore plan, fork and compare through `/api/shakedown/*`. Shakedown runs cannot be paused or stopped from Control yet; those actions say so. While Shakedown does not answer, `SimGate` shows "Shakedown is not running" in each pane, with how to start it.
 
 **Alarms.** `alarms.ts` is pure. A feed entry tagged with a rule raises an alarm when that rule is on, and a threshold rule only after its wait. The alarm's id is the rule plus the condition's key (a question, an agent's session), so an acknowledgement (`useAlarms`, kept per team) stays valid however the condition is seen again.
 
 ## 6. How to add a pane
 
-1. Write the body in `web/src/control/panes/<Name>.tsx` (or `web/src/arena/panes/`).
+1. Write the body in `web/src/control/panes/<Name>.tsx` (or `web/src/shakedown/panes/`).
    - It reads `useControl()` for the source and `useSelection()` for the selection.
    - It calls no API itself; add what it needs to `ControlSource` and both sources instead.
    - Unknown values say "unknown", status is a mark plus a word, and raw records carry `data-raw-evidence`.
@@ -137,7 +137,7 @@ cd web && RECORD_VIDEOS=1 npx playwright test control-video.spec.ts
 ```
 
 - **Videos.** Each is recorded at 1280×800. `fixtures/recording.ts` draws only a pointer and a step caption over the real app (both marked `data-recording-overlay`), and encodes WebM (VP9) and MP4 (H.264) with ffmpeg when it is installed.
-- **Shakedown captures** need serve to reach an arenad (`COPPERTIDE_ARENA_URL`) with the retail example. Without one they are skipped, saying why.
+- **Shakedown captures** need serve to reach an shaked (`COPPERTIDE_SHAKEDOWN_URL`) with the retail example. Without one they are skipped, saying why.
   - Shakedown captures are pending: the November 2 recording environment denied Docker access and local socket creation. No Shakedown media is committed by this task.
   - Use a throwaway Postgres and save folder, and a scripted stand-in model; never call a real model for recordings.
 
@@ -161,6 +161,6 @@ The two committed videos were recorded before that restriction. The two committe
 | Dropping a stack's only pane on itself does nothing | `web/src/workspace/model.test.ts` (`move_onto_itself_is_noop`) |
 | A stream update mid-drag or mid-scroll moves nothing | `web/src/workspace/Workspace.test.tsx` (`stream_update_keeps_drag_and_scroll`) |
 | Emergency stop with nothing running, or pressed twice, never errors | `web/src/control/ControlPage.test.tsx` (`emergency_stop_confirm_and_idle`) |
-| Shakedown not answering is said plainly in every pane | `web/src/arena/ArenaControlPage.test.tsx`, `web/src/control/SimulatedControl.test.tsx`, `web/src/control/simulatedSource.test.tsx` (`arena_down_is_plain`) |
+| Shakedown not answering is said plainly in every pane | `web/src/shakedown/ShakedownControlPage.test.tsx`, `web/src/control/SimulatedControl.test.tsx`, `web/src/control/simulatedSource.test.tsx` (`shakedown_down_is_plain`) |
 | A design that never started can Start at once | `web/src/control/deploymentSource.controls.test.tsx` |
 | Control opens first, starts, keeps a dragged layout, moves by keyboard, pauses, resumes, stops; phone pane switcher | `web/e2e/control.spec.ts` |

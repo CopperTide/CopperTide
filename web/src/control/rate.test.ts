@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { canCompare, choice, MUST_FINISH } from '../arena/compareRule';
+import { canCompare, choice, MUST_FINISH } from '../shakedown/compareRule';
 import { rawNote } from './panes/RawEvents';
 import { perMinute, RATE_MINUTES } from './rate';
 

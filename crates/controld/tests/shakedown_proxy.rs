@@ -1,15 +1,15 @@
-//! Tests: `/api/arena/*` forwards to arenad (here a stub) and turns its errors into plain codes.
+//! Tests: `/api/shakedown/*` forwards to shaked (here a stub) and turns its errors into plain codes.
 mod common;
 use axum::Router;
 use axum::extract::{Path, RawQuery};
 use axum::http::header;
 use axum::response::IntoResponse;
 use axum::routing::{get, post};
-use controld::arena::Arena;
+use controld::shakedown::Shakedown;
 use serde_json::{Value, json};
 
-/// A stand-in for arenad on a free loopback port; returns its base URL.
-async fn stub_arenad() -> String {
+/// A stand-in for shaked on a free loopback port; returns its base URL.
+async fn stub_shaked() -> String {
     let app = Router::new()
         .route(
             "/api/health",
@@ -53,21 +53,21 @@ async fn stub_arenad() -> String {
 async fn served_with(base: Option<&str>) -> common::m2::Served {
     let mut s = common::m2::serve().await;
     if let Some(b) = base {
-        s.st = s.st.clone().with_arena(Arena::new(b));
+        s.st = s.st.clone().with_shakedown(Shakedown::new(b));
     }
     s.router = controld::app(s.st.clone(), None);
     s
 }
 
 #[tokio::test]
-async fn forwards_paths_queries_and_bodies_to_arenad() {
-    let s = served_with(Some(&stub_arenad().await)).await;
-    let (st, v) = common::m2::get(&s.router, "/api/arena/health").await;
+async fn forwards_paths_queries_and_bodies_to_shaked() {
+    let s = served_with(Some(&stub_shaked().await)).await;
+    let (st, v) = common::m2::get(&s.router, "/api/shakedown/health").await;
     assert_eq!((st.as_u16(), v), (200, json!({"claude": true})));
 
     let (st, v) = common::m2::get(
         &s.router,
-        "/api/arena/branches/b-1/rows?seq=3&keys=orders%2F%23W1",
+        "/api/shakedown/branches/b-1/rows?seq=3&keys=orders%2F%23W1",
     )
     .await;
     assert_eq!(st.as_u16(), 200);
@@ -79,7 +79,7 @@ async fn forwards_paths_queries_and_bodies_to_arenad() {
     let (st, v) = common::m2::call(
         &s.router,
         "POST",
-        "/api/arena/runs",
+        "/api/shakedown/runs",
         json!({"task_id": "27"}),
     )
     .await;
@@ -90,9 +90,9 @@ async fn forwards_paths_queries_and_bodies_to_arenad() {
 
 #[tokio::test]
 async fn a_running_branch_feed_streams_as_server_sent_events() {
-    let s = served_with(Some(&stub_arenad().await)).await;
+    let s = served_with(Some(&stub_shaked().await)).await;
     let req = axum::http::Request::builder()
-        .uri("/api/arena/branches/b-1/stream")
+        .uri("/api/shakedown/branches/b-1/stream")
         .header("host", "test")
         .body(axum::body::Body::empty())
         .unwrap();
@@ -106,22 +106,22 @@ async fn a_running_branch_feed_streams_as_server_sent_events() {
 }
 
 #[tokio::test]
-async fn arenad_errors_come_back_as_codes_with_its_text_as_evidence() {
-    let s = served_with(Some(&stub_arenad().await)).await;
-    let (st, v) = common::m2::get(&s.router, "/api/arena/runs/x").await;
+async fn shaked_errors_come_back_as_codes_with_its_text_as_evidence() {
+    let s = served_with(Some(&stub_shaked().await)).await;
+    let (st, v) = common::m2::get(&s.router, "/api/shakedown/runs/x").await;
     assert_eq!(st.as_u16(), 404);
-    assert_eq!(v["error"]["code"], "arena_not_found");
+    assert_eq!(v["error"]["code"], "shakedown_not_found");
     assert_eq!(v["error"]["raw"], "there is no run \"x\"");
 }
 
 #[tokio::test]
-async fn paths_that_could_leave_arenads_api_are_refused() {
-    let s = served_with(Some(&stub_arenad().await)).await;
+async fn paths_that_could_leave_shakeds_api_are_refused() {
+    let s = served_with(Some(&stub_shaked().await)).await;
     for p in [
-        "/api/arena/../mcp/b/a",
-        "/api/arena/runs/%2e%2e/%2e%2e/gateway",
-        "/api/arena/runs/a.b",
-        "/api/arena/runs/a%2Fb",
+        "/api/shakedown/../mcp/b/a",
+        "/api/shakedown/runs/%2e%2e/%2e%2e/gateway",
+        "/api/shakedown/runs/a.b",
+        "/api/shakedown/runs/a%2Fb",
     ] {
         let (st, v) = common::m2::get(&s.router, p).await;
         assert_eq!(
@@ -130,23 +130,23 @@ async fn paths_that_could_leave_arenads_api_are_refused() {
             "{p}"
         );
     }
-    let (st, _) = common::m2::call(&s.router, "PUT", "/api/arena/runs", json!({})).await;
+    let (st, _) = common::m2::call(&s.router, "PUT", "/api/shakedown/runs", json!({})).await;
     assert_eq!(st.as_u16(), 405);
 }
 
 #[tokio::test]
-async fn without_arenad_the_answer_says_so() {
+async fn without_shaked_the_answer_says_so() {
     // Nothing listens on port 1.
     let s = served_with(Some("http://127.0.0.1:1")).await;
-    let (st, v) = common::m2::get(&s.router, "/api/arena/health").await;
+    let (st, v) = common::m2::get(&s.router, "/api/shakedown/health").await;
     assert_eq!(
         (st.as_u16(), v["error"]["code"].as_str()),
-        (503, Some("arena_unreachable"))
+        (503, Some("shakedown_unreachable"))
     );
 
-    // Hosted (no arena wired): Tests need Sculptured on your own computer.
+    // Hosted (no shakedown wired): Tests need Sculptured on your own computer.
     let s = served_with(None).await;
-    let (st, v) = common::m2::get(&s.router, "/api/arena/health").await;
+    let (st, v) = common::m2::get(&s.router, "/api/shakedown/health").await;
     assert_eq!(
         (st.as_u16(), v["error"]["code"].as_str()),
         (409, Some("needs_computer"))

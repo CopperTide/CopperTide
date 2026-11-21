@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Btn } from '../../shell/ui';
-import { arena } from '../../tests/api';
+import { shakedown } from '../../tests/api';
 import { agentProvider, agentsProblem, someProviderOk, useProviderList } from '../../tests/providers';
 import { kindLabel, teamForRun } from '../../tests/team';
 import type { Health, TaskSummary, Team } from '../../tests/types';
@@ -12,7 +12,7 @@ import { TeamEditor, useTestTeam } from './TeamEditor';
 function Chain({ team }: { team: Team | null }) {
   if (!team) return <span className="muted">Loading team…</span>;
   return (
-    <span className="arena-chain">
+    <span className="shakedown-chain">
       {team.agents.map((a, i) => (
         <span key={a.id}>
           {i > 0 && <span className="muted" aria-label="hands work to"> → </span>}
@@ -32,7 +32,7 @@ function useStart(team: Team | null, onError: (e: unknown) => void) {
     setBusy(true);
     onError(null);
     try {
-      const r = await arena.startRun(task, teamForRun(team));
+      const r = await shakedown.startRun(task, teamForRun(team));
       nav(runPath(r.run_id, r.branch_id));
     } catch (e) {
       onError(e);
@@ -64,9 +64,9 @@ export function NewRun({ tasks, health, onError }: Props) {
   const { busy, start } = useStart(team, onError);
   const selected = taskId || tasks[0]?.id || '';
   return (
-    <section className="arena-bar-new" aria-label="New run">
-      <div className="arena-row">
-        <label className="arena-inline">
+    <section className="shakedown-bar-new" aria-label="New run">
+      <div className="shakedown-row">
+        <label className="shakedown-inline">
           <span className="tst-label">Task</span>
           <select value={selected} onChange={(e) => setTaskId(e.target.value)} disabled={busy || tasks.length === 0}>
             {tasks.map((t) => <option key={t.id} value={t.id}>{t.id} · {t.reason}</option>)}

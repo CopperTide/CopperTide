@@ -1,4 +1,4 @@
-// Arena control's plain words: how a part restores, sizes on disk, and times.
+// Shakedown control's plain words: how a part restores, sizes on disk, and times.
 import type { PartRestore } from '../tests/types';
 
 export const CANT_RESTORE = "Can't be restored";

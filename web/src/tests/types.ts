@@ -1,8 +1,8 @@
-// Mirrors arenad's model.rs / fork.rs / compare.rs / recorded.rs (serde snake_case), reached through `/api/arena` (controld `arena.rs`).
+// Mirrors shaked's model.rs / fork.rs / compare.rs / recorded.rs (serde snake_case), reached through `/api/shakedown` (controld `shakedown.rs`).
 
 export type AgentKind = 'claude_code' | 'codex' | 'open';
 
-/** Model arenad uses for an OpenRouter agent with no model set (`agents/open.rs`). */
+/** Model shaked uses for an OpenRouter agent with no model set (`agents/open.rs`). */
 export const DEFAULT_OPENROUTER_MODEL = 'deepseek/deepseek-chat-v3.1';
 
 /** The provider of an API-mode agent that names none (and of runs made before providers). */
@@ -155,7 +155,7 @@ export interface Branch {
   error: string | null;
   created_at: string;
   ended_at: string | null;
-  /** The restore a fork asked for (null for a run's first branch; absent from older arenads). */
+  /** The restore a fork asked for (null for a run's first branch; absent from older shakeds). */
   restore_mode?: RestoreMode | null;
   /** How each part of a fork's world was restored (empty for a run's first branch). */
   restored?: RestoredPart[];
@@ -207,7 +207,7 @@ export interface ProviderStatus {
   models?: string[];
 }
 
-/** Space used by every save the arena keeps (the hub's and each integration's), and the limit. */
+/** Space used by every save the shakedown keeps (the hub's and each integration's), and the limit. */
 export interface DiskUsage {
   bytes: number;
   limit_bytes: number;
@@ -280,7 +280,7 @@ export interface PartRestore {
 }
 
 /**
- * One part of `GET /api/world` (arenad `api/world.rs` `PartInfo`). A part whose integration did
+ * One part of `GET /api/world` (shaked `api/world.rs` `PartInfo`). A part whose integration did
  * not answer has only `name`, `integration`, `answered: false` and `error`.
  */
 export interface WorldPartInfo {

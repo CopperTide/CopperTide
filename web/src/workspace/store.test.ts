@@ -56,9 +56,9 @@ describe('workspace store', () => {
     const other = { ...defaults(), active: 'default' };
     const mine = { ...saved(), layouts: [{ ...saved().layouts[0], popped: [], root: { kind: 'stack' as const, id: 's', panes: [{ id: 'a', type: 'chat' }], active: 0 } }] };
     saveLayouts('control', mine);
-    saveLayouts('arena', other);
+    saveLayouts('shakedown', other);
     expect(loadLayouts('control', defaults, known)).toEqual(mine);
-    expect(loadLayouts('arena', () => mine, known)).toEqual(other);
+    expect(loadLayouts('shakedown', () => mine, known)).toEqual(other);
     expect(localStorage.getItem('sculptured.workspace.v1.control')).not.toBeNull();
   });
 

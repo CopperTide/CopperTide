@@ -3,18 +3,18 @@ import { Btn } from '../../shell/ui';
 import { providerState, stateGlyph, stateReason, useProviderList } from '../../tests/providers';
 import { ErrorNote } from '../../tests/shared';
 import type { BenchmarkInfo, Health, ProviderStatus } from '../../tests/types';
-import { useArena } from '../data';
-import { ArenaGate } from '../gate';
+import { useShakedown } from '../data';
+import { ShakedownGate } from '../gate';
 import { sizeWords } from '../words';
 
-/** The CLI agents Arena can run here, each with why not when it can't; API mode's providers have their own rows. */
+/** The CLI agents Shakedown can run here, each with why not when it can't; API mode's providers have their own rows. */
 function modes(h: Health) {
   const cli = [
     { word: 'Claude Code', on: h.claude, why: 'claude is not on this computer' },
     { word: 'Codex', on: h.codex, why: 'codex is not on this computer' },
   ];
-  // An Arena from before providers says only whether API mode can run.
-  return h.providers ? cli : [...cli, { word: 'API mode', on: h.open_available, why: 'no model provider is set up when arenad starts' }];
+  // An Shakedown from before providers says only whether API mode can run.
+  return h.providers ? cli : [...cli, { word: 'API mode', on: h.open_available, why: 'no model provider is set up when shaked starts' }];
 }
 
 const STATE_WORD = { ready: 'Ready', unavailable: 'Unavailable', 'not checked': 'Not checked' } as const;
@@ -29,7 +29,7 @@ function Providers({ health }: { health: ProviderStatus[] }) {
         const st = providerState(s);
         const why = stateReason(s);
         return (
-          <div key={s.id} className="arena-grid-row">
+          <div key={s.id} className="shakedown-grid-row">
             <dt>{s.label}</dt>
             <dd className={st === 'ready' ? undefined : 'muted'}><span aria-hidden="true">{stateGlyph(st)}</span> {STATE_WORD[st]}{why && <span className="tst-small">: {why}</span>}</dd>
           </div>
@@ -58,7 +58,7 @@ function Benchmark({ b }: { b: BenchmarkInfo }) {
       ) : (
         <>
           <dt>Tasks</dt>
-          <dd className="arena-num">{b.tasks != null ? plural(b.tasks, 'task') : 'Unknown'}</dd>
+          <dd className="shakedown-num">{b.tasks != null ? plural(b.tasks, 'task') : 'Unknown'}</dd>
           <dt>World</dt>
           <dd>{b.world?.length ? b.world.map((p) => `${p.part} (${p.integration})`).join(', ') : 'Unknown'}</dd>
         </>
@@ -68,26 +68,26 @@ function Benchmark({ b }: { b: BenchmarkInfo }) {
 }
 
 function EngineBody() {
-  const { health } = useArena();
+  const { health } = useShakedown();
   if (!health) return null;
   return (
-    <dl className="arena-grid">
+    <dl className="shakedown-grid">
       <dt>Shakedown</dt>
-      <dd><span className="arena-up"><span aria-hidden="true">●</span> Up</span> <span className="muted tst-small">answered its health check</span></dd>
+      <dd><span className="shakedown-up"><span aria-hidden="true">●</span> Up</span> <span className="muted tst-small">answered its health check</span></dd>
       {modes(health).map((m) => (
-        <div key={m.word} className="arena-grid-row">
+        <div key={m.word} className="shakedown-grid-row">
           <dt>{m.word}</dt>
           <dd>{m.on ? <span><span aria-hidden="true">✓</span> Can run</span> : <span className="muted"><span aria-hidden="true">–</span> Can't run: {m.why}</span>}</dd>
         </div>
       ))}
       {health.providers && <Providers health={health.providers} />}
-      {health.disk && <><dt>Saves</dt><dd className="arena-num">{sizeWords(health.disk.bytes)} of {sizeWords(health.disk.limit_bytes)}</dd></>}
+      {health.disk && <><dt>Saves</dt><dd className="shakedown-num">{sizeWords(health.disk.bytes)} of {sizeWords(health.disk.limit_bytes)}</dd></>}
       {health.benchmark ? <Benchmark b={health.benchmark} /> : <><dt>Benchmark</dt><dd className="muted">Unknown: this Shakedown does not say</dd></>}
     </dl>
   );
 }
 
-/** Arena's health: whether it is up, which agents and model providers it can run, its disk use and the benchmark new runs use. */
+/** Shakedown's health: whether it is up, which agents and model providers it can run, its disk use and the benchmark new runs use. */
 export function EnginePane() {
-  return <div className="arena-pane"><ArenaGate><EngineBody /></ArenaGate></div>;
+  return <div className="shakedown-pane"><ShakedownGate><EngineBody /></ShakedownGate></div>;
 }

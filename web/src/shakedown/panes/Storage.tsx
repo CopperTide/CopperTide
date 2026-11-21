@@ -1,11 +1,11 @@
 import { useState, type CSSProperties } from 'react';
-import { ARENA_GC_WORDS, errorTextWith } from '../../errors';
+import { SHAKEDOWN_GC_WORDS, errorTextWith } from '../../errors';
 import { plural } from '../../format';
 import { Btn } from '../../shell/ui';
-import { arena } from '../../tests/api';
+import { shakedown } from '../../tests/api';
 import type { GcResponse, UsageResponse } from '../../tests/types';
-import { useArena } from '../data';
-import { ArenaGate, ArenaProblem } from '../gate';
+import { useShakedown } from '../data';
+import { ShakedownGate, ShakedownProblem } from '../gate';
 import { sizeWords } from '../words';
 
 const SERIES = 6;
@@ -17,16 +17,16 @@ function UsageBar({ usage }: { usage: UsageResponse }) {
   const scale = Math.max(usage.total_bytes, usage.limit_bytes, 1);
   const share = usage.limit_bytes > 0 ? Math.round((100 * usage.total_bytes) / usage.limit_bytes) : null;
   return (
-    <div className="arena-total">
-      <p className="arena-row">
+    <div className="shakedown-total">
+      <p className="shakedown-row">
         <strong>Saves use {sizeWords(usage.total_bytes)} of {sizeWords(usage.limit_bytes)}</strong>
-        {share != null && <span className={`arena-num${share >= 90 ? ' arena-warn' : ' muted'}`}>{share >= 90 && <span aria-hidden="true">⚠ </span>}{share}%</span>}
+        {share != null && <span className={`shakedown-num${share >= 90 ? ' shakedown-warn' : ' muted'}`}>{share >= 90 && <span aria-hidden="true">⚠ </span>}{share}%</span>}
       </p>
-      <div className="arena-stack" role="img" aria-label={`Saves use ${share ?? '?'}% of the limit`}>
-        {usage.integrations.map((r, i) => (r.bytes > 0 ? <span key={r.integration} className="arena-seg" style={{ ...seg(i), width: pct(r.bytes, scale) }} title={`${r.integration}: ${sizeWords(r.bytes)}`} /> : null))}
-        <span className="arena-limit" style={{ left: pct(usage.limit_bytes, scale) }} title={`Limit ${sizeWords(usage.limit_bytes)}`} />
+      <div className="shakedown-stack" role="img" aria-label={`Saves use ${share ?? '?'}% of the limit`}>
+        {usage.integrations.map((r, i) => (r.bytes > 0 ? <span key={r.integration} className="shakedown-seg" style={{ ...seg(i), width: pct(r.bytes, scale) }} title={`${r.integration}: ${sizeWords(r.bytes)}`} /> : null))}
+        <span className="shakedown-limit" style={{ left: pct(usage.limit_bytes, scale) }} title={`Limit ${sizeWords(usage.limit_bytes)}`} />
       </div>
-      <p className="arena-limit-note"><span aria-hidden="true">▏</span>limit {sizeWords(usage.limit_bytes)}</p>
+      <p className="shakedown-limit-note"><span aria-hidden="true">▏</span>limit {sizeWords(usage.limit_bytes)}</p>
     </div>
   );
 }
@@ -34,14 +34,14 @@ function UsageBar({ usage }: { usage: UsageResponse }) {
 /** Each integration: its colour in the bar, the parts that use it, and its bytes (or why they're unknown). */
 function Legend({ usage }: { usage: UsageResponse }) {
   return (
-    <table className="arena-table" aria-label="Saves by integration">
-      <thead><tr><th>Integration</th><th>Used by</th><th className="arena-num">Size</th></tr></thead>
+    <table className="shakedown-table" aria-label="Saves by integration">
+      <thead><tr><th>Integration</th><th>Used by</th><th className="shakedown-num">Size</th></tr></thead>
       <tbody>
         {usage.integrations.map((r, i) => (
           <tr key={r.integration}>
-            <td><span className="arena-swatch" style={seg(i)} aria-hidden="true" /> <span className="mono">{r.integration}</span></td>
+            <td><span className="shakedown-swatch" style={seg(i)} aria-hidden="true" /> <span className="mono">{r.integration}</span></td>
             <td className="muted">{r.parts.join(', ')}</td>
-            <td className="arena-num">
+            <td className="shakedown-num">
               {r.error
                 ? <><span className="tst-status tst-blocked"><span aria-hidden="true">⚠</span>Not answering</span> <span className="tst-evidence mono tst-small" data-raw-evidence>{r.error}</span></>
                 : sizeWords(r.bytes)}
@@ -65,9 +65,9 @@ function Freed({ result }: { result: GcResponse }) {
   );
 }
 
-/** "Clean up": runs Arena's cleanup and says what it freed. Not while a branch is running. */
+/** "Clean up": runs Shakedown's cleanup and says what it freed. Not while a branch is running. */
 function CleanUp() {
-  const { runs, cleanedUp } = useArena();
+  const { runs, cleanedUp } = useShakedown();
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<GcResponse | null>(null);
   const [error, setError] = useState<unknown>(null);
@@ -75,30 +75,30 @@ function CleanUp() {
   const run = async () => {
     setBusy(true); setError(null); setResult(null);
     try {
-      const r = await arena.gc();
+      const r = await shakedown.gc();
       setResult(r);
       cleanedUp({ at: Date.now(), freed_bytes: r.freed_bytes });
     } catch (e) { setError(e); }
     setBusy(false);
   };
   return (
-    <section className="arena-cleanup" aria-label="Clean up">
-      <div className="arena-row">
+    <section className="shakedown-cleanup" aria-label="Clean up">
+      <div className="shakedown-row">
         <Btn size="sm" icon="trash" onClick={run} disabled={busy || running}>{busy ? 'Cleaning up…' : 'Clean up'}</Btn>
         <span className="muted tst-small">{running ? "Can't clean up while a run is going." : 'Removes saves no recorded run uses. Every run keeps its own.'}</span>
       </div>
       {result && <Freed result={result} />}
-      <ArenaProblem error={error} text={errorTextWith(ARENA_GC_WORDS, error)} />
+      <ShakedownProblem error={error} text={errorTextWith(SHAKEDOWN_GC_WORDS, error)} />
     </section>
   );
 }
 
 /** A failed re-read shows above the last answer, never silently stale. */
 function StorageBody() {
-  const { usage } = useArena();
+  const { usage } = useShakedown();
   return (
     <>
-      <ArenaProblem error={usage.error} />
+      <ShakedownProblem error={usage.error} />
       {!usage.value && !usage.error && <p className="muted">Measuring saves…</p>}
       {usage.value && <UsageBar usage={usage.value} />}
       {usage.value && <Legend usage={usage.value} />}
@@ -109,5 +109,5 @@ function StorageBody() {
 
 /** Saves and disk: the total against the limit, each integration's share, and Clean up. */
 export function StoragePane() {
-  return <div className="arena-pane"><ArenaGate><StorageBody /></ArenaGate></div>;
+  return <div className="shakedown-pane"><ShakedownGate><StorageBody /></ShakedownGate></div>;
 }

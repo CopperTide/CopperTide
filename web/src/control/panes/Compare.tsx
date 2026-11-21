@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { canCompare, choice, MUST_FINISH } from '../../arena/compareRule';
-import { ArenaProblem } from '../../arena/gate';
-import { comparePath } from '../../arena/paths';
+import { canCompare, choice, MUST_FINISH } from '../../shakedown/compareRule';
+import { ShakedownProblem } from '../../shakedown/gate';
+import { comparePath } from '../../shakedown/paths';
 import { branchTree } from '../../tests/model';
 import { APPROXIMATE_NOTE, isApproximate } from '../../tests/restore';
 import { Differences, Totals } from '../../tests/ComparePage';
@@ -85,7 +85,7 @@ function Result({ d, a, other }: { d: Comparison; a: SimulatedRun; other: string
 
 export function ComparePane({ settings, setSettings }: PaneProps) {
   const s = settings as CompareSettings;
-  const a = useControl().source.arena!;
+  const a = useControl().source.shakedown!;
   const b = a.branch!;
   const other = otherOf(a, s.other);
   const ready = canCompare(b.status, a.branches.find((x) => x.id === other)?.status);
@@ -96,7 +96,7 @@ export function ComparePane({ settings, setSettings }: PaneProps) {
       {!other && <p className="ctl-empty">{a.branches.length > 1 ? 'Choose a branch of this run to compare with.' : 'This run has one branch. Fork from a step in the Timeline to have something to compare.'}</p>}
       {other && !ready && <p className="ctl-empty">{MUST_FINISH}</p>}
       {read.state === 'loading' && <p className="ctl-empty">Comparing…</p>}
-      {read.state === 'failed' && <div className="ctl-empty"><ArenaProblem error={read.error} /></div>}
+      {read.state === 'failed' && <div className="ctl-empty"><ShakedownProblem error={read.error} /></div>}
       {read.state === 'ready' && other && <Result d={read.d} a={a} other={other} />}
     </div>
   );

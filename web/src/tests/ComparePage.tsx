@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { arena } from './api';
+import { shakedown } from './api';
 import { branchNames, costSource, diffHunks, dollars, jsonDiff } from './model';
-import { ARENA_PATH, runPath } from './paths';
+import { SHAKEDOWN_PATH, runPath } from './paths';
 import { APPROXIMATE_NOTE, isApproximate, notComparedLine } from './restore';
 import { ApproximateMark, ErrorNote, StatusPill, pretty } from './shared';
 import { KIND } from './Swimlanes';
@@ -84,7 +84,7 @@ type Loaded = Comparison;
 
 /** Reads the comparison of `a` with `b`, both branches and their run's branch names. */
 export async function loadComparison(a: string, b: string): Promise<Comparison> {
-  const [cmp, x, y, runs] = await Promise.all([arena.compare(a, b), arena.branch(a), arena.branch(b), arena.runs()]);
+  const [cmp, x, y, runs] = await Promise.all([shakedown.compare(a, b), shakedown.branch(a), shakedown.branch(b), shakedown.runs()]);
   const run = runs.find((r) => r.branches.some((br) => br.id === a));
   return { cmp, x, y, names: branchNames(run?.branches ?? [x, y]), run: run?.id ?? x.run_id };
 }
@@ -156,7 +156,7 @@ export function Differences({ d }: { d: Loaded }) {
   );
 }
 
-/** `/arena/compare/:a/:b`: two branches of a run side by side. */
+/** `/shakedown/compare/:a/:b`: two branches of a run side by side. */
 export function ComparePage() {
   const { a = '', b = '' } = useParams();
   const { data, error } = useComparison(a, b);
@@ -177,5 +177,5 @@ export function ComparePage() {
 }
 
 function Crumbs() {
-  return <nav className="tst-crumbs" aria-label="Breadcrumb"><Link to={ARENA_PATH}>Shakedown</Link><span aria-hidden="true">/</span><span>Compare</span></nav>;
+  return <nav className="tst-crumbs" aria-label="Breadcrumb"><Link to={SHAKEDOWN_PATH}>Shakedown</Link><span aria-hidden="true">/</span><span>Compare</span></nav>;
 }

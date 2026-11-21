@@ -9,7 +9,7 @@ Every picture and video on this page comes from a recording of the real app. The
 1. [Open a project on Control and start the team](../videos/control-1-open-and-start.mp4)
 2. [Rearrange panes and switch layouts](../videos/control-2-rearrange.mp4)
 3. [An alarm, an approval, pause, resume and emergency stop](../videos/control-3-trouble.mp4)
-4. [Shakedown control: a run's Replay and a fork](../videos/control-4-arena.mp4)
+4. [Shakedown control: a run's Replay and a fork](../videos/control-4-shakedown.mp4)
 
 The same videos are also in `docs/videos/` as WebM.
 
@@ -161,7 +161,7 @@ Left to right: the one-line header, the rest of the header opened, and the **Pan
 
 ## 7. Simulated runs (Shakedown)
 
-A Shakedown run is a team working in a simulated world. Shakedown saves the world after each step that changes it, so a run can be replayed and forked. A run's branch opens in the same Control workspace, at `/arena/runs/<run>/<branch>`. Its first layout is **Replay**: the Timeline large, with World state and Compare below it. **Live** and **Cost** are there too.
+A Shakedown run is a team working in a simulated world. Shakedown saves the world after each step that changes it, so a run can be replayed and forked. A run's branch opens in the same Control workspace, at `/shakedown/runs/<run>/<branch>`. Its first layout is **Replay**: the Timeline large, with World state and Compare below it. **Live** and **Cost** are there too.
 
 
 **Step through the run:**
@@ -172,7 +172,7 @@ A Shakedown run is a team working in a simulated world. Shakedown saves the worl
 - The panel beside the lanes shows the step's arguments, its result and the rows it read or changed.
 - **World state** shows the world as saved at or before the selected step.
 
-![A finished run on Replay: the Timeline with a lane per agent, the step list, World state and Compare](../images/control/arena-replay.png)
+![A finished run on Replay: the Timeline with a lane per agent, the step list, World state and Compare](../images/control/shakedown-replay.png)
 
 **Fork from a step:**
 
@@ -185,17 +185,17 @@ A Shakedown run is a team working in a simulated world. Shakedown saves the worl
    The plan under the choice says how each part of the world would be restored.
 4. Press **Fork unchanged** or **Fork with N changes**.
 
-![The fork panel for step 19, with Exact chosen and the restore plan "retail: from its save"](../images/control/arena-fork.png)
+![The fork panel for step 19, with Exact chosen and the restore plan "retail: from its save"](../images/control/shakedown-fork.png)
 
 The fork runs on its own branch. It may start at an earlier step than the one you picked, and its bar says so: an agent's session restarts from that agent's start. **Compare** shows the two branches side by side: outcome, time, tokens, cost and how the world differs.
 
-[Video 4](../videos/control-4-arena.mp4) starts a run, steps through it, forks it with changed instructions and compares the two branches.
+[Video 4](../videos/control-4-shakedown.mp4) starts a run, steps through it, forks it with changed instructions and compares the two branches.
 
 **Header.** A simulated run's header reads the same way. Shakedown runs cannot be paused or stopped from Control yet, and the header says so. Start a new run from Shakedown control.
 
 ## 8. Shakedown control
 
-**Shakedown** in the top bar opens Shakedown control (`/arena`), the same kind of workspace for Shakedown itself. Its strip shows whether Shakedown is up, how many parts of the world answer, how much of the save limit is used, and how many branches are running.
+**Shakedown** in the top bar opens Shakedown control (`/shakedown`), the same kind of workspace for Shakedown itself. Its strip shows whether Shakedown is up, how many parts of the world answer, how much of the save limit is used, and how many branches are running.
 
 
 **Overview** layout:
@@ -204,14 +204,14 @@ The fork runs on its own branch. It may start at an earlier step than the one yo
 - **World:** each part of the world, its integration, how it restores (exact from a save, by replay, or approximate), whether it uses Shakedown's clock, and its tools.
 - **Engine:** Shakedown's health, which kinds of agent it can run, its benchmark and its tasks.
 
-![Shakedown control in the Overview layout: Runs with a new-run bar, World and Engine](../images/control/arena-control.png)
+![Shakedown control in the Overview layout: Runs with a new-run bar, World and Engine](../images/control/shakedown-control.png)
 
 **Storage** layout:
 
 - **Saves and disk:** the space used against the limit, the space each part holds, and **Clean up**, which removes saves no run uses.
 - **Fork tree:** each run's branches, parent to child.
 
-![The Storage layout: saves against the 5 GB limit by integration, and the fork tree of two runs](../images/control/arena-storage.png)
+![The Storage layout: saves against the 5 GB limit by integration, and the fork tree of two runs](../images/control/shakedown-storage.png)
 
 If Shakedown is not running, every Shakedown pane says "Shakedown is not running" and how to start it, and checks again every 15 seconds.
 

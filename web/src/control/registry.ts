@@ -33,7 +33,7 @@ const PANES: PaneType[] = [
   { type: 'compare', title: 'Compare', glyph: '⇄', multi: true, appliesTo: simulatedOnly, defaultSettings: {}, Body: ComparePane },
 ];
 
-/** Every pane of a simulated run waits for its branch (saying why it can't show while Arena is not answering). */
+/** Every pane of a simulated run waits for its branch (saying why it can't show while Shakedown is not answering). */
 export const CONTROL_PANES: PaneType[] = PANES.map((t) => ({ ...t, Body: gated(t.Body) }));
 
 /** Made once, here: the workspace keeps the wrapped types by identity. */

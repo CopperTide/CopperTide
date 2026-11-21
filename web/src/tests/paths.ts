@@ -1,2 +1,2 @@
-// Moved to `arena/paths.ts`, the one place Arena addresses are made.
-export { ARENA_PATH, comparePath, runPath } from '../arena/paths';
+// Moved to `shakedown/paths.ts`, the one place Shakedown addresses are made.
+export { SHAKEDOWN_PATH, comparePath, runPath } from '../shakedown/paths';

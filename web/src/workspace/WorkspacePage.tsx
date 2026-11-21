@@ -12,11 +12,11 @@ import { closeWindowsOf, usePopOut, useSetRoot } from './usePopOut';
 import { Workspace } from './Workspace';
 
 export type WorkspacePageProps = {
-  /** Names the saved layouts and the selection channel: one per page ("control", "arena"). */
+  /** Names the saved layouts and the selection channel: one per page ("control", "shakedown"). */
   page: string;
   /**
    * The selection channel when it is not the page's: many workspaces sharing one page's layouts (each
-   * Arena run) talk only among their own windows. The layouts are shared; which panes are popped out
+   * Shakedown run) talk only among their own windows. The layouts are shared; which panes are popped out
    * is each channel's own (another tab on another channel never takes them back or closes them).
    */
   channel?: string;

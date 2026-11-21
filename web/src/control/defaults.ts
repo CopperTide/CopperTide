@@ -27,7 +27,7 @@ const replay = (): Node => split('replay', 'col', [stack(['replay-timeline', 'ti
 
 /**
  * A simulated run's first-open layouts: Replay first, then Live and Cost (Agent focus and Results
- * are a deployment's: an Arena run's agents have no conversation or results to show there).
+ * are a deployment's: an Shakedown run's agents have no conversation or results to show there).
  */
 function simulatedDefaults(): PageLayouts {
   return {

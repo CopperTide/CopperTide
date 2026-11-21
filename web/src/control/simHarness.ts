@@ -5,8 +5,8 @@ import { FakeChannel } from '../workspace/testkit';
 
 /**
  * Test fixtures for simulated runs: run r1, branch b1 (Triage then Resolver, task 27) in a world of
- * retail, plant and a CopperTide approvals part (desk), and its fork b2. `/api/arena/*` is answered
- * by `fetch` stubbed here; tests change `arenaFake` to vary the answers.
+ * retail, plant and a CopperTide approvals part (desk), and its fork b2. `/api/shakedown/*` is answered
+ * by `fetch` stubbed here; tests change `shakedownFake` to vary the answers.
  */
 
 export const at = (s: number) => new Date(Date.parse('2026-11-02T10:00:00Z') + s * 1000).toISOString();
@@ -65,14 +65,14 @@ const ROWS: Record<number, Record<string, unknown>> = {
   8: { 'orders/#W1': { status: 'exchange requested' }, 'change/c1': { id: 'c1', decision: null }, 'change/c2': { id: 'c2', decision: null } },
 };
 
-export const DOWN: [number, unknown] = [503, { error: { code: 'arena_unreachable', message: 'unreachable', raw: 'error sending request: connection refused' } }];
+export const DOWN: [number, unknown] = [503, { error: { code: 'shakedown_unreachable', message: 'unreachable', raw: 'error sending request: connection refused' } }];
 export const REFUSAL = "the part plant can't be restored exactly; choose an approximate restore";
 export const PLANS: Record<string, [number, unknown]> = {
   exact: [200, { parts: [{ part: 'retail', how: 'save' }, { part: 'plant', how: 'replay', estimate_seconds: 40 }, { part: 'desk', how: 'save' }] }],
   approximate: [200, { parts: [{ part: 'retail', how: 'save' }, { part: 'plant', how: 'approximate' }, { part: 'desk', how: 'save' }] }],
 };
 
-export const arenaFake = {
+export const shakedownFake = {
   down: false,
   branches: {} as Record<string, BranchDetail>,
   runs: [] as RunSummary[],
@@ -104,7 +104,7 @@ function compare(path: string): unknown {
 function table(path: string): unknown {
   if (path === '/health') return { claude: true, codex: true, open_available: false };
   if (path === '/tasks') return [{ id: '27', reason: 'Exchange the hiking boots for a larger size.' }];
-  if (path === '/runs') return arenaFake.runs;
+  if (path === '/runs') return shakedownFake.runs;
   if (path === '/world') {
     return { parts: [
       { name: 'retail', integration: 'mongo', version: '7.0', answered: true, restore: { exact: 'save', approximate: false }, uses_clock: false, tools: ['get_order_details'] },
@@ -114,38 +114,38 @@ function table(path: string): unknown {
   }
   if (path.startsWith('/compare?')) return compare(path);
   const b = /^\/branches\/(\w+)$/.exec(path);
-  return b ? arenaFake.branches[b[1]] : undefined;
+  return b ? shakedownFake.branches[b[1]] : undefined;
 }
 
 function answer(method: string, url: string, body: unknown): [number, unknown] {
-  if (arenaFake.down) return DOWN;
-  const path = url.replace('/api/arena', '');
+  if (shakedownFake.down) return DOWN;
+  const path = url.replace('/api/shakedown', '');
   const plan = /\/restore-plan\?at_seq=\d+&restore=(\w+)$/.exec(path);
-  if (plan) return arenaFake.plans[plan[1]];
+  if (plan) return shakedownFake.plans[plan[1]];
   if (method === 'POST' && /\/branches\/b1\/fork$/.test(path)) {
-    arenaFake.branches.b2 = branchB2();
-    arenaFake.runs = [{ id: 'r1', task_id: '27', created_at: at(0), branches: [branchB1(), branchB2()] }];
+    shakedownFake.branches.b2 = branchB2();
+    shakedownFake.runs = [{ id: 'r1', task_id: '27', created_at: at(0), branches: [branchB1(), branchB2()] }];
     return [200, { branch_id: 'b2', start_seq: (body as { at_seq: number }).at_seq, moved_from: null, reason: null }];
   }
   if (path.includes('/rows?')) return rows(path);
   const found = table(path);
-  return found === undefined ? [404, { error: { code: 'arena_not_found', message: path } }] : [200, found];
+  return found === undefined ? [404, { error: { code: 'shakedown_not_found', message: path } }] : [200, found];
 }
 
-/** Fresh answers: b1 alone in run r1, Arena up, every restore plan as PLANS. */
-export function resetArena() {
+/** Fresh answers: b1 alone in run r1, Shakedown up, every restore plan as PLANS. */
+export function resetShakedown() {
   localStorage.clear();
   FakeChannel.open.clear();
   FakeEventSource.reset();
   vi.stubGlobal('BroadcastChannel', FakeChannel);
   vi.stubGlobal('EventSource', FakeEventSource);
-  Object.assign(arenaFake, { down: false, branches: { b1: branchB1() }, plans: { ...PLANS }, calls: [] });
-  arenaFake.runs = [{ id: 'r1', task_id: '27', created_at: at(0), branches: [branchB1()] }];
+  Object.assign(shakedownFake, { down: false, branches: { b1: branchB1() }, plans: { ...PLANS }, calls: [] });
+  shakedownFake.runs = [{ id: 'r1', task_id: '27', created_at: at(0), branches: [branchB1()] }];
   vi.stubGlobal('fetch', vi.fn(async (url: string, init?: RequestInit) => {
     const method = init?.method ?? 'GET';
     const body = init?.body ? JSON.parse(String(init.body)) : undefined;
-    arenaFake.calls.push({ method, url, body });
-    if (!url.startsWith('/api/arena')) return new Response(JSON.stringify({ error: { code: 'not_found', message: url } }), { status: 404 });
+    shakedownFake.calls.push({ method, url, body });
+    if (!url.startsWith('/api/shakedown')) return new Response(JSON.stringify({ error: { code: 'not_found', message: url } }), { status: 404 });
     const [status, reply] = answer(method, url, body);
     return new Response(JSON.stringify(reply), { status });
   }));

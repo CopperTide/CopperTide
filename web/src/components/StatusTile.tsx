@@ -9,7 +9,7 @@ export type TileTone = 'ok' | 'verified' | 'warn' | 'bad' | 'idle' | 'unknown' |
 
 type Props = { label: string; glyph?: string; tone?: TileTone; className?: string; children: ReactNode };
 
-/** One reading of a status strip (Control's header, Arena's): a small caps label, then glyph and value. */
+/** One reading of a status strip (Control's header, Shakedown's): a small caps label, then glyph and value. */
 export function StatusTile({ label, glyph, tone = 'plain', className, children }: Props) {
   return (
     <li className={`status-tile status-tile-${tone}${className ? ` ${className}` : ''}`}>

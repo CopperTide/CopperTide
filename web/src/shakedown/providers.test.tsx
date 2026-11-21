@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { resetProviders } from '../tests/providers';
 import type { Health, ProviderStatus } from '../tests/types';
 import { PaneContext } from '../workspace/registry';
-import type { ArenaCtx } from './data';
+import type { ShakedownCtx } from './data';
 import { EnginePane } from './panes/Engine';
 import { NewRun } from './panes/NewRun';
 
@@ -30,18 +30,18 @@ let posted: unknown[];
 beforeEach(() => {
   localStorage.clear();
   resetProviders();
-  providersReply = [500, { error: { code: 'arena_failed', message: 'failed', raw: 'boom' } }];
+  providersReply = [500, { error: { code: 'shakedown_failed', message: 'failed', raw: 'boom' } }];
   posted = [];
   vi.stubGlobal('fetch', vi.fn(async (url: string, init?: RequestInit) => {
-    const path = url.replace('/api/arena', '');
+    const path = url.replace('/api/shakedown', '');
     if (init?.method === 'POST' && path === '/runs') { posted.push(JSON.parse(String(init.body))); return new Response(JSON.stringify({ run_id: 'r9', branch_id: 'b9' })); }
-    const [status, body] = path === '/providers' ? providersReply : path === '/team/default' ? [200, TEAM] : [404, { error: { code: 'arena_not_found', message: path } }];
+    const [status, body] = path === '/providers' ? providersReply : path === '/team/default' ? [200, TEAM] : [404, { error: { code: 'shakedown_not_found', message: path } }];
     return new Response(JSON.stringify(body), { status });
   }));
 });
 afterEach(() => vi.unstubAllGlobals());
 
-const ctx = { health: HEALTH, healthError: null, runs: { value: [], error: null }, world: { value: null, error: null }, usage: { value: null, error: null } } as unknown as ArenaCtx;
+const ctx = { health: HEALTH, healthError: null, runs: { value: [], error: null }, world: { value: null, error: null }, usage: { value: null, error: null } } as unknown as ShakedownCtx;
 
 describe('Engine pane: model providers', () => {
   it('shows one row per provider with its reason; locals are not checked until Check answers', async () => {

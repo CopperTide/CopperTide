@@ -28,8 +28,8 @@ import { SettingsPage } from './pages/SettingsPage';
 import { WorkflowPage } from './pages/WorkflowPage';
 import { SetupGate } from './setup/SetupGate';
 import { SetupPage } from './setup/SetupPage';
-import { ArenaPanePage } from './arena/ArenaControlPage';
-import { ArenaSection, TestsRedirect } from './arena/routes';
+import { ShakedownPanePage } from './shakedown/ShakedownControlPage';
+import { ShakedownSection, TestsRedirect } from './shakedown/routes';
 import { SimulatedPanePage } from './control/SimulatedControlPage';
 import { ControlPage, ControlPanePage } from './control/ControlPage';
 
@@ -108,15 +108,15 @@ export function AppRoutes({ openStream }: { openStream?: OpenStream }) {
       <Route path="/computers" element={<ComputersPage />} />
       <Route path="/ops" element={<OpsPage />} />
       <Route path="/what-we-record" element={<WhatWeRecord />} />
-      <Route path="/arena/pane/:instance" element={<ArenaPanePage />} />
-      <Route path="/arena/runs/:run/:branch/pane/:instance" element={<SimulatedPanePage />} />
+      <Route path="/shakedown/pane/:instance" element={<ShakedownPanePage />} />
+      <Route path="/shakedown/runs/:run/:branch/pane/:instance" element={<SimulatedPanePage />} />
       <Route element={<CommunityHost openStream={openStream} />}><Route path="/community/*" element={<CommunitySection />} /></Route>
       <Route element={<Shell openStream={openStream} />}>
         <Route path="/" element={<ProjectsHome />} />
         <Route path="/new" element={<NewProject />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/library/:collection" element={<LibraryRoute />} />
-        <Route path="/arena/*" element={<ArenaSection />} />
+        <Route path="/shakedown/*" element={<ShakedownSection />} />
         {ProjectRoutes()}
       </Route>
       {LegacyRoutes()}

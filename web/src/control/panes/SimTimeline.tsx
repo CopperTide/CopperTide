@@ -1,6 +1,6 @@
 import { useState, type KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { runPath } from '../../arena/paths';
+import { runPath } from '../../shakedown/paths';
 import { Segmented } from '../../shell/ui';
 import { bySteps, type Step } from '../../tests/model';
 import { RerunPanel } from '../../tests/RerunPanel';
@@ -139,7 +139,7 @@ function Steps({ s, tl, b, move }: { s: TimelineSettings; tl: SimulatedTimeline;
 
 export function SimTimeline({ settings, setSettings }: PaneProps) {
   const s = settings as TimelineSettings;
-  const a = useControl().source.arena!;
+  const a = useControl().source.shakedown!;
   const tl = useControl().source.timeline!;
   const b = a.branch!;
   const move = useCursor(tl, b);

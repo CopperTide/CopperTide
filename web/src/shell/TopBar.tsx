@@ -1,5 +1,5 @@
 import { Link, NavLink } from 'react-router-dom';
-import { ARENA_PATH } from '../arena/paths';
+import { SHAKEDOWN_PATH } from '../shakedown/paths';
 import { useHosted } from '../hosted/HostedGate';
 import { teamStatus } from '../pages/status';
 import { StatusBadge } from '../pages/StatusBadge';
@@ -20,7 +20,7 @@ type Props = {
   onHelp: () => void;
 };
 
-/** The one bar on every page: home, the project switcher, Arena, Library, Community, Account, Docs, Ctrl K and the app menu. */
+/** The one bar on every page: home, the project switcher, Shakedown, Library, Community, Account, Docs, Ctrl K and the app menu. */
 export function TopBar({ team, rows, onCommand, onHelp }: Props) {
   return (
     <header className="topbar">
@@ -94,8 +94,8 @@ export function ProjectSwitcher({ team, rows }: { team?: string; rows: TeamRow[]
 function ShakedownLink({ narrow = false }: { narrow?: boolean }) {
   const s = useHosted();
   if (s.kind === 'signed-in' && s.shakedown) return <a href="/sd/" className={narrow ? 'tb-narrow-only' : 'tb-link'}>Shakedown</a>;
-  if (narrow) return <Link to={ARENA_PATH} className="tb-narrow-only">Shakedown</Link>;
-  return <NavLink to={ARENA_PATH} className={({ isActive }) => `tb-link${isActive ? ' on' : ''}`}>Shakedown</NavLink>;
+  if (narrow) return <Link to={SHAKEDOWN_PATH} className="tb-narrow-only">Shakedown</Link>;
+  return <NavLink to={SHAKEDOWN_PATH} className={({ isActive }) => `tb-link${isActive ? ' on' : ''}`}>Shakedown</NavLink>;
 }
 
 /** The ⋯ menu: appearance, keys, and the pages a phone has no room for in the bar. */

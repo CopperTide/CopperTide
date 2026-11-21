@@ -1,4 +1,4 @@
-/* Arena (`/arena/*`): runs of a test team against arenad. Only CopperTide's tokens, so both looks apply. */
+/* Shakedown (`/shakedown/*`): runs of a test team against shaked. Only CopperTide's tokens, so both looks apply. */
 
 .tst-page { display: flex; flex-direction: column; gap: var(--space-4); }
 .tst-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-4); }

@@ -6,10 +6,10 @@ import { openRigWords } from '../test-vocab';
 import { HEALTH_CHANGED } from '../tests/shared';
 import type { Branch, RunSummary } from '../tests/types';
 import { FakeChannel } from '../workspace/testkit';
-import { ArenaPanePage } from './ArenaControlPage';
-import { arenaDefaults } from './defaults';
+import { ShakedownPanePage } from './ShakedownControlPage';
+import { shakedownDefaults } from './defaults';
 import { legacyTestsPath } from './paths';
-import { ArenaSection, TestsRedirect } from './routes';
+import { ShakedownSection, TestsRedirect } from './routes';
 
 const at = (s: number) => new Date(Date.parse('2026-11-02T10:00:00Z') + s * 1000).toISOString();
 const team = { id: 't', name: 't', agents: [{ id: 'triage', name: 'Triage', kind: 'claude_code' as const, model: null, prompt: '' }] };
@@ -37,12 +37,12 @@ const USAGE = {
   total_bytes: 1.5 * 2 ** 30,
   limit_bytes: 10 * 2 ** 30,
 };
-const DOWN: [number, unknown] = [503, { error: { code: 'arena_unreachable', message: 'unreachable', raw: 'error sending request: connection refused' } }];
+const DOWN: [number, unknown] = [503, { error: { code: 'shakedown_unreachable', message: 'unreachable', raw: 'error sending request: connection refused' } }];
 
 let runs: RunSummary[];
 let gcReply: [number, unknown];
 let down: boolean;
-/** Paths that answer 500 (arena_failed) for now. */
+/** Paths that answer 500 (shakedown_failed) for now. */
 let failing: Set<string>;
 /** Whether DELETE empties the runs list (false: the next read still lists the run). */
 let deleteClears: boolean;
@@ -50,14 +50,14 @@ let calls: { method: string; url: string }[];
 
 function answer(method: string, url: string): [number, unknown] {
   if (down) return DOWN;
-  const path = url.replace('/api/arena', '');
-  if (failing.has(path)) return [500, { error: { code: 'arena_failed', message: 'failed', raw: `${path} broke` } }];
+  const path = url.replace('/api/shakedown', '');
+  if (failing.has(path)) return [500, { error: { code: 'shakedown_failed', message: 'failed', raw: `${path} broke` } }];
   if (method === 'DELETE' && path === '/runs/r1') { if (deleteClears) runs = []; return [200, { dropped: 2 }]; }
   if (method === 'POST' && path === '/gc') return gcReply;
   const table: Record<string, unknown> = {
     '/health': HEALTH, '/runs': runs, '/tasks': [{ id: '27', reason: 'Swap the boots.' }], '/team/default': team, '/world': WORLD, '/usage': USAGE,
   };
-  return path in table ? [200, table[path]] : [404, { error: { code: 'arena_not_found', message: path } }];
+  return path in table ? [200, table[path]] : [404, { error: { code: 'shakedown_not_found', message: path } }];
 }
 
 beforeEach(() => {
@@ -79,9 +79,9 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllGlobals());
 
-const page = (path = '/arena') => render(
+const page = (path = '/shakedown') => render(
   <MemoryRouter initialEntries={[path]}>
-    <Routes><Route path="/arena/*" element={<ArenaSection />} /></Routes>
+    <Routes><Route path="/shakedown/*" element={<ShakedownSection />} /></Routes>
   </MemoryRouter>,
 );
 const pane = (title: string) => screen.getByRole('region', { name: title });
@@ -95,7 +95,7 @@ function Where() {
 }
 
 describe('Shakedown control', () => {
-  it('arena_overview_layout', async () => {
+  it('shakedown_overview_layout', async () => {
     const { container } = page();
     expect(screen.getByRole('heading', { name: /Shakedown control/ })).toBeInTheDocument();
     expect(within(screen.getByRole('tablist', { name: 'Layouts' })).getAllByRole('tab').map((t) => t.textContent)).toEqual(['Overview', 'Storage']);
@@ -109,10 +109,10 @@ describe('Shakedown control', () => {
     const col = cells[1].querySelector(':scope > .ws-split-col')!;
     expect([...col.querySelectorAll(':scope > .ws-cell > section')]).toEqual([pane('World'), pane('Engine')]);
     // jsdom drops the cells' flex shorthand, so the shares are read from the layout itself.
-    const root = arenaDefaults().layouts[0].root;
+    const root = shakedownDefaults().layouts[0].root;
     expect(root.kind === 'split' && root.sizes).toEqual([0.45, 0.55]);
     expect(await within(pane('Engine')).findByText('Can run', { exact: false })).toBeInTheDocument();
-    expect(await within(pane('Runs')).findByRole('link', { name: 'Task 27' })).toHaveAttribute('href', '/arena/runs/r1/b1');
+    expect(await within(pane('Runs')).findByRole('link', { name: 'Task 27' })).toHaveAttribute('href', '/shakedown/runs/r1/b1');
     const strip = within(screen.getByRole('list', { name: 'Shakedown status' }));
     expect(await strip.findByText('3/4 answering')).toBeInTheDocument();
     expect(strip.getByText('Up')).toBeInTheDocument();
@@ -124,13 +124,13 @@ describe('Shakedown control', () => {
   });
 
   it('tests_routes_redirect', () => {
-    expect(legacyTestsPath('/tests')).toBe('/arena');
-    expect(legacyTestsPath('/tests/team')).toBe('/arena');
-    expect(legacyTestsPath('/tests/compare/a/b')).toBe('/arena/compare/a/b');
-    for (const [from, to] of [['/tests/runs/r1/b2?step=4', '/arena/runs/r1/b2?step=4'], ['/tests/', '/arena']]) {
+    expect(legacyTestsPath('/tests')).toBe('/shakedown');
+    expect(legacyTestsPath('/tests/team')).toBe('/shakedown');
+    expect(legacyTestsPath('/tests/compare/a/b')).toBe('/shakedown/compare/a/b');
+    for (const [from, to] of [['/tests/runs/r1/b2?step=4', '/shakedown/runs/r1/b2?step=4'], ['/tests/', '/shakedown']]) {
       const { unmount } = render(
         <MemoryRouter initialEntries={[from]}>
-          <Routes><Route path="/tests/*" element={<TestsRedirect />} /><Route path="/arena/*" element={<Where />} /></Routes>
+          <Routes><Route path="/tests/*" element={<TestsRedirect />} /><Route path="/shakedown/*" element={<Where />} /></Routes>
         </MemoryRouter>,
       );
       expect(screen.getByTestId('at')).toHaveTextContent(to);
@@ -165,7 +165,7 @@ describe('Shakedown control', () => {
     expect(pane('Fork tree')).toBeInTheDocument();
     expect(await within(pane('Fork tree')).findByText('Forked from Original at step 5')).toBeInTheDocument();
 
-    gcReply = [409, { error: { code: 'arena_busy', message: 'busy', raw: 'Saves are being cleaned up; try again in a moment' } }];
+    gcReply = [409, { error: { code: 'shakedown_busy', message: 'busy', raw: 'Saves are being cleaned up; try again in a moment' } }];
     await user.click(within(storage).getByRole('button', { name: 'Clean up' }));
     expect(await within(storage).findByText(/Saves can't be cleaned up while a run is going/)).toBeInTheDocument();
     expect(within(storage).getByText(/Saves are being cleaned up/)).toHaveAttribute('data-raw-evidence');
@@ -191,14 +191,14 @@ describe('Shakedown control', () => {
     expect(within(storage).getByText("Can't clean up while a run is going.")).toBeInTheDocument();
   });
 
-  it('arena_down_is_plain', async () => {
+  it('shakedown_down_is_plain', async () => {
     down = true;
     const user = userEvent.setup();
     const { container } = page();
-    // One alarm for the page, with how to start Arena; each pane only says it is offline.
+    // One alarm for the page, with how to start Shakedown; each pane only says it is offline.
     const banner = await screen.findByRole('alert');
     expect(banner).toHaveTextContent('Shakedown is not running');
-    expect(within(banner).getByText('cd core && cargo run -p arenad')).toBeInTheDocument();
+    expect(within(banner).getByText('cd core && cargo run -p shaked')).toBeInTheDocument();
     expect(within(screen.getByRole('list', { name: 'Shakedown status' })).getByText('Down')).toBeInTheDocument();
     // The pane on show in that stack (a stack keeps its other tabs' bodies, hidden).
     const shown = (title: string) => within(pane(title).querySelector<HTMLElement>('.ws-pane.is-on')!);
@@ -212,7 +212,7 @@ describe('Shakedown control', () => {
     await user.click(screen.getByRole('menuitem', { name: /Compare/ }));
     await plain('Compare');
     expect(screen.getAllByRole('alert')).toHaveLength(1);
-    // arenad's own words only as evidence.
+    // shaked's own words only as evidence.
     for (const n of within(container).getAllByText(/connection refused/)) expect(n).toHaveAttribute('data-raw-evidence');
     expect(openRigWords(container)).toEqual([]);
   });
@@ -230,7 +230,7 @@ describe('Shakedown control', () => {
 
     await user.click(within(runsPane).getByRole('button', { name: 'Delete' }));
     await user.click(within(runsPane).getByRole('button', { name: 'Delete run' }));
-    expect(calls.filter((c) => c.method === 'DELETE').map((c) => c.url)).toEqual(['/api/arena/runs/r1']);
+    expect(calls.filter((c) => c.method === 'DELETE').map((c) => c.url)).toEqual(['/api/shakedown/runs/r1']);
     expect(await within(runsPane).findByText(/No runs yet/)).toBeInTheDocument();
   });
 
@@ -249,8 +249,8 @@ describe('Shakedown control', () => {
     fetchMock.mockImplementation(async (url, init) => (init?.method === 'POST' && String(url).endsWith('/runs')
       ? new Response(JSON.stringify({ run_id: 'r9', branch_id: 'b9' }), { status: 200 }) : base(url, init)));
     render(
-      <MemoryRouter initialEntries={['/arena']}>
-        <Routes><Route path="/arena" element={<ArenaSection />} /><Route path="/arena/runs/:run/:branch" element={<Where />} /></Routes>
+      <MemoryRouter initialEntries={['/shakedown']}>
+        <Routes><Route path="/shakedown" element={<ShakedownSection />} /><Route path="/shakedown/runs/:run/:branch" element={<Where />} /></Routes>
       </MemoryRouter>,
     );
     const runsPane = pane('Runs');
@@ -258,7 +258,7 @@ describe('Shakedown control', () => {
     await user.click(within(runsPane).getByRole('button', { name: 'Edit team' }));
     expect(within(runsPane).getByRole('region', { name: 'Test team' })).toBeInTheDocument();
     await user.click(within(runsPane).getByRole('button', { name: 'Start run' }));
-    expect(await screen.findByTestId('at')).toHaveTextContent('/arena/runs/r9/b9');
+    expect(await screen.findByTestId('at')).toHaveTextContent('/shakedown/runs/r9/b9');
   });
 
   it('a popped-out pane renders on its own route', async () => {
@@ -266,8 +266,8 @@ describe('Shakedown control', () => {
     await within(pane('World')).findByRole('row', { name: 'Part retail' });
     first.unmount();
     render(
-      <MemoryRouter initialEntries={['/arena/pane/ov-world']}>
-        <Routes><Route path="/arena/pane/:instance" element={<ArenaPanePage />} /></Routes>
+      <MemoryRouter initialEntries={['/shakedown/pane/ov-world']}>
+        <Routes><Route path="/shakedown/pane/:instance" element={<ShakedownPanePage />} /></Routes>
       </MemoryRouter>,
     );
     expect(screen.getByRole('heading', { name: 'World' })).toBeInTheDocument();

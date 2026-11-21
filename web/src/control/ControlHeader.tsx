@@ -32,7 +32,7 @@ function Clock({ startedAt, endedAt, running, unread }: { startedAt?: number; en
   return <span className="ctl-clock" role="timer" aria-label={`Running for ${span(now - startedAt)}`}>T+{span(now - startedAt)}</span>;
 }
 
-/** Tokens in / out as reported, else the total where only that was reported (an Arena run), else unknown. */
+/** Tokens in / out as reported, else the total where only that was reported (an Shakedown run), else unknown. */
 function tokenWords(m: ControlCtx['source']['metrics']): string {
   if (m.tokensIn !== undefined && m.tokensOut !== undefined) return `${compactNumber(m.tokensIn)} / ${compactNumber(m.tokensOut)}`;
   return m.tokens !== undefined ? `${compactNumber(m.tokens)} total` : 'unknown';
@@ -74,7 +74,7 @@ function Strip({ ctx }: { ctx: ControlCtx }) {
 
 type RowProps = { ctx: ControlCtx; onOutcome(o: Outcome | null): void; afterStop(): void };
 
-/** The reason Pause all, Resume all, Stop team… and Emergency stop share, when they share one (an Arena run). */
+/** The reason Pause all, Resume all, Stop team… and Emergency stop share, when they share one (an Shakedown run). */
 function sharedWhy(t: TeamActions): string | null {
   const why = [t.pauseAll, t.resumeAll, t.stop, t.emergencyStop].map((a) => (a.can.ok ? null : a.can.why));
   return why[0] && why.every((w) => w === why[0]) ? why[0] : null;

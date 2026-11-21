@@ -4,11 +4,11 @@ import type {
   RowsResponse, RunSummary, StatusEvent, TaskSummary, Team, UsageResponse, WorldResponse,
 } from './types';
 
-/** arenad, through controld's pass-through (`crates/controld/src/arena.rs`). */
-const BASE = '/api/arena';
+/** shaked, through controld's pass-through (`crates/controld/src/shakedown.rs`). */
+const BASE = '/api/shakedown';
 const id = encodeURIComponent;
 
-export const arena = {
+export const shakedown = {
   health: () => apiRequest<Health>('GET', `${BASE}/health`),
   /** Every model provider; asks local servers (and OpenAI/Anthropic when keyed) for their models, 3 s each. */
   providers: () => apiRequest<ProviderStatus[]>('GET', `${BASE}/providers`),

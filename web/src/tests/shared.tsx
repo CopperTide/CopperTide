@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { ApiError } from '../api';
 import { errorText } from '../errors';
 import { Badge, VendorMark } from '../shell/ui';
-import { arena } from './api';
+import { shakedown } from './api';
 import { APPROXIMATE_LABEL, isApproximate, planLine } from './restore';
 import { providerId, providerName } from './providers';
 import { kindLabel } from './team';
@@ -49,7 +49,7 @@ export function KindMark({ kind, model, provider }: { kind: AgentKind; model?: s
   );
 }
 
-/** A plain sentence for any error (`text`, else `errorText`); Arena's own words follow as evidence when it gave some. */
+/** A plain sentence for any error (`text`, else `errorText`); Shakedown's own words follow as evidence when it gave some. */
 export function ErrorNote({ error, text }: { error: unknown; text?: string }) {
   if (error == null) return null;
   const raw = error instanceof ApiError ? error.raw : undefined;
@@ -61,17 +61,17 @@ export function ErrorNote({ error, text }: { error: unknown; text?: string }) {
   );
 }
 
-/** Tells the Arena pages to re-read Arena's status (disk use changes after a delete or a cleanup). */
+/** Tells the Shakedown pages to re-read Shakedown's status (disk use changes after a delete or a cleanup). */
 export const HEALTH_CHANGED = 'sculptured:tests-health';
 
-/** Arena's status: undefined while asking, null when it is not answering. */
-export function useArenaHealth(): { health: Health | null | undefined; error: unknown } {
+/** Shakedown's status: undefined while asking, null when it is not answering. */
+export function useShakedownHealth(): { health: Health | null | undefined; error: unknown } {
   const [health, setHealth] = useState<Health | null | undefined>(undefined);
   const [error, setError] = useState<unknown>(null);
   useEffect(() => {
     let alive = true;
     const load = () =>
-      arena.health().then((h) => { if (alive) { setHealth(h); setError(null); } })
+      shakedown.health().then((h) => { if (alive) { setHealth(h); setError(null); } })
         .catch((e) => { if (alive) { setHealth(null); setError(e); } });
     load();
     const t = setInterval(load, 15000);
@@ -83,7 +83,7 @@ export function useArenaHealth(): { health: Health | null | undefined; error: un
 
 const gb = (n: number) => { const v = n / 2 ** 30; return v >= 10 ? Math.round(v).toString() : (Math.round(v * 10) / 10).toString(); };
 
-/** Which agent modes Arena can run, and how much of its disk budget its saved worlds use. */
+/** Which agent modes Shakedown can run, and how much of its disk budget its saved worlds use. */
 export function EngineLine({ health }: { health: Health }) {
   const modes = [
     { on: health.claude, word: 'Claude Code', why: 'claude is not on this computer' },

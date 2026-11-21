@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Btn, Icon } from '../../shell/ui';
-import { arena } from '../../tests/api';
+import { shakedown } from '../../tests/api';
 import { ModelHint, ModelInput, ProviderSelect } from '../../tests/ProviderFields';
 import { providerOf } from '../../tests/providers';
 import { KINDS, clearStoredTeam, loadTeam, saveTeam, slug, withSlugIds } from '../../tests/team';
 import type { AgentKind, AgentSpec, ProviderStatus, Team } from '../../tests/types';
 
 /**
- * The team new runs use: kept in this browser, saved as it changes; Reset goes back to Arena's
+ * The team new runs use: kept in this browser, saved as it changes; Reset goes back to Shakedown's
  * default. `onError` must be stable (a state setter).
  */
 export function useTestTeam(onError: (e: unknown) => void) {
   const [team, setTeam] = useState<Team | null>(null);
-  // Only the user's edits are kept; the default stays unstored, so it follows Arena's.
+  // Only the user's edits are kept; the default stays unstored, so it follows Shakedown's.
   const [edited, setEdited] = useState(false);
   useEffect(() => { loadTeam().then(setTeam).catch(onError); }, [onError]);
   useEffect(() => { if (edited && team) saveTeam(team); }, [edited, team]);
@@ -20,7 +20,7 @@ export function useTestTeam(onError: (e: unknown) => void) {
   const reset = async () => {
     setEdited(false);
     clearStoredTeam();
-    try { setTeam(await arena.defaultTeam()); } catch (e) { onError(e); }
+    try { setTeam(await shakedown.defaultTeam()); } catch (e) { onError(e); }
   };
   return { team, update, reset };
 }
@@ -85,10 +85,10 @@ export function TeamEditor({ team, update, reset, openOk, list }: Edit) {
       remove={() => setAgents((as) => as.filter((_, j) => j !== i))} />
   );
   return (
-    <section className="arena-team" aria-label="Test team">
+    <section className="shakedown-team" aria-label="Test team">
       <p className="muted tst-small">Agents work in order, each handing its notes to the next. Only the last one may change the world.</p>
       <ol className="tst-team">{team.agents.map(card)}</ol>
-      <div className="arena-row">
+      <div className="shakedown-row">
         <Btn icon="plus" onClick={() => setAgents((as) => [...as, newAgent(as)])}>Add agent</Btn>
         <Btn variant="ghost" icon="undo" onClick={reset}>Reset to default</Btn>
         <span className="muted tst-small"><Icon name="check" size={13} /> Saved in this browser.</span>

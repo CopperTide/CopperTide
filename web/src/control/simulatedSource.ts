@@ -1,17 +1,17 @@
 import { useCallback, useMemo } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { loadComparison } from '../tests/ComparePage';
-import { arena } from '../tests/api';
+import { shakedown } from '../tests/api';
 import { branchNames, inOrder, layout, summarize, type Step } from '../tests/model';
 import type { BranchDetail, Change, RestoreMode } from '../tests/types';
 import { agentsOf, approvalsOf, DECIDED_BY_AGENTS, feedOf, outcomeOf, toolCallsPerMin } from './simulatedFeed';
-import { useArenaRun, type ArenaRunData } from './simulatedData';
+import { useShakedownRun, type ShakedownRunData } from './simulatedData';
 import { rowsAt, saveAt } from './simulatedWorld';
 import { ActionError, type Action, type ActionReport, type ControlSource, type SimulatedTimeline, type TeamActions } from './source';
 
 /** Why the team's controls do nothing on a simulated run, in visible words. */
-export const ARENA_CANT_CONTROL = "Shakedown runs can't be paused or stopped from here yet";
-export const START_IN_ARENA = 'Start runs from Shakedown control';
+export const SHAKEDOWN_CANT_CONTROL = "Shakedown runs can't be paused or stopped from here yet";
+export const START_IN_SHAKEDOWN = 'Start runs from Shakedown control';
 export const NO_MESSAGES = "Agents in a Shakedown run can't be sent messages; fork with changed instructions instead";
 
 /** An action that cannot run: disabled with `why`, and pressing it anyway reports the refusal. */
@@ -20,16 +20,16 @@ const unavailable = (why: string): Action => ({
   run: async (): Promise<ActionReport> => ({ text: why, skipped: [], refused: true }),
 });
 
-/** The run's status before its branch is read: unknown (Arena not answering, or the read failed), or loading. */
+/** The run's status before its branch is read: unknown (Shakedown not answering, or the read failed), or loading. */
 const UNKNOWN = { glyph: '∅', word: 'unknown', tone: 'unknown' as const };
 const LOADING = { glyph: '◌', word: 'loading', tone: 'unknown' as const };
 
 const TEAM: TeamActions = {
-  start: unavailable(START_IN_ARENA),
-  stop: unavailable(ARENA_CANT_CONTROL),
-  pauseAll: unavailable(ARENA_CANT_CONTROL),
-  resumeAll: unavailable(ARENA_CANT_CONTROL),
-  emergencyStop: unavailable(ARENA_CANT_CONTROL),
+  start: unavailable(START_IN_SHAKEDOWN),
+  stop: unavailable(SHAKEDOWN_CANT_CONTROL),
+  pauseAll: unavailable(SHAKEDOWN_CANT_CONTROL),
+  resumeAll: unavailable(SHAKEDOWN_CANT_CONTROL),
+  emergencyStop: unavailable(SHAKEDOWN_CANT_CONTROL),
 };
 
 /** The cursor: the `?step=` the operator moved to, else the latest step (so a running branch's cursor follows it). */
@@ -44,7 +44,7 @@ function useCursor(steps: Step[]) {
   return { cursor, setCursor };
 }
 
-/** Where a fork started, in plain words (arenad may move it to the nearest step it can restore). */
+/** Where a fork started, in plain words (shaked may move it to the nearest step it can restore). */
 function forkNotice(r: { start_seq: number; moved_from: number | null; reason: string | null }): string {
   if (r.moved_from == null) return `Forked from step ${r.start_seq}.`;
   return `Started from step ${r.start_seq} instead of ${r.moved_from}${r.reason ? `: ${r.reason}` : '.'}`;
@@ -57,9 +57,9 @@ function timelineOf(run: string, b: BranchDetail, cursor: ReturnType<typeof useC
     saves: steps.filter((s) => s.snapshot).map((s) => s.seq),
     ...cursor,
     layout: lay,
-    plan: (seq, restore: RestoreMode = 'exact') => arena.restorePlan(b.id, seq, restore),
+    plan: (seq, restore: RestoreMode = 'exact') => shakedown.restorePlan(b.id, seq, restore),
     fork: async (seq, changes: Record<string, Change>, restore) => {
-      const r = await arena.fork(b.id, seq, changes, restore);
+      const r = await shakedown.fork(b.id, seq, changes, restore);
       return { run, branch: r.branch_id, notice: forkNotice(r) };
     },
   };
@@ -81,14 +81,14 @@ function metricsOf(b: BranchDetail | null): ControlSource['metrics'] {
   return { ...(sm.tokens ? { tokens: sm.tokens } : {}), ...(sm.cost_usd != null ? { costUsd: sm.cost_usd } : {}), toolCallsPerMin: toolCallsPerMin(b, end) };
 }
 
-function arenaOf(run: string, branchId: string, d: ArenaRunData): NonNullable<ControlSource['arena']> {
+function shakedownOf(run: string, branchId: string, d: ShakedownRunData): NonNullable<ControlSource['shakedown']> {
   const branches = d.branches.length ? d.branches : d.detail ? [d.detail] : [];
   return {
     run, branchId, branches, names: branchNames(branches), parts: d.parts, openAvailable: !!d.health?.open_available, reconnects: d.reconnects,
     ...(d.health?.providers ? { providers: d.health.providers } : {}),
     ...(d.reason ? { reason: d.reason } : {}),
     ...(d.detail ? { branch: d.detail } : {}),
-    // Why the branch can't be read, or (once it is) that Arena stopped answering since.
+    // Why the branch can't be read, or (once it is) that Shakedown stopped answering since.
     ...(d.error ? { error: d.error } : d.health === null ? { error: d.healthError } : {}),
     // The other branch first: the change column then reads as what this branch changed.
     compare: (other) => loadComparison(other, branchId),
@@ -99,7 +99,7 @@ function worldOf(b: BranchDetail, save: number | null): NonNullable<ControlSourc
   return {
     save,
     rows: (key?: string) => (save === null ? Promise.resolve({}) : rowsAt(b, save, key)),
-    read: async (seq, keys, part) => (await arena.rows(b.id, seq, keys, part)).rows,
+    read: async (seq, keys, part) => (await shakedown.rows(b.id, seq, keys, part)).rows,
   };
 }
 
@@ -110,16 +110,16 @@ function titleOf(b: BranchDetail | null, names: Map<string, string>): string {
 }
 
 /**
- * An Arena run branch as a ControlSource, through the `/api/arena/*` proxy: the branch and its
- * stream, the rows at the cursor's save, restore plans, fork and compare. Arena runs can't be
+ * An Shakedown run branch as a ControlSource, through the `/api/shakedown/*` proxy: the branch and its
+ * stream, the rows at the cursor's save, restore plans, fork and compare. Shakedown runs can't be
  * paused, stopped or messaged, so those controls are unavailable and say why.
  */
 export function useSimulatedSource(run: string, branchId: string): ControlSource {
-  const d = useArenaRun(run, branchId);
+  const d = useShakedownRun(run, branchId);
   const b = d.detail;
   const m = useMapped(b);
   const cursor = useCursor(m.lay ? inOrder(m.lay) : []);
-  const info = arenaOf(run, branchId, d);
+  const info = shakedownOf(run, branchId, d);
   const save = b && m.lay ? saveAt(inOrder(m.lay).filter((s) => s.snapshot).map((s) => s.seq), cursor.cursor) : null;
   return {
     kind: 'simulated',
@@ -133,12 +133,12 @@ export function useSimulatedSource(run: string, branchId: string): ControlSource
     feed: m.feed,
     approvals: m.approvals,
     decide: async () => { throw new ActionError(DECIDED_BY_AGENTS); },
-    agentControl: () => unavailable(ARENA_CANT_CONTROL),
+    agentControl: () => unavailable(SHAKEDOWN_CANT_CONTROL),
     message: () => unavailable(NO_MESSAGES),
     team: TEAM,
     metrics: metricsOf(b),
     ...(b && m.lay ? { timeline: timelineOf(run, b, cursor, m.lay) } : {}),
     ...(b ? { world: worldOf(b, save) } : {}),
-    arena: info,
+    shakedown: info,
   };
 }

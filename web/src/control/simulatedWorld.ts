@@ -1,4 +1,4 @@
-import { arena } from '../tests/api';
+import { shakedown } from '../tests/api';
 import { MAX_ROW_KEYS } from '../tests/model';
 import type { BranchDetail, Event } from '../tests/types';
 
@@ -49,6 +49,6 @@ export function keysByPart(events: Event[], upTo: number, key?: string): Map<str
 /** The rows at step `save` (a step after which the world was saved): `key`, or every key touched by then. */
 export async function rowsAt(b: BranchDetail, save: number, key?: string): Promise<Record<string, unknown>> {
   const groups = [...keysByPart(b.events, save, key)];
-  const answers = await Promise.all(groups.map(([part, keys]) => arena.rows(b.id, save, keys, part || undefined)));
+  const answers = await Promise.all(groups.map(([part, keys]) => shakedown.rows(b.id, save, keys, part || undefined)));
   return Object.assign({}, ...answers.map((a) => a.rows)) as Record<string, unknown>;
 }

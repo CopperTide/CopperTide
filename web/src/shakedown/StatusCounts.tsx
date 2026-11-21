@@ -9,10 +9,10 @@ export function StatusCounts({ branches }: { branches: Pick<Branch, 'status'>[] 
   const counts = ORDER.map((s) => ({ s, n: branches.filter((b) => b.status === s).length })).filter((c) => c.n > 0);
   if (!counts.length) return <span className="muted">No branches</span>;
   return (
-    <span className="arena-counts">
+    <span className="shakedown-counts">
       {counts.map(({ s, n }, i) => (
-        <span key={s} className={`arena-count tst-${BRANCH_STATUS[s].tone}`}>
-          {i > 0 && <span className="arena-sep" aria-hidden="true">·</span>}
+        <span key={s} className={`shakedown-count tst-${BRANCH_STATUS[s].tone}`}>
+          {i > 0 && <span className="shakedown-sep" aria-hidden="true">·</span>}
           <span aria-hidden="true">{BRANCH_STATUS[s].glyph}</span> {n} {SHORT[s]}
         </span>
       ))}

@@ -1,10 +1,10 @@
-import { arena } from './api';
+import { shakedown } from './api';
 import type { AgentKind, AgentSpec, Team } from './types';
 
 /** The team new test runs use, kept in this browser. */
 export const TEAM_KEY = 'sculptured.tests.team.v1';
 
-/** Model arenad uses for an OpenRouter agent with no model set (arena `agents/open.rs`). */
+/** Model shaked uses for an OpenRouter agent with no model set (shakedown `agents/open.rs`). */
 export const DEFAULT_OPENROUTER_MODEL = 'deepseek/deepseek-chat-v3.1';
 
 export const KINDS: { value: AgentKind; label: string }[] = [
@@ -49,7 +49,7 @@ export function clearStoredTeam(): void {
 
 /** The stored team, else the engine's default (triage → resolver). */
 export async function loadTeam(): Promise<Team> {
-  return readStoredTeam() ?? (await arena.defaultTeam());
+  return readStoredTeam() ?? (await shakedown.defaultTeam());
 }
 
 /** The team as a run is started with: a provider only on API-mode agents, trimmed, never blank. */

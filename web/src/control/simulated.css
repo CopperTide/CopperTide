@@ -1,4 +1,4 @@
-/* A simulated run (an Arena branch) in the Control workspace: its branch bar, the replay (lanes of
+/* A simulated run (an Shakedown branch) in the Control workspace: its branch bar, the replay (lanes of
    steps with saves and the cursor, the step or fork panel beside them), World state, Compare and the
    world's parts in System overview. Tokens only. */
 
@@ -25,7 +25,7 @@
 .ctl-sim-world { flex: 1 1 200px; min-width: 0; margin-left: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; font-family: var(--font-mono); font-size: var(--text-xs); color: var(--muted); }
 .ctl-sim-note { margin: 0; padding: 3px var(--space-2); border-top: 1px solid var(--line); font-size: var(--text-sm); color: var(--text); }
 .ctl-sim-note a { color: var(--accent); }
-.ctl-sim .arena-alarm { margin: 0; border-radius: 0; }
+.ctl-sim .shakedown-alarm { margin: 0; border-radius: 0; }
 .ctl-sim-page { min-height: 0; }
 
 /* ── The replay: a toolbar, then the lanes beside the step (or fork) panel ── */

@@ -1,4 +1,4 @@
-# Control workspace and Arena control: design
+# Control workspace and Shakedown control: design
 
 Status: agreed with the user in conversation on 2026-11-02. Where this says "my call", the
 controller decided it; everything else the user said or confirmed.
@@ -20,10 +20,10 @@ Two pages that share one look and one docking system.
 
 1. **Control**: one per project, at `/p/:team/control`. It is the control system for a CopperTide
    deployment (a team running for real) and also the interface for a **simulated deployment** (a team
-   running in Arena). Both open the same workspace. A simulated one adds rewind controls.
-2. **Arena control**: a separate page for running Arena itself: worlds and their integrations,
-   runs, forks, restore plans, saves and disk, and the Arena service's health. It uses the same
-   look and docking, with Arena-specific panes. It replaces today's Tests section.
+   running in Shakedown). Both open the same workspace. A simulated one adds rewind controls.
+2. **Shakedown control**: a separate page for running Shakedown itself: worlds and their integrations,
+   runs, forks, restore plans, saves and disk, and the Shakedown service's health. It uses the same
+   look and docking, with Shakedown-specific panes. It replaces today's Tests section.
 
 ## Goals
 
@@ -67,7 +67,7 @@ Two pages that share one look and one docking system.
 - **A plant camera or 3-D view.** No data source exists.
 - **Daemon logs.** The server writes logs to stdout only. The "Raw events" pane shows the event
   journal instead, labelled as such.
-- **Pausing an Arena run.** arenad has no pause. Simulated deployments show pause and stop as
+- **Pausing an Shakedown run.** shaked has no pause. Simulated deployments show pause and stop as
   disabled, with the reason in visible text.
 
 ## Anti-goals
@@ -155,7 +155,7 @@ two implementations:
   - questions and changes;
   - usage and budget;
   - the seat and team control routes.
-- **A simulated source**, for an Arena run branch. It is built on the `/api/arena/*` proxy:
+- **A simulated source**, for an Shakedown run branch. It is built on the `/api/shakedown/*` proxy:
   - the branch;
   - its stream;
   - rows;
@@ -211,28 +211,28 @@ The default layouts (my call) are:
 - **Cost:** Metrics and Results.
 - **Replay** (simulated only): Timeline large, World state and Compare.
 
-### Arena control panes
+### Shakedown control panes
 
 The panes:
 - **Runs:** start a run (team and task) and delete a run. Opening a run opens its simulated Control
   workspace.
 - **Fork tree:** a run's branches, parent to child.
 - **World:** the benchmark's parts. For each: its integration, version, how it restores (exact from
-  a save, by replay, or approximate), whether it uses the arena clock, and its tool count.
+  a save, by replay, or approximate), whether it uses the shakedown clock, and its tool count.
 - **Saves and disk:** disk used against the limit, the bytes held by each part, and a "Clean up"
   action that runs gc.
-- **Engine:** arenad's health, its tools and its benchmark.
+- **Engine:** shaked's health, its tools and its benchmark.
 - **Compare:** any two branches.
 
 The default layouts (my call) are **Overview** (Runs, World, Engine) and **Storage** (Saves and
 disk, and Fork tree).
 
 Routes:
-- `/arena` is Arena control.
-- `/arena/runs/:run/:branch` is that branch's simulated Control workspace, replacing RunPage.
-- `/arena/compare/:a/:b` stays.
-- `/tests/*` redirects to the matching `/arena` address.
-- The top bar's "Tests" link becomes "Arena".
+- `/shakedown` is Shakedown control.
+- `/shakedown/runs/:run/:branch` is that branch's simulated Control workspace, replacing RunPage.
+- `/shakedown/compare/:a/:b` stays.
+- `/tests/*` redirects to the matching `/shakedown` address.
+- The top bar's "Tests" link becomes "Shakedown".
 
 ### Backend additions
 
@@ -246,12 +246,12 @@ controld, in the sculptured repo:
   apply that to every live agent, modelled on `stop-now`.
 - Both have behaviour tests and generated TS types.
 
-arenad, in the arena repo on branch `integrations`:
+shaked, in the shakedown repo on branch `integrations`:
 - `GET /api/world`: the benchmark's parts, each with its integration's describe summary (name,
   version, restore, `uses_clock`, tool count) and whether it answered.
 - `GET /api/usage`: bytes per part, the total, and the limit.
 - `POST /api/gc`: runs the same gc as startup and returns what it removed.
-- Each has a unit test. The `/api/arena/*` proxy already allows GET and POST.
+- Each has a unit test. The `/api/shakedown/*` proxy already allows GET and POST.
 
 ## Left to the builder
 

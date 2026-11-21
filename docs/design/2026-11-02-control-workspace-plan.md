@@ -1,14 +1,14 @@
-# Control workspace and Arena control: implementation plan
+# Control workspace and Shakedown control: implementation plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task by task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** A dockable, mission-control-style workspace. It is CopperTide's Control page for real and simulated deployments, and the Arena control page that replaces the Tests section.
+**Goal:** A dockable, mission-control-style workspace. It is CopperTide's Control page for real and simulated deployments, and the Shakedown control page that replaces the Tests section.
 
-**Architecture:** One in-house docking engine sits in `web/src/workspace/`. It has a pure layout-tree model, persistence, pane registry, selection bus and React views. Two pages register panes: `web/src/control/` and `web/src/arena/`. Panes read a `ControlSource` interface, which has a deployment implementation (the shell stream plus controld routes) and a simulated one (`/api/arena/*`). The backend gets small controld routes for pause and resume, and arenad routes for world, usage and gc.
+**Architecture:** One in-house docking engine sits in `web/src/workspace/`. It has a pure layout-tree model, persistence, pane registry, selection bus and React views. Two pages register panes: `web/src/control/` and `web/src/shakedown/`. Panes read a `ControlSource` interface, which has a deployment implementation (the shell stream plus controld routes) and a simulated one (`/api/shakedown/*`). The backend gets small controld routes for pause and resume, and shaked routes for world, usage and gc.
 
 **Tech Stack:**
 - React 19, TypeScript 7, react-router 7, vitest plus testing-library, Playwright.
-- Rust: axum in controld and arenad, ts-rs.
+- Rust: axum in controld and shaked, ts-rs.
 
 **Spec:** `docs/design/2026-11-02-control-workspace-design.md`. Read it; it is binding.
 
@@ -16,7 +16,7 @@
 
 - **Where the work happens:**
   - CopperTide work is in the worktree `/home/alexsky2/MLSys/CopperTide/sculptured-control`, branch `control-workspace`.
-  - Arena work is in `/home/alexsky2/MLSys/CopperTide/arena`, branch `integrations`.
+  - Shakedown work is in `/home/alexsky2/MLSys/CopperTide/shakedown`, branch `integrations`.
 - **Rules:**
   - `AGENTS.md` and `DESIGN.md` hold.
   - No raw hex outside `web/src/tokens.css`.
@@ -36,15 +36,15 @@
   - Delete only your own build output.
 - **Never touch:**
   - the user's CopperTide on :4410, its data in `~/.sculptured`, or its runners;
-  - the user's arenad;
+  - the user's shaked;
   - other Docker containers or volumes;
   - `Sculptured-Examples`;
   - other worktrees.
 - **Tests:**
   - never call real models or third parties;
   - Playwright uses Practice agents only;
-  - Arena web tests mock `/api/arena/*`.
-- **Commits:** on the branch named above, with explicit paths only, in the repository's message style ("Control: …", "Arena: …").
+  - Shakedown web tests mock `/api/shakedown/*`.
+- **Commits:** on the branch named above, with explicit paths only, in the repository's message style ("Control: …", "Shakedown: …").
 
 ## Review Focus
 
@@ -52,7 +52,7 @@
 2. **Dropping a stack's only pane onto that same stack** (an edge or the centre). It must do nothing. Owner: Task 1, `move_onto_itself_is_noop`.
 3. **A live stream update while the user is dragging or has scrolled a pane.** The layout and scroll must not jump. Owner: Task 2, `stream_update_keeps_drag_and_scroll`.
 4. **Emergency stop pressed with no agents running, or pressed twice.** It must say "nothing running", or stay disabled, never error. Owner: Task 6, `emergency_stop_confirm_and_idle`.
-5. **Arena not running or unreachable.** The Arena control panes and the simulated Control panes show a plain "Arena is not running" message with how to start it, never a blank pane or raw error. Owner: Task 9, `arena_down_is_plain`.
+5. **Shakedown not running or unreachable.** The Shakedown control panes and the simulated Control panes show a plain "Shakedown is not running" message with how to start it, never a blank pane or raw error. Owner: Task 9, `shakedown_down_is_plain`.
 
 ---
 
@@ -341,9 +341,9 @@ Steps:
 - [ ] Step 4. Pass `npm test` for the touched areas, `npm run build`, and lint on the new and changed files.
 - [ ] Step 5. Commit "Control: Control page, panes and header controls".
 
-### Task 7: arenad world, usage and gc routes (arena repo)
+### Task 7: shaked world, usage and gc routes (shakedown repo)
 
-**Files** (in `/home/alexsky2/MLSys/CopperTide/arena/core/crates/arenad/src/`):
+**Files** (in `/home/alexsky2/MLSys/CopperTide/shakedown/core/crates/shaked/src/`):
 - Modify: `api.rs` to register the routes.
 - Create: a leaf module for the three handlers (for example, `api/world.rs`). Use the existing `saves.rs` (`integrations`, `world_of`, `usage`) and `gc.rs` (`usage`, `run_startup_gc`).
 - Test: unit tests next to the handlers, in the same style as the existing api tests.
@@ -361,8 +361,8 @@ Steps:
   - `gc_keeps_referenced_saves`
 - [ ] Step 2. They fail.
 - [ ] Step 3. Implement.
-- [ ] Step 4. Run `CARGO_INCREMENTAL=0 cargo test -p arenad` in `arena/core`, then fmt and Clippy. Update the HTTP route list in `arena/README.md` (or `docs/protocol.md` if routes are listed there).
-- [ ] Step 5. Commit on `integrations`: "arenad: world, usage and gc routes".
+- [ ] Step 4. Run `CARGO_INCREMENTAL=0 cargo test -p shaked` in `shakedown/core`, then fmt and Clippy. Update the HTTP route list in `shakedown/README.md` (or `docs/protocol.md` if routes are listed there).
+- [ ] Step 5. Commit on `integrations`: "shaked: world, usage and gc routes".
 
 ### Task 8: Simulated source and the simulated Control workspace
 
@@ -371,16 +371,16 @@ Steps:
 - Modify:
   - `web/src/control/panes/Timeline.tsx`: the simulated controls;
   - `web/src/control/registry.ts` and `defaults.ts`: the Replay layout;
-  - `web/src/tests/api.ts`: move it to `web/src/arena/api.ts` if Task 9 is easier that way, but do it in this task if you move it, and keep the re-export.
+  - `web/src/tests/api.ts`: move it to `web/src/shakedown/api.ts` if Task 9 is easier that way, but do it in this task if you move it, and keep the re-export.
 - Test: `web/src/control/simulatedSource.test.tsx`, `web/src/control/SimulatedControl.test.tsx`
 
 **Interfaces:**
-- Consumes: the `arena.*` API (`branch`, `follow`, `rows`, `fork`, `restorePlan`, `compare`), `tests/model.ts` `layout()`, and `tests/restore.ts`.
+- Consumes: the `shakedown.*` API (`branch`, `follow`, `rows`, `fork`, `restorePlan`, `compare`), `tests/model.ts` `layout()`, and `tests/restore.ts`.
 - Produces: `SimulatedTimeline = { steps: Step[]; saves: number[]; cursor: number; setCursor(seq: number): void; plan(seq: number): Promise<RestorePlan>; fork(seq: number, changes: unknown, restore: 'exact'|'approximate'): Promise<{ run: string; branch: string }> }`.
 
 Behaviour:
 - Agents and feed come from the branch's events. Approvals come from world events, if the `sculptured` integration is in the world; otherwise there are none.
-- Pause, resume and stop are unavailable, with the reason "Arena runs can't be paused or stopped from here yet". Emergency stop is likewise unavailable, with a reason.
+- Pause, resume and stop are unavailable, with the reason "Shakedown runs can't be paused or stopped from here yet". Emergency stop is likewise unavailable, with a reason.
 - On Timeline:
   - ←/→ and j/k step through steps, as RunPage does today;
   - "Fork from here" reuses `RerunPanel` and `RestoreChoice`, showing the per-part plan with "Approximate restore" labels;
@@ -389,7 +389,7 @@ Behaviour:
 - **Compare** shows this branch against a chosen one (reuse the ComparePage pieces).
 
 Steps:
-- [ ] Step 1. Write the failing tests (mock `/api/arena/*`):
+- [ ] Step 1. Write the failing tests (mock `/api/shakedown/*`):
   - `simulated_source_maps_events`
   - `controls_unavailable_with_reason`
   - `timeline_steps_with_keys`
@@ -398,26 +398,26 @@ Steps:
 - [ ] Step 2. They fail.
 - [ ] Step 3. Implement.
 - [ ] Step 4. The tests pass, plus the build and lint.
-- [ ] Step 5. Commit "Control: simulated deployments from Arena".
+- [ ] Step 5. Commit "Control: simulated deployments from Shakedown".
 
-### Task 9: Arena control page
+### Task 9: Shakedown control page
 
 **Files:**
 - Create:
-  - `web/src/arena/ArenaControlPage.tsx`, `registry.ts`, `defaults.ts`;
-  - `web/src/arena/panes/{Runs,ForkTree,World,Storage,Engine,Compare}.tsx`;
-  - `web/src/arena/routes.tsx`.
+  - `web/src/shakedown/ShakedownControlPage.tsx`, `registry.ts`, `defaults.ts`;
+  - `web/src/shakedown/panes/{Runs,ForkTree,World,Storage,Engine,Compare}.tsx`;
+  - `web/src/shakedown/routes.tsx`.
 - Modify:
-  - `web/src/App.tsx`: `/arena/*`, with `/tests/*` redirecting to the matching `/arena` path;
-  - `web/src/shell/TopBar.tsx`: the label becomes "Arena";
-  - the `arena` API: `world()`, `usage()` and `gc()` for Task 7's routes.
+  - `web/src/App.tsx`: `/shakedown/*`, with `/tests/*` redirecting to the matching `/shakedown` path;
+  - `web/src/shell/TopBar.tsx`: the label becomes "Shakedown";
+  - the `shakedown` API: `world()`, `usage()` and `gc()` for Task 7's routes.
 - Remove: `tests/` pages that are now fully replaced. Keep shared helpers that moved, or re-export them.
-- Test: `web/src/arena/ArenaControlPage.test.tsx`, and move or adjust the existing `tests/*.test.tsx` so coverage isn't lost.
+- Test: `web/src/shakedown/ShakedownControlPage.test.tsx`, and move or adjust the existing `tests/*.test.tsx` so coverage isn't lost.
 
-Panes, as in the spec's "Arena control panes":
-- **Runs** starts a run (team and task, reusing TestsHome and TeamPage pieces), deletes a run (with a confirm step) and opens a branch at `/arena/runs/:run/:branch`.
+Panes, as in the spec's "Shakedown control panes":
+- **Runs** starts a run (team and task, reusing TestsHome and TeamPage pieces), deletes a run (with a confirm step) and opens a branch at `/shakedown/runs/:run/:branch`.
 - **Storage** shows usage against the limit, and "Clean up" calls `gc()` and shows what it freed.
-- **Engine** reuses `useArenaHealth` and `EngineLine`.
+- **Engine** reuses `useShakedownHealth` and `EngineLine`.
 
 Defaults:
 - **Overview:** row [Runs, col [World, Engine]].
@@ -425,16 +425,16 @@ Defaults:
 
 Steps:
 - [ ] Step 1. Write the failing tests:
-  - `arena_overview_layout`
+  - `shakedown_overview_layout`
   - `tests_routes_redirect`
   - `world_pane_shows_restore_words`: shows "Exact from a save", "Exact by replay" and "Approximate", and "Can't be restored" for none.
   - `storage_clean_up`
-  - `arena_down_is_plain`
+  - `shakedown_down_is_plain`
   - `delete_run_confirms`
 - [ ] Step 2. They fail.
 - [ ] Step 3. Implement.
 - [ ] Step 4. Run all web tests (`npm test`), the build, and lint on the new and changed files.
-- [ ] Step 5. Commit "Arena: Arena control page".
+- [ ] Step 5. Commit "Shakedown: Shakedown control page".
 
 ### Task 10: End-to-end, captures and docs
 
@@ -455,8 +455,8 @@ Steps:
 - [ ] Step 2. Run `npm run e2e -- control.spec.ts` (desktop and mobile projects). It passes.
 - [ ] Step 3. Take real captures of the running app:
   - Control Live, Agent focus and Cost, in the Mission look and in Follow app look;
-  - Arena control Overview;
-  - a simulated run's Replay, using a throwaway arenad on a free port with the retail world, if it runs within the disk limit;
+  - Shakedown control Overview;
+  - a simulated run's Replay, using a throwaway shaked on a free port with the retail world, if it runs within the disk limit;
   - mobile.
   - Save working copies in the ledger folder `captures/`. Report any capture that could not be taken.
 - [ ] Step 4. **Screenshots and usage videos for the docs** (added by the user on 2026-11-02). All are recordings of the real application, never mocked (AGENTS.md).
@@ -465,14 +465,14 @@ Steps:
     - Agent focus;
     - Cost;
     - Follow app look;
-    - Arena control Overview;
+    - Shakedown control Overview;
     - a simulated run's Replay;
     - mobile.
   - **Usage videos:** short Playwright `recordVideo` recordings of real flows with Practice agents, driven by a dedicated spec `web/e2e/control-video.spec.ts` that runs only when `RECORD_VIDEOS=1`. Commit them to `docs/videos/` as `.webm`, also converted to `.mp4` with ffmpeg if it is installed. Keep each 20–60 s at 1280×800, with pauses between steps so a viewer can follow, and ≤ 3 MB each. The flows:
     1. open a project's Control and start the team;
     2. rearrange panes: drag to split, join as tabs, resize, pop out, add and close a pane, switch layouts;
     3. handle trouble: an alarm trips, acknowledge it, approve a change, pause all, then resume all, then emergency stop with confirm;
-    4. Arena control: open a run's Replay, step the timeline, and fork from a save showing the restore plan (needs a throwaway arenad; skip with a stated reason if it can't run within the disk limit).
+    4. Shakedown control: open a run's Replay, step the timeline, and fork from a save showing the restore plan (needs a throwaway shaked; skip with a stated reason if it can't run within the disk limit).
   - **Guide:** write `docs/guide/control.md`, a user guide with the screenshots inline and the videos linked, and link it from `README.md`.
 - [ ] Step 5. Write the internals docs (`docs/internals/workspace.md`) and the `CHANGELOG.md` entry.
 - [ ] Step 6. Commit "Control: end-to-end test, screenshots, videos and docs".

@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
-import { isArenaDown } from '../arena/data';
-import { ArenaDownBanner } from '../arena/gate';
-import { ARENA_PATH, runPath } from '../arena/paths';
+import { isShakedownDown } from '../shakedown/data';
+import { ShakedownDownBanner } from '../shakedown/gate';
+import { SHAKEDOWN_PATH, runPath } from '../shakedown/paths';
 import { branchTree, summarize } from '../tests/model';
 import { worldLine } from '../tests/restore';
 import { ApproximateMark, StatusPill } from '../tests/shared';
@@ -11,7 +11,7 @@ import type { ControlSource, SimulatedRun } from './source';
 /**
  * What a simulated run is, above its Control header: the task and branch with its outcome (and an
  * "Approximate restore" mark), the steps it ran and rows it changed, the run's other branches to
- * switch to, its world, the task's words, where a fork started and, when Arena is not answering,
+ * switch to, its world, the task's words, where a fork started and, when Shakedown is not answering,
  * how to start it.
  */
 
@@ -45,7 +45,7 @@ function Notes({ a }: { a: SimulatedRun }) {
         </p>
       )}
       {b?.error && <p className="ctl-sim-note tone-bad"><span aria-hidden="true">⚠ </span>This branch could not finish. <span className="ctl-mono" data-raw-evidence>{b.error}</span></p>}
-      {isArenaDown(a.error) && <ArenaDownBanner error={a.error} />}
+      {isShakedownDown(a.error) && <ShakedownDownBanner error={a.error} />}
     </>
   );
 }
@@ -62,13 +62,13 @@ function Totals({ b }: { b: BranchDetail }) {
 }
 
 export function SimulatedBar({ source }: { source: ControlSource }) {
-  const a = source.arena!;
+  const a = source.shakedown!;
   const b = a.branch;
   const world = b ? worldLine(b.events) : '';
   return (
     <div className="ctl-sim">
       <div className="ctl-sim-row">
-        <nav className="ctl-sim-crumbs" aria-label="Breadcrumb"><Link to={ARENA_PATH}>Shakedown</Link><span aria-hidden="true">›</span></nav>
+        <nav className="ctl-sim-crumbs" aria-label="Breadcrumb"><Link to={SHAKEDOWN_PATH}>Shakedown</Link><span aria-hidden="true">›</span></nav>
         <h1 className="ctl-sim-title">{source.title}{b && <> <StatusPill status={b.status} /> <ApproximateMark of={b} /></>}</h1>
         {b && <Totals b={b} />}
         <Branches a={a} />

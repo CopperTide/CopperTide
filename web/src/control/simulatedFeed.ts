@@ -5,7 +5,7 @@ import { perMinute } from './rate';
 import type { AgentLine, Approval, Availability, FeedItem, Tone } from './source';
 
 /**
- * A simulated run (an Arena branch) in the source's terms, from its recorded events: each agent's
+ * A simulated run (an Shakedown branch) in the source's terms, from its recorded events: each agent's
  * status, the feed in plain words, the approvals waiting in its world, and its outcome. Pure.
  */
 

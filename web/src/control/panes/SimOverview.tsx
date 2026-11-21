@@ -1,5 +1,5 @@
 import { compactNumber, plural } from '../../format';
-import { CANT_RESTORE, restoreWords } from '../../arena/words';
+import { CANT_RESTORE, restoreWords } from '../../shakedown/words';
 import { planLine, savedParts, worldParts, type WorldPartLine } from '../../tests/restore';
 import { KindMark } from '../../tests/shared';
 import type { BranchDetail, Event, WorldPartInfo } from '../../tests/types';
@@ -9,7 +9,7 @@ import type { AgentLine } from '../source';
 
 /**
  * A simulated run's System overview: its agents (status, steps, what each reported at its end) and
- * a compact grid of the world's parts: how each restores, whether it keeps the arena clock, when
+ * a compact grid of the world's parts: how each restores, whether it keeps the shakedown clock, when
  * it was last saved on this branch, and how a fork restored it.
  */
 
@@ -60,8 +60,8 @@ function partTrail(b: BranchDetail, part: string) {
 function Restore({ info }: { info?: WorldPartInfo }) {
   if (!info?.answered) return <span className="ctl-muted">Restore unknown</span>;
   return (
-    <span className="arena-chips">
-      {restoreWords(info.restore).map((w) => <span key={w} className={`arena-chip${w === CANT_RESTORE ? ' arena-chip-none' : ''}`}>{w === CANT_RESTORE && <span aria-hidden="true">⊘ </span>}{w}</span>)}
+    <span className="shakedown-chips">
+      {restoreWords(info.restore).map((w) => <span key={w} className={`shakedown-chip${w === CANT_RESTORE ? ' shakedown-chip-none' : ''}`}>{w === CANT_RESTORE && <span aria-hidden="true">⊘ </span>}{w}</span>)}
     </span>
   );
 }
@@ -88,13 +88,13 @@ function Parts({ b }: { b: BranchDetail }) {
   const { source } = useControl();
   const parts = worldParts(b.events);
   if (parts.length === 0) return <p className="ctl-empty">This run was recorded before worlds had parts.</p>;
-  const info = (name: string) => source.arena?.parts?.find((p) => p.name === name);
+  const info = (name: string) => source.shakedown?.parts?.find((p) => p.name === name);
   return <ul className="ctl-parts" aria-label="World parts">{parts.map((p) => <PartCard key={p.part} part={p} info={info(p.part)} b={b} />)}</ul>;
 }
 
 export function SimOverview() {
   const { source } = useControl();
-  const b = source.arena!.branch!;
+  const b = source.shakedown!.branch!;
   const parts = worldParts(b.events).length;
   return (
     <div className="ctl-simov">

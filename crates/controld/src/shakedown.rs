@@ -1,10 +1,10 @@
-//! Tests: a pass-through to arenad, the arena engine that records a team's run step by step, restores
-//! its database to any step, and reruns from there (`arena/` repo). The web app's Tests pages call
-//! `/api/arena/<path>`; this forwards to `<arenad>/api/<path>` so the browser stays on Sculptured's
-//! origin, behind its guard and login. Local mode only: the hosted app has no arena (`AppState::arena`).
+//! Tests: a pass-through to shaked, the shakedown engine that records a team's run step by step, restores
+//! its database to any step, and reruns from there (`shakedown/` repo). The web app's Tests pages call
+//! `/api/shakedown/<path>`; this forwards to `<shaked>/api/<path>` so the browser stays on Sculptured's
+//! origin, behind its guard and login. Local mode only: the hosted app has no shakedown (`AppState::shakedown`).
 //!
-//! arenad answers errors as `{"error": "<text>"}`. They come back in Sculptured's envelope with a code
-//! per status and arenad's text as `raw` evidence; successful answers (JSON, or the SSE feed of a
+//! shaked answers errors as `{"error": "<text>"}`. They come back in Sculptured's envelope with a code
+//! per status and shaked's text as `raw` evidence; successful answers (JSON, or the SSE feed of a
 //! running branch) are streamed through as they are.
 use crate::error::ApiError;
 use crate::state::AppState;
@@ -16,18 +16,18 @@ use axum::response::{IntoResponse, Response};
 use std::sync::Arc;
 use std::time::Duration;
 
-/// Where arenad listens unless `COPPERTIDE_ARENA_URL` says otherwise.
-pub const DEFAULT_ARENA_URL: &str = "http://127.0.0.1:4510";
+/// Where shaked listens unless `COPPERTIDE_SHAKEDOWN_URL` says otherwise.
+pub const DEFAULT_SHAKEDOWN_URL: &str = "http://127.0.0.1:4510";
 
-pub struct Arena {
+pub struct Shakedown {
     base: String,
     client: reqwest::Client,
 }
 
-impl Arena {
-    /// Forwards to arenad at `base` (scheme, host and port, e.g. `http://127.0.0.1:4510`).
+impl Shakedown {
+    /// Forwards to shaked at `base` (scheme, host and port, e.g. `http://127.0.0.1:4510`).
     #[must_use]
-    pub fn new(base: &str) -> Arc<Arena> {
+    pub fn new(base: &str) -> Arc<Shakedown> {
         // In the full build reqwest has rustls with no provider chosen; building a client then panics.
         let _ = rustls::crypto::ring::default_provider().install_default();
         // No overall timeout: a running branch's feed stays open until the branch ends.
@@ -35,25 +35,25 @@ impl Arena {
             .connect_timeout(Duration::from_secs(3))
             .build()
             .expect("http client");
-        Arc::new(Arena {
+        Arc::new(Shakedown {
             base: base.trim_end_matches('/').to_string(),
             client,
         })
     }
 
-    /// `COPPERTIDE_ARENA_URL`, else [`DEFAULT_ARENA_URL`].
+    /// `COPPERTIDE_SHAKEDOWN_URL`, else [`DEFAULT_SHAKEDOWN_URL`].
     #[must_use]
-    pub fn from_env() -> Arc<Arena> {
-        let url = model::brand::env_var("COPPERTIDE_ARENA_URL").filter(|u| !u.trim().is_empty());
-        Arena::new(url.as_deref().unwrap_or(DEFAULT_ARENA_URL))
+    pub fn from_env() -> Arc<Shakedown> {
+        let url = model::brand::env_var("COPPERTIDE_SHAKEDOWN_URL").filter(|u| !u.trim().is_empty());
+        Shakedown::new(url.as_deref().unwrap_or(DEFAULT_SHAKEDOWN_URL))
     }
 }
 
 pub fn routes() -> Router<AppState> {
-    Router::new().route("/api/arena/{*rest}", axum::routing::any(forward))
+    Router::new().route("/api/shakedown/{*rest}", axum::routing::any(forward))
 }
 
-/// Only arenad's own API: each segment is a plain id or word, so nothing can climb out of `/api/`.
+/// Only shaked's own API: each segment is a plain id or word, so nothing can climb out of `/api/`.
 fn plain_path(rest: &str) -> bool {
     rest.split('/').all(|s| {
         !s.is_empty()
@@ -68,11 +68,11 @@ async fn forward(
     uri: Uri,
     body: Bytes,
 ) -> Result<Response, ApiError> {
-    let Some(arena) = st.arena.clone() else {
+    let Some(shakedown) = st.shakedown.clone() else {
         return Err(crate::hosted::needs_computer());
     };
     // The raw path, not the decoded one: an escaped `/` or `.` is refused, never decoded into the URL.
-    let rest = uri.path().strip_prefix("/api/arena/").unwrap_or_default();
+    let rest = uri.path().strip_prefix("/api/shakedown/").unwrap_or_default();
     if !plain_path(rest) {
         return Err(ApiError::not_found("no such Tests route"));
     }
@@ -83,27 +83,27 @@ async fn forward(
             "Tests routes take GET, POST or DELETE",
         ));
     }
-    let mut url = format!("{}/api/{rest}", arena.base);
+    let mut url = format!("{}/api/{rest}", shakedown.base);
     if let Some(q) = uri.query() {
         url.push('?');
         url.push_str(q);
     }
-    let mut req = arena.client.request(method, &url);
+    let mut req = shakedown.client.request(method, &url);
     if !body.is_empty() {
         req = req
             .header(header::CONTENT_TYPE, "application/json")
             .body(body);
     }
-    let res = req.send().await.map_err(|_| unreachable_arena())?;
+    let res = req.send().await.map_err(|_| unreachable_shakedown())?;
     pass_through(res).await
 }
 
-/// arenad's answer as ours: a success streams through with its content type, an error is translated.
+/// shaked's answer as ours: a success streams through with its content type, an error is translated.
 async fn pass_through(res: reqwest::Response) -> Result<Response, ApiError> {
     let status = StatusCode::from_u16(res.status().as_u16()).unwrap_or(StatusCode::BAD_GATEWAY);
     if !status.is_success() {
         let text = res.text().await.unwrap_or_default();
-        return Err(arena_error(status, &text));
+        return Err(shakedown_error(status, &text));
     }
     let content_type = res
         .headers()
@@ -117,26 +117,26 @@ async fn pass_through(res: reqwest::Response) -> Result<Response, ApiError> {
     Ok(out)
 }
 
-fn unreachable_arena() -> ApiError {
+fn unreachable_shakedown() -> ApiError {
     ApiError::new(
         StatusCode::SERVICE_UNAVAILABLE,
-        "arena_unreachable",
-        "the Shakedown engine (arenad) is not answering",
+        "shakedown_unreachable",
+        "the Shakedown engine (shaked) is not answering",
     )
 }
 
-/// arenad's `{"error": "<text>"}` in Sculptured's envelope: a code per status, the text as evidence.
-fn arena_error(status: StatusCode, text: &str) -> ApiError {
+/// shaked's `{"error": "<text>"}` in Sculptured's envelope: a code per status, the text as evidence.
+fn shakedown_error(status: StatusCode, text: &str) -> ApiError {
     let said = serde_json::from_str::<serde_json::Value>(text)
         .ok()
         .and_then(|v| v.get("error").and_then(|e| e.as_str()).map(str::to_string))
         .unwrap_or_else(|| text.chars().take(300).collect());
     let code = match status {
-        StatusCode::NOT_FOUND => "arena_not_found",
-        StatusCode::CONFLICT => "arena_busy",
-        StatusCode::INSUFFICIENT_STORAGE => "arena_full",
-        StatusCode::BAD_REQUEST => "arena_refused",
-        _ => "arena_failed",
+        StatusCode::NOT_FOUND => "shakedown_not_found",
+        StatusCode::CONFLICT => "shakedown_busy",
+        StatusCode::INSUFFICIENT_STORAGE => "shakedown_full",
+        StatusCode::BAD_REQUEST => "shakedown_refused",
+        _ => "shakedown_failed",
     };
     ApiError {
         raw: Some(said.clone()),
@@ -146,7 +146,7 @@ fn arena_error(status: StatusCode, text: &str) -> ApiError {
 
 #[cfg(test)]
 mod tests {
-    use super::{arena_error, plain_path};
+    use super::{shakedown_error, plain_path};
     use axum::http::StatusCode;
 
     #[test]
@@ -161,20 +161,20 @@ mod tests {
     }
 
     #[test]
-    fn errors_get_a_code_per_status_and_keep_arenads_text_as_evidence() {
-        let e = arena_error(
+    fn errors_get_a_code_per_status_and_keep_shakeds_text_as_evidence() {
+        let e = shakedown_error(
             StatusCode::CONFLICT,
             r#"{"error":"the branch is still running"}"#,
         );
         assert_eq!(e.status, StatusCode::CONFLICT);
-        assert_eq!(e.code, "arena_busy");
+        assert_eq!(e.code, "shakedown_busy");
         assert_eq!(e.raw.as_deref(), Some("the branch is still running"));
         assert_eq!(
-            arena_error(StatusCode::INSUFFICIENT_STORAGE, "{}").code,
-            "arena_full"
+            shakedown_error(StatusCode::INSUFFICIENT_STORAGE, "{}").code,
+            "shakedown_full"
         );
         assert_eq!(
-            arena_error(StatusCode::BAD_GATEWAY, "not json")
+            shakedown_error(StatusCode::BAD_GATEWAY, "not json")
                 .raw
                 .as_deref(),
             Some("not json")

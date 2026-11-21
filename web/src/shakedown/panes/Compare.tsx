@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { plural } from '../../format';
 import type { PaneProps } from '../../workspace/registry';
-import { arena } from '../../tests/api';
+import { shakedown } from '../../tests/api';
 import { branchNames } from '../../tests/model';
 import { notComparedLine } from '../../tests/restore';
 import { ApproximateMark, StatusPill } from '../../tests/shared';
 import type { CompareResponse, RunSummary } from '../../tests/types';
 import { canCompare, choice, MUST_FINISH } from '../compareRule';
-import { useArena } from '../data';
-import { ArenaGate, ArenaProblem } from '../gate';
+import { useShakedown } from '../data';
+import { ShakedownGate, ShakedownProblem } from '../gate';
 import { comparePath } from '../paths';
 
 type Chosen = { a?: string; b?: string };
@@ -44,7 +44,7 @@ function useCompare(a: string | undefined, b: string | undefined, ready: boolean
     setCmp(null); setError(null);
     if (!a || !b || a === b || !ready) return;
     let alive = true;
-    arena.compare(a, b).then((c) => { if (alive) setCmp(c); }).catch((e) => { if (alive) setError(e); });
+    shakedown.compare(a, b).then((c) => { if (alive) setCmp(c); }).catch((e) => { if (alive) setError(e); });
     return () => { alive = false; };
   }, [a, b, ready]);
   return { cmp, error };
@@ -53,8 +53,8 @@ function useCompare(a: string | undefined, b: string | undefined, ready: boolean
 function Summary({ cmp, a, b }: { cmp: CompareResponse; a: string; b: string }) {
   const rows = cmp.differing_rows.length;
   return (
-    <div className="arena-compare" role="group" aria-label="Comparison">
-      <p className="arena-row"><StatusPill status={cmp.a.status} short /><ApproximateMark of={cmp.a} /><span aria-hidden="true">→</span><StatusPill status={cmp.b.status} short /><ApproximateMark of={cmp.b} /></p>
+    <div className="shakedown-compare" role="group" aria-label="Comparison">
+      <p className="shakedown-row"><StatusPill status={cmp.a.status} short /><ApproximateMark of={cmp.a} /><span aria-hidden="true">→</span><StatusPill status={cmp.b.status} short /><ApproximateMark of={cmp.b} /></p>
       <p>{cmp.first_divergent_seq != null ? `They first differ at step ${cmp.first_divergent_seq}.` : 'They take the same steps.'}{' '}
         {rows ? `In the final world, ${plural(rows, 'row')} ${rows === 1 ? 'differs' : 'differ'}.` : 'No row of the final world differs.'}</p>
       {notComparedLine(cmp.not_compared, 'compare') && <p className="tst-small">{notComparedLine(cmp.not_compared, 'compare')}</p>}
@@ -64,16 +64,16 @@ function Summary({ cmp, a, b }: { cmp: CompareResponse; a: string; b: string }) 
 }
 
 function CompareBody({ settings, setSettings }: PaneProps<Chosen>) {
-  const { runs: loaded } = useArena();
+  const { runs: loaded } = useShakedown();
   const runs = loaded.value;
   const { a, b } = settings;
   const status = (id?: string) => runs?.flatMap((r) => r.branches).find((x) => x.id === id)?.status;
   const ready = canCompare(status(a), status(b));
   const { cmp, error } = useCompare(a, b, ready);
-  if (!runs) return loaded.error ? <ArenaProblem error={loaded.error} /> : <p className="muted">Reading runs…</p>;
+  if (!runs) return loaded.error ? <ShakedownProblem error={loaded.error} /> : <p className="muted">Reading runs…</p>;
   return (
     <>
-      <ArenaProblem error={loaded.error} />
+      <ShakedownProblem error={loaded.error} />
       <div className="tst-row">
         <BranchSelect label="First" runs={runs} value={a} onChange={(v) => setSettings({ ...settings, a: v || undefined })} />
         <BranchSelect label="Second" runs={runs} value={b} onChange={(v) => setSettings({ ...settings, b: v || undefined })} />
@@ -81,7 +81,7 @@ function CompareBody({ settings, setSettings }: PaneProps<Chosen>) {
       {(!a || !b) && <p className="muted">Choose two branches to compare.</p>}
       {a && b && a === b && <p className="muted">Choose two different branches.</p>}
       {a && b && a !== b && !ready && <p className="muted">{MUST_FINISH}</p>}
-      <ArenaProblem error={error} />
+      <ShakedownProblem error={error} />
       {cmp && a && b && <Summary cmp={cmp} a={a} b={b} />}
     </>
   );
@@ -89,5 +89,5 @@ function CompareBody({ settings, setSettings }: PaneProps<Chosen>) {
 
 /** Any two branches: where they first differ and how their final worlds differ. */
 export function ComparePane(props: PaneProps) {
-  return <div className="arena-pane"><ArenaGate><CompareBody {...(props as PaneProps<Chosen>)} /></ArenaGate></div>;
+  return <div className="shakedown-pane"><ShakedownGate><CompareBody {...(props as PaneProps<Chosen>)} /></ShakedownGate></div>;
 }

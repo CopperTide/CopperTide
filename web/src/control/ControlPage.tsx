@@ -31,20 +31,20 @@ export function useControlCtx(team: string, source: ControlSource, show: (type: 
 }
 
 type Props = {
-  /** Names the alarms' acknowledgements and rules (a team, or an Arena branch). */
+  /** Names the alarms' acknowledgements and rules (a team, or an Shakedown branch). */
   team: string;
   source: ControlSource;
   paneRoute(instance: string): string;
   startFix?: ControlCtx['startFix'];
   /** The workspace's layouts; the team's own (`control.<team>`) unless given. */
   page?: string;
-  /** The selection channel, when it is not the page's (each Arena run talks only among its own windows). */
+  /** The selection channel, when it is not the page's (each Shakedown run talks only among its own windows). */
   channel?: string;
   /** Above the header's status strip: what the run is (a simulated run's branch bar). */
   lead?: ReactNode;
 };
 
-/** The Control workspace over any source (a deployment here; a simulated run in Arena). */
+/** The Control workspace over any source (a deployment here; a simulated run in Shakedown). */
 export function ControlWorkspace({ team, source, paneRoute, startFix, page, channel, lead }: Props) {
   const handle = useRef<WorkspaceHandle>(null);
   const show = useCallback((type: string) => handle.current?.show(type), []);

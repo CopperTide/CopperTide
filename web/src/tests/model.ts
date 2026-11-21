@@ -140,7 +140,7 @@ function branchTiming(branch: Pick<Branch, 'created_at' | 'ended_at' | 'status'>
   return { seconds: Number.isNaN(start) || Number.isNaN(end) ? null : (end - start) / 1000, live };
 }
 
-/** Same arithmetic as arenad's compare: this branch's own events only (seq >= start_seq). */
+/** Same arithmetic as shaked's compare: this branch's own events only (seq >= start_seq). */
 export function summarize(branch: Pick<Branch, 'start_seq' | 'created_at' | 'ended_at' | 'status'>, events: Event[], now: number = Date.now()): Summary {
   const from = branch.start_seq ?? 0;
   let tokens = 0;
@@ -197,7 +197,7 @@ export function branchNames(branches: Pick<Branch, 'id' | 'parent_id' | 'created
 
 /**
  * Only fields that really changed. Prompts compare trimmed. A cleared model that was set is sent as ""
- * (explicit clear); blank on an unset model is no change. A mode change resets the model in arenad,
+ * (explicit clear); blank on an unset model is no change. A mode change resets the model in shaked,
  * so a blank model next to it sends just the mode. A provider (API mode only) is sent only when it
  * differs from the agent's (absent is `openrouter`), never blank, and always with its model: the old
  * model belongs to the old provider.

@@ -1,7 +1,7 @@
 import type { BranchStatus } from '../tests/types';
 
 /**
- * When two branches can be compared, the same in both Compare panes (Arena's and a run's Control):
+ * When two branches can be compared, the same in both Compare panes (Shakedown's and a run's Control):
  * a branch still running has no final world yet, so the comparison waits until both have finished.
  */
 export const MUST_FINISH = '◌ Both branches must finish before they can be compared.';

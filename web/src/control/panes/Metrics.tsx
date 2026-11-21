@@ -95,7 +95,7 @@ function Machine() {
   );
 }
 
-/** This machine's load is shown for a deployment only: a simulated run's agents run inside Arena, maybe elsewhere. */
+/** This machine's load is shown for a deployment only: a simulated run's agents run inside Shakedown, maybe elsewhere. */
 export function MetricsPane() {
   const { kind } = useControl();
   return (

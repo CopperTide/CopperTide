@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { ArenaProblem } from '../../arena/gate';
+import { ShakedownProblem } from '../../shakedown/gate';
 import { pretty } from '../../tests/shared';
 import { useSelection } from '../../workspace/selection';
 import { useControl } from '../context';
@@ -13,7 +13,7 @@ import { useCursor } from './cursor';
 
 type Rows = { state: 'loading' } | { state: 'ready'; rows: Record<string, unknown> } | { state: 'failed'; error: unknown };
 
-/** The rows at `save`, read again when the key, the branch or Arena's return (`epoch`) changes. */
+/** The rows at `save`, read again when the key, the branch or Shakedown's return (`epoch`) changes. */
 function useRows(save: number | null, key: string | undefined, branch: string, epoch: number) {
   const { source } = useControl();
   const [rows, setRows] = useState<Rows>({ state: 'loading' });
@@ -64,7 +64,7 @@ function RowTable({ rows, picked, onPick }: { rows: Record<string, unknown>; pic
 
 function Body({ rows, picked, onPick }: { rows: Rows; picked?: string; onPick(k: string): void }) {
   if (rows.state === 'loading') return <p className="ctl-empty">Reading the saved rows…</p>;
-  if (rows.state === 'failed') return <div className="ctl-empty"><ArenaProblem error={rows.error} /></div>;
+  if (rows.state === 'failed') return <div className="ctl-empty"><ShakedownProblem error={rows.error} /></div>;
   return <RowTable rows={rows.rows} picked={picked} onPick={onPick} />;
 }
 
@@ -72,10 +72,10 @@ export function WorldPane() {
   const { source } = useControl();
   const { selection, select } = useSelection();
   const tl = source.timeline!;
-  const b = source.arena!.branch!;
+  const b = source.shakedown!.branch!;
   useCursor(tl, b);
   const save = source.world?.save ?? null;
-  const rows = useRows(save, selection.key, b.id, source.arena!.reconnects);
+  const rows = useRows(save, selection.key, b.id, source.shakedown!.reconnects);
   const pick = (k: string | undefined) => select({ key: k });
   return (
     <div className="ctl-world">

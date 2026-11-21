@@ -16,14 +16,14 @@ export const STARTING_REASON = 'Starting… you can stop the team once it has st
 
 const RELOAD = 'Reload the page and try again.';
 
-/** What every Arena pane says when arenad is not answering, and how to start it. */
-export const ARENA_DOWN = 'Shakedown is not running';
-export const ARENA_START_COMMAND = 'cd core && cargo run -p arenad';
-export const ARENA_START = `Start it in the arena folder with ${ARENA_START_COMMAND}, then try again.`;
+/** What every Shakedown pane says when shaked is not answering, and how to start it. */
+export const SHAKEDOWN_DOWN = 'Shakedown is not running';
+export const SHAKEDOWN_START_COMMAND = 'cd core && cargo run -p shaked';
+export const SHAKEDOWN_START = `Start it in the shakedown folder with ${SHAKEDOWN_START_COMMAND}, then try again.`;
 
 /** Saves cleanup's own answers: a 409 means a run is going or another cleanup is running. */
-export const ARENA_GC_WORDS: Record<string, string> = {
-  arena_busy: "Saves can't be cleaned up while a run is going or another cleanup is running. Try again in a moment.",
+export const SHAKEDOWN_GC_WORDS: Record<string, string> = {
+  shakedown_busy: "Saves can't be cleaned up while a run is going or another cleanup is running. Try again in a moment.",
 };
 
 /** Folder API errors (the folder picker). */
@@ -138,13 +138,13 @@ export const ERROR_WORDS: Record<string, string> = {
   needs_computer: 'This needs your computer: your folders and agents run there, not on the server. Open Computers and connect your computer, then try again.',
   older_runner:
     "CopperTide's agent runner is from an older version. Stop all teams, then end the old agent runner: its process number is in the file hostd.pid, in the host-local folder of CopperTide's data folder. CopperTide starts the new runner within a minute.",
-  // Arena: arenad, through `/api/arena` (its own words travel as `raw` evidence).
-  arena_unreachable: `${ARENA_DOWN}. ${ARENA_START}`,
-  arena_not_found: 'That run or branch no longer exists. It may have been deleted.',
-  arena_busy: 'A branch of this run is still running. Wait for it to finish, then try again.',
-  arena_full: "Shakedown's saves have reached their space limit. Delete old runs or clean up saves to make room.",
-  arena_refused: 'Shakedown did not accept this request.',
-  arena_failed: 'Shakedown hit a problem with this request.',
+  // Shakedown: shaked, through `/api/shakedown` (its own words travel as `raw` evidence).
+  shakedown_unreachable: `${SHAKEDOWN_DOWN}. ${SHAKEDOWN_START}`,
+  shakedown_not_found: 'That run or branch no longer exists. It may have been deleted.',
+  shakedown_busy: 'A branch of this run is still running. Wait for it to finish, then try again.',
+  shakedown_full: "Shakedown's saves have reached their space limit. Delete old runs or clean up saves to make room.",
+  shakedown_refused: 'Shakedown did not accept this request.',
+  shakedown_failed: 'Shakedown hit a problem with this request.',
   // Everything else.
   internal: 'CopperTide hit an internal problem. Try again; if it keeps happening, restart CopperTide.',
   login_required: 'Sign in to use CopperTide.',
@@ -189,7 +189,7 @@ export function errorText(e: unknown): string {
   return ERROR_WORDS[e.code] ?? `CopperTide could not do that (error ${e.status}). ${RELOAD}`;
 }
 
-/** `errorText`, with words of its own for the codes one action answers differently (Arena's cleanup). */
+/** `errorText`, with words of its own for the codes one action answers differently (Shakedown's cleanup). */
 export function errorTextWith(words: Record<string, string>, e: unknown): string {
   return e instanceof ApiError && words[e.code] ? words[e.code] : errorText(e);
 }

@@ -1,10 +1,10 @@
-// Model providers of API-mode agents (arena `providers/`): names, states, choices and the checked list.
+// Model providers of API-mode agents (shakedown `providers/`): names, states, choices and the checked list.
 import { useEffect, useSyncExternalStore } from 'react';
-import { arena } from './api';
+import { shakedown } from './api';
 import { DEFAULT_OPENROUTER_MODEL, DEFAULT_PROVIDER } from './types';
 import type { AgentSpec, Change, ProviderKind, ProviderStatus } from './types';
 
-/** The cost source of a local server's calls (arena `providers/mod.rs` `LOCAL_COST_SOURCE`). */
+/** The cost source of a local server's calls (shakedown `providers/mod.rs` `LOCAL_COST_SOURCE`). */
 export const LOCAL_COST_SOURCE = 'local (no API charge)';
 
 /** The provider id `p` stands for: itself trimmed, else the default (`openrouter`). */
@@ -29,7 +29,7 @@ export function providerName(id: string): string {
 /** Only OpenRouter has a default model; the others need one named. */
 export const hasDefaultModel = (id: string) => kindOf(id) === 'openrouter';
 
-/** OpenAI and Anthropic report no price, and Arena keeps no price table. */
+/** OpenAI and Anthropic report no price, and Shakedown keeps no price table. */
 export const costIsUnknown = (id: string) => kindOf(id) === 'openai' || kindOf(id) === 'anthropic';
 
 /** The provider shown next to an agent's model: an API-mode agent's, else none. */
@@ -64,7 +64,7 @@ export interface ProviderOption {
 
 /**
  * The providers to choose from. `current` (the agent's provider) is always listed and never
- * disabled, so a team keeps showing what it names; one Arena doesn't know is "not configured".
+ * disabled, so a team keeps showing what it names; one Shakedown doesn't know is "not configured".
  */
 export function providerOptions(list: ProviderStatus[], current: string): ProviderOption[] {
   const out: ProviderOption[] = list.map((s) => {
@@ -97,7 +97,7 @@ export function agentsProblem(agents: AgentSpec[], list: ProviderStatus[]): stri
   return null;
 }
 
-/** The agent a fork would run: `c` applied as arenad's `fork::apply_change` does. */
+/** The agent a fork would run: `c` applied as shaked's `fork::apply_change` does. */
 export function applied(a: AgentSpec, c: Change): AgentSpec {
   const kindChanged = c.kind != null && c.kind !== a.kind;
   const providerChanged = c.provider != null && providerId(c.provider) !== providerOf(a);
@@ -127,7 +127,7 @@ const set = (s: Partial<Snapshot>) => { snapshot = { ...snapshot, ...s }; listen
 /** Asks `/api/providers` (once at a time) and shares the answer. */
 export function checkProviders(): Promise<ProviderStatus[]> {
   if (pending) return pending;
-  pending = arena.providers()
+  pending = shakedown.providers()
     .then((list) => { set({ list, error: null }); return list; })
     .catch((error: unknown) => { set({ error }); throw error; })
     .finally(() => { pending = null; set({ loading: false }); });
