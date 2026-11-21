@@ -1,7 +1,8 @@
 import { setCsrf } from '../api';
 
 export type HostedUser = { id: string; name: string; email: string; role: 'member' | 'admin' };
-export type HostedSession = { kind: 'local' } | { kind: 'signed-out' } | { kind: 'signed-in'; user: HostedUser; csrf: string };
+/** `shakedown`: hosted Shakedown is on at /sd/ for this account (the gateway's `/gw/api/me`). */
+export type HostedSession = { kind: 'local' } | { kind: 'signed-out' } | { kind: 'signed-in'; user: HostedUser; csrf: string; shakedown?: boolean };
 
 let csrf: string | null = null;
 
@@ -15,7 +16,7 @@ export async function loadSession(): Promise<HostedSession> {
   const body = await res.json().catch(() => null);
   if (!body?.user || !body.csrf) return { kind: 'local' };
   csrf = body.csrf; setCsrf(body.csrf);
-  return { kind: 'signed-in', user: body.user, csrf: body.csrf };
+  return { kind: 'signed-in', user: body.user, csrf: body.csrf, shakedown: body.shakedown === true };
 }
 
 export class GwError extends Error { constructor(public status: number, public code: string, message: string) { super(message); } }

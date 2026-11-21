@@ -30,7 +30,7 @@ export function TopBar({ team, rows, onCommand, onHelp }: Props) {
       </Link>
       <ProjectSwitcher team={team} rows={rows} />
       <nav className="tb-nav" aria-label="Go to">
-        <NavLink to={ARENA_PATH} className={({ isActive }) => `tb-link${isActive ? ' on' : ''}`}>Shakedown</NavLink>
+        <ShakedownLink />
         <NavLink to="/library/groups" className={({ isActive }) => `tb-link${isActive ? ' on' : ''}`}>Library</NavLink>
         <NavLink to="/community" className={({ isActive }) => `tb-link${isActive ? ' on' : ''}`}>Community</NavLink>
         <AccountLink />
@@ -90,6 +90,14 @@ export function ProjectSwitcher({ team, rows }: { team?: string; rows: TeamRow[]
   );
 }
 
+/** Shakedown: hosted Shakedown (its own app at /sd/) where the account has it, else this workspace's own page. */
+function ShakedownLink({ narrow = false }: { narrow?: boolean }) {
+  const s = useHosted();
+  if (s.kind === 'signed-in' && s.shakedown) return <a href="/sd/" className={narrow ? 'tb-narrow-only' : 'tb-link'}>Shakedown</a>;
+  if (narrow) return <Link to={ARENA_PATH} className="tb-narrow-only">Shakedown</Link>;
+  return <NavLink to={ARENA_PATH} className={({ isActive }) => `tb-link${isActive ? ' on' : ''}`}>Shakedown</NavLink>;
+}
+
 /** The ⋯ menu: appearance, keys, and the pages a phone has no room for in the bar. */
 function AppMenu({ onHelp }: { onHelp: () => void }) {
   const s = useHosted();
@@ -97,7 +105,7 @@ function AppMenu({ onHelp }: { onHelp: () => void }) {
     <details className="top-menu tb-app">
       <summary aria-label="App menu" data-tip="App menu"><Icon name="more" size={16} /></summary>
       <div className="top-menu-body tb-app-items" onClick={closeMenu}>
-        <Link to={ARENA_PATH} className="tb-narrow-only">Shakedown</Link>
+        <ShakedownLink narrow />
         <Link to="/library/groups" className="tb-narrow-only">Library</Link>
         <Link to="/account" className="tb-narrow-only">Account</Link>
         <a href={DOCS_URL} className="tb-narrow-only" target="_blank" rel="noreferrer">Docs</a>
