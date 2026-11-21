@@ -22,7 +22,7 @@ it('the sign-in page offers the official Google and GitHub buttons, then email a
   expect(github.querySelector('svg[aria-hidden="true"]')).not.toBeNull();
   expect(screen.getByText('or')).toBeInTheDocument();
   expect(screen.getByLabelText('Email')).toBeInTheDocument();
-  expect(screen.getByRole('link', { name: 'Everything we record' })).toHaveAttribute('href', '/what-we-record');
+  expect(screen.queryByRole('link', { name: 'Everything we record' })).toBeNull();
 });
 
 it('the sign-in page hides providers that are not configured', async () => {

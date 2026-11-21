@@ -20,7 +20,6 @@ export function AuthCard({ title, lead, children }: { title: string; lead?: Reac
         </section>
         <footer className="auth-footer">
           <a href={DOCS_URL} target="_blank" rel="noreferrer">Docs</a>
-          <a href="/what-we-record" target="_blank" rel="noreferrer">Everything we record</a>
         </footer>
       </div>
     </main>
