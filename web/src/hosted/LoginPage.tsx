@@ -32,7 +32,9 @@ function LoginForm() {
         <label>Password<input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required autoComplete="current-password" /></label>
         <button className="btn btn-primary auth-submit" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
       </form>
-      <p className="auth-note">CopperTide is in private beta: creating an account needs a personal invite link. Forgot your password? Ask the person who invited you for a reset link.</p>
+      {providers.open_signup && (providers.google || providers.github)
+        ? <p className="auth-note">New here? Continue with Google or GitHub to create your account. Forgot your password? Ask the CopperTide team for a reset link.</p>
+        : <p className="auth-note">CopperTide is in private beta: creating an account needs a personal invite link. Forgot your password? Ask the person who invited you for a reset link.</p>}
     </AuthCard>
   );
 }

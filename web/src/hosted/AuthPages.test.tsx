@@ -104,3 +104,18 @@ it('knows a Mac browser from the app and from an iPad', async () => {
   expect(isMacBrowser(SAFARI_MAC, 5)).toBe(false);
   expect(isMacBrowser('Mozilla/5.0 (Windows NT 10.0; Win64; x64)', 0)).toBe(false);
 });
+
+it('with open sign-up, the sign-in page says Google or GitHub makes an account, and drops the invite note', async () => {
+  vi.spyOn(globalThis, 'fetch').mockImplementation(() => reply(200, { password: true, google: true, github: true, open_signup: true }));
+  render(<MemoryRouter><LoginPage /></MemoryRouter>);
+  expect(await screen.findByText(/New here\? Continue with Google or GitHub to create your account\./)).toBeInTheDocument();
+  expect(screen.queryByText(/needs a personal invite link/)).toBeNull();
+});
+
+it('without open sign-up, the invite note stays', async () => {
+  vi.spyOn(globalThis, 'fetch').mockImplementation(() => reply(200, { password: true, google: true, github: true, open_signup: false }));
+  render(<MemoryRouter><LoginPage /></MemoryRouter>);
+  await screen.findByRole('link', { name: 'Continue with Google' });
+  expect(screen.getByText(/needs a personal invite link/)).toBeInTheDocument();
+  expect(screen.queryByText(/New here\?/)).toBeNull();
+});

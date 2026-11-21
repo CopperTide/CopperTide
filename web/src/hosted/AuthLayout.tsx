@@ -4,7 +4,8 @@ import { DOCS_URL } from '../paths';
 import { BrandMark } from '../shell/BrandMark';
 import { providerHref } from './session';
 
-export type Providers = { password: boolean; google: boolean; github: boolean };
+/** `open_signup`: a Google or GitHub sign-in with no account makes one (no invite needed). */
+export type Providers = { password: boolean; google: boolean; github: boolean; open_signup?: boolean };
 
 /** The signed-out pages' frame: the brand, one card, and the links every visitor may want. */
 export function AuthCard({ title, lead, children }: { title: string; lead?: ReactNode; children: ReactNode }) {
