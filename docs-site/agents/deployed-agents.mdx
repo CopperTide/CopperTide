@@ -19,7 +19,7 @@ Your agent stays where the agent runs. Shakedown sends the agent the task and an
 
 Instead of typing a credential as a header, name one of your own stored keys: `auth: {key: <name>}` (on a local engine also `{env: SHAKEDOWN_AGENT_NAME}`). Shakedown reads it again from your key on each request and sends it as `Authorization: Bearer <secret>`. Only `http` agents take `auth`; any other kind is refused with a 400.
 
-Header values never reach a log, an API answer or a saved run, and only the caller who typed them can use them again. Put credentials in headers, not in the URL: Shakedown stores the URL with the team.
+Header values never reach a log, an API answer or a saved run, and only the caller who typed them can use them again. On a local engine, the person in the app, each API token and each MCP client count as different callers: a header typed in the app cannot be cited by your API token or an MCP client, and the other way round. Type it again, or use `auth`. Put credentials in headers, not in the URL: Shakedown stores the URL with the team.
 
 ## The HTTP protocol
 
