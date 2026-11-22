@@ -7,7 +7,7 @@ Your agent stays where the agent runs. Shakedown sends the agent the task and an
 
 | Kind | Team member | What runs the agent |
 |---|---|---|
-| `http` | `{kind: "http", url, headers?}` | Your service, behind a URL |
+| `http` | `{kind: "http", url, headers?, auth?}` | Your service, behind a URL |
 | `bedrock` | `{kind: "bedrock", model_id, region}` | Shakedown's own tool-use loop on Bedrock's Converse API |
 
 ## Connect your agent
@@ -17,7 +17,9 @@ Your agent stays where the agent runs. Shakedown sends the agent the task and an
 3. For HTTP, enter the URL and any headers, one `Name: value` per line. For Bedrock, name the model and the region.
 4. Click **Test connection**, then **Use this agent**. On the test, for HTTP, Shakedown sends a `shakedown-agent/1` hello and shows the name your agent answers with. For Bedrock, Shakedown makes one Converse call of one output token.
 
-Header values never reach a log, an API answer or a saved run. Put credentials in headers, not in the URL: Shakedown stores the URL with the team.
+Instead of typing a credential as a header, name one of your own stored keys: `auth: {key: <name>}` (on a local engine also `{env: SHAKEDOWN_AGENT_NAME}`). Shakedown reads it again from your key on each request and sends it as `Authorization: Bearer <secret>`. Only `http` agents take `auth`; any other kind is refused with a 400.
+
+Header values never reach a log, an API answer or a saved run, and only the caller who typed them can use them again. Put credentials in headers, not in the URL: Shakedown stores the URL with the team.
 
 ## The HTTP protocol
 

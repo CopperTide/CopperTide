@@ -65,7 +65,7 @@ team:
 
 A deploy runs a built-in agent on the stored key its `key` names, as the provider `key:<name>`, with the model id as written. A `key` that names no stored key, or another member's key that names its own server, refuses the deploy, naming the key and the setup.
 
-An HTTP agent's credential goes under `auth` in a setup file: `{key: <name>}` or `{env: SHAKEDOWN_AGENT_NAME}`. The setup keeps only that reference. Each request to the endpoint reads the credential again, under your org, and sends it as `Authorization: Bearer <secret>`. It appears in no event, record, fork note or log, and a team stored earlier keeps working after a restart.
+An HTTP agent's credential goes under `auth` in a setup file: `{key: <name>}` or `{env: SHAKEDOWN_AGENT_NAME}`. The setup keeps only that reference. Each request to the endpoint reads the credential again from your own key, and sends it as `Authorization: Bearer <secret>`. It appears in no event, record, fork note or log, and a team stored earlier keeps working after a restart.
 
 - `key` must name one of your own stored keys of kind **Your server** (custom). A model provider key (OpenRouter, OpenAI, Anthropic, Bedrock), a key shared with you and an empty secret are refused at deploy with a 400. Naming both `key` and `env` is refused too.
 - `env` works only on a local engine, and only for variables whose names start with `SHAKEDOWN_AGENT_`. On the hosted service it is refused: use a stored key. A refused variable gets the same answer whether or not it exists.
