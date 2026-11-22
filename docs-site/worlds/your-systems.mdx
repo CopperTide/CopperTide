@@ -6,7 +6,7 @@ description: Put any Docker Compose project in a world through the service integ
 Bring a system you already run into a world as a Docker Compose project. The `service` integration starts one Compose project per world instance, saves the volumes you list, and restores them exactly on rewind and fork.
 
 <Note>
-Import from GitHub is planned: point Shakedown at a repository and get a world. Today you bring a system in as a Docker Compose project through the `service` integration, named in a world template or a benchmark package.
+CopperTide plans import from GitHub: point Shakedown at a repository and get a world. Today you bring a system in as a Docker Compose project through the `service` integration, named in a world template or a benchmark package.
 </Note>
 
 ## How the service integration works
@@ -29,7 +29,7 @@ The integration ran live once against a real Redis 6.2 project in Docker (save, 
 | `images` | The image of each Compose service, passed as `IMAGE_<SERVICE>` and kept in saves |
 | `probes` | Documents read over HTTP from the services, kept in saves, for checks |
 | `env` | Extra environment for `docker compose` |
-| `helper_image` | An image with `tar` that copies volumes. Default `redis:6.2-alpine`, never pulled. |
+| `helper_image` | An image with `tar`, used to copy volumes. Default `redis:6.2-alpine`, never pulled. |
 
 The `postgres`, `hardlink` and `skip` strategies, `images` and `probes` passed tests against a fake Docker. The `live_service_strategies` test (Postgres, a hard-linked volume and a cache) passed once on Docker 29.1.
 

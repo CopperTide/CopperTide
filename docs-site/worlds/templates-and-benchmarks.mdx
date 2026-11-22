@@ -3,7 +3,7 @@ title: Start from a benchmark or template
 description: Give a world a runtime from a benchmark in the repository, or build one from a world template.
 ---
 
-Pick the fastest way to a world you can run: name a benchmark as the world's runtime package, or build a world from a template and name the built world.
+Pick the fastest way to a world ready to run: name a benchmark as the world's runtime package, or build a world from a template and name the built world.
 
 <Note>
 Both paths need a local engine today. Hosted Shakedown installs no packages yet and refuses to build worlds, because packages there run only in sandboxes and the sandbox runner is in progress.
@@ -28,7 +28,7 @@ To use one:
 
 1. Open your world and its **Runtime** section.
 2. Pick the package and save. The list shows `retail`, every built world, and the benchmark the engine started with. For another package, start the engine with `SHAKEDOWN_BENCHMARK=<name>`, or write `package: <name>` in the world file.
-3. In each scenario of the world, set **Task of the world's runtime it plays** to one of the package's task ids.
+3. In each scenario of the world, set the runtime task (`preset`) to one of the package's task ids.
 
 ## Build a world from a template
 

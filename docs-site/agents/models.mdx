@@ -6,7 +6,7 @@ description: Run API-mode agents on OpenRouter, OpenAI, Anthropic, Amazon Bedroc
 An API-mode agent runs in Shakedown's own agent loop. Each model call goes through Shakedown's gateway to the agent's provider, and Shakedown records every call in one format (OpenAI chat completions) whatever the provider. Replay, forks and compare treat all providers alike.
 
 <Note>
-Claude Code and Codex are measured live ([Claude Code and Codex](/agents/claude-code-and-codex)). API-model agents, OpenRouter, self-hosted model servers, Bedrock, `http` agents and the framework adapters are built and tested against simulated servers. Live checks of those are in progress.
+CopperTide has measured Claude Code and Codex live ([Claude Code and Codex](/agents/claude-code-and-codex)). CopperTide built API-model agents, OpenRouter, self-hosted model servers, Bedrock, `http` agents and the framework adapters, and tests them against simulated servers. Live checks of those are in progress.
 </Note>
 
 ## Add a key or server
@@ -34,7 +34,7 @@ A server of your own is any server speaking the OpenAI chat-completions API: Oll
 
 ## How keys resolve
 
-Your own keys come first. A key of kind OpenRouter, OpenAI or Anthropic replaces the environment's key for that provider, and the newest key of a kind wins. Without a key of your own, a local engine uses the environment's key (`OPENROUTER_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`). In a shared org, another member's key serves your agent only when your agent names the key as `key:<name>`.
+Your own keys come first. A key of kind OpenRouter, OpenAI or Anthropic replaces the environment's key for the same provider, and the newest key of a kind wins. Without a key of your own, a local engine uses the environment's key (`OPENROUTER_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`). In a shared org, another member's key serves your agent only when your agent names the key as `key:<name>`.
 
 ## Costs
 

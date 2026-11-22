@@ -1,0 +1,28 @@
+---
+title: Sign in and organizations
+description: Sign in to hosted Shakedown, find your personal org and its project, and switch between orgs.
+---
+
+Sign in at [app.coppertide.ai](https://app.coppertide.ai/). Every signed-in user lands in Shakedown at `/sd/`.
+
+## Ways to sign in
+
+| Method | Who |
+|---|---|
+| Google | Anyone. Signing in the first time creates the account. |
+| GitHub | Anyone. Signing in the first time creates the account. |
+| Email and password | By invite only |
+
+A verified email from Google or GitHub matching an existing account signs in to the existing account and links the new sign-in method.
+
+## Your org and its project
+
+Your account comes with a personal org. Each org has one project: the folder of worlds, scenarios, setups and experiments you edit in the app. Records of one org stay apart from every other org's: every route asks the authorization layer, and every query in the database runs under row-level security for your org.
+
+The account menu at the top right lists your orgs, your personal org first and the current one marked. Pick an org to switch. **Sign out** is at the bottom of the menu.
+
+Pages for inviting people to an org and managing members are not in the app yet.
+
+## Hosted and local
+
+The open-source engine has no accounts and no orgs: one person at one machine. Project files keep the same format in both. See [Self-host](/self-host).

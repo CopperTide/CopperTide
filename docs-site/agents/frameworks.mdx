@@ -6,7 +6,7 @@ description: Bring a LangGraph, CrewAI or OpenAI Agents SDK team into a run thro
 Keep your agent code as written. A **driver**, a short program, registers each of your agents with Shakedown and hands your framework the agent's tools and model. The SDK's adapters turn an agent's tools into the framework's own tool objects and its gateway into the framework's chat model.
 
 <Note>
-The three adapters are built and tested against a stand-in for an agent's endpoint, with no model. Live checks are in progress.
+CopperTide built the three adapters and tests them against a stand-in for an agent's endpoint, with no model. Live checks are in progress.
 </Note>
 
 ## Install
@@ -63,7 +63,7 @@ The adapter turns the SDK's trace export off when no `OPENAI_API_KEY` is set.
 ## What you get
 
 - Each framework agent is one Shakedown agent (`run.agent("<id>")`), so the run shows who did what.
-- Every tool call runs in the world as that agent and gets recorded. A refused call reaches the agent as `error: …`, so the agent reacts.
+- Every tool call runs in the world as the calling agent, and Shakedown records the call. A refused call reaches the agent as `error: …`, so the agent reacts.
 - The model key stays in Shakedown's gateway. Your framework's client sends a placeholder.
 - When the `with` block ends, the driver ends your agents and finishes the run, and Shakedown scores the world. If the block raises, the run ends `failed`, still scored.
 

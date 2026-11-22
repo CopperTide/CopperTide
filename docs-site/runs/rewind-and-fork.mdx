@@ -3,7 +3,7 @@ title: Rewind and fork
 description: Go back to a step of a run, change one thing, and rerun from there with the world restored.
 ---
 
-Rewind a run to a step and rerun with a change: another prompt, model, provider or mode for an agent. Shakedown restores the world as the world stood just before the step, reuses everything before the step, and records the rerun as a new branch of the same run.
+Rewind a run to a step and rerun with a change: another prompt, model, provider or mode for an agent. Shakedown restores the world as the world stood right before the step, reuses everything before the step, and records the rerun as a new branch of the same run.
 
 <Note>
 Rewind and fork work today on a local engine. Forking a cloud run arrives after cloud runs.
@@ -23,7 +23,7 @@ The new branch shows in the run's **⋯** menu under **Reruns**, with a note on 
 
 The rerun starts where you asked, unless the step cannot restart on its own:
 
-- During a Claude Code or Codex turn, the fork starts at that agent's start, since a CLI session cannot resume mid-way.
+- During a Claude Code or Codex turn, the fork starts at the start of the agent's turn, since a CLI session cannot resume mid-way.
 - For an API-mode agent, the fork starts at the model call choosing the tool call.
 - In a run where agents ran at once, every agent restarts from the run's first agent start.
 

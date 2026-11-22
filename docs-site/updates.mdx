@@ -1,0 +1,22 @@
+---
+title: Changelog
+description: What changed in Shakedown, newest first.
+---
+
+Changes you see or use, by date. The open-source engine's full history is on [GitHub](https://github.com/CopperTide/Shakedown/commits/main).
+
+## 21 November 2026
+
+- **Shakedown is CopperTide's product.** Signed in, [app.coppertide.ai](https://app.coppertide.ai/) opens Shakedown at `/sd/`. This site now documents Shakedown.
+- **Hosted Shakedown.** Everyone signed in gets a personal org and its project at `/sd/`, with org switching and **Sign out** in the account menu. Hosted Shakedown builds and edits projects. Cloud runs arrive with the sandbox runner.
+- **Project files.** Worlds, scenarios, agent setups and experiments are YAML files in a project folder, each with its own editor in the app. See [Concepts](/concepts).
+- **Deploy a file experiment.** **Deploy** runs every setup on the world's runtime package and lists each deployment under **Runs**. See [Experiments](/runs/experiments).
+- **Get started.** A guided path from a project to a first scenario.
+- **The assistant and the MCP server.** **Ask** on every page, and the same operations for Claude Code, Codex or any MCP client. See [Use Shakedown from your agent](/code/mcp).
+- **MADL setups** show their team graph and checks. **Observability and on-call** joins the world file.
+- **Move into the project.** Earlier experiments and installed benchmarks become files, and earlier runs stay as first deployments.
+
+## 20 November 2026
+
+- **Your own keys only.** In a shared org, another member's key serves your agent only when your agent names the key as `key:<name>`.
+- **Every agent has a token.** No MCP or gateway call gets in without the agent's own token.

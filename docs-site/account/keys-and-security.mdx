@@ -1,0 +1,34 @@
+---
+title: Model keys and security
+description: How Shakedown stores your model keys, keeps credentials out of files, and isolates agents.
+---
+
+You add model keys in **Connections & models**. This page says what happens to a key after you click add.
+
+## Keys
+
+- Shakedown seals each key with AES-256-GCM under a vault key, bound to its row, and stores the sealed key in the database.
+- Nobody sees a key again. The app shows only the last four characters, and the API never returns a key or writes one to a log.
+- **Test** makes a one-token call and shows the provider's reason on failure, never the key.
+- Agents never hold your key. Model calls go through Shakedown's gateway, which adds the key, and a framework's client sends a placeholder.
+- On a local engine the vault key lives in `core/vault.key` (mode 0600), or the file `SHAKEDOWN_VAULT_KEY_FILE` names. A lost vault key makes saved keys unreadable: add them again.
+
+In cloud runs, arriving with the sandbox runner, no provider key enters a sandbox: agents call the model gateway with their agent token, and the gateway adds your org's sealed key.
+
+## Credentials stay out of files
+
+Project files name credentials by key-store name (`key: <name>`) or environment variable (`env: NAME`). Shakedown refuses a file holding a value shaped like a credential, such as an `sk-`, `ghp_` or `AKIA` prefix or a literal `password` or `token` field, and never echoes the value back.
+
+Header values of an HTTP agent never reach a log, an API answer or a saved run.
+
+## Addresses Shakedown calls
+
+In hosted Shakedown, a model server's or an agent's URL must be HTTPS, and every address its name resolves to must be public. Shakedown refuses private ranges, loopback, link-local (the cloud metadata address among them) and unique-local IPv6, on save, on test, before every call and at every redirect.
+
+A local engine allows servers on your own network, such as a vLLM on `127.0.0.1`.
+
+## Agents under test
+
+- Each agent's MCP endpoint and gateway take the agent's own token, which dies with its branch.
+- Claude Code and Codex run in a fresh folder with only the world's tools, database URLs and other providers' keys removed from their environment. See [Claude Code and Codex](/agents/claude-code-and-codex).
+- A read-only agent gets only read tools, and Shakedown refuses and records any write the agent tries.

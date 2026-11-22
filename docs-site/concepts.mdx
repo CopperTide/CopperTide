@@ -27,16 +27,16 @@ Ids are 1 to 64 lowercase letters, digits and dashes, not starting with a dash.
 
 ## Saves at every step
 
-After each step that wrote to a part of the world, Shakedown saves that part and records the save with the step. A part of the world is one system, such as a database or a Docker Compose project. A part whose saves cost a lot declares `save_at: points` and gets saved at save points instead: before each model call through Shakedown's gateway, when a driver asks, and at the run's end.
+After each step writing to a part of the world, Shakedown saves the part and records the save with the step. A part of the world is one system, such as a database or a Docker Compose project. A part whose saves cost a lot declares `save_at: points` and gets saved at save points instead: before each model call through Shakedown's gateway, when a driver asks, and at the run's end.
 
 ## Rewind and fork
 
-To **rewind**, you pick a step of an ended run. To **fork**, you change something (an agent's prompt, model, provider, kind or read-only flag) and rerun from there. Shakedown puts every part of the world back as the part stood just before the step, copies the earlier steps into the new branch, and lets the team continue.
+To **rewind**, you pick a step of an ended run. To **fork**, you change something (an agent's prompt, model, provider, kind or read-only flag) and rerun from there. Shakedown puts every part of the world back as the part stood right before the step, copies the earlier steps into the new branch, and lets the team continue.
 
 The fork point moves back when a step cannot restart on its own. In the chain runner, the default:
 
-- A Claude Code or Codex session cannot resume mid-way, so a fork during a CLI agent's turn starts at that agent's start.
-- An API-mode agent restarts at the model call that chose the tool call.
+- A Claude Code or Codex session cannot resume mid-way, so a fork during a CLI agent's turn starts at the start of the agent's turn.
+- An API-mode agent restarts at the model call choosing the tool call.
 
 The fork's answer and the run page say where the fork started, where you asked, and why.
 

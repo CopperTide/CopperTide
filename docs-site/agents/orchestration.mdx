@@ -6,7 +6,7 @@ description: Drive your agents in any shape and any language, through a Code con
 When your design has its own orchestration, your code drives the agents and Shakedown records them. Pick one of two ways in: save your driver as a **Code connection** and Shakedown starts the driver for each run, or call the **external-runner routes** from any language.
 
 <Note>
-Code connections and the external-runner routes are built and tested against simulated servers. Live checks are in progress.
+CopperTide built Code connections and the external-runner routes, and tests them against simulated servers. Live checks are in progress.
 </Note>
 
 ## A Code connection
@@ -41,7 +41,7 @@ A local engine starts drivers only because the engine listens on 127.0.0.1 alone
 
 ## The external-runner routes
 
-1. `POST /api/runs` with `runner: "external"` starts the world. The team may be empty.
+1. `POST /api/runs` with `runner: "external"` starts the world. An empty team is fine.
 2. `POST /api/branches/{id}/agents` registers an agent at any time and answers its `mcp_url` (the world's tools) and `gateway_url` (OpenAI-compatible).
 3. Drive the agents your way. Point their tools at the MCP endpoint and their models at the gateway. Report model calls made elsewhere with `POST .../agents/{agent}/usage`.
 4. `POST /api/branches/{id}/finish` freezes, scores and stops the world.

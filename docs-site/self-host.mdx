@@ -1,0 +1,71 @@
+---
+title: Run the open-source engine locally
+description: Build and start shaked, the open-source Shakedown engine, with a project folder, on your own computer.
+---
+
+The open-source engine, `shaked`, runs everything on your computer: runs with recording, saves at every step, rewind, fork, experiments, the UI and the MCP server. This is where runs work today. The engine is for personal use: one person at one machine, with no orgs and no sign-in.
+
+## What you need
+
+- Docker, for the Postgres holding the engine's records and for integrations running in containers.
+- Rust and Node.
+- The `claude` and `codex` CLIs on your `PATH`, for Claude Code and Codex agents.
+- For API-mode agents, a key (`OPENROUTER_API_KEY`, `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`), a key added in the app, or an OpenAI-compatible server of your own.
+- `uv`, for the Python integrations and benchmarks.
+
+## Start the engine
+
+<Steps>
+  <Step title="Clone and start Postgres">
+    ```bash
+    git clone https://github.com/CopperTide/Shakedown.git && cd Shakedown
+    docker compose -f deploy/compose.yml up -d     # Postgres on 127.0.0.1:5544, loopback only
+    ```
+  </Step>
+  <Step title="Build">
+    ```bash
+    cargo build --release                          # integrations and benchmarks, into core/target/release
+    ```
+  </Step>
+  <Step title="Start shaked with a project folder">
+    ```bash
+    (cd core && SHAKEDOWN_PROJECT=~/work/my-project cargo run -p shaked)   # API on http://127.0.0.1:4510
+    ```
+    Shakedown creates the folder if missing. Without `SHAKEDOWN_PROJECT`, the project pages say so and the project routes answer 409.
+  </Step>
+  <Step title="Start the UI">
+    ```bash
+    (cd ui && npm install && npm run dev)          # UI on http://127.0.0.1:4520, calling the API on 4510
+    ```
+    Or build the UI once and let shaked serve the UI and the API together on `:4510`: run `npm run build` in `ui`, then start shaked with `SHAKEDOWN_UI_DIST=../ui/dist`.
+  </Step>
+  <Step title="Create the project">
+    Open **Get started**, name the project and click **Create project**. Then follow the [Quickstart](/quickstart) from step 3.
+  </Step>
+</Steps>
+
+## Settings you reach for
+
+| Setting | What the setting does |
+|---|---|
+| `SHAKEDOWN_PROJECT` | The project folder the app and the MCP server work in |
+| `SHAKEDOWN_BENCHMARK` | The benchmark new engine runs use when they name none. Default: `retail`, the one benchmark not marked opt-in. |
+| `SHAKEDOWN_PACKAGES` | Folders of integration and benchmark packages. Default: `integrations` and `benchmarks` |
+| `SHAKEDOWN_WORLDS`, `SHAKEDOWN_TEMPLATES` | Where built worlds go, and more world templates |
+| `SHAKEDOWN_BIND` | Where shaked listens. Default `127.0.0.1:4510`. The open-source engine refuses a bind beyond loopback. |
+| `SHAKEDOWN_PUBLIC_URL` | The base of every URL shaked hands out, for agents reaching the engine through a tunnel |
+| `SHAKEDOWN_MAX_COST_USD` | The spend limit of a run naming none |
+| `SHAKEDOWN_MAX_DB_BYTES` | The disk limit for saves. Default 5 GiB. New runs and forks stop at the limit until you delete old runs. |
+| `SHAKEDOWN_VAULT_KEY_FILE` | The key sealing your model keys. Default: `core/vault.key`, made on first use |
+
+The full list is in the repository's [`docs/reference.md`](https://github.com/CopperTide/Shakedown/blob/main/docs/reference.md).
+
+## Safety of a local engine
+
+- The API answers only loopback host names, so a web page on another origin cannot drive the engine.
+- Code connections start programs on your computer. Run them only on a computer whose other accounts you trust.
+- A package's `command` run is for programs you trust. An `image` run starts the program in a container with no network unless the manifest asks for host networking.
+
+## Use the engine from code
+
+The engine runs headless. Use the [Python SDK](/code/python-sdk) or the [HTTP API](/code/http-api), and give your own coding agent the [MCP server](/code/mcp).

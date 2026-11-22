@@ -6,7 +6,7 @@ description: Describe what every run of a world starts from, as files, databases
 The **Data** section lists what the world starts with. Each entry is exactly one of a file, a database or a connector import.
 
 <Note>
-Runs do not read this section yet. Today every run starts from the runtime package's base world: the package seeds its parts once, Shakedown saves the result, and each run starts from a copy of that save. See [Runtime package](/worlds/runtime).
+Runs do not read this section yet. Today every run starts from the runtime package's base world: the package seeds its parts once, Shakedown saves the result, and each run starts from a copy of the save. See [Runtime package](/worlds/runtime).
 </Note>
 
 ## Fields
@@ -18,7 +18,7 @@ Runs do not read this section yet. Today every run starts from the runtime packa
 | `database` | Database | A database restored at the start of every run |
 | `engine`, `version` | Database | The database engine and exact server version, such as `postgres` and `"15.6"` |
 | `snapshot` | Database | The snapshot runs restore |
-| `masked` | Database | Personal columns masked before the snapshot is stored |
+| `masked` | Database | Shakedown masks personal columns before storing the snapshot |
 | `default_state` | Database | Every scenario starts from this source |
 | `import` | Connector import | A read-only snapshot taken through a connector |
 | `from` | Connector import | The connector the import reads from |

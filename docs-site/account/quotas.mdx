@@ -1,0 +1,32 @@
+---
+title: Quotas and limits
+description: The limits on a hosted org, and the safety caps of every engine.
+---
+
+## Hosted orgs
+
+Every org starts on the beta plan. These quotas govern cloud runs, which arrive with the sandbox runner.
+
+| Quota | Beta plan |
+|---|---|
+| Sandboxes running at once | 2 |
+| Sandbox time | 180,000 seconds (50 hours) a month |
+| Longest branch | 3,600 seconds (1 hour) |
+| Saves kept | 20 GiB |
+
+Going over a quota refuses the run and names the quota, for example `over the sandbox_seconds quota: … of 180000 this month`. Model spend on your org's own keys has no limit here: set a spend limit per run instead.
+
+## Every engine
+
+| Limit | Value |
+|---|---|
+| Setups per engine experiment | 1 to 50 |
+| Runs per setup | Up to 1000 (5 by default) |
+| A run's spend limit | `max_cost_usd`, `budget.per_run_usd`, or `SHAKEDOWN_MAX_COST_USD`. None by default. |
+| A Code connection's run | `SHAKEDOWN_CODE_RUN_SECS`, 900 seconds by default |
+| An HTTP agent's turn | 15 minutes |
+| A dispatch run | 60 minutes by default (`SHAKEDOWN_DISPATCH_MAX_MINUTES`) |
+| Saves on a local engine | `SHAKEDOWN_MAX_DB_BYTES`, 5 GiB by default |
+| A request body | 2 MiB on an engine serving others |
+
+At the saves limit, new runs and forks answer 507 until you delete old runs. Deleting a run drops its saves, stops its live instances and removes its events.

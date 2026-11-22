@@ -36,7 +36,7 @@ claude mcp add shakedown -- shaked mcp --project ~/work/my-project
 
 | Tools | What they do | Access |
 |---|---|---|
-| `project_status`, `project_init`, `project_update` | The project's name, settings, counts and problems; create a project; change its settings | Read, edit |
+| `project_status`, `project_init`, `project_update` | The project's name, settings, counts and problems, creating a project, and changing its settings | Read, edit |
 | `project_import` | Move installed benchmarks and earlier experiments into the project, showing the plan first | Edit |
 | `worlds_list`, `worlds_get`, `worlds_put`, `worlds_delete` | Worlds | Read, edit, delete |
 | `scenarios_*`, `setups_*`, `experiments_*` | The same four for scenarios, setups and experiments | Read, edit, delete |
@@ -52,6 +52,6 @@ The token's scope bounds every call: `read` lists and reads, editing or deleting
 | Setting | Values | Today |
 |---|---|---|
 | `edit` | `diff_first` (default): a put answers a diff and writes only when sent again with `confirm: true`. `apply_then_tell`: writes at once. | Applies to MCP clients and the assistant |
-| `spend` | `always_ask` (default), or `under_cap` with a daily cap | Stored. The assistant asks before every deploy whatever the setting says, and no daily cap applies yet. |
+| `spend` | `always_ask` (default), or `under_cap` with a daily cap | Stored. The assistant asks before every deploy whatever the setting says, an MCP client with a `run` token deploys without a prompt, and no daily cap applies yet. |
 
 The **Ask** assistant runs reads at once, shows edits as diffs to apply, and turns every deploy or delete into a card you confirm. The assistant runs on your own model key, set under **Project settings → Assistant**.
