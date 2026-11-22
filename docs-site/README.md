@@ -1,15 +1,19 @@
-# CopperTide documentation
+# Shakedown documentation
 
-This directory contains the public user guides and reference pages for [docs.coppertide.ai](https://docs.coppertide.ai). Pages are written in MDX, with navigation in `docs.json`. The same sources support a Mintlify preview and the static site built by `build.mjs`.
+This directory contains Shakedown's user guide, published at [docs.coppertide.ai](https://docs.coppertide.ai). Pages are written in MDX, with navigation in `docs.json`. The same sources support a Mintlify preview and the static site built by `build.mjs`.
 
 For architecture and implementation details, see [the internals documentation](../docs/internals/README.md).
 
 ## Find the right page
 
-- **Getting started:** introduction, quickstart, computer setup and concepts.
-- **Task guides:** team design, running agents, workflows, reuse and sharing.
-- **Reference:** commands, agent tools, file formats, states and limits.
-- **Operations and help:** self-hosting, security, privacy and troubleshooting.
+- **Get started:** introduction, quickstart and concepts.
+- **Build worlds, Agents, Run and read results:** the task guides.
+- **Use from code, Self-host, Account:** the SDK, the MCP server, the API, the local engine, sign-in, keys and quotas.
+- **Help:** FAQ and the changelog.
+
+The team-of-agents pages (`guides/`, `reference/`, `connect-a-computer`, `operations`, `security`, `privacy`, `troubleshooting`, `changelog`) are out of the navigation and not built. Their files stay.
+
+Say plainly what is not there yet, and check every claim against the Shakedown code. The engine's developer docs live in the Shakedown repository; link to them rather than copying them.
 
 Keep the quickstart focused on a first successful run. Put detailed procedures in guides and exact fields, defaults and limits in reference pages. Link to those pages instead of repeating their contents.
 
@@ -34,7 +38,7 @@ npm run validate
 npm run links
 ```
 
-`npm test` builds every navigation page in a temporary directory and checks rendered components, navigation, Markdown exports, schemas and screenshots. Mintlify's commands validate the site configuration and check internal links.
+`npm test` builds every navigation page in a temporary directory and checks rendered components, navigation, Markdown exports, schemas, images and internal links. `node build.mjs` fails on a link to a missing page or file, or to an anchor (headings get no anchors). Mintlify's commands validate the site configuration and check internal links.
 
 To produce the static site:
 
