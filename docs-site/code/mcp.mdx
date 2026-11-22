@@ -1,0 +1,57 @@
+---
+title: Use Shakedown from your agent
+description: Give Claude Code, Codex or any MCP client Shakedown's own MCP server, to build project files and deploy experiments from chat.
+---
+
+Shakedown serves its project operations as an MCP server. Add the server to Claude Code, Codex or another MCP client, and your agent lists, reads and writes worlds, scenarios, setups and experiments, and deploys experiments. The app's **Ask** assistant uses the same operations.
+
+This server is separate from the MCP endpoint an agent under test gets inside a run, which holds the world's tools.
+
+## Add the server
+
+**Project settings → Use from an agent** shows the command for your engine.
+
+Hosted Shakedown, with a token from **Settings → API tokens** in `SHAKEDOWN_TOKEN`:
+
+```bash
+claude mcp add --transport http shakedown https://app.coppertide.ai/sd/mcp --header "Authorization: Bearer $SHAKEDOWN_TOKEN"
+```
+
+```toml
+# Codex, ~/.codex/config.toml
+[mcp_servers.shakedown]
+url = "https://app.coppertide.ai/sd/mcp"
+bearer_token_env_var = "SHAKEDOWN_TOKEN"
+```
+
+A local engine, over stdio, for one project folder:
+
+```bash
+claude mcp add shakedown -- shaked mcp --project ~/work/my-project
+```
+
+`shaked mcp` works on the folder alone, with no database and no running engine. Edits work there. Deploying needs a running engine: use `POST /mcp` on the engine with an API token instead.
+
+## The tools
+
+| Tools | What they do | Access |
+|---|---|---|
+| `project_status`, `project_init`, `project_update` | The project's name, settings, counts and problems; create a project; change its settings | Read, edit |
+| `project_import` | Move installed benchmarks and earlier experiments into the project, showing the plan first | Edit |
+| `worlds_list`, `worlds_get`, `worlds_put`, `worlds_delete` | Worlds | Read, edit, delete |
+| `scenarios_*`, `setups_*`, `experiments_*` | The same four for scenarios, setups and experiments | Read, edit, delete |
+| `experiments_deploy`, `experiments_runs` | Deploy an experiment, and list its deployments with each setup's results | Spend, read |
+| `setups_madl` | A MADL setup's checks and its graph of agents | Read |
+
+Runs, forks and compare are HTTP routes outside this server: see [HTTP API](/code/http-api).
+
+## What agents do without asking
+
+The token's scope bounds every call: `read` lists and reads, editing or deleting files needs `admin`, and deploying needs `run`. The project's `permissions` in `shakedown.yaml` (**Project settings → What agents may do**) set the rest:
+
+| Setting | Values | Today |
+|---|---|---|
+| `edit` | `diff_first` (default): a put answers a diff and writes only when sent again with `confirm: true`. `apply_then_tell`: writes at once. | Applies to MCP clients and the assistant |
+| `spend` | `always_ask` (default), or `under_cap` with a daily cap | Stored. The assistant asks before every deploy whatever the setting says, and no daily cap applies yet. |
+
+The **Ask** assistant runs reads at once, shows edits as diffs to apply, and turns every deploy or delete into a card you confirm. The assistant runs on your own model key, set under **Project settings → Assistant**.

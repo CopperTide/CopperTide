@@ -1,0 +1,33 @@
+---
+title: HTTP API
+description: Every route of the engine, from runs and forks to project files, in the repository's reference.
+---
+
+The web UI, the Python SDK and the MCP server all use one HTTP API. Use the API from any language: JSON over HTTP, plus Server-Sent Events for a branch's live events.
+
+The full route table, the settings and the disk rules live in the repository: [`docs/reference.md`](https://github.com/CopperTide/Shakedown/blob/main/docs/reference.md).
+
+## The routes you reach for first
+
+| Route | What the route does |
+|---|---|
+| `GET /api/health` | The benchmark, the CLIs found, each model provider and disk use |
+| `POST /api/runs` | Starts a run: `{task_id, team, runner?, scenario?, seed?, benchmark?, max_cost_usd?}` |
+| `GET /api/branches/{id}/stream` | Server-Sent Events: each event, then the final status |
+| `POST /api/branches/{id}/fork` | `{at_seq, changes, restore}`: a fork, answering where the fork started and why |
+| `GET /api/compare?a=&b=` | The first divergent step and the rows differing at the end |
+| `POST /api/experiments` | An engine experiment: one task, 1 to 50 setups, runs per setup |
+| `GET`, `PUT`, `DELETE /api/project/{kind}/{id}` | Project files: worlds, scenarios, setups, experiments |
+| `POST /api/project/experiments/{id}/deploy` | Deploys a file experiment |
+
+## Tokens
+
+Send `Authorization: Bearer sd_…`. Make tokens in **Settings → API tokens**, or locally with `shaked token create --name ci --scope run`.
+
+| Scope | Allows |
+|---|---|
+| `read` | Sees runs, experiments and their records |
+| `run` | Also starts, forks, stops and records runs |
+| `admin` | Everything, model keys and tokens included |
+
+A local engine answers `/api` only for loopback host names. A UI served from another origin needs that origin in `SHAKEDOWN_CORS_ORIGIN`.

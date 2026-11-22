@@ -1,0 +1,51 @@
+---
+title: Python SDK
+description: Start runs, follow events, fork, run suites and export datasets from Python.
+---
+
+The `shakedown` package drives an engine from Python: connect to one or start one, run teams, follow every event live, fork, run suites, and export runs as datasets. Everything goes through the engine's public HTTP API.
+
+## Install
+
+```bash
+uv add "shakedown-sdk @ git+https://github.com/CopperTide/Shakedown#subdirectory=sdk/python"
+```
+
+Python 3.10 or newer, with one dependency, `httpx`. You also need an engine: a running one, or a build of the repository plus Postgres for `Shakedown.local` (see [Self-host](/self-host)).
+
+## A run, its events and a fork
+
+```python
+from shakedown import Shakedown, Agent
+
+with Shakedown.local(benchmark="retail", bin_dir="core/target/release") as sd:   # or Shakedown("http://127.0.0.1:4510")
+    run = sd.run("72", team=[Agent.claude_code("support", model="haiku")], seed=7)
+    for event in run.events():                    # every event, live, until the run ends
+        print(event.summary())
+    print(run.check())                            # passed?, named checks, safety violations
+    fork = run.rewind(event=40).fork(model="sonnet")   # back to just before event 40, one thing changed
+    run.export("data/run-72")                     # JSONL dataset with a schema
+```
+
+## What the SDK covers
+
+| Task | Calls |
+|---|---|
+| Connect | `Shakedown(url, token="sd_…")`, `Shakedown.local(...)`, `sd.health()`, `sd.providers()`, `sd.world()` |
+| Teams | `Agent.claude_code(...)`, `Agent.api(id, provider=..., model=...)`, `Team([...])`, `sd.default_team()` |
+| Runs | `sd.run(task, team, runner="chain", seed=..., scenario=[Disruption(...)])` |
+| Your own agents | `sd.external_run(task, agents=[...])`, then each agent's `mcp_url`, `gateway_url`, `call(...)`, `end(...)`, and `branch.finish()` |
+| Follow | `branch.events()`, `branch.astream()`, `branch.record()`, `branch.rows(seq=..., keys=[...])`, `branch.views()` |
+| Control | `branch.pause()`, `resume()`, `stop()`, `branch.fork(seq, changes=..., restore="exact")`, `branch.restore_plan(seq)` |
+| Compare | `sd.compare(a, b)`, `sd.suite(team, tasks=[...], repeats=5)`, `sd.compare_suites(before, after)` |
+| AI review | `branch.review()`, `sd.compare_review(a, b)` |
+| Export | `branch.export(folder)`, `suite.export(folder)`, format `shakedown-dataset/1` |
+| RL | `shakedown.env.ShakedownParallelEnv`, PettingZoo's parallel API with a fork as "reset to step N" |
+
+Without `token=`, the SDK reads `SHAKEDOWN_TOKEN`. Make a token in **Settings → API tokens** with scope `read`, `run` or `admin`. Each error from the engine is an `ApiError` subclass: `BadRequest`, `NotFound`, `Conflict`, `DiskFull`.
+
+## Agents are real models
+
+Shakedown never supplies a scripted agent. Your code, Claude Code, Codex or an API model does the work, and Shakedown records, restores and scores the work.
+
+The full guide, with drivers, the step-loop environment and reproducibility, is the repository's [`docs/sdk.md`](https://github.com/CopperTide/Shakedown/blob/main/docs/sdk.md). For framework adapters see [Frameworks](/agents/frameworks).
