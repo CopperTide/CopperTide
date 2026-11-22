@@ -10,8 +10,9 @@ You add model keys in **Connections & models**. This page says what happens to a
 - Shakedown seals each key with AES-256-GCM under a vault key, bound to its row, and stores the sealed key in the database.
 - Nobody sees a key again. The app shows only the last four characters, and the API never returns a key or writes one to a log.
 - **Test** makes a one-token call and shows the provider's reason on failure, never the key.
-- Agents never hold your key. Model calls go through Shakedown's gateway, which adds the key, and a framework's client sends a placeholder.
-- A setup file's `key` is not read by deploys yet, so an agent deployed from a file runs on the default provider. See [Agent setups](/agents/setups).
+- Built-in, Claude Code and Codex agents never hold your key. Model calls go through Shakedown's gateway, which adds the key, and a framework's client sends a placeholder.
+- A key you name in an HTTP setup's `auth` is sent to that endpoint on each request, read then from your own stored key. Only your own custom keys can be named; model provider keys and keys shared with you are refused. It appears in no event, record, fork note or log. See [Agent setups](/agents/setups).
+- A deploy runs a setup file's built-in agent on the key its `key` names.
 - On a local engine the vault key lives in `core/vault.key` (mode 0600), or the file `SHAKEDOWN_VAULT_KEY_FILE` names. A lost vault key makes saved keys unreadable: add them again.
 
 In cloud runs, arriving with the sandbox runner, no provider key enters a sandbox: agents call the model gateway with their agent token, and the gateway adds your org's sealed key.

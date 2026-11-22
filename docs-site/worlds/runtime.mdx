@@ -23,7 +23,7 @@ When you click **Deploy** on an experiment, Shakedown turns the files into an en
 |---|---|---|
 | The world | `package`, the benchmark or built world to run | Connectors, flows, data, people and observability |
 | The scenario | `preset`, the package's task to play, and each event's `fault` and `params`, as the package's disruptions | The `task` text (runs get the preset task's ticket), `changes`, `gates`, `checks`, and each event's `at`, `after_calls` and `effects` |
-| Each setup | The team: built-in agents, Claude Code, Codex or an HTTP endpoint, run one after another | A built-in agent's `key`, an HTTP setup's `auth` |
+| Each setup | The team: built-in agents, Claude Code, Codex or an HTTP endpoint, run one after another. A built-in agent's `key` becomes its provider, and an HTTP setup's `auth` is read from your own stored key on each request and sent to the endpoint (`env` works on a local engine only, for `SHAKEDOWN_AGENT_*` names) | Setups of kind `code` and `madl` (below) |
 | The experiment | `repeats.per_setup` and `budget.per_run_usd`, each run's spend limit | `budget.per_deployment_usd`. Seeds stay paired whatever `paired_seeds` says. |
 
 Setups of kind `code` and `madl` refuse to deploy from a file today, with the message "this kind of setup can't be deployed from a file yet". Run your own code through a Code connection instead: see [Your own orchestration](/agents/orchestration).
@@ -35,6 +35,9 @@ Setups of kind `code` and `madl` refuse to deploy from a file today, with the me
 | `<world> has no runtime yet: set package: to an installed benchmark or built world` | Pick a package in the world's Runtime section |
 | `<scenario> names no task of <package> to play: set preset:` | Set the scenario's runtime task to one of the package's task ids |
 | `fix <item> before deploying: <problem>` | Open the item and fix the problem the list shows |
+| `<setup>: agent <id> names the key "<name>", which is not stored` | Add the key in **Connections & models**, or change the setup's `key` |
+| `<setup>: auth: no key named "<name>" is stored`, `... is shared with you`, `... is a model provider key`, `... is empty` | Store the endpoint's credential as a key of kind **Your server** under your own account, then deploy again |
+| `<setup>: auth: environment variables are not read here`, or `only SHAKEDOWN_AGENT_* variables may be sent to an agent` | Use a stored key; on a local engine, name a variable that starts with `SHAKEDOWN_AGENT_` |
 
 ## Where runs happen
 

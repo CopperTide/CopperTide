@@ -10,7 +10,7 @@ An experiment runs every setup against one scenario, as many times as you ask, a
 1. Open **Experiments** and click **New experiment**.
 2. Name the experiment, pick the world, a scenario in the world, and the setups to compare. Set **Runs per setup**.
 3. Click **Create experiment**. Nothing runs yet.
-4. Click **Deploy** on the experiment's page. The dialog says how many runs you start: setups times runs per setup. Every run calls a real model.
+4. Click **Deploy** on the experiment's page. The dialog says how many runs you start: setups times runs per setup. Every run calls a real model. Deploy refuses a setup whose `key` or `auth` names a key that is not stored or not yours to use, and an `auth.env` variable that may not be sent (hosted: any; local: names not starting with `SHAKEDOWN_AGENT_`).
 
 The **Runs** tab lists each deployment with each setup's passes. Click **Open results** for the full page. On a local engine, **Experiment on a benchmark…** in the **⋯** menu starts an engine experiment straight from a benchmark, with no files.
 
