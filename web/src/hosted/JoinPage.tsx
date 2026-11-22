@@ -27,7 +27,7 @@ export function JoinPage({ onSignedIn = () => window.location.assign('/') }: { o
   const params = new URLSearchParams(window.location.search);
   const failed = error || (params.get('error') ? `Sign-in didn't finish (${params.get('error')}). Try again.` : '');
   return (
-    <AuthCard title="Join the CopperTide beta" lead={invite ? lead(invite) : undefined}>
+    <AuthCard title="Join the Shakedown beta" lead={invite ? lead(invite) : undefined}>
       {failed && <p className="auth-error" role="alert">{failed}</p>}
       {failed && !invite && <p className="auth-note">Already have an account? <a href="/login">Sign in</a></p>}
       {invite && (

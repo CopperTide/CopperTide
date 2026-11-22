@@ -38,3 +38,37 @@ it('never follows a stored address off this site', async () => {
   app('/');
   expect(await screen.findByText('home')).toBeInTheDocument();
 });
+
+const withShakedown: HostedSession = { kind: 'signed-in', user: { id: 'u', name: 'Ana', email: 'ana@x.com', role: 'member' }, csrf: 'c', shakedown: true };
+
+it('with Shakedown, a signed-in visit to any other CopperTide page goes to Shakedown', async () => {
+  const { leave } = await import('./HostedGate');
+  const go = vi.spyOn(leave, 'to').mockImplementation(() => {});
+  session = withShakedown;
+  for (const url of ['/', '/p/team/board', '/library/groups', '/login', '/community']) {
+    const r = app(url);
+    await vi.waitFor(() => expect(go).toHaveBeenLastCalledWith('/sd/'));
+    r.unmount();
+  }
+  go.mockRestore();
+});
+
+it('with Shakedown, the admin console, ops, invites and password resets stay', async () => {
+  const { leave } = await import('./HostedGate');
+  const go = vi.spyOn(leave, 'to').mockImplementation(() => {});
+  session = withShakedown;
+  app('/ops');
+  expect(await screen.findByText('ops page')).toBeInTheDocument();
+  expect(go).not.toHaveBeenCalled();
+  go.mockRestore();
+});
+
+it('with Shakedown, signing in brings you back to the Shakedown page that asked', async () => {
+  const { leave } = await import('./HostedGate');
+  const go = vi.spyOn(leave, 'to').mockImplementation(() => {});
+  sessionStorage.setItem('sculptured.after-login', '/sd/p/runs');
+  session = withShakedown;
+  app('/');
+  await vi.waitFor(() => expect(go).toHaveBeenCalledWith('/sd/p/runs'));
+  go.mockRestore();
+});

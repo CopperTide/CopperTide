@@ -1,19 +1,11 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { gw } from './session';
 import { AuthCard, ProviderButtons, type Providers } from './AuthLayout';
-import { MacAppCard, useMacApp } from './MacAppPrompt';
 import './hosted.css';
 
 const WHY: Record<string, string> = { no_account: 'There is no account for that sign-in. You need an invite link first.', login_expired: 'That sign-in took too long or was opened in another browser. Try again.', account_disabled: 'This account is disabled.', email_unverified: 'Verify your email with Google or GitHub first.', cancelled: 'Sign-in was cancelled.', email_taken: 'That email already has an account. Sign in with the method you used before.', invite_used: 'That invite was already used or withdrawn. Ask for a new link.' };
 
 export function LoginPage() {
-  const mac = useMacApp();
-  if (mac.checking) return null;
-  if (mac.href) return <MacAppCard href={mac.href} onBrowser={mac.chooseBrowser} />;
-  return <LoginForm />;
-}
-
-function LoginForm() {
   const [providers, setProviders] = useState<Providers>({ password: true, google: false, github: false });
   const [form, setForm] = useState({ email: '', password: '' });
   const [busy, setBusy] = useState(false);
@@ -24,7 +16,7 @@ function LoginForm() {
     try { await gw('POST', '/login/password', form); window.location.assign('/'); } catch (err) { setError((err as Error).message); setBusy(false); }
   };
   return (
-    <AuthCard title="Sign in to CopperTide" lead="Design, run and steer teams of agents.">
+    <AuthCard title="Sign in to Shakedown" lead="Test your agent systems against simulated worlds. Every step is recorded, so you can rewind any run and fork it.">
       {error && <p className="auth-error" role="alert">{error}</p>}
       <ProviderButtons providers={providers} purpose="login" />
       <form onSubmit={submit} className="auth-form">
@@ -33,8 +25,8 @@ function LoginForm() {
         <button className="btn btn-primary auth-submit" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
       </form>
       {providers.open_signup && (providers.google || providers.github)
-        ? <p className="auth-note">New here? Continue with Google or GitHub to create your account. Forgot your password? Ask the CopperTide team for a reset link.</p>
-        : <p className="auth-note">CopperTide is in private beta: creating an account needs a personal invite link. Forgot your password? Ask the person who invited you for a reset link.</p>}
+        ? <p className="auth-note">New here? Continue with Google or GitHub to create your account. Forgot your password? Ask the Shakedown team for a reset link.</p>
+        : <p className="auth-note">Shakedown is in private beta: creating an account needs a personal invite link. Forgot your password? Ask the person who invited you for a reset link.</p>}
     </AuthCard>
   );
 }
