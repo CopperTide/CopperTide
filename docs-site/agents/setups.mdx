@@ -63,7 +63,7 @@ team:
 | `key` | The key-store name of the model key, never the key |
 | `tools` | The tools the agent calls, or `*` for every tool |
 
-A built-in agent from a file runs on the default provider, OpenRouter, so name an OpenRouter model id. Deploys do not read `key` yet. Pick another provider per agent in the **Team editor** (**⋯ → Team editor**) or through the API: see [Models and providers](/agents/models).
+A built-in agent from a file runs on the default provider, OpenRouter, so name an OpenRouter model id. Deploys do not read `key` yet. In a setup file, an HTTP agent's credentials go under `auth`; through the API the same member takes `headers` (see [Deployed agents](/agents/deployed-agents)), and deploys do not pass `auth` on yet. Pick another provider per agent in the **Team editor** (**⋯ → Team editor**) or through the API: see [Models and providers](/agents/models).
 
 ## MADL setups
 
