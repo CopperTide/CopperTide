@@ -1,0 +1,55 @@
+---
+title: Worlds overview
+description: What a world file holds, and what runs use from the file today.
+---
+
+A world is a copy of the systems your agents work in, as the systems stand before any agent acts. You edit a world in **Worlds**, one section at a time, and Shakedown writes the world to `worlds/<id>/world.yaml` in your project.
+
+<Note>
+Worlds need a runtime package today. A world file runs through an installed benchmark or a built world, named in `package` (the **Runtime** section). The world's other sections describe your systems, and runs do not read them yet. Worlds that run from their files alone are planned.
+</Note>
+
+## The sections
+
+| Section in the editor | Field | What the field holds | Used by runs today |
+|---|---|---|---|
+| Connectors | `connectors` | The systems agents call: a product, an MCP server or an OpenAPI spec, each real, replayed or a stand-in | No |
+| Software flows | `flows` | Automations already running in production, a trigger and its steps | No |
+| Data | `data` | Files, databases and connector imports every run starts from | No |
+| People | `people` | Simulated people agents ask | No |
+| Observability & on-call | `observability` | Monitoring tools, alert rules, on-call operators and the moments needing a human | No |
+| Runtime | `package` | The installed benchmark or built world running this world | Yes |
+
+The file also holds `format: shakedown-world/3` and `label`, the world's display name.
+
+## A world file
+
+This world is the test fixture of the project format, with every section filled.
+
+```yaml
+format: shakedown-world/3
+label: Larkspur Valve Works
+connectors:
+  - {id: erp, label: SAP S/4HANA, mode: stand-in, product: sap-s4hana}
+  - {id: mes, label: Larkspur MES, mode: real, mcp: "https://mcp.larkspur.internal/mes", auth: {key: larkspur-mes}}
+  - {id: rates, label: Carrier rates, mode: replay, openapi: carrier-rates.openapi.yaml, auth: {env: CARRIER_TOKEN}}
+flows:
+  - {id: order-to-job, trigger: crm.order.created, steps: [erp.create_sales_order, mes.create_job]}
+data:
+  - {database: larkspur-prod, engine: postgres, version: "15.6", snapshot: snap_0412-7f3a, masked: true, default_state: true}
+  - {file: suppliers.csv, seeds: erp}
+people:
+  - {id: planner, label: Planner on call, role: planner}
+```
+
+To deploy an experiment in this world, add `package:` naming an installed benchmark or built world.
+
+## Credentials stay out of files
+
+A world names a credential by its key-store name (`auth: {key: <name>}`) or by an environment variable (`auth: {env: NAME}`), never by value. Shakedown refuses a file holding a value shaped like a credential, such as an `sk-` key or a `password:` field, and points to the value.
+
+## Ways to make a world
+
+- Start from a benchmark or a template: [Start from a benchmark or template](/worlds/templates-and-benchmarks).
+- Put your own Docker Compose project in a world: [Bring your own systems](/worlds/your-systems).
+- Ask the assistant: click **Ask** in the top bar and describe what you run.

@@ -1,0 +1,41 @@
+---
+title: Runtime package
+description: Name the installed benchmark or built world running a world, and see what a deploy takes from each file.
+---
+
+The **Runtime** section names the package running the world. You pick an installed benchmark or a built world under **Runtime package**, and Shakedown writes the package's name to `package` in the world file.
+
+```yaml
+format: shakedown-world/3
+label: Retail store
+package: retail
+```
+
+<Note>
+Worlds need a runtime package today. Worlds that run from their files alone are planned. Until then, the package supplies the world's parts, tools, seed data, tasks and checks, and the editor marks the Runtime section with a warning while `package` is empty.
+</Note>
+
+## What a deploy takes from your files
+
+When you click **Deploy** on an experiment, Shakedown turns the files into an engine experiment:
+
+| From | Shakedown takes | Today Shakedown leaves out |
+|---|---|---|
+| The world | `package`, the benchmark or built world to run | Connectors, flows, data, people and observability |
+| The scenario | `preset`, the package's task to play, and each event's `fault` and `params`, as the package's disruptions | The `task` text (runs get the preset task's ticket), `changes`, `gates`, `checks`, and each event's `at`, `after_calls` and `effects` |
+| Each setup | The team: built-in agents, Claude Code, Codex or an HTTP endpoint, run one after another | A built-in agent's `key`, an HTTP setup's `auth` |
+| The experiment | `repeats.per_setup` and `budget.per_run_usd`, each run's spend limit | `budget.per_deployment_usd`. Seeds stay paired whatever `paired_seeds` says. |
+
+Setups of kind `code` and `madl` refuse to deploy from a file today, with the message "this kind of setup can't be deployed from a file yet". Run your own code through a Code connection instead: see [Your own orchestration](/agents/orchestration).
+
+## Messages you meet
+
+| Message | What to do |
+|---|---|
+| `<world> has no runtime yet: set package: to an installed benchmark or built world` | Pick a package in the world's Runtime section |
+| `<scenario> names no task of <package> to play: set preset:` | Set the scenario's runtime task to one of the package's task ids |
+| `fix <item> before deploying: <problem>` | Open the item and fix the problem the list shows |
+
+## Where runs happen
+
+A deploy needs an engine running packages on its own machine. Hosted Shakedown runs packages only in sandboxes, and the sandbox runner is in progress, so pressing Run in the cloud arrives with that runner. Runs work today on a local engine: see [Self-host](/self-host).

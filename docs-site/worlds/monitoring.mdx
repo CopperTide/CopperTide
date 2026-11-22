@@ -1,0 +1,57 @@
+---
+title: Monitoring
+description: Describe the monitoring tools, alert rules, on-call operators and the moments needing a human.
+---
+
+The **Observability & on-call** section holds four lists under `observability`: tools, alerts, operators and human rules.
+
+<Note>
+Runs do not read this section yet. Today the runtime package supplies any monitoring a world has. The `software-factory` template, for example, runs OpenTelemetry, Prometheus, Loki, Tempo, Grafana and GlitchTip on the world clock, with a PagerDuty twin.
+</Note>
+
+## Tools
+
+| Field | What the field holds |
+|---|---|
+| `id` | Unique in the world |
+| `product` | The product, such as `datadog`, `pagerduty` or `otel-collector` |
+| `mode` | `real` (receives the run's telemetry, tagged with the run id) or `stand-in` |
+| `seeded_from` | The export a stand-in starts from, such as `monitors.json` |
+| `auth` | `{key: <name>}` or `{env: NAME}` |
+
+## Alerts
+
+| Field | What the field holds |
+|---|---|
+| `name` | The alert's name |
+| `when` | The condition, such as `approvals.pending > 3` |
+| `routes_to` | The operator or channel the alert pages |
+
+## Operators
+
+| Field | What the field holds |
+|---|---|
+| `id`, `label`, `role` | Who the operator is |
+| `behavior` | `{answers_after: {minutes: 15}}`, `approves`, `refuses` or `never_answers` |
+
+## Human rules
+
+Each rule pairs a `moment` with what the run does then (`then`).
+
+| `moment` | `then` |
+|---|---|
+| `paged`, `approval`, `gate_needs_person`, `agent_stuck`, `message_to_person` | `continue`, `pause` or `fail` |
+
+## Example
+
+```yaml
+observability:
+  tools:
+    - {id: pd, product: pagerduty, mode: stand-in, seeded_from: services.json}
+  alerts:
+    - {name: Approvals piling up, when: approvals.pending > 3, routes_to: planner}
+  operators:
+    - {id: planner, label: Planner on call, role: planner, behavior: {answers_after: {minutes: 15}}}
+  human:
+    - {moment: approval, then: pause}
+```

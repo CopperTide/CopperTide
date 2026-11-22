@@ -1,140 +1,64 @@
 ---
 title: Concepts
-description: The words CopperTide uses, how the parts connect, and what each status means.
+description: The words Shakedown uses, from a world to an approximate restore.
 ---
 
-A **project** holds a team's design and run history. Its **agents** work in folders you choose and pass results along the connections you draw. This page explains those parts and the labels you will see as the team runs.
+Read this page once before you build. Every other page uses these words.
 
-## Designing
+## The four files
 
-| Word | What it is |
-| --- | --- |
-| **Project** | One team's design and its history. The Projects page, and the **Projects** menu in the top bar, list your projects. |
-| **Team** | The agents of a project and the connections between them, started and stopped together. |
-| **Agent** | One worker with a name, a **Job** and a **Folder**. It runs on **Claude** (Claude Code), **Codex** or **OpenCode** (open models, see [Open models with OpenCode](/guides/open-models)). |
-| **Job** | The agent's assignment, delivered when its work begins. An agent waiting for a handoff receives its Job with that handoff. See [Designing teams](/guides/agent-design). |
-| **Folder** | Where the agent works. Agents use the project folder unless you give one its own. On a connected computer it must be inside a folder that computer allows. |
-| **Group** | A box of agents inside a team, with its own color. Save a group to your **Library** to reuse it in other projects: see [Reusable groups](/guides/groups). |
-| **Input** | Shared goals, links, notes and constraints. In an ordinary team, selected agents receive it; in a workflow, the dispatcher reads it when the team starts. |
+| Item | What the file describes | Where the file lives |
+|---|---|---|
+| World | The systems agents work in, before any agent acts | `worlds/<id>/world.yaml` |
+| Scenario | A task in one world, with disruptions, gates and checks | `scenarios/<id>.yaml` |
+| Agent setup | A team to test: built-in agents, Claude Code, Codex, your code, an endpoint, or MADL | `setups/<id>.yaml` |
+| Experiment | One scenario against one or more setups, with runs per setup and a budget | `experiments/<id>.yaml` |
 
-### Connections
+A **project** is the folder holding these files, with `shakedown.yaml` at the root. Every file starts with a `format:` line, such as `format: shakedown-world/3`. Shakedown reads each file strictly. An unknown field, a wrong `format:` or a credential written inline counts as a problem, shown next to the item with a pointer to the value. A problem in one file never stops the rest of the project from loading.
 
-Arrows on the board say how agents relate.
+Ids are 1 to 64 lowercase letters, digits and dashes, not starting with a dash.
 
-| Arrow | Effect |
-| --- | --- |
-| **hands work to** | When the source agent finishes a work turn, CopperTide passes its final reply to the receiving agent. The source starts first. |
-| **reports to** | Design intent only. It documents the hierarchy; nothing is enforced. |
-| **watches** | Design intent only. Nothing is enforced. |
+## Runs, branches and steps
 
-A **handoff** is one piece of work passed along a "hands work to" arrow, recorded with its message. An arrow on the design does not prove a message was sent: the Run view shows the handoffs that actually happened.
+- A **run** is one task, one team, one world.
+- A **branch** is one line of events in a run. The first branch is the original. Each fork adds a branch.
+- A **step** is one recorded event: an agent start, a model call, a tool call, a handoff note, a message, a world event. Steps carry a number, `seq`.
+- An **experiment** runs every setup the number of times you ask. Shakedown interleaves the setups (run 1 of every setup, then run 2) and gives run *n* of every setup the same seed, so setups meet the same conditions.
 
-### Workflows (Advanced)
+## Saves at every step
 
-A **workflow** replaces ordinary arrows with stages. A **dispatcher** agent reads Input and splits the work into **items**. Each item moves through **stages**, and routes can branch on the outcome or loop back for another round, up to a round limit. A stage is run by one of:
+After each step that wrote to a part of the world, Shakedown saves that part and records the save with the step. A part of the world is one system, such as a database or a Docker Compose project. A part whose saves cost a lot declares `save_at: points` and gets saved at save points instead: before each model call through Shakedown's gateway, when a driver asks, and at the run's end.
 
-| Stage | Settled by |
-| --- | --- |
-| **Agent** | An agent, which reports the outcome. |
-| **Review panel** | Several reviewers, whose verdicts are combined. |
-| **Check** | A command CopperTide runs, such as `npm test`. Its result is verified evidence. |
-| **Person decides** | You, with approve or rework and an optional note. |
-| **Merge** | CopperTide, merging the item's branch back. A conflict sends it back. |
+## Rewind and fork
 
-An **assembly** agent finishes once every item is done. See [Workflows](/guides/workflows).
+To **rewind**, you pick a step of an ended run. To **fork**, you change something (an agent's prompt, model, provider, kind or read-only flag) and rerun from there. Shakedown puts every part of the world back as the part stood just before the step, copies the earlier steps into the new branch, and lets the team continue.
 
-## Running
+The fork point moves back when a step cannot restart on its own. In the chain runner, the default:
 
-| Word | What it is |
-| --- | --- |
-| **Start team** | Checks the design, then starts each agent in order. The project's status, next to **Start team**, reads **Draft · N to fix** until the design can start, then **Draft · ready to start**. |
-| **Design** and **Run** | The two views of a project. **Design** is the editable board. **Run** shows the agents that are running now, what each is doing, and the handoffs between them. |
-| **Run** | One start-to-stop of a team. Each run's history is kept. |
-| **Question** | An agent asking you for a decision. It shows as **needs you** until you answer, or until it times out and the agent decides for itself. See [Questions and approvals](/guides/questions). |
-| **Managed subagent** | An agent another agent started with CopperTide's tools while the team runs. It shows in Run under its parent. |
-| **Own copy** | An agent's own Git working copy of the project, so agents working at once don't overwrite each other. |
-| **Token use** | The tokens each agent's CLI reports, shown live. Limits and estimates are on [Limits and usage](/reference/limits). |
+- A Claude Code or Codex session cannot resume mid-way, so a fork during a CLI agent's turn starts at that agent's start.
+- An API-mode agent restarts at the model call that chose the tool call.
 
-Agent states such as *running*, *stopping* or *needs attention* are listed on [Agent states](/reference/states).
+The fork's answer and the run page say where the fork started, where you asked, and why.
 
-## Computers
+## Exact and approximate restore
 
-| Word | What it is |
-| --- | --- |
-| **Computer** | One of your machines, connected to your account. The **Computers** page lists them. |
-| **Runner** | The background program on a computer that starts the agents, captures what they do and passes messages. Installed by the [connect command](/connect-a-computer). |
-| **Allowed folders** | The folders a computer lets agents start in, decided on that computer. By default, your home folder. Add more with `coppertide allow <folder>`. |
-| **Access** | How much agents may do once started. **Full access** (the default) lets them act as you do. **Sandboxed** makes Claude ask before risky actions and keeps Codex writing only inside its folder. |
-| **Run on** | Which computer runs a team. With one connected computer, **Automatic** uses it. |
+A fork asks for one restore mode for the whole world. Each integration declares what the integration supports.
 
-The server can ask a computer to do something, but the computer has the last word. It refuses agents outside its allowed folders, and the server can lower access but never raise it.
+| The part declares | Exact restore | Approximate restore |
+|---|---|---|
+| An exact save | From the save | From the save |
+| Replay and an approximate save | Replays from the start | From the save, approximately |
+| Replay only | Replays from the start | Replays from the start |
+| An approximate save only | Refused, naming the part | From the save, approximately |
+| Nothing | Refused | Refused |
 
-## Evidence and provenance
+A replay reruns every recorded input with the same seed. When a replay gives a different result from the record, the fork fails and names the step. Shakedown labels a branch restored approximately as **Approximate restore** on the run page, in the branch list and in compare.
 
-Progress labels describe where the work stands: **Planned**, **In progress** or **Blocked**, for example. Evidence labels describe how CopperTide obtained a fact. Read them together: an agent can finish a task without its result having been checked.
+## Scoring
 
-| Word | Meaning |
-| --- | --- |
-| **Agent-reported** | The agent said so, for example "done" or "tests pass". A claim, not proof. |
-| **Captured** | CopperTide recorded it directly, such as a tool call and its result. |
-| **Observed** | Seen on disk or in Git, such as a changed file. |
-| **Estimated** | Worked out by a rule of thumb, such as a token count from text length. |
-| **Verified** | A check CopperTide ran passed; the result covers what that check tests. |
-| **Unknown** | No supporting information is available. |
+When a branch ends, Shakedown saves every part and scores the world: by the named checks of the runtime package's task, or by comparing the final world with the task's expected world. Safety checks count apart from goals. A model never decides a score.
 
-<Note>A file existing, a tool succeeding or an agent saying "done" does not show that the work is correct. Only a check that ran counts as verified.</Note>
+## Where to go next
 
-## Sharing
-
-| Word | What it is |
-| --- | --- |
-| **Library** | Your private collection of reusable groups. |
-| **Community** | The shared catalog. A published group is a **block**: a definition only, which never starts agents by itself. |
-| **Team file** | A project exported as a [MADL](/guides/madl) document (`.madl.yaml`), an open format other tools can read. |
-
-## How the parts connect
-
-<Tabs>
-  <Tab title="Hosted beta">
-
-```mermaid
-flowchart LR
-  B["Your browser"] -- "HTTPS, signed in" --> G["Gateway: app.coppertide.ai"]
-  G -- "your requests only" --> I["Your own CopperTide: board, journal, workflows"]
-  R["Runner on your computer"] -- "connects out through the gateway" --> I
-  I -- "start, message, stop" --> R
-  R --> C["Claude Code"]
-  R --> X["Codex"]
-  C -- "read and edit" --> F["Allowed folders"]
-  X -- "read and edit" --> F
-```
-
-The hosted service signs you in and provides a separate CopperTide instance for your account's projects and run history. Your computer's **runner** opens an outbound connection to the service, so you do not need to open an inbound port. Agents run on your computer using its CLI sign-ins and folder permissions.
-
-  </Tab>
-  <Tab title="Self-hosted">
-
-```mermaid
-flowchart LR
-  B["Your browser"] -- "http://127.0.0.1:4410" --> S["coppertide serve: board, journal, workflows"]
-  S -- "start, message, stop" --> R["Local runner"]
-  R --> C["Claude Code"]
-  R --> X["Codex"]
-  C -- "read and edit" --> F["Your folders and Git"]
-  X -- "read and edit" --> F
-  R -- "every event" --> S
-```
-
-`coppertide serve` starts the app server and a runner on the same machine. Team designs and run history are stored locally. Claude Code and Codex still communicate with their providers; see [Privacy](/privacy) for the data flow.
-
-  </Tab>
-</Tabs>
-
-## Next steps
-
-<CardGroup cols={2}>
-  <Card title="Connect a computer" icon="desktop" href="/connect-a-computer">Install the runner and choose folders.</Card>
-  <Card title="Compose on the board" icon="pen-ruler" href="/guides/board">Put these pieces together.</Card>
-  <Card title="Run a team" icon="play" href="/guides/running">What happens when you press Start team.</Card>
-  <Card title="Agent states" icon="list" href="/reference/states">Every state an agent can be in.</Card>
-</CardGroup>
+- [Worlds overview](/worlds/overview) for what a world file holds.
+- [Rewind and fork](/runs/rewind-and-fork) for the steps in the app.

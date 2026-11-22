@@ -1,0 +1,53 @@
+---
+title: Start from a benchmark or template
+description: Give a world a runtime from a benchmark in the repository, or build one from a world template.
+---
+
+Pick the fastest way to a world you can run: name a benchmark as the world's runtime package, or build a world from a template and name the built world.
+
+<Note>
+Both paths need a local engine today. Hosted Shakedown installs no packages yet and refuses to build worlds, because packages there run only in sandboxes and the sandbox runner is in progress.
+</Note>
+
+## Use a benchmark
+
+A benchmark is a package with tasks, tools, seed data and checks, and the world the tasks run in. The open-source repository ships these:
+
+| Package | What the world is | What the package needs |
+|---|---|---|
+| `retail` | Customer service from tau2-bench retail, on one Postgres database. The default benchmark. | The Postgres from the repository's compose file |
+| `factory-01` | A pump plant's ERP with a USD 150 purchase limit and a supplier delay | Python (`uv`), no Docker |
+| `plant-floor` | A supply disruption on a plant floor, re-planned over OPC UA | Python, no Docker |
+| `line2-oee` | A plant's discrete-event simulation for an optimisation study with a simulation budget | Python, no Docker |
+| `pharma` | A production incident at a fictional maker of a refrigerated biologic, in five scenarios | ERPNext and Twenty CRM in Docker, plus a CopperTide program for approvals |
+| `factory` | A stamping plant: a press bearing failure and a bad shift | A factory example not public yet |
+
+Each package's README in `benchmarks/<name>/` lists its tasks and checks.
+
+To use one:
+
+1. Open your world and its **Runtime** section.
+2. Pick the package and save. The list shows `retail`, every built world, and the benchmark the engine started with. For another package, start the engine with `SHAKEDOWN_BENCHMARK=<name>`, or write `package: <name>` in the world file.
+3. In each scenario of the world, set **Task of the world's runtime it plays** to one of the package's task ids.
+
+## Build a world from a template
+
+The world builder generates a benchmark package from a template, your choices and a seed, the same way every time.
+
+1. Open the **⋯** menu in the top bar and pick **Build a world…**.
+2. Pick a template, then work through the steps: company, systems, people, events, review.
+3. Click **Build world**. Shakedown writes the world to `SHAKEDOWN_WORLDS`, installs the world and prepares the world's base saves in the background.
+4. In your world file's **Runtime** section, pick the built world.
+
+The builder ships two templates:
+
+| Template | What the world holds |
+|---|---|
+| `small-manufacturer` | A pump plant's ERP and its shift roster, both simulated |
+| `software-factory` | A GitHub twin with Actions CI, a Jira twin, three services in staging and production on Docker Compose, an observability stack, Slack and PagerDuty twins, and simulated engineers |
+
+Templates are YAML files checked by a JSON Schema (`benchmarks/world/worldbench/schema/template.schema.json`). Add folders of your own templates with `SHAKEDOWN_TEMPLATES`. A built world never changes: a change makes a new world under another name.
+
+## Move earlier experiments into the project
+
+Experiments made on an engine before project files show under **Earlier experiments** on the Experiments page. Click **Move into the project** to see what Shakedown would write: a world per installed benchmark and built world, and a scenario, setups and an experiment per earlier experiment. Click **Move them** to write the files. Earlier runs stay, each as the first deployment of its new experiment file.

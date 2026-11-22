@@ -1,16 +1,16 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "CopperTide",
+  "name": "Shakedown",
   "colors": {
-    "primary": "#A4461A",
-    "light": "#EE7A3A",
-    "dark": "#A4461A"
+    "primary": "#a8562a",
+    "light": "#d98b5a",
+    "dark": "#7a3d1c"
   },
   "background": {
     "color": {
       "light": "#FBF9F5",
-      "dark": "#100E0C"
+      "dark": "#14110E"
     }
   },
   "fonts": {
@@ -27,84 +27,71 @@
         "pages": [
           "introduction",
           "quickstart",
-          "guides/setup",
-          "guides/open-models",
-          "connect-a-computer",
           "concepts"
         ]
       },
       {
-        "group": "Design a team",
+        "group": "Build worlds",
         "pages": [
-          "guides/agent-design",
-          "guides/board",
-          "guides/design-assistant",
-          "guides/examples",
-          "guides/groups"
+          "worlds/overview",
+          "worlds/templates-and-benchmarks",
+          "worlds/connectors",
+          "worlds/data",
+          "worlds/flows-and-people",
+          "worlds/monitoring",
+          "worlds/runtime",
+          "worlds/your-systems",
+          "worlds/write-an-integration"
         ]
       },
       {
-        "group": "Run a team",
+        "group": "Agents",
         "pages": [
-          "guides/running",
-          "guides/control",
-          "guides/budgets",
-          "guides/where-tokens-went",
-          "guides/send-traces",
-          "guides/run-from-terminal",
-          "guides/questions",
-          "guides/context",
-          "guides/status-page",
-          "guides/changes",
-          "guides/triggers",
-          "guides/result-checks",
-          "guides/knowledge",
-          "guides/skills",
-          "guides/git",
-          "guides/offline"
+          "agents/setups",
+          "agents/claude-code-and-codex",
+          "agents/models",
+          "agents/deployed-agents",
+          "agents/frameworks",
+          "agents/orchestration"
         ]
       },
       {
-        "group": "Build workflows",
+        "group": "Run and read results",
         "pages": [
-          "guides/workflows",
-          "guides/textbook",
-          "guides/pattern-catalog"
+          "runs/experiments",
+          "runs/watching",
+          "runs/rewind-and-fork",
+          "runs/compare-and-review",
+          "runs/scenarios"
         ]
       },
       {
-        "group": "Save and share",
+        "group": "Use from code",
         "pages": [
-          "guides/team-files",
-          "guides/madl",
-          "guides/import-a-session",
-          "guides/community"
+          "code/python-sdk",
+          "code/mcp",
+          "code/http-api"
         ]
       },
       {
-        "group": "Reference",
+        "group": "Self-host",
         "pages": [
-          "reference/cli",
-          "reference/agent-tools",
-          "reference/team-file",
-          "reference/states",
-          "reference/limits"
+          "self-host"
         ]
       },
       {
-        "group": "Hosting and security",
+        "group": "Account",
         "pages": [
-          "operations",
-          "security",
-          "privacy"
+          "account/sign-in",
+          "account/keys-and-security",
+          "account/quotas"
         ]
       },
       {
         "group": "Help",
         "pages": [
-          "troubleshooting",
           "faq",
-          "changelog"
+          "updates"
         ]
       }
     ]
@@ -115,5 +102,5 @@
       "view"
     ]
   },
-  "description": "CopperTide lets you design a team of agents performing complex tasks on a visual board, run it and see the evidence behind every result."
+  "description": "Shakedown, by CopperTide, tests agent systems before production: build a copy of the systems your agents work in, run your agent setups against scenarios, and read every step of every run."
 }

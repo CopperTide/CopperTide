@@ -1,0 +1,34 @@
+---
+title: Write an integration
+description: Put a new kind of system in a world with a program speaking the shakedown-part/1 protocol.
+---
+
+Write an integration when no existing one fits your system and a Compose project falls short, for example a simulator, a twin with its own save format, or a system with a cheap save of its own. An integration is a separate program, in any language, speaking `shakedown-part/1`: JSON-RPC over stdin and stdout.
+
+## What an integration does
+
+| Call | What the program does |
+|---|---|
+| `describe` | Declares its tools (each marked `read` or `write`), how the program restores, and whether the program uses the world clock |
+| `start` | Starts an instance from its config, or from a save |
+| `call_tool` | Runs one tool call and says which keys the call read and wrote |
+| `save`, `drop_save` | Saves an instance's state, and drops a save |
+| `inspect`, `diff` | Shows the state, and compares two states |
+| `advance`, `stop`, `usage` | Moves the clock, stops an instance, reports disk use |
+
+In `describe`, each integration declares its restore: `restore.exact` (`save`, `replay` or `none`) and `restore.approximate`. Shakedown uses these to decide how a fork restores the part, and refuses a fork the part cannot honor. See [Concepts](/concepts).
+
+## Steps
+
+1. Copy the counter example: `kits/rust/examples/counter.rs` with the Rust kit (crate `shakedown-part`), or `kits/python/examples/counter.py` with the Python kit (package `shakedown_part`). The kits read and write the lines and check the ids.
+2. Add a folder with a `shakedown-package.toml` (`kind = "integration"`, `name`, `version`, `protocol`, `run`, `needs`, `config_schema` and example tool calls).
+3. Check the program against the protocol with `shakedown-part-check`. The checker runs describe, start, the examples, save and restore, diff, replay and `drop_save`, prints a JSON report, and exits 0 when all passed.
+4. Name the integration as a part in a benchmark's world or a world template, and put the folder under one of the `SHAKEDOWN_PACKAGES` roots.
+
+## Read next, in the repository
+
+- [`docs/protocol.md`](https://github.com/CopperTide/Shakedown/blob/main/docs/protocol.md): the transport, the manifest, every call, errors, and the clock and determinism contracts.
+- [`integrations/README.md`](https://github.com/CopperTide/Shakedown/blob/main/integrations/README.md): a step-by-step counter integration.
+- [`docs/packages.md`](https://github.com/CopperTide/Shakedown/blob/main/docs/packages.md): writing and installing integrations and benchmarks.
+
+A `command` run is for programs you trust. An `image` run starts the program in a container, with no network unless the manifest asks for host networking.

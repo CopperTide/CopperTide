@@ -1,0 +1,35 @@
+---
+title: Connectors
+description: Describe the systems your agents call, each with how runs use the system and where its credential comes from.
+---
+
+A connector names one system your agents work against: an ERP, an MES, a carrier's rate API. You add connectors in the world's **Connectors** section.
+
+<Note>
+Runs do not read connectors yet. Today the world's runtime package supplies the systems and tools agents call. See [Runtime package](/worlds/runtime). Connectors record what your production systems are, for the time worlds run from their files alone.
+</Note>
+
+## Fields
+
+| Field | In the editor | What the field holds |
+|---|---|---|
+| `id` | Connector id | Unique in the world. Tools take the name `<id>.<tool>`. |
+| `label` | Connector name | The display name |
+| `mode` | How runs use it | `real` (the real system, sandboxed), `replay` (recorded once, then replayed) or `stand-in` (a built-in stand-in seeded from the world's data) |
+| `product` | Product | A built-in product connector, such as `sap-s4hana` |
+| `mcp` | MCP server URL | The system's MCP server |
+| `openapi` | OpenAPI spec file | A spec file in the world's data folder |
+| `auth` | Key-store name, or environment variable | `{key: <name>}` or `{env: NAME}`, never the credential |
+
+## Example
+
+```yaml
+connectors:
+  - {id: erp, label: SAP S/4HANA, mode: stand-in, product: sap-s4hana}
+  - {id: mes, label: Larkspur MES, mode: real, mcp: "https://mcp.larkspur.internal/mes", auth: {key: larkspur-mes}}
+  - {id: rates, label: Carrier rates, mode: replay, openapi: carrier-rates.openapi.yaml, auth: {env: CARRIER_TOKEN}}
+```
+
+## What agents call today
+
+The tools agents call come from the parts of the runtime package's world. Each part is an integration, such as `postgres`, `erpnext`, `twenty-crm`, a GitHub or Jira twin, or any Docker Compose project through `service`. The repository's `integrations/` folder holds 25 integrations. To add a system of your own, see [Bring your own systems](/worlds/your-systems).

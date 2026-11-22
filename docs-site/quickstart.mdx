@@ -1,112 +1,86 @@
 ---
 title: Quickstart
-description: Set up CopperTide, create a team and follow its first run.
+description: Sign in, set up a project, and build your first world, scenario, agent setup and experiment.
 ---
 
-Start with a small task in a project folder you know. This guide uses a **Builder → Reviewer** team: one agent does the work, then a second reviews the result.
+You build four files in this guide: a world, a scenario, an agent setup and an experiment. The example uses the retail benchmark, a customer-service task on one Postgres database, from tau2-bench retail.
 
-## Set up CopperTide
-
-Choose the setup that matches how you want to run the app. Both lead to the same team creation steps below.
-
-<Tabs>
-  <Tab title="Hosted beta">
-    You need a beta invite and a computer with Claude Code or Codex installed. The runner supports Windows on 64-bit Intel or AMD, macOS 11 or later, and Linux; the **Computers** page lists available builds.
-
-    1. Open your invite link. Enter your name, email and a password of at least 12 characters, then choose **Create account**. For later visits, sign in at **app.coppertide.ai**.
-    2. Open **Computers** from the **⋯** menu at the top right. Under **Connect a computer**, select the system of the computer that will run your agents and choose **Copy connect command**.
-    3. Open a terminal on that computer—PowerShell on Windows—paste the command and press Enter.
-    4. Return to **Computers** and wait for **Connected**. Check that Claude Code or Codex is installed and signed in; use the sign-in controls if needed.
-
-    The command installs the runner without admin rights and allows agents to start in your home folder. The runner stays in the background and starts again when you log in. See [Connect a computer](/connect-a-computer) for installation details and folder access.
-  </Tab>
-  <Tab title="Self-hosted">
-    You need Linux or an Apple silicon Mac, Rust 1.95 or newer, Node.js 24 and Git. Install Claude Code or Codex and sign in as the user who will run CopperTide.
-
-    ```bash
-    git clone https://github.com/CopperTide/CopperTide.git
-    cd CopperTide
-    npm --prefix web ci
-    npm --prefix web run build
-    cargo run --release -p coppertide -- serve
-    ```
-
-    Open `http://127.0.0.1:4410`. The server starts a local runner, so you do not need to connect a computer or create an account.
-
-    <Warning>Keep port 4410 on localhost. Anyone who can reach the local server can control your agents. See [Security](/security).</Warning>
-
-    For backups, upgrades and other server options, see [Run it yourself](/operations).
-  </Tab>
-</Tabs>
-
-## Create your first team
+<Note>
+Hosted Shakedown builds and edits these files today. Pressing Run in the cloud arrives with the sandbox runner, which is in progress. To run the experiment now, start the open-source engine on your computer ([Self-host](/self-host)) and follow the same steps there.
+</Note>
 
 <Steps>
-  <Step title="Choose a template">
-    Choose **New project** on the Projects page, or under **Projects** in the top bar. Set **Agents run on** to **Claude** or **Codex**, then select **Builder → Reviewer**.
+  <Step title="Sign in">
+    Open [app.coppertide.ai](https://app.coppertide.ai/) and sign in with Google or GitHub. You land in Shakedown at `/sd/`, in your personal org. The account menu at the top right shows your orgs and **Sign out**.
 
-    <Frame caption="Choose an agent provider, then a template.">
-      ![The New project page with the Claude or Codex choice and templates including Solo agent and Builder → Reviewer](/images/quickstart/start-from.png)
-    </Frame>
+    On a local engine there is no sign-in. Open the UI at the address from [Self-host](/self-host).
   </Step>
-  <Step title="Choose the working folder">
-    The project opens on the **Design** board.
-
-    - **Hosted:** use **Folder on your computer** to enter a full path, such as `/home/you/project` or `C:\Users\you\project`, or choose **Browse…**. Select a computer under **Run on** if more than one is connected. With one connected computer, **Automatic** uses it. An empty folder field uses that computer's first allowed folder.
-    - **Self-hosted:** choose **Project folder**. Agents use this folder unless you give an agent its own.
+  <Step title="Open Get started">
+    Click **Get started** at the bottom of the sidebar. The first step shows your project. On a local engine with no project yet, give the project a name and click **Create project**. A project is a folder of YAML files, one per world, scenario, setup and experiment.
   </Step>
-  <Step title="Write the jobs">
-    Open each agent and edit its **Job**. Give the builder a specific task and tell the reviewer what to inspect. Include how the result should be checked.
+  <Step title="Connect a model">
+    Open **Connections & models** in the sidebar and add a key under **Add a key or server**. Every run calls a real model. On a local engine, Claude Code and Codex use your own CLI sign-in instead. See [Models and providers](/agents/models).
+  </Step>
+  <Step title="Make a world">
+    Open **Worlds** and click **New world**. Name the world `Retail store`. Open its **Runtime** section and pick `retail` as the runtime package, then click **Save**.
 
-    For example, ask the builder to fix one reproducible bug and add a regression test. Ask the reviewer to inspect the change, run the relevant tests and report any remaining issues.
-
-    The project's status, next to **Start team** in the tab row, reads **Draft · N to fix** while required details are missing; **Things to fix** on the Design board lists them. **Draft · ready to start** means the team can start; it does not assess the quality of the jobs.
-
-    <Frame caption="The Design board shows each agent's Job and whether the team is ready to start.">
-      ![A Design board with a Planner connected to two builders, each showing its Job; the project's tab row shows Draft · ready to start and Start team](/images/quickstart/design-board.png)
-    </Frame>
+    Today a world runs through an installed benchmark or a built world, named as its runtime package. Worlds that run from their files alone are planned. Hosted Shakedown has no runtime packages installed yet, so its list shows **None yet**. See [Runtime package](/worlds/runtime).
+  </Step>
+  <Step title="Write a scenario">
+    Open **Scenarios** and click **New scenario**. In **Inputs**, pick the world, enter `27` as the task of the world's runtime, and write the ticket. Save.
+  </Step>
+  <Step title="Describe an agent setup">
+    Open **Agent setups** and click **New agent setup**. Under **How it runs**, pick **Claude Code**. Save.
+  </Step>
+  <Step title="Create the experiment">
+    Open **Experiments** and click **New experiment**. Name the experiment, pick the world, the scenario and the setup, and set **Runs per setup** to 3. Click **Create experiment**.
+  </Step>
+  <Step title="Deploy">
+    On the experiment's page, click **Deploy** and confirm. The **Runs** tab lists each deployment. Click **Open results** to see the pass rate, every run and its checks. See [Experiments](/runs/experiments).
   </Step>
 </Steps>
 
-## Run and review the team
+## The files you made
 
-<Steps>
-  <Step title="Start the team">
-    Choose **Start team**, at the right of the project's tab row, and review the confirmation. Agents use your own Claude Code or Codex sign-in and may incur charges or consume plan usage. You can set a per-agent **Token limit** before starting; see [Limits and usage](/reference/limits).
+The editors write these files into the project folder. You edit them in the app, through the [MCP server](/code/mcp), or with any text editor on a local engine.
 
-    Once you confirm, CopperTide opens the **Run** view. The builder receives its Job first. When it finishes a work turn, its final reply is passed to the reviewer along with the reviewer's Job.
+```yaml
+# worlds/retail-store/world.yaml
+format: shakedown-world/3
+label: Retail store
+package: retail
+```
 
-    <Frame caption="The Run board shows each agent's state. Answer opens an agent's pending question.">
-      ![An example Run board with a Planner marked needs you and an Answer button, alongside two builders marked done](/images/quickstart/run-board.png)
-    </Frame>
-  </Step>
-  <Step title="Follow the work">
-    Open an agent to read its conversation and tool calls. Send guidance through its message box, or open **Results › Team conversation** to follow updates across the team.
+```yaml
+# scenarios/return-and-exchange.yaml
+format: shakedown-scenario/1
+label: Return and exchange
+world: retail-store
+preset: "27"
+task: The customer wants to return two items and exchange the boots.
+```
 
-    If an agent shows **needs you**, choose **Answer** and respond on the question card. Use **Allow** or **Deny** for a tool approval. Questions and approvals have timeouts; [Questions and approvals](/guides/questions) explains what happens when they expire.
+```yaml
+# setups/claude-code.yaml
+format: shakedown-setup/1
+label: Claude Code
+team:
+  kind: claude-code
+```
 
-    <Frame caption="Answer on the question card, using a choice or your own words where offered.">
-      ![A question card asking for a colour scheme, with two choices, a free-text answer box and a timeout](/images/guides/question-card.png)
-    </Frame>
-  </Step>
-  <Step title="Review the result and stop">
-    Read the reviewer's findings and inspect the changes and check results. An agent marked **done** has finished a turn; that alone does not establish that the work is correct.
+```yaml
+# experiments/first-try.yaml
+format: shakedown-experiment/1
+label: First try
+world: retail-store
+scenario: return-and-exchange
+setups: [claude-code]
+repeats: {per_setup: 3}
+```
 
-    Choose **Stop team** and confirm to close the agents' sessions. CopperTide keeps the run history for later review.
-  </Step>
-</Steps>
+Today each run gets the ticket of the preset task from the runtime package. The ticket you write in `task` stays in the file for readers. See [Scenarios and disruptions](/runs/scenarios).
 
-## If an agent cannot start
+## Next
 
-If an agent says Claude Code or Codex **isn't signed in on the computer**, use its **Sign in** action and complete the provider's sign-in. Then choose **Hand over again** or **Restart this agent**, as offered. See [Troubleshooting](/troubleshooting) for other startup problems.
-
-To use both providers in one team, stop the team, open an agent and change **Runs on** to **Claude** or **Codex**.
-
-## Next steps
-
-<CardGroup cols={2}>
-  <Card title="Design a team" icon="diagram-project" href="/guides/agent-design">Choose roles, write jobs and set limits.</Card>
-  <Card title="Compose on the board" icon="pen-ruler" href="/guides/board">Add agents, connect handoffs and supply shared Input.</Card>
-  <Card title="Run a team" icon="play" href="/guides/running">Understand handoffs, restarts and run history.</Card>
-  <Card title="Inspect the evidence" icon="eye" href="/guides/context">Read tool results, checks and reported progress.</Card>
-</CardGroup>
+- Add a second setup and compare the two: [Agent setups](/agents/setups).
+- Open a run, rewind to a step and rerun with a change: [Rewind and fork](/runs/rewind-and-fork).

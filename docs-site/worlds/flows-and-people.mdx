@@ -1,0 +1,38 @@
+---
+title: Flows and people
+description: Describe the automations already running in production and the people agents ask.
+---
+
+Two sections describe what happens around the agents: **Software flows**, the automations running with no agent involved, and **People**, the humans agents ask or must ask.
+
+<Note>
+Runs do not read these two sections yet. Today simulated people and automations come from the runtime package. The `software-factory` template, for example, ships simulated engineers driven by rules, and the `pharma` benchmark ships simulated deciders for approvals.
+</Note>
+
+## Software flows
+
+| Field | In the editor | What the field holds |
+|---|---|---|
+| `id` | Flow id | Unique in the world |
+| `trigger` | Trigger | The event or schedule starting the flow, such as `crm.order.created` |
+| `steps` | Steps | The connector tools the flow calls, in order, one per line in the editor |
+
+```yaml
+flows:
+  - {id: order-to-job, trigger: crm.order.created, steps: [erp.create_sales_order, mes.create_job]}
+```
+
+## People
+
+| Field | In the editor | What the field holds |
+|---|---|---|
+| `id` | Person id | Unique in the world |
+| `label` | Person name | The display name, such as `Planner on call` |
+| `role` | Role | What the person does, such as `planner` |
+
+```yaml
+people:
+  - {id: planner, label: Planner on call, role: planner}
+```
+
+For on-call people with a set behavior, such as answering after 15 minutes, see [Monitoring](/worlds/monitoring).

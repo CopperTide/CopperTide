@@ -1,80 +1,37 @@
 ---
 title: Introduction
-description: Design, run and supervise teams of agents performing complex tasks.
+description: Test an agent system in a copy of its world before you put the system in production.
 ---
 
-CopperTide brings your coding agents into one workspace. Give each agent a job and a folder, then connect the agents to decide how they pass work along. While the team runs, you can follow its progress, read individual conversations and guide the work.
+Shakedown tests agent systems before production. You build a **world**, a working copy of the systems your agents touch: databases, an ERP, a CRM, a ticket tracker, plant controls. You write a **scenario**, a task in the world with the disruptions you want to throw at the agents. You describe each **agent setup** you want to compare. An **experiment** runs every setup against the scenario as many times as you ask and shows the results side by side.
 
-Agents run on **your own computer**, using your installed Claude Code or Codex and your existing sign-in. You can use the hosted app or run CopperTide locally.
+Shakedown records every tool call and model call and saves the world after every step. You open any run, read each step, rewind to a step and fork the run with one thing changed.
 
 <CardGroup cols={2}>
-  <Card title="Quickstart" icon="rocket" href="/quickstart">Set up CopperTide and run your first team.</Card>
-  <Card title="Concepts" icon="book" href="/concepts">Understand projects, agents, handoffs and evidence.</Card>
+  <Card title="Quickstart" href="/quickstart">Sign in, build a project and set up your first experiment.</Card>
+  <Card title="Concepts" href="/concepts">Worlds, scenarios, setups, experiments, runs, branches and restores.</Card>
+  <Card title="Build worlds" href="/worlds/overview">What a world file holds and how a world runs today.</Card>
+  <Card title="Agents" href="/agents/setups">Claude Code, Codex, API models, your framework or a deployed agent.</Card>
 </CardGroup>
 
-## Choose how to run CopperTide
+## Two ways to use Shakedown
 
-<Tabs>
-  <Tab title="Hosted beta">
-    Sign in at **app.coppertide.ai** and connect a computer from the **Computers** page. The app stores your team designs and run history in your account. A background program called the *runner* starts agents on your computer, in the folders you allow.
+| | Hosted Shakedown | The open-source engine |
+|---|---|---|
+| Where | [app.coppertide.ai/sd](https://app.coppertide.ai/sd/) | Your own computer, see [Self-host](/self-host) |
+| Account | Google, GitHub or an invited password account | None |
+| Project files | Your org's project, edited in the app | A folder on your disk |
+| Runs | Arrive with the cloud sandbox runner | Work today |
 
-    The hosted beta is invite-only. You need a personal invite link to create an account.
-  </Tab>
-  <Tab title="Self-hosted">
-    Run `coppertide serve` and open `http://127.0.0.1:4410`. The app and runner run locally, and CopperTide stores its data in `~/.coppertide/`. Agents work in the project folders you choose. No CopperTide account is required.
+<Note>
+Hosted Shakedown builds and edits projects today. Pressing Run in the cloud arrives with the sandbox runner, which is in progress. Runs, rewind and fork work today on a local engine. See [Self-host](/self-host).
+</Note>
 
-    See [Run it yourself](/operations) to build, back up and upgrade it.
-  </Tab>
-</Tabs>
+## What Shakedown measures
 
-Both modes use the same board and [team file format](/guides/team-files). The app and runner are open source under the Apache 2.0 license.
+- **Pass rate per setup**, with a 95% range, over the runs of an experiment.
+- **Checks** each run passed, with safety checks counted apart from goals.
+- **Refused actions and flags for a human**, step by step.
+- **Time, tokens and cost** per run and per agent.
 
-## How it fits together
-
-```mermaid
-flowchart LR
-  You["You, in a browser"] -- "design, start, answer" --> S["CopperTide: board, journal, workflows"]
-  S -- "start, message, stop" --> R["Runner on your computer"]
-  R --> C["Claude Code"]
-  R --> X["Codex"]
-  C -- "read and edit" --> F["Your folders and Git"]
-  X -- "read and edit" --> F
-  R -- "every event" --> S
-```
-
-The runner starts each CLI and sends its captured events to CopperTide. The app uses those events to show conversations, progress and handoffs. [Concepts](/concepts) explains the parts in more detail.
-
-## Follow the work from design to review
-
-1. **Design the team.** [Choose roles and write jobs](/guides/agent-design), then [arrange agents and handoffs on the board](/guides/board).
-2. **Run and guide it.** [Start the team](/guides/running), [answer questions](/guides/questions) and [send guidance to individual agents](/guides/control).
-3. **Review the results.** [Inspect conversations, tool calls and checks](/guides/context) to understand what happened and what still needs verification.
-4. **Reuse what works.** [Save a group](/guides/groups), [export a team](/guides/team-files) or [share it through Community](/guides/community).
-
-For work that needs explicit stages, review decisions and bounded revision loops, use a [workflow](/guides/workflows).
-
-## Understand what a result proves
-
-CopperTide distinguishes progress from evidence:
-
-| What you see | What it means |
-| --- | --- |
-| **Planned** | On the design. Nothing has started. |
-| **In progress** | The agent is working on it. |
-| **Reported done** | The agent *said* it finished. That is a claim, not proof. |
-| **Verified** | A check ran and passed. The result supports only what that check tests. |
-| **Blocked** | It cannot go on without something: an answer, a sign-in, a missing file. |
-
-<Note>An agent saying "done" is a report. Add a check, such as your project's test command, to verify the properties that matter to you.</Note>
-
-Each fact also shows where it came from: reported by the agent, captured from a tool, observed on disk, estimated, or checked. Anything CopperTide does not know stays marked as unknown.
-
-## Use these docs with a coding agent
-
-These docs are also published as plain text for AI tools:
-
-- [`/llms.txt`](/llms.txt) is an index of every page with a one-line summary.
-- [`/llms-full.txt`](/llms-full.txt) is the full text of every page in one file.
-- Any page is available as Markdown: add `.md` to its address, for example [`/quickstart.md`](/quickstart.md).
-
-Point Claude Code or Codex at `https://docs.coppertide.ai/llms-full.txt` when you want help designing a team or writing a [team file](/guides/team-files).
+Scoring uses deterministic checks on the final state of the world, never a model. An optional AI review explains a run and cites its steps. The review never changes a score.

@@ -1,0 +1,38 @@
+---
+title: Data
+description: Describe what every run of a world starts from, as files, databases and connector imports.
+---
+
+The **Data** section lists what the world starts with. Each entry is exactly one of a file, a database or a connector import.
+
+<Note>
+Runs do not read this section yet. Today every run starts from the runtime package's base world: the package seeds its parts once, Shakedown saves the result, and each run starts from a copy of that save. See [Runtime package](/worlds/runtime).
+</Note>
+
+## Fields
+
+| Field | Kind | What the field holds |
+|---|---|---|
+| `file` | File | A file in the world's data folder |
+| `seeds` | File | The connector the file seeds |
+| `database` | Database | A database restored at the start of every run |
+| `engine`, `version` | Database | The database engine and exact server version, such as `postgres` and `"15.6"` |
+| `snapshot` | Database | The snapshot runs restore |
+| `masked` | Database | Personal columns masked before the snapshot is stored |
+| `default_state` | Database | Every scenario starts from this source |
+| `import` | Connector import | A read-only snapshot taken through a connector |
+| `from` | Connector import | The connector the import reads from |
+
+An entry with none, or more than one, of `file`, `database` and `import` is a problem in the file.
+
+## Example
+
+```yaml
+data:
+  - {database: larkspur-prod, engine: postgres, version: "15.6", snapshot: snap_0412-7f3a, masked: true, default_state: true}
+  - {file: suppliers.csv, seeds: erp}
+```
+
+## Where run data comes from today
+
+A benchmark seeds its parts from its own data files. The retail benchmark, for example, seeds one Postgres database from `data/retail/db.json`. A built world copies the template's data into the world folder. Both paths give every run of a task the same start, made once with a fixed seed.

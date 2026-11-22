@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { build } from './build.mjs';
+import { brokenLinks, build } from './build.mjs';
 
 const out = fs.mkdtempSync(path.join(os.tmpdir(), 'docs-'));
 try {
@@ -15,7 +15,7 @@ try {
     const file = path.join(out, `${page}.html`);
     assert.ok(fs.existsSync(file), `${page}.html is built`);
     const html = fs.readFileSync(file, 'utf8');
-    assert.match(html, /<title>[^<]+ · CopperTide docs<\/title>/, `${page} has a title`);
+    assert.match(html, /<title>[^<]+ · Shakedown docs<\/title>/, `${page} has a title`);
     assert.doesNotMatch(html, /<(Card|CardGroup|Steps|Step|Note|Tip|Info|Check|Warning|Tabs|Tab|AccordionGroup|Accordion|Frame)[\s>]/, `${page} has no raw components`);
     for (const other of pages) assert.ok(html.includes(`href="/${other}"`), `${page} links to ${other} in the sidebar`);
     assert.ok(html.includes(`aria-current="page" href="/${page}"`), `${page} marks itself current`);
@@ -40,7 +40,7 @@ try {
   for (const f of ['session-v1.json']) {
     assert.ok(JSON.parse(fs.readFileSync(path.join(out, 'schema', f), 'utf8')).$schema, `the ${f} schema is published`);
   }
-  // Screenshots: every image a page uses exists, is small, and says what it shows.
+  // Images: every image a page uses exists, is small, and says what it shows.
   let shots = 0;
   for (const page of pages) {
     const mdx = fs.readFileSync(new URL(`./${page}.mdx`, import.meta.url), 'utf8');
@@ -52,10 +52,15 @@ try {
       shots += 1;
     }
   }
-  assert.ok(shots >= 8, `the docs show the app (${shots} screenshots)`);
-  const withShot = fs.readFileSync(path.join(out, 'quickstart.html'), 'utf8');
-  assert.match(withShot, /<img [^>]*src="\/images\/quickstart\//, 'screenshots render as images');
-  console.log(`build.test: ok (${pages.length} pages, ${shots} screenshots)`);
+  // Links: the build refuses a page that links to no page, to a missing file or to an anchor.
+  const ids = new Set(['a', 'b/c']);
+  const roots = [new URL('./images', import.meta.url).pathname, new URL('../web/public/schema', import.meta.url).pathname];
+  const html = new Map([['a', '<a href="/b/c">ok</a><a href="/b/d">gone</a><a href="/a#x">anchor</a><a href="b/c">relative</a><a href="/images/coppertide-mark.png">img</a><a href="https://x.y">out</a>']]);
+  assert.deepEqual(brokenLinks(html, ids, roots), ['a: /b/d (no such page)', 'a: /a#x (headings have no anchors)', 'a: b/c (not a site path)'], 'broken links are named');
+  const site = JSON.parse(fs.readFileSync(new URL('./docs.json', import.meta.url), 'utf8'));
+  assert.equal(site.name, 'Shakedown', 'the site is called Shakedown');
+  assert.ok(fs.readFileSync(path.join(out, 'introduction.html'), 'utf8').includes('Shakedown docs</a>'), 'the header names the site');
+  console.log(`build.test: ok (${pages.length} pages, ${shots} images)`);
 } finally {
   fs.rmSync(out, { recursive: true, force: true });
 }

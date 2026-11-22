@@ -54,7 +54,7 @@ function page({ title, description, content, nav, current }) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(title)} · CopperTide docs</title>
+<title>${esc(title)} · Shakedown docs</title>
 <meta name="description" content="${esc(description ?? '')}">
 <link rel="icon" href="/images/coppertide-mark.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -63,7 +63,7 @@ function page({ title, description, content, nav, current }) {
 <style>${CSS}</style>
 </head>
 <body>
-<header><a class="brand" href="/"><img src="/images/coppertide-mark.png" alt="" width="28" height="28">CopperTide docs</a></header>
+<header><a class="brand" href="/"><img src="/images/coppertide-mark.png" alt="" width="28" height="28">Shakedown docs</a><span class="by">by <a href="https://coppertide.ai">CopperTide</a></span></header>
 <div class="layout">
 <nav aria-label="Documentation">${sidebar}</nav>
 <main>
@@ -114,19 +114,20 @@ await mermaid.run();
 </script>`;
 
 const CSS = `
-:root { --bg:#fbf9f5; --panel:#f3eee6; --text:#100e0c; --muted:#5e5850; --line:#e5ddd1; --accent:#a4461a; --accent-soft:#f8e6d9; --warn:#7a5e00; --warn-soft:#f8efd2; }
-@media (prefers-color-scheme: dark) { :root { --bg:#100e0c; --panel:#181512; --text:#f6f2eb; --muted:#b9b1a6; --line:#2e2924; --accent:#ee7a3a; --accent-soft:#2a1c14; --warn:#e9cd75; --warn-soft:#2a2414; } }
+:root { --bg:#fbf9f5; --panel:#f3eee6; --text:#1c1916; --muted:#5e5850; --line:#e5ddd1; --accent:#a8562a; --accent-strong:#7a3d1c; --accent-soft:#f6e7dc; --warn:#7a5e00; --warn-soft:#f8efd2; }
+@media (prefers-color-scheme: dark) { :root { --bg:#14110e; --panel:#1c1814; --text:#f3eee6; --muted:#b9b1a6; --line:#2e2924; --accent:#d98b5a; --accent-strong:#d98b5a; --accent-soft:#2a1c14; --warn:#e9cd75; --warn-soft:#2a2414; } }
 * { box-sizing: border-box; }
 body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif; }
 a { color:var(--accent); }
-header { padding:12px 16px; border-bottom:1px solid var(--line); }
+header { display:flex; align-items:baseline; gap:10px; padding:12px 16px; border-bottom:1px solid var(--line); }
+header .by { color:var(--muted); font-size:.85rem; }
 .brand { display:inline-flex; align-items:center; gap:10px; font-weight:600; color:var(--text); text-decoration:none; }
 .layout { display:grid; grid-template-columns:240px minmax(0,1fr); max-width:1100px; margin:0 auto; }
 nav { padding:16px; border-right:1px solid var(--line); }
 nav .group { margin:16px 0 4px; font-size:.78rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:600; }
 nav ul { list-style:none; margin:0; padding:0; }
 nav a { display:block; padding:4px 8px; border-radius:6px; color:var(--text); text-decoration:none; }
-nav a[aria-current="page"] { background:var(--accent-soft); color:var(--accent); font-weight:600; }
+nav a[aria-current="page"] { background:var(--accent-soft); color:var(--accent-strong); font-weight:600; }
 main { padding:24px 32px 64px; min-width:0; }
 h1 { margin:0 0 4px; font-size:2rem; line-height:1.2; }
 .lede { color:var(--muted); font-size:1.1rem; margin-top:0; }
@@ -166,6 +167,32 @@ img { max-width:100%; }
 }
 `;
 
+// Every link a page's own content makes inside the site must name a built page or a copied file. Headings get no
+// anchors here, so a link with a #fragment counts as broken too.
+export function brokenLinks(contents, ids, fileRoots) {
+  const files = { images: fileRoots[0], schema: fileRoots[1] };
+  const broken = [];
+  for (const [id, html] of contents) {
+    for (const [, href] of html.matchAll(/href="([^"]*)"/g)) {
+      if (/^(https?:|mailto:)/.test(href)) continue;
+      const why = linkProblem(href, ids, files);
+      if (why) broken.push(`${id}: ${href} (${why})`);
+    }
+  }
+  return broken;
+}
+
+function linkProblem(href, ids, files) {
+  if (!href.startsWith('/')) return 'not a site path';
+  if (href.includes('#')) return 'headings have no anchors';
+  const target = href.slice(1).replace(/\/$/, '');
+  if (target === '' || ids.has(target)) return null;
+  if (target.endsWith('.md') && ids.has(target.slice(0, -3))) return null;
+  const [root, ...rest] = target.split('/');
+  if (files[root] && fs.existsSync(path.join(files[root], ...rest))) return null;
+  return 'no such page';
+}
+
 export async function build(out = path.join(here, 'dist')) {
   const config = JSON.parse(fs.readFileSync(path.join(here, 'docs.json'), 'utf8'));
   const pages = new Map();
@@ -174,21 +201,25 @@ export async function build(out = path.join(here, 'dist')) {
     pages.set(id, { id, title: meta.title ?? id, description: meta.description, body });
   }
   const nav = config.navigation.groups.map((g) => ({ group: g.group, pages: g.pages.map((id) => pages.get(id)) }));
+  const contents = new Map();
   fs.rmSync(out, { recursive: true, force: true });
   fs.mkdirSync(out, { recursive: true });
   for (const p of pages.values()) {
     const { default: Content } = await evaluate(p.body, { ...runtime, remarkPlugins: [remarkGfm], baseUrl: pathToFileURL(here) });
     const content = renderToStaticMarkup(h(Content, { components }));
+    contents.set(p.id, content);
     const file = path.join(out, `${p.id}.html`);
     fs.mkdirSync(path.dirname(file), { recursive: true });
     fs.writeFileSync(file, page({ ...p, content, nav, current: p.id }));
   }
   // llms.txt (https://llmstxt.org): an index coding agents can read, and every page's source in one file.
   const index = nav.map((g) => `## ${g.group}\n\n${g.pages.map((p) => `- [${p.title}](/${p.id}.md)${p.description ? `: ${p.description}` : ''}`).join('\n')}`);
-  fs.writeFileSync(path.join(out, 'llms.txt'), `# CopperTide\n\n> ${config.description ?? ''}\n\n${index.join('\n\n')}\n`);
+  fs.writeFileSync(path.join(out, 'llms.txt'), `# ${config.name ?? 'Shakedown'}\n\n> ${config.description ?? ''}\n\n${index.join('\n\n')}\n`);
   fs.writeFileSync(path.join(out, 'llms-full.txt'), [...pages.values()].map((p) => `# ${p.title}\n\n${p.body.trim()}\n`).join('\n'));
   for (const p of pages.values()) fs.writeFileSync(path.join(out, `${p.id}.md`), `# ${p.title}\n\n${p.description ? `> ${p.description}\n\n` : ''}${p.body.trim()}\n`);
   const first = config.navigation.groups[0].pages[0];
+  const broken = brokenLinks(contents, new Set(pages.keys()), [path.join(here, 'images'), path.join(here, '../web/public/schema')]);
+  if (broken.length) throw new Error(`broken internal links:\n${broken.join('\n')}`);
   fs.copyFileSync(path.join(out, `${first}.html`), path.join(out, 'index.html'));
   fs.cpSync(path.join(here, 'images'), path.join(out, 'images'), { recursive: true });
   // The portable formats' JSON Schemas, at the address exported team files name in "$schema".
