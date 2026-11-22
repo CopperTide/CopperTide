@@ -1,0 +1,37 @@
+---
+title: Watching a run
+description: Follow a run live, read every step, and see the world as the world stood at any step.
+---
+
+Open a run from an experiment's results, or start one with **Run once** in the **⋯** menu. The run page follows a running branch live over the event stream and keeps every step once the run ends.
+
+## The run page
+
+| Part of the page | What you see |
+|---|---|
+| Header | Time (or time so far), cost, the check result, safety, and refused or failed actions |
+| **Timeline** | A lane per agent, each tool call marked by system and by read or write. Pauses show as bands. |
+| **Event log** | Every recorded event in order |
+| **Coordination** | The run's agents and what passed between them: handoff notes, messages, delegations and reports |
+| **Step** panel | The selected step's arguments, result and the state the step read or wrote, as the state stood at that step |
+| Deployment estimate | Measured time, Shakedown's overhead per kind, the estimate in production, tokens and cost per agent |
+
+A run's **⋯** menu opens its other views, **Compare with another run…**, the run's reruns, and under **Advanced**, **Rewind to step N and rerun…**.
+
+## Other views
+
+- **World view**: the world's view after each step, when the runtime package draws one, with a scrubber to play through the steps.
+- **Process view**: the agents as units and the world's parts as equipment, with the actions between them, trends per system, and the inspector for one step.
+
+## Pause and stop
+
+While a run started from **Run once** goes on, its live view pauses, resumes and stops the run.
+
+- **Pause**: new tool calls and model calls through the gateway wait, and the world clock stops. A CLI agent keeps thinking but cannot act. Time paused counts as overhead, not as run time.
+- **Stop**: drops the agents where they are. The run ends `stopped`, unscored.
+
+The same controls exist for any live branch through the API: `POST /api/branches/{id}/pause`, `/resume` and `/stop`.
+
+## What Shakedown records
+
+Every tool call with its arguments, result, the part touched and the keys read and written. Every model call through the gateway. Handoff notes and messages. World events, such as a disruption firing. Shakedown times its own work on every event apart from the agents' and the world's, so the estimate in production leaves the overhead out.

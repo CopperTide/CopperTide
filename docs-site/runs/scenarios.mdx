@@ -1,0 +1,44 @@
+---
+title: Scenarios and disruptions
+description: Write the task a world plays, the disruptions thrown at the agents, the gates and the checks.
+---
+
+A scenario is one task in one world. You edit a scenario in **Scenarios**, in four sections (Inputs, Events, Gates, Checks), and Shakedown writes the scenario to `scenarios/<id>.yaml`.
+
+<Note>
+Today a deploy reads two things from a scenario: `preset`, the runtime package's task to play, and each event's `fault` and `params`, passed to the package as a disruption. The ticket, the record changes, the event timing, the gates and the checks stay in the file for readers. The runtime package supplies a run's ticket, gates and checks. See [Runtime package](/worlds/runtime).
+</Note>
+
+## Fields
+
+| Field | Section | What the field holds | Used by deploys today |
+|---|---|---|---|
+| `world` | Inputs | The world the scenario happens in | Yes |
+| `preset` | Inputs | The task of the world's runtime package to play, such as `"27"` | Yes |
+| `task` | Inputs | The ticket, written as you would write the ticket to a person | No |
+| `changes` | Inputs | Records changed for this scenario: `{record: <connector>.<record path>, value}` | No |
+| `events` | Events | Failures and disruptions: a `name`, either `at` (a world time) or `after_calls`, and optional `fault`, `params`, `db`, `effects` | `fault` and `params` only |
+| `gates` | Gates | Rules on agent calls: `{rule, scope: <tool>, on_breach: block or flag}` | No |
+| `checks` | Checks | What must be true at the end: `{text, kind: goal or safety, ends_run?}` | No |
+
+## Disruptions
+
+A runtime package offers its disruptions as scenario options, each with an id and params. The `pharma` benchmark, for example, offers `courier-capacity`: the usual courier has `capacity` shipments left after `after` quote calls, and the agents are not told.
+
+```yaml
+format: shakedown-scenario/1
+label: Courier runs out of capacity
+world: larkspur-pharma
+preset: cvx-2611-em-excursion
+task: Hold batch CVX-2611 and serve this week's orders from other stock.
+events:
+  - {name: Courier loses capacity, after_calls: 1, fault: courier-capacity, params: {after: 1, capacity: 0}}
+```
+
+The event needs `at` or `after_calls` to be a valid file. The disruption's own `params` decide when the disruption fires. Shakedown checks each choice against the package's options (a known id, known params, values in range) and records the expanded scenario in the run's start.
+
+Disruptions fire inside simulated parts, deterministically. The agents find out when they query or act.
+
+## Write the scenario with the assistant
+
+Click **Ask** in the top bar, paste a postmortem or a ticket, and ask for a scenario. The assistant drafts the file. With the project's edit setting at **Show a diff first**, the default, you see the diff and apply the change yourself.

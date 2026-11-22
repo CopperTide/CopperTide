@@ -1,0 +1,29 @@
+---
+title: Compare runs and AI review
+description: Find where two runs part ways and what differs at the end, and ask a model to explain a run.
+---
+
+Compare two runs to find the first step where the runs differ and the state differing in their final worlds. Ask for an AI review to get where a run went wrong, with each claim citing steps.
+
+## Compare two runs
+
+1. Open a run's **⋯** menu and pick **Compare with another run…**, or pick **Compare two runs…** in the top bar's **⋯** menu.
+2. Pick the second run.
+
+The compare page shows both runs' outcome, time, tokens and cost side by side, the first divergent step with each run's step at that point, and the **Differing rows** of the two final worlds. A branch restored approximately carries an **Approximate restore** mark.
+
+To see the setups of several engine experiments side by side, open `/experiments/compare?ids=<a>,<b>` in the app. For verdicts, compare two setups through the API with `GET /api/suites/compare?a=<suite>&b=<suite>` (in Python, `sd.compare_suites(before, after)`): each check's pass rate, the pass rate, safety, time, tokens and cost get improved, regressed, the same or incomparable. Pass rates count any change. Time, tokens and cost count a change beyond 10% of the first suite's mean.
+
+## AI review
+
+A real model reads a compact digest of the run's record and answers with:
+
+- **Where it went wrong**, each item citing steps of the run.
+- **Suggestions**: a change to a prompt, the team, a tool, the model or the process. A prompt or team suggestion has **Rewind and try this**, which opens the rerun panel at the suggested step with the text added.
+- **What went well**.
+
+Shakedown checks every cited step against the record and drops citations naming no real step. The review never scores a run.
+
+A run watched to its end gets reviewed at once. An older run has a **Review this run** button. The compare pages show **What matters** above the outcome.
+
+The reviewer defaults to Claude Code with Sonnet, headless and with no tools. Set another with `SHAKEDOWN_REVIEW_MODEL`, or turn reviews off with `SHAKEDOWN_REVIEW=off`. In the app, the **⋯** menu turns AI review off in your browser. A review costs what the model costs.

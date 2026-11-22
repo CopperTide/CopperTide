@@ -1,0 +1,48 @@
+---
+title: Rewind and fork
+description: Go back to a step of a run, change one thing, and rerun from there with the world restored.
+---
+
+Rewind a run to a step and rerun with a change: another prompt, model, provider or mode for an agent. Shakedown restores the world as the world stood just before the step, reuses everything before the step, and records the rerun as a new branch of the same run.
+
+<Note>
+Rewind and fork work today on a local engine. Forking a cloud run arrives after cloud runs.
+</Note>
+
+## Steps
+
+1. Open an ended run. Select the step to go back to.
+2. Open the run's **⋯** menu and pick **Rewind to step N and rerun…**.
+3. In **Change and rerun from step N**, pick **Edit agents** and change any agent's mode, provider, model or prompt.
+4. Pick the restore: **Exact** (the world exactly as the world stood) or **Approximate** (from saves which miss some state). The panel shows how Shakedown restores each part, and a replay's estimated time.
+5. Click **Change and rerun from here**.
+
+The new branch shows in the run's **⋯** menu under **Reruns**, with a note on what changed.
+
+## Where the fork starts
+
+The rerun starts where you asked, unless the step cannot restart on its own:
+
+- During a Claude Code or Codex turn, the fork starts at that agent's start, since a CLI session cannot resume mid-way.
+- For an API-mode agent, the fork starts at the model call choosing the tool call.
+- In a run where agents ran at once, every agent restarts from the run's first agent start.
+
+The run page says where the fork started, where you asked, and why.
+
+## When Shakedown refuses
+
+- A part cannot restore in the mode you asked for: the refusal names the part. A part with only an approximate save refuses an exact restore.
+- A replay gives a different result from the record: the fork fails and names the step.
+- The run still runs: wait for the run to end.
+
+Shakedown never ignores a change silently. Changing an agent's mode or provider resets the agent's model to the new default unless you also set a model.
+
+## From code
+
+```python
+fork = branch.rewind(event=17).fork(model="sonnet")               # every agent on another model
+fork = branch.rewind(event=17).fork(prompt="...", agents=["resolver"])
+branch.rewind(event=17).plan()                                    # how each part restores, or the refusal
+```
+
+See [Python SDK](/code/python-sdk).
