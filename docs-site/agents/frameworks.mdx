@@ -1,0 +1,70 @@
+---
+title: Frameworks
+description: Bring a LangGraph, CrewAI or OpenAI Agents SDK team into a run through a short driver.
+---
+
+Keep your agent code as written. A **driver**, a short program, registers each of your agents with Shakedown and hands your framework the agent's tools and model. The SDK's adapters turn an agent's tools into the framework's own tool objects and its gateway into the framework's chat model.
+
+<Note>
+The three adapters are built and tested against a stand-in for an agent's endpoint, with no model. Live checks are in progress.
+</Note>
+
+## Install
+
+The SDK installs from the repository, with your framework's extra:
+
+```bash
+uv add "shakedown-sdk[langgraph] @ git+https://github.com/CopperTide/Shakedown#subdirectory=sdk/python"
+```
+
+The extras are `langgraph`, `crewai` and `openai-agents`.
+
+## LangGraph and LangChain
+
+```python
+from shakedown.adapters import langgraph as sd
+from langgraph.prebuilt import create_react_agent
+
+with sd.run() as run:
+    a = run.agent("support", provider="openai", model="gpt-4.1-mini")
+    graph = create_react_agent(sd.chat_model(a, "gpt-4.1-mini"), sd.tools(a))
+    graph.invoke({"messages": [("user", run.ticket)]})
+```
+
+## CrewAI
+
+```python
+from shakedown.adapters import crewai as sd
+from crewai import Agent, Crew, Task
+
+with sd.run() as run:
+    a = run.agent("support", provider="openai", model="gpt-4.1-mini")
+    agent = Agent(role="Support", goal="Resolve the ticket", backstory="...",
+                  tools=sd.tools(a), llm=sd.llm(a, "gpt-4.1-mini"), step_callback=sd.step_callback(a))
+    Crew(agents=[agent], tasks=[Task(description=run.ticket, expected_output="...", agent=agent)]).kickoff()
+```
+
+`step_callback` records each step's thought. The adapter turns CrewAI's own telemetry off.
+
+## OpenAI Agents SDK
+
+```python
+from shakedown.adapters import openai_agents as sd
+from agents import Agent, Runner
+
+with sd.run() as run:
+    a = run.agent("support", provider="openai", model="gpt-4.1-mini")
+    agent = Agent(name="support", instructions="...", tools=sd.tools(a), model=sd.model(a, "gpt-4.1-mini"))
+    Runner.run_sync(agent, run.ticket)
+```
+
+The adapter turns the SDK's trace export off when no `OPENAI_API_KEY` is set.
+
+## What you get
+
+- Each framework agent is one Shakedown agent (`run.agent("<id>")`), so the run shows who did what.
+- Every tool call runs in the world as that agent and gets recorded. A refused call reaches the agent as `error: …`, so the agent reacts.
+- The model key stays in Shakedown's gateway. Your framework's client sends a placeholder.
+- When the `with` block ends, the driver ends your agents and finishes the run, and Shakedown scores the world. If the block raises, the run ends `failed`, still scored.
+
+The same team in each framework lives in `sdk/python/examples/drivers/`. To have Shakedown start your driver for every run, save the driver as a Code connection: see [Your own orchestration](/agents/orchestration).

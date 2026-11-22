@@ -1,0 +1,48 @@
+---
+title: Models and providers
+description: Run API-mode agents on OpenRouter, OpenAI, Anthropic, Amazon Bedrock or your own model server.
+---
+
+An API-mode agent runs in Shakedown's own agent loop. Each model call goes through Shakedown's gateway to the agent's provider, and Shakedown records every call in one format (OpenAI chat completions) whatever the provider. Replay, forks and compare treat all providers alike.
+
+<Note>
+Claude Code and Codex are measured live ([Claude Code and Codex](/agents/claude-code-and-codex)). API-model agents, OpenRouter, self-hosted model servers, Bedrock, `http` agents and the framework adapters are built and tested against simulated servers. Live checks of those are in progress.
+</Note>
+
+## Add a key or server
+
+1. Open **Connections & models**.
+2. Under **Add a key or server**, pick the kind: **Your server**, **OpenRouter**, **OpenAI**, **Anthropic** or **Bedrock**.
+3. Give the key a name, paste the key, and for **Your server** the server URL. For Bedrock, give the access key ID, the secret access key and the region.
+4. Click **Test**. Shakedown makes a one-token call and shows **Works**, or the provider's reason.
+
+Shakedown seals each key and never shows the key again, only its last four characters. See [Model keys and security](/account/keys-and-security).
+
+## Providers
+
+| Provider | An agent names | Key | Default model |
+|---|---|---|---|
+| OpenRouter | `openrouter` (also the default) | An OpenRouter key | `deepseek/deepseek-chat-v3.1` |
+| OpenAI | `openai` | An OpenAI key | None: name one |
+| Anthropic | `anthropic` | An Anthropic key. The gateway translates calls to the Messages API. | None: name one |
+| Amazon Bedrock | `bedrock:<region>` | AWS credentials or a Bedrock API key. The gateway translates calls to the Converse API. | None: name one |
+| Your server | `custom:<name>` | Optional | None: name one |
+| A local server from the environment | `local:<name>` | Optional `SHAKEDOWN_LOCAL_KEY_<NAME>` | None: name one |
+| One key by name | `key:<name>` | The named key | As for the key's kind |
+
+A server of your own is any server speaking the OpenAI chat-completions API: Ollama, vLLM, LM Studio or llama.cpp's server. On a local engine the server runs anywhere you reach. In hosted Shakedown a model server's URL must be HTTPS on a public address. Shakedown refuses private, loopback and metadata addresses when you save the key, when you test the key and before every call.
+
+## How keys resolve
+
+Your own keys come first. A key of kind OpenRouter, OpenAI or Anthropic replaces the environment's key for that provider, and the newest key of a kind wins. Without a key of your own, a local engine uses the environment's key (`OPENROUTER_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`). In a shared org, another member's key serves your agent only when your agent names the key as `key:<name>`.
+
+## Costs
+
+| Source | What Shakedown shows |
+|---|---|
+| OpenRouter | The cost OpenRouter reports |
+| OpenAI, Anthropic | A list-price estimate from the repository's `docs/prices.toml` for the models listed there, labelled with the price's source and date, else unknown |
+| A local server | No API charge, unless you set a rate with `SHAKEDOWN_LOCAL_PRICE_<NAME>` |
+| Bedrock | Unknown |
+
+In a run driven by Shakedown's own runners, the spend limit (`max_cost_usd`, or `budget.per_run_usd` in an experiment file) stops every agent once the run's estimate passes the limit, and the run ends `budget_exceeded`, scored as the world stood.

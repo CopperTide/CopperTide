@@ -1,0 +1,61 @@
+---
+title: Your own orchestration
+description: Drive your agents in any shape and any language, through a Code connection or the external-runner routes.
+---
+
+When your design has its own orchestration, your code drives the agents and Shakedown records them. Pick one of two ways in: save your driver as a **Code connection** and Shakedown starts the driver for each run, or call the **external-runner routes** from any language.
+
+<Note>
+Code connections and the external-runner routes are built and tested against simulated servers. Live checks are in progress.
+</Note>
+
+## A Code connection
+
+1. Click **Connect an agent** at the bottom of the sidebar and pick **Code**.
+2. Give the connection a name, the command starting your driver, an optional folder, and environment lines such as `SHAKEDOWN_MODEL=gpt-4.1-mini`.
+3. Click **Test connection**. Shakedown runs the benchmark's first task with the driver, under a $0.50 spend limit, and reports whether your agents worked.
+4. Click **Use this connection**, then pick the connection as a team in Run once or in an experiment on a benchmark.
+
+The same from the HTTP API:
+
+```bash
+curl -s localhost:4510/api/connections -H 'content-type: application/json' -d '{
+  "name": "Our LangGraph team",
+  "command": ["uv", "run", "--extra", "langgraph", "python", "examples/drivers/langgraph_driver.py"],
+  "workdir": "/path/to/sdk/python",
+  "env": {"SHAKEDOWN_PROVIDER": "openai", "SHAKEDOWN_MODEL": "gpt-4.1-mini"}
+}'
+```
+
+The driver gets the run's ids (`SHAKEDOWN_URL`, `SHAKEDOWN_RUN`, `SHAKEDOWN_BRANCH`, `SHAKEDOWN_TASK`), the connection's `env`, and a handful of plain variables such as `PATH` and `HOME`. Model keys stay in Shakedown, behind the gateway.
+
+| What happens | The run |
+|---|---|
+| The driver exits before finishing the run | Scored, ends `failed` with the exit code and the end of stderr |
+| The driver runs past `SHAKEDOWN_CODE_RUN_SECS` (default 900) | Scored, ends `failed` |
+| The driver still runs 30 seconds after the run ended | Shakedown stops the driver and what the driver started |
+
+A fork of a run a Code connection drove starts the driver again, with `SHAKEDOWN_FORK_OF` set, and `run.history(agent_id)` gives what each agent did before the fork point.
+
+A local engine starts drivers only because the engine listens on 127.0.0.1 alone, and the routes starting a driver refuse requests from a web page. Run Code connections only on a computer whose other accounts you trust. A setup file of kind `code` does not deploy yet. Use the connection from Run once or an experiment on a benchmark.
+
+## The external-runner routes
+
+1. `POST /api/runs` with `runner: "external"` starts the world. The team may be empty.
+2. `POST /api/branches/{id}/agents` registers an agent at any time and answers its `mcp_url` (the world's tools) and `gateway_url` (OpenAI-compatible).
+3. Drive the agents your way. Point their tools at the MCP endpoint and their models at the gateway. Report model calls made elsewhere with `POST .../agents/{agent}/usage`.
+4. `POST /api/branches/{id}/finish` freezes, scores and stops the world.
+
+In Python, `shakedown.driver` wraps these routes:
+
+```python
+from shakedown import driver
+
+with driver.run() as run:                        # or driver.run(task="27", url="http://127.0.0.1:4510")
+    planner = run.agent("planner", provider="openai", model="gpt-4.1-mini")
+    run.ticket                                   # the task's ticket and the benchmark's instructions
+    planner.report_reasoning("Check stock before reserving.", kind="plan")
+    ...                                          # your code, with the agent's tools and gateway
+```
+
+The routes and their fields are in the repository's [`docs/reference.md`](https://github.com/CopperTide/Shakedown/blob/main/docs/reference.md).

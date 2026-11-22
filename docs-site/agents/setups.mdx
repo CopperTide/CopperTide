@@ -1,0 +1,78 @@
+---
+title: Agent setups
+description: Describe each agent team you want to test, built any way, as a setup file.
+---
+
+An agent setup is one team you want to test. You make setups in **Agent setups**, pick a kind under **How it runs**, and Shakedown writes the setup to `setups/<id>.yaml`. Every kind gets the same ticket, tools and data, so an experiment compares setups fairly.
+
+<Note>
+Claude Code and Codex are measured live ([Claude Code and Codex](/agents/claude-code-and-codex)). API-model agents, OpenRouter, self-hosted model servers, Bedrock, `http` agents and the framework adapters are built and tested against simulated servers. Live checks of those are in progress.
+</Note>
+
+## Kinds of setup
+
+| Kind | `team.kind` | What runs the agents | Deploys from a file today |
+|---|---|---|---|
+| Built-in agents | `builtin` | Shakedown's own agent loop, one agent after another | Yes |
+| Claude Code | `claude-code` | Claude Code, headless, with only the world's tools over MCP | Yes |
+| Codex | `codex` | Codex, headless, with only the world's tools over MCP | Yes |
+| HTTP endpoint | `http` | Your agent behind a URL, speaking `shakedown-agent/1` | Yes, without `auth` |
+| Your code | `code` | A command running your agents, such as a LangGraph or CrewAI script | No |
+| Described in MADL | `madl` | A MADL team file next to the setup | No |
+
+Setups of kind `code` and `madl` refuse to deploy from a file today. Run your own code through a Code connection: see [Your own orchestration](/agents/orchestration).
+
+## Examples
+
+```yaml
+# setups/solo-planner.yaml
+format: shakedown-setup/1
+label: Solo planner
+team:
+  kind: builtin
+  agents:
+    - {id: planner, role: You keep orders on schedule., model: deepseek/deepseek-chat-v3.1, key: openrouter-main, tools: ["*"]}
+```
+
+```yaml
+# setups/planner-with-rules.yaml
+format: shakedown-setup/1
+label: Planner with rules
+team:
+  kind: http
+  url: "https://agents.larkspur.internal/planner"
+  auth: {key: planner-endpoint}
+```
+
+```yaml
+# setups/planning-team.yaml, with setups/planning-team/team.madl.yaml next to the file
+format: shakedown-setup/1
+label: Planning team
+team:
+  kind: madl
+  file: team.madl.yaml
+```
+
+## Built-in agents
+
+| Field | What the field holds |
+|---|---|
+| `id` | Unique in the team |
+| `role` | The role prompt |
+| `model` | The model id |
+| `key` | The key-store name of the model key, never the key |
+| `tools` | The tools the agent calls, or `*` for every tool |
+
+A built-in agent from a file runs on the default provider, OpenRouter, so name an OpenRouter model id. Deploys do not read `key` yet. Pick another provider per agent in the **Team editor** (**⋯ → Team editor**) or through the API: see [Models and providers](/agents/models).
+
+## MADL setups
+
+A MADL setup points at a Multi-Agent Descriptor Language file in the setup's own folder. The editor adds a **Team graph** section: every agent and connection, with patterns expanded, and the MADL checks with a pointer to each problem.
+
+## More than the file holds
+
+The engine's own teams take more than a setup file holds. The **Team editor** sets each agent's provider and a read-only flag. **Run once**, in the **⋯** menu, picks a runner under Options: one agent after another, all at once, or a lead dispatching to the team. A team suggested by a benchmark brings the runner its prompts expect. The [Python SDK](/code/python-sdk) and the HTTP API also take a tool list per agent. Each agent there is one of:
+
+- **Claude Code** or **Codex** (CLI mode): see [Claude Code and Codex](/agents/claude-code-and-codex).
+- **API mode**: Shakedown's own loop on a model provider: see [Models and providers](/agents/models).
+- **HTTP** or **Bedrock**: an agent you already deployed: see [Bring a deployed agent](/agents/deployed-agents).

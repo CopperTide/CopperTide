@@ -1,0 +1,47 @@
+---
+title: Claude Code and Codex
+description: Test Claude Code or Codex as an agent, headless, with only the world's tools.
+---
+
+Add Claude Code or Codex to a team and Shakedown starts the CLI headless, with the world's tools over an MCP endpoint and nothing else. Shakedown records every tool call, note and message, and the tokens and cost the CLI reports.
+
+## Add one
+
+- In a setup file, set `team.kind` to `claude-code` or `codex`.
+- In the **Team editor** or on **Run once**, pick **Claude Code** or **Codex** as an agent's mode and name a model, such as `sonnet` or `haiku` for Claude Code.
+
+On a local engine, the CLIs run on your computer with your own CLI sign-in. Shakedown finds them on your `PATH`, and `GET /api/health` says which ones the engine found.
+
+## Isolation
+
+| | Claude Code | Codex |
+|---|---|---|
+| Built-in tools | Off (`--tools ""`) | Built-in shell stays on, in a read-only sandbox |
+| Settings and config | No settings sources, strict MCP config, slash commands off | User config, rules and session storage ignored, web search off |
+| Working folder | A fresh temporary folder | A fresh temporary folder |
+| Environment | Database URLs, other providers' keys and `OPENAI_API_KEY` removed | Database URLs, other providers' keys and `ANTHROPIC_API_KEY` removed |
+| Cost reported | An API-equivalent estimate from Claude Code | Tokens only |
+
+A probe from inside the Codex sandbox could not open a socket, not even to the local Postgres port. Each agent reaches the MCP endpoint with its own token, which dies with its branch.
+
+## Rules to know
+
+- A CLI session cannot resume mid-way. A fork during a CLI agent's turn starts at that agent's start. See [Rewind and fork](/runs/rewind-and-fork).
+- In a dispatch run, Claude Code keeps one long-lived session across turns. Codex cannot keep a session, so a dispatch team refuses Codex.
+- Shakedown sees no raw model calls from a CLI agent, only the usage the CLI reports.
+
+## Measured live
+
+Claude Code and Codex are the agents measured live. The repository's [`docs/measurements.md`](https://github.com/CopperTide/Shakedown/blob/main/docs/measurements.md) records single runs on the retail benchmark's task 27, on 2026-10-30, through the HTTP API:
+
+| Run (one each) | Result | Seconds | Tokens | Cost |
+|---|---|---|---|---|
+| Claude Code to Claude Code, model `sonnet` | passed | 23.574 | 104,427 | $0.0996, Claude Code's API-equivalent estimate |
+| Fork of that run at step 12, resolver prompt changed (figures cover the redone resolver only) | passed | 8.911 | 36,036 | $0.0296, Claude Code's estimate |
+| Claude Code for triage, then Codex as resolver | passed | 50.708 | 166,583 | $0.0408 for the triage agent. Codex reports tokens only. |
+
+These are single runs, an observation and not a benchmark. The runs predate the move to integrations, and the file holds no newer measurements.
+
+## In the cloud
+
+Claude Code and Codex in cloud runs arrive with the sandbox runner: the CLI runs inside the run's sandbox, pointed at Shakedown's model gateway with your org's API key, and the sandbox never sees the key. Your own subscription sign-in stays on your own computer. Joining a cloud run from your own CLI, on your subscription, is planned.
