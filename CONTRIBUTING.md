@@ -10,7 +10,7 @@ Thanks for helping. Bug reports, ideas, docs fixes and code are all welcome.
 
 ## Set up
 
-You need Rust 1.95 or newer, Node.js 24, and Git. Claude Code or Codex is only needed to run real agents; the tests never call them.
+You need Rust 1.98 (the version CI builds with), Node.js 24 and Git. Claude Code, Codex or OpenCode is needed only to run real agents. The tests never call them.
 
 ```bash
 git clone https://github.com/CopperTide/CopperTide.git

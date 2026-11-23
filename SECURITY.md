@@ -5,13 +5,13 @@
 Please report security problems privately, not in a public issue:
 
 - **Preferred:** [open a private vulnerability report](https://github.com/CopperTide/CopperTide/security/advisories/new) on GitHub.
-- **Or email** security@usesculptured.com.
+- **Or email** hello@coppertide.ai, with "Security" in the subject.
 
 Include what you found, how to reproduce it, and the version or commit. You will get an acknowledgement within three working days. We will keep you updated until a fix is released, and credit you in the release notes if you wish.
 
 ## Scope
 
-CopperTide runs coding agents on your own computer with your own Claude Code and Codex sign-in. Reports we especially want:
+CopperTide runs coding agents on your own computer with your own Claude Code, Codex or OpenCode setup. Reports we especially want:
 
 - A way for a web page, another local user or a remote party to reach `coppertide serve` (it must only listen on loopback) or drive agents without the user.
 - Reading or writing files outside the folders a team is allowed to use.
