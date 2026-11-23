@@ -24,11 +24,13 @@ url = "https://app.coppertide.ai/sd/mcp"
 bearer_token_env_var = "SHAKEDOWN_TOKEN"
 ```
 
-A local engine, over stdio, for one project folder:
+A local engine, over stdio, for one project folder, with `shaked` on your `PATH` (see [Self-host](/self-host)):
 
 ```bash
-claude mcp add shakedown -- shaked mcp --project ~/work/my-project
+claude mcp add shakedown -- "$(command -v shaked)" mcp --project ~/work/my-project
 ```
+
+`$(command -v shaked)` stores the full path of `shaked`, so the client starts it whatever its own `PATH` holds. Without the `PATH` step, give the path yourself: `<your clone>/core/target/release/shaked`.
 
 `shaked mcp` works on the folder alone, with no database and no running engine. Edits work there. Deploying needs a running engine: use `POST /mcp` on the engine with an API token instead.
 

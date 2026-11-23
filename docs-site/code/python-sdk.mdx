@@ -11,7 +11,7 @@ The `shakedown` package drives an engine from Python: connect to one or start on
 uv add "shakedown-sdk @ git+https://github.com/CopperTide/Shakedown#subdirectory=sdk/python"
 ```
 
-Python 3.10 or newer, with one dependency, `httpx`. You also need an engine: a running one, or a build of the repository plus Postgres for `Shakedown.local` (see [Self-host](/self-host)).
+Python 3.10 or newer, with one dependency, `httpx`. You also need an engine: a running one, or a release build of the repository plus Postgres for `Shakedown.local` (see [Self-host](/self-host)). `bin_dir` below is relative to the repository folder, where the release build puts `shaked`.
 
 ## A run, its events and a fork
 
@@ -23,7 +23,8 @@ with Shakedown.local(benchmark="retail", bin_dir="core/target/release") as sd:  
     for event in run.events():                    # every event, live, until the run ends
         print(event.summary())
     print(run.check())                            # passed?, named checks, safety violations
-    fork = run.rewind(event=40).fork(model="sonnet")   # back to just before event 40, one thing changed
+    steps = [e for e in run.record().events if e.kind == "tool_call"]
+    fork = run.rewind(event=steps[-1]).fork(model="sonnet")   # back to just before the last tool call, one thing changed
     run.export("data/run-72")                     # JSONL dataset with a schema
 ```
 

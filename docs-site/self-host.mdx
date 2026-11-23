@@ -25,11 +25,19 @@ The open-source engine, `shaked`, runs everything on your computer: runs with re
   <Step title="Build">
     ```bash
     cargo build --release                          # integrations and benchmarks, into core/target/release
+    (cd core && cargo build --release -p shaked)   # shaked, into the same folder
     ```
+    shaked, the Python SDK's `Shakedown.local` and the package commands all look for programs in `core/target/release`.
+  </Step>
+  <Step title="Put shaked on your PATH">
+    ```bash
+    export PATH="$PWD/core/target/release:$PATH"   # run in the repository folder
+    ```
+    Add the same line to your shell profile, with the full path of your clone, to keep it. The `shaked mcp` and `shaked token create` commands in these docs expect `shaked` on your `PATH`.
   </Step>
   <Step title="Start shaked with a project folder">
     ```bash
-    (cd core && SHAKEDOWN_PROJECT=~/work/my-project cargo run -p shaked)   # API on http://127.0.0.1:4510
+    SHAKEDOWN_PROJECT=~/work/my-project shaked     # API on http://127.0.0.1:4510
     ```
     Shakedown creates the folder if missing. Without `SHAKEDOWN_PROJECT`, the project pages say so and the project routes answer 409.
   </Step>
@@ -37,7 +45,7 @@ The open-source engine, `shaked`, runs everything on your computer: runs with re
     ```bash
     (cd ui && npm install && npm run dev)          # UI on http://127.0.0.1:4520, calling the API on 4510
     ```
-    Or build the UI once and let shaked serve the UI and the API together on `:4510`: run `npm run build` in `ui`, then start shaked with `SHAKEDOWN_UI_DIST=../ui/dist`.
+    Or build the UI once and let shaked serve the UI and the API together on `:4510`: run `npm run build` in `ui`, then start shaked from the repository folder with `SHAKEDOWN_UI_DIST=ui/dist`.
   </Step>
   <Step title="Create the project">
     Open **Get started**, name the project and click **Create project**. Then follow the [Quickstart](/quickstart) from step 3.
