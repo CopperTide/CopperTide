@@ -17,7 +17,11 @@ The full route table, the settings and the disk rules live in the repository: [`
 | `POST /api/branches/{id}/fork` | `{at_seq, changes, restore}`: a fork, answering where the fork started and why |
 | `GET /api/compare?a=&b=` | The first divergent step and the rows differing at the end |
 | `POST /api/experiments` | An engine experiment: one task, 1 to 50 setups, runs per setup |
-| `GET`, `PUT`, `DELETE /api/project/{kind}/{id}` | Project files: worlds, scenarios, setups, experiments |
+| `GET`, `PUT`, `DELETE /api/project/{kind}/{id}` | Project files: worlds, scenarios, setups, experiments. `DELETE` answers 409 with `dependents` while a file uses the item, unless sent with `{"cascade": true}` |
+| `GET /api/project/{kind}/{id}/dependents` | What uses the item, and what a delete with `cascade` does to each |
+| `POST /api/project/world-groups/rename` | `{from, to, confirm}`: move every world in a group to a new group name |
+| `GET /api/project/trash` | The most recent delete Undo puts back |
+| `POST /api/project/trash/restore` | `{trash, confirm}`: put back the files of the most recent delete, or the delete named. 409 when a file changed since the delete |
 | `POST /api/project/experiments/{id}/deploy` | Deploys a file experiment |
 
 ## Tokens

@@ -35,6 +35,12 @@ parent: supplier-slip-baseline   # optional: the experiment this one branched fr
 | `budget.per_deployment_usd` | A cap for one deployment. Deploys do not read this field yet. |
 | `parent` | The experiment this one branched from, shown as a sub-experiment in the list |
 
+## Find and delete an experiment
+
+An experiment's page shows the path to the experiment under its name: the world, then the scenario, each a link to its page. **Worlds** also lists every experiment under its scenario.
+
+**Delete** on the experiment's page, or the bin on the experiment's row in **Experiments**, deletes the experiment's file. Sub-experiments of the experiment become experiments of their own. Past runs of the experiment stay, listed under **Earlier experiments** on the same page. Click **Undo** in the message after the delete, or **Undo last delete** in **Project settings → Deleted files**, to bring the file back with its runs.
+
 ## How the runs go
 
 Shakedown makes the runs one at a time, interleaved: the first run of every setup, then the second of every setup, and so on. Run *n* of every setup starts the world from the same seed. Every run starts from the same base world, so what varies is the agents. An engine experiment takes 1 to 50 setups and up to 1000 runs per setup, as safety caps.

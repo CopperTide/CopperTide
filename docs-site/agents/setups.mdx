@@ -72,6 +72,10 @@ An HTTP agent's credential goes under `auth` in a setup file: `{key: <name>}` or
 
 Through the API the same member takes `headers` (see [Deployed agents](/agents/deployed-agents)). Pick another provider per agent in the **Team editor** (**⋯ → Team editor**) or through the API: see [Models and providers](/agents/models).
 
+## Delete a setup
+
+Click **Delete** on the setup's page. The dialog lists the experiments comparing the setup. **Delete and update 3 experiments** removes the setup from each experiment comparing other setups too, and deletes an experiment left with no setup, such as **Delete with 1 experiment and update 2 experiments**. Past runs stay. A MADL setup's folder `setups/<id>/` stays, and Shakedown deletes `<id>.yaml` alone. **Undo** in the message after the delete brings the file back.
+
 ## MADL setups
 
 A MADL setup points at a Multi-Agent Descriptor Language file in the setup's own folder. The editor adds a **Team graph** section: every agent and connection, with patterns expanded, and the MADL checks with a pointer to each problem.

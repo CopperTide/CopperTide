@@ -20,7 +20,7 @@ Worlds need a runtime package today. A world file runs through an installed benc
 | Observability & on-call | `observability` | Monitoring tools, alert rules, on-call operators and the moments needing a human | No |
 | Runtime | `package` | The installed benchmark or built world running this world | Yes |
 
-The file also holds `format: shakedown-world/3` and `label`, the world's display name.
+The file also holds `format: shakedown-world/3`, `label`, the world's display name, and the optional `group`, the group **Worlds** lists the world under.
 
 ## A world file
 
@@ -47,6 +47,31 @@ To deploy an experiment in this world, add `package:` naming an installed benchm
 ## Credentials stay out of files
 
 A world names a credential by its key-store name (`auth: {key: <name>}`) or by an environment variable (`auth: {env: NAME}`), never by value. Shakedown refuses a file holding a value shaped like a credential, such as an `sk-` key or a `password:` field, and points to the value.
+
+## Group your worlds
+
+Give the worlds of one customer one group, such as the customer's name. **Worlds** and the sidebar list the groups A to Z, the worlds in no group last under **Ungrouped**, and the worlds by name inside each group. The sidebar opens the group of the world on screen. Click a group's name to open or close the group.
+
+- **Set a group:** open the world. In **Overview**, pick a group under **Group**, or pick **New group…** and type a name. Click **Save**.
+- **Move a world:** in **Worlds**, drag the world's row onto a group's header. Drop the row on **Ungrouped** to take the world out of its group. Click **Undo** in the message to move the world back.
+- **Rename a group:** click the pencil on the group's header and type the new name. Every world in the group moves to the new name. Typing the name of another group moves the worlds into the other group, and the dialog says how many. An empty name moves the group's worlds to **Ungrouped**.
+
+The world file holds the group as one line, such as `group: Rebolt`. A group name has no spaces at its start or end. A world file without the line opens under **Ungrouped**, and saving the world adds no line. Moving or renaming writes the world file again from Shakedown's own reading of the file, so comments and the order of keys in a hand-written `world.yaml` go.
+
+## From a world to its scenarios and experiments
+
+In **Worlds**, click the arrow beside a world to list its scenarios, and the arrow beside a scenario to list the experiments playing the scenario. Each row opens its page. The world's **Overview** lists **Scenarios in this world**. A scenario's **Overview** lists **Experiments using this scenario**. An experiment's page shows the path to the experiment under its name: world, then scenario, then experiment.
+
+## Delete a world
+
+Click **Delete** on the world's page, or the bin on the world's row in **Worlds**. Before anything goes, the dialog lists the scenarios and experiments using the world, then offers two choices:
+
+- **Delete** appears alone when nothing uses the world, and deletes the world.
+- **Delete only if unused** stays off while a scenario or an experiment uses the world. Beside the button, **Delete with 1 scenario, 2 experiments** deletes the world, its scenarios and their experiments, and names the counts.
+
+Scenarios, agent setups and experiments delete the same way, from their pages and their rows. Deleting a scenario takes its experiments with the scenario. Deleting an agent setup removes the setup from each experiment comparing other setups, and deletes an experiment left with no setup. Deleting an experiment turns its sub-experiments into experiments of their own, so **Delete only if unused** stays off while the experiment has sub-experiments. If someone changes what uses the world while the dialog is open, Shakedown deletes nothing and shows the new list.
+
+Deleted files go to the project's trash, the folder `.shakedown/trash/`. Shakedown keeps every delete of the last 30 days, and always the last 20, and never commits the trash to Git. Click **Undo** in the message after a delete to put every file back, or later, open **Project settings → Deleted files** and click **Undo last delete**. Undo refuses to overwrite a file someone edited after the delete, and names the file. Shakedown keeps the world's data folder and deletes `world.yaml` alone. Past runs of a deleted experiment stay, listed under **Earlier experiments** on the **Experiments** page. Undo moves those runs back to the experiment.
 
 ## Ways to make a world
 

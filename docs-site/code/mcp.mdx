@@ -40,8 +40,10 @@ claude mcp add shakedown -- "$(command -v shaked)" mcp --project ~/work/my-proje
 |---|---|---|
 | `project_status`, `project_init`, `project_update` | The project's name, settings, counts and problems, creating a project, and changing its settings | Read, edit |
 | `project_import` | Move installed benchmarks and earlier experiments into the project, showing the plan first | Edit |
-| `worlds_list`, `worlds_get`, `worlds_put`, `worlds_delete` | Worlds | Read, edit, delete |
-| `scenarios_*`, `setups_*`, `experiments_*` | The same four for scenarios, setups and experiments | Read, edit, delete |
+| `project_deleted`, `project_restore` | The most recent delete, and undoing a delete. Without `confirm`, `project_restore` answers the files and a `trash` name. Pass the `trash` back with `confirm: true` to restore the same delete, whatever came in between | Read, edit |
+| `worlds_list`, `worlds_get`, `worlds_put`, `worlds_delete`, `worlds_dependents` | Worlds, and what uses one. Shakedown refuses a delete while a file uses the world, unless the call sends `cascade: true`. A cascade sent with `expect`, the list a preview returned, fails when the list has changed | Read, edit, delete |
+| `scenarios_*`, `setups_*`, `experiments_*` | The same five for scenarios, setups and experiments | Read, edit, delete |
+| `worlds_rename_group` | Move every world in a group to a new group name, showing the diff first | Edit |
 | `experiments_deploy`, `experiments_runs` | Deploy an experiment, and list its deployments with each setup's results | Spend, read |
 | `setups_madl` | A MADL setup's checks and its graph of agents | Read |
 
@@ -53,7 +55,7 @@ The token's scope bounds every call: `read` lists and reads, editing or deleting
 
 | Setting | Values | Today |
 |---|---|---|
-| `edit` | `diff_first` (default): a put answers a diff and writes only when sent again with `confirm: true`. `apply_then_tell`: writes at once. | Applies to MCP clients and the assistant |
+| `edit` | `diff_first` (default): every tool taking `confirm` answers what the call changes and writes only when sent again with `confirm: true`. The tools are each `_put`, `project_update`, `project_import`, `project_restore`, `worlds_rename_group` and a delete with `cascade`. `apply_then_tell`: writes at once. | Applies to MCP clients and the assistant |
 | `spend` | `always_ask` (default), or `under_cap` with a daily cap | Stored. The assistant asks before every deploy whatever the setting says, an MCP client with a `run` token deploys without a prompt, and no daily cap applies yet. |
 
-The **Ask** assistant runs reads at once, shows edits as diffs to apply, and turns every deploy or delete into a card you confirm. The assistant runs on your own model key, set under **Project settings → Assistant**.
+The **Ask** assistant runs reads at once and follows `edit` for every tool taking `confirm`: a diff to apply under `diff_first`, written at once under `apply_then_tell`. Every deploy or delete becomes a card you confirm. A delete card shows the delete dialog: what uses the item, then **Delete** alone or with what uses the item. The card ignores any choice the model made. The assistant runs on your own model key, set under **Project settings → Assistant**.
