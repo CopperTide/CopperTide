@@ -1,7 +1,7 @@
 import { BackToApp } from './BackToApp';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { gw } from './session';
-import { AdminAnalytics } from './AdminAnalytics';
+import { AccountActivity } from './AccountActivity';
 import { AdminAudit } from './AdminAudit';
 import { AdminRunning } from './AdminRunning';
 import { AdminUsers, type User } from './AdminUsers';
@@ -10,8 +10,8 @@ import './hosted.css';
 
 type Invite = { id: string; kind: string; role: string; name: string; email: string | null; note: string | null; created_at: string; expires_at: string; used_at: string | null; revoked_at: string | null; slug?: string | null; max_uses?: number | null; uses?: number };
 
-type View = 'people' | 'running' | 'audit' | 'analytics';
-const VIEWS: [View, string][] = [['people', 'People & invites'], ['running', 'Running now'], ['audit', 'Audit log'], ['analytics', 'Analytics']];
+type View = 'people' | 'running' | 'audit';
+const VIEWS: [View, string][] = [['people', 'People & invites'], ['running', 'Running now'], ['audit', 'Audit log']];
 
 const open = (i: Invite) => new Date(i.expires_at) < new Date() ? 'expired' : `open until ${new Date(i.expires_at).toLocaleDateString()}`;
 /** A group link counts who joined; a personal invite is used once. */
@@ -46,10 +46,10 @@ export function AdminPage(_: { csrf?: string }) {
         {/* The ops site signs admins in with a one-time ticket from here (opens in a new tab). */}
         <a className="btn" href="/gw/api/admin/ops-ticket?next=%2F" target="_blank" rel="noopener">Ops tools: databases and logs ↗</a>
       </div>
-      <div role="tablist" aria-label="Admin" className="an-tabs">
+      <div role="tablist" aria-label="Admin" className="admin-tabs">
         {VIEWS.map(([v, label]) => <button key={v} role="tab" aria-selected={view === v} className={`btn${view === v ? ' is-on' : ''}`} onClick={() => setView(v)}>{label}</button>)}
       </div>
-      {view === 'analytics' ? <AdminAnalytics /> : view === 'running' ? <AdminRunning /> : view === 'audit' ? <AdminAudit /> : <>
+      {view === 'running' ? <AdminRunning /> : view === 'audit' ? <><AdminAudit /><AccountActivity /></> : <>
       {error && <p className="tone-red" role="alert">{error}</p>}
       <section aria-label="New invite">
         <h2>Invite someone</h2>

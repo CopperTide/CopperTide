@@ -211,11 +211,6 @@ pub(super) async fn create_team(
             store.insert_draft(&draft)?;
             draft
         };
-        crate::analytics::emit(
-            &st2,
-            "team.created",
-            serde_json::json!({ "template": crate::analytics::template(&info.id) }),
-        );
         crate::teams::to_value(&record(&st2, draft)?)
     })
     .await
@@ -278,10 +273,7 @@ pub(super) async fn put_team(
             ));
         }
         match save_checked(&st2, &id, &req)? {
-            SaveDraft::Saved(d) => {
-                crate::analytics::saved(&st2, &d);
-                crate::teams::to_value(&record(&st2, *d)?)
-            }
+            SaveDraft::Saved(d) => crate::teams::to_value(&record(&st2, *d)?),
             SaveDraft::Conflict { current } => Err(draft_conflict(current)),
             SaveDraft::Missing => Err(ApiError::not_found(format!("no team {id:?}"))),
         }
@@ -356,7 +348,6 @@ pub(super) async fn import_team(
             imported.draft.id = new_team_id(&store, &spec_name);
             store.insert_draft(&imported.draft)?;
         }
-        crate::analytics::emit(&st2, "team.created", json!({ "template": "import" }));
         crate::teams::to_value(&TeamImport {
             team: record(&st2, imported.draft)?,
             dropped: imported.dropped,

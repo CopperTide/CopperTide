@@ -1,4 +1,4 @@
-import { track } from '../hosted/analytics';
+import { track } from '../hosted/productAnalytics';
 import {DismissibleError} from '../shell/DismissibleError';
 import { workflowLinks, inputBox, stageBoxes } from '../workflow/WorkflowGraph';
 import { TextArea } from '../shell/TextArea';
@@ -379,7 +379,7 @@ export function TemplateGallery({ onCreated, onClose, inline, flow = inline, adv
         ) : (
           <p className="gallery-describe">
             <span>Rather describe what you need?</span>{' '}
-            <Btn icon="bot" onClick={() => { track('describe-it'); setDescribing(true); }}>
+            <Btn icon="bot" onClick={() => { track('describe it opened'); setDescribing(true); }}>
               Describe it
             </Btn>{' '}
             <span className="muted">Your own Claude Code or Codex drafts the team for you to review.</span>

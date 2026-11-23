@@ -56,8 +56,6 @@ pub struct AppState {
     /// Agents a Start asked to resume: seat → (its last session id, that session's usage so far).
     /// `launch_one` takes each entry once.
     pub start_resumes: Arc<Mutex<HashMap<String, ResumeSession>>>,
-    /// Hosted beta analytics (None: local mode, which sends nothing).
-    pub analytics: Option<Arc<crate::analytics::Analytics>>,
     /// Hosted beta: where the person's model connections are read at launch (None: local mode).
     pub gateway: Option<Arc<crate::gateway::Gateway>>,
     /// Local mode: shaked, which the Tests pages reach through `/api/shakedown` (None: hosted, or not wired).
@@ -92,16 +90,10 @@ impl AppState {
             cli_programs: Arc::new((PathBuf::from("claude"), PathBuf::from("codex"))),
             workflow_jobs: Arc::default(),
             start_resumes: Arc::default(),
-            analytics: None,
             gateway: None,
             shakedown: None,
             community: None,
         }
-    }
-
-    pub fn with_analytics(mut self, a: Arc<crate::analytics::Analytics>) -> Self {
-        self.analytics = Some(a);
-        self
     }
 
     pub fn with_gateway(mut self, g: Arc<crate::gateway::Gateway>) -> Self {
@@ -117,11 +109,6 @@ impl AppState {
     pub fn with_community(mut self, link: crate::community::CommunityLink) -> Self {
         self.community = Some(Arc::new(link));
         self
-    }
-
-    #[must_use]
-    pub fn analytics(&self) -> Option<&crate::analytics::Analytics> {
-        self.analytics.as_deref()
     }
 
     #[must_use]

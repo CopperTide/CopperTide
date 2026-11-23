@@ -1,4 +1,4 @@
-import { track } from './hosted/analytics';
+import { track } from './hosted/productAnalytics';
 import type { RigSummary } from './generated/RigSummary';
 import type { EventRecord } from './generated/EventRecord';
 import type { Diagnostic } from './generated/Diagnostic';
@@ -289,7 +289,7 @@ export const api = {
     post<TeamImport>('/api/teams/import', requestId, { yaml }),
   /** The team as a MADL (Multi-Agent Descriptor Language) file; `folders` keeps this computer's folder paths. */
   teamMadl: (id: string, folders = false) => {
-    track('export-team-file');
+    track('team file exported');
     return get<{ yaml: string }>(`${teamUrl(id)}/madl${folders ? '?folders=true' : ''}`);
   },
   /** Your own Claude Code / Codex proposes a change to the design; `proposal` continues from an earlier one. Nothing is saved. */
@@ -298,7 +298,7 @@ export const api = {
   /** A MADL file (YAML or JSON) as a new team, with what CopperTide could not keep. An older
    * `sculptured.team/v1` file is read too. */
   importMadl: (text: string, requestId = newRequestId()) => {
-    track('import-team-file');
+    track('team file imported');
     return post<TeamImport>('/api/teams/import-madl', requestId, { text });
   },
   /** Download address of a run as a `sculptured.session/v1` file. */
@@ -311,7 +311,7 @@ export const api = {
     return request<import('./structure/SessionPreview').Converted>('POST', '/api/runs/convert', { files });
   },
   importRun: (text: string) => {
-    track('import-run');
+    track('run imported');
     return request<{ team: TeamRecord; run: import('./generated/DeploymentRun').DeploymentRun; warnings: DraftIssue[] }>('POST', '/api/runs/import', undefined, { text: { body: text, type: 'application/x-ndjson' } });
   },
   /** A team drafted with Describe it, as the person trimmed it, made into a team with where it came from. */
@@ -340,7 +340,7 @@ export const api = {
   /** Every question the team's agents asked, newest first. */
   teamQuestions: (id: string) => request<QuestionView[]>('GET', `${teamUrl(id)}/questions`),
   answer: (questionId: string, answer: Answer, requestId = newRequestId()) => {
-    track('answer-question');
+    track('question answered');
     return request<QuestionView>('POST', `${questionUrl(questionId)}/answer`, { request_id: requestId, answer });
   },
   /** Sends the recorded answer (or expiry) again when it may not have reached the agent (`QuestionView.unconfirmed`). */

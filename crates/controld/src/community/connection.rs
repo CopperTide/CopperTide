@@ -97,7 +97,7 @@ pub struct CommunityLink {
 impl CommunityLink {
     #[must_use]
     pub fn new(data_dir: PathBuf, default_origin: String) -> Self {
-        // The same provider as analytics, the runner's link and pairing (installing twice is harmless).
+        // The same provider as the gateway client, the runner's link and pairing (installing twice is harmless).
         let _ = rustls::crypto::ring::default_provider().install_default();
         let http = reqwest::Client::builder()
             .redirect(reqwest::redirect::Policy::none())

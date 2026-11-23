@@ -5,6 +5,7 @@ All notable changes to CopperTide are listed here. The format follows [Keep a Ch
 ## [Unreleased]
 
 ### Changed
+- Hosted usage analytics move to PostHog. Signed-in browsers on the hosted service send page views, clicks and a session replay, with all text and inputs masked and names removed from page addresses. They are identified by account id, with email and name, and grouped by organization. Nothing is sent without a configured key, with Do Not Track or Global Privacy Control on, or in local mode; in an EU or EEA time zone nothing is stored in the browser and no replay is recorded. The admin console's Analytics tab and the browser collector are gone. `controld` no longer reports team shapes, starts, stops or runs to the gateway, and `COPPERTIDE_GATEWAY_URL` is now only for reading model connections. See [Privacy](https://docs.coppertide.ai/privacy).
 - Renamed to CopperTide.
 - The program is `coppertide` (`coppertide serve`, `coppertide connect`, `cargo run -p coppertide -- serve`), its environment variables are `COPPERTIDE_*`, and its data folder is `~/.coppertide`. Release files are `coppertide-<target>.tar.gz` and `CopperTide-mac.dmg`. Reinstalling from the Computers page moves an existing runner over, with its data, connection and settings.
 

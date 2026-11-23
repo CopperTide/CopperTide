@@ -62,11 +62,6 @@ pub(super) async fn create_draft(
             .lock()
             .expect("store mutex must not be poisoned")
             .set_team_origin(&draft.id, &req.origin)?;
-        crate::analytics::emit(
-            &st2,
-            "team.created",
-            serde_json::json!({ "template": "generated" }),
-        );
         crate::error::to_value(&Created {
             team: crate::teams::record(&st2, draft)?,
             warnings,

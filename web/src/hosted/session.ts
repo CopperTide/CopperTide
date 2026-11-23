@@ -1,8 +1,15 @@
 import { setCsrf } from '../api';
+import { stopProductAnalytics } from './productAnalytics';
+import type { Org as HostedOrg, PostHogSettings } from './posthogShared';
 
 export type HostedUser = { id: string; name: string; email: string; role: 'member' | 'admin' };
+/** The person's personal org, and where product analytics go (null when no PostHog key is configured). */
+export type { HostedOrg, PostHogSettings };
 /** `shakedown`: hosted Shakedown is on at /sd/ for this account (the gateway's `/gw/api/me`). */
-export type HostedSession = { kind: 'local' } | { kind: 'signed-out' } | { kind: 'signed-in'; user: HostedUser; csrf: string; shakedown?: boolean };
+export type HostedSession =
+  | { kind: 'local' }
+  | { kind: 'signed-out' }
+  | { kind: 'signed-in'; user: HostedUser; csrf: string; shakedown?: boolean; org?: HostedOrg | null; posthog?: PostHogSettings | null };
 
 let csrf: string | null = null;
 
@@ -16,7 +23,7 @@ export async function loadSession(): Promise<HostedSession> {
   const body = await res.json().catch(() => null);
   if (!body?.user || !body.csrf) return { kind: 'local' };
   csrf = body.csrf; setCsrf(body.csrf);
-  return { kind: 'signed-in', user: body.user, csrf: body.csrf, shakedown: body.shakedown === true };
+  return { kind: 'signed-in', user: body.user, csrf: body.csrf, shakedown: body.shakedown === true, org: body.org ?? null, posthog: body.posthog ?? null };
 }
 
 export class GwError extends Error { constructor(public status: number, public code: string, message: string) { super(message); } }
@@ -32,7 +39,13 @@ export async function gw<T>(method: 'GET' | 'POST' | 'DELETE', path: string, bod
   return json as T;
 }
 
+/** Signs this browser out, and makes product analytics forget who it was. */
+export async function signOut(): Promise<void> {
+  stopProductAnalytics();
+  await gw('POST', '/logout');
+}
+
 export const providerHref = (purpose: { join: string } | 'login', provider: 'google' | 'github') =>
   purpose === 'login' ? `/gw/api/login/oidc/${provider}` : `/gw/api/join/${purpose.join}/oidc/${provider}`;
 
-export const RECORDED = 'We record what you do in CopperTide to improve the beta: pages and features you use and for how long, the shape of the teams you set up (how many agents, which kinds and models), runs, token totals and errors. We never record your prompts, messages, jobs, agent output, file names or file contents.';
+export const RECORDED = 'To improve the beta we use PostHog to see how CopperTide is used: sign-ins, pages and clicks, and a session replay with every text and input masked. We never send what you type or the content of your teams, prompts or runs.';

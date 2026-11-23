@@ -1,4 +1,4 @@
-import { track } from '../hosted/analytics';
+import { track } from '../hosted/productAnalytics';
 import {useEffect,useMemo,useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import {api} from '../api';
@@ -41,7 +41,7 @@ export function DeploymentHistoryView({rig}:{rig:string}) {
       {root&&<button className="btn" onClick={()=>navigate('history_subtree','')}>Whole deployment</button>}
       <button className="btn" aria-pressed={list} onClick={()=>setList(!list)}>{list?'Graph':'List'}</button>
       {seq!==undefined&&!data?.run.source&&<button className="btn" aria-pressed={tokensView} onClick={()=>setTokensView(!tokensView)}>{tokensView?'Agents':'Where tokens went'}</button>}
-      {seq!==undefined&&<a className="btn" href={api.runFileUrl(rig,seq)} download onClick={()=>track('download-run')}>Download run</a>}
+      {seq!==undefined&&<a className="btn" href={api.runFileUrl(rig,seq)} download onClick={()=>track('run downloaded')}>Download run</a>}
     </div>
     {data?.run.source&&<p className="live-evidence-note">Imported from a file ({sourceName(data.run.source)}). Shown as recorded in the file; it did not run here.</p>}
     <p className="live-evidence-note">Recorded history · includes stopped and removed agents. Status means last observed in this run, not current activity.</p>

@@ -66,6 +66,23 @@ it('shows the audit log in plain words, newest first', async () => {
   expect(rows[1]).toHaveTextContent('opened the ops tools');
 });
 
+it('shows account activity in plain words, and API writes only when asked', async () => {
+  gateway({ '/admin/audit/account': [
+    { id: 3, at: '2026-11-23T10:00:00Z', action: 'signin.failed', detail: { method: 'password', reason: 'bad_credentials' }, email: null },
+    { id: 2, at: '2026-11-23T09:00:00Z', action: 'signin.succeeded', detail: { method: 'google' }, email: 'ana@x.com' },
+    { id: 1, at: '2026-11-23T08:00:00Z', action: 'session.revoked', detail: { all: true, by: 'password_reset' }, email: 'ana@x.com' },
+  ], '/admin/audit/account?api=true': [{ id: 4, at: '2026-11-23T11:00:00Z', action: 'api.write', detail: { method: 'POST', route: '/api/teams/:id/start', status: 200 }, email: 'ana@x.com' }] });
+  await userEvent.click(await screen.findByRole('tab', { name: 'Audit log' }));
+  const table = await screen.findByRole('table', { name: 'Account events' });
+  await within(table).findByText('failed to sign in with a password (bad_credentials)');
+  const rows = within(table).getAllByRole('row').slice(1);
+  expect(rows[0]).toHaveTextContent('no account');
+  expect(rows[1]).toHaveTextContent('signed in with Google');
+  expect(rows[2]).toHaveTextContent('every session ended (by password reset)');
+  await userEvent.click(screen.getByLabelText('Include API writes'));
+  expect(await within(table).findByText('POST /api/teams/:id/start → 200')).toBeInTheDocument();
+});
+
 it('links to the ops tools through a one-time sign-in', async () => {
   gateway();
   const link = await screen.findByRole('link', { name: /Ops tools/ });

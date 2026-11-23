@@ -5,7 +5,7 @@ import { api } from '../api';
 import { errorText } from '../errors';
 import type { AccountUsage } from '../generated/AccountUsage';
 import { useHosted } from '../hosted/HostedGate';
-import { gw } from '../hosted/session';
+import { signOut as endSession } from '../hosted/session';
 import { UsageSummary } from './UsageSummary';
 import { CliAccounts } from '../shell/CliAccounts';
 import { CommunityCard } from '../community/CommunityCard';
@@ -43,7 +43,7 @@ export function AccountPage() {
 
 function SignedIn({ name, email, admin }: { name: string; email: string; admin: boolean }) {
   const [busy, setBusy] = useState(false);
-  const signOut = () => { setBusy(true); void gw('POST', '/logout').finally(() => window.location.assign('/login')); };
+  const signOut = () => { setBusy(true); void endSession().finally(() => window.location.assign('/login')); };
   return (
     <section aria-label="Signed in" className="acct-who">
       <div><strong>{name}</strong><span className="muted">{email}</span>{admin && <span className="muted">Admin</span>}</div>

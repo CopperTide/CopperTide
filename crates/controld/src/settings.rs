@@ -201,12 +201,8 @@ async fn put_team_settings(
     if store.draft(&id)?.is_none() {
         return Err(crate::ApiError::not_found("Project not found"));
     }
-    let had_copies = store.team_settings(&id)?.own_copies;
     store.save_team_settings(&id, &s)?;
     drop(store);
-    if s.own_copies && !had_copies {
-        crate::analytics::emit(&st, "copies.enabled", serde_json::json!({}));
-    }
     Ok(crate::extract::Json(s))
 }
 async fn get_settings(

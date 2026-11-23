@@ -1,4 +1,3 @@
-import { track } from '../hosted/analytics';
 import { useCallback, useMemo, useSyncExternalStore } from 'react';
 import type { CompiledEdge } from '../generated/CompiledEdge';
 import { CARD_W, type Box } from '../layout';
@@ -69,7 +68,7 @@ export function routeGroupEdges(edges: CompiledEdge[], projection: GroupProjecti
 }
 export function GroupVisibilityButton({ name, collapsed, onToggle, onFocus }: { name: string; collapsed: boolean; onToggle: () => void; onFocus?: () => void }) {
   return <button type="button" className="group-visibility" aria-label={`${collapsed ? 'Show' : 'Hide'} contents of ${name}`} aria-expanded={!collapsed}
-    onFocus={onFocus} onPointerDown={e => e.stopPropagation()} onClick={e => { e.stopPropagation(); if (!collapsed) track('collapse-group'); onToggle(); }}>
+    onFocus={onFocus} onPointerDown={e => e.stopPropagation()} onClick={e => { e.stopPropagation(); onToggle(); }}>
     <Icon name={collapsed ? 'chevron-right' : 'chevron-down'} size={13} />{collapsed ? 'Show contents' : 'Hide contents'}
   </button>;
 }

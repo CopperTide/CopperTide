@@ -200,7 +200,6 @@ pub(super) async fn start_team(
             providers.sort_unstable();
             providers.dedup();
             if let Some(why) = providers.iter().find_map(|p| crate::plan_usage::held(&st2, p)) {
-                crate::analytics::emit(&st2, "plan.held", json!({}));
                 return Err(ApiError::conflict("plan_limit", why));
             }
         }
@@ -227,7 +226,6 @@ pub(super) async fn start_team(
             crate::knowledge::refresh(&st3, &team, &mapped).await;
             reconciler::deliver_jobs(st3, jobs, after_seq, layers).await;
         });
-        crate::analytics::team_started(&st2, &draft);
         Ok(json!({ "rig": build.rig.name, "warnings": build.warnings }))
     })
     .await
@@ -308,9 +306,7 @@ pub(super) async fn stop_team(
             return Err(stop_refused(&st2, &id));
         };
         // Same body as `POST /api/rigs/{name}/stop`: the agents that could not be stopped, with the host's reason.
-        let analytics = st2.clone();
         let failed = reconciler::stop_rig(st2, id).await?;
-        crate::analytics::emit(&analytics, "team.stopped", json!({}));
         crate::error::to_value(&StopRigOutcome { failed })
     })
     .await

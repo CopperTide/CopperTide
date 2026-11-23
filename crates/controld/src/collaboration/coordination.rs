@@ -224,7 +224,6 @@ pub(super) async fn stop_team_now(
         if !roots.is_empty() {
             controls::stop_now(&st2, &id, &roots).await?;
         }
-        crate::analytics::emit(&st2, "team.stopped_now", json!({}));
         Ok(json!({ "stopped": roots.len() }))
     })
     .await

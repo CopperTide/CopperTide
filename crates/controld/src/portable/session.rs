@@ -303,19 +303,6 @@ pub fn import_run(
         settings: Default::default(),
     });
     let draft = super::team::create(st, file)?;
-    crate::analytics::emit(
-        st,
-        "team.created",
-        serde_json::json!({ "template": "run-import" }),
-    );
-    if header.source != Source::Sculptured {
-        // Only that it happened, which tool, and how many agents: never content.
-        crate::analytics::emit(
-            st,
-            "run.imported",
-            serde_json::json!({ "source": header.source, "agents": header.agents.len() }),
-        );
-    }
     header.team_id = draft.id.clone();
     let rows: Vec<(i64, String, &str)> = lines
         .iter()

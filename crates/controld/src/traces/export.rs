@@ -251,7 +251,7 @@ fn client(hosted: bool) -> &'static reqwest::Client {
     static LOCAL: OnceLock<reqwest::Client> = OnceLock::new();
     static HOSTED: OnceLock<reqwest::Client> = OnceLock::new();
     let build = || {
-        // See analytics: reqwest's rustls needs a provider chosen before a client is built.
+        // See `gateway`: reqwest's rustls needs a provider chosen before a client is built.
         let _ = rustls::crypto::ring::default_provider().install_default();
         // No redirects: the key goes only to the address the team chose.
         let b = reqwest::Client::builder()

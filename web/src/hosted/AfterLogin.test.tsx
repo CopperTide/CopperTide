@@ -5,7 +5,7 @@ import type { HostedSession } from './session';
 
 let session: HostedSession = { kind: 'signed-out' };
 vi.mock('./session', async (orig) => ({ ...(await orig<typeof import('./session')>()), loadSession: () => Promise.resolve(session) }));
-vi.mock('./analytics', () => ({ startAnalytics: () => undefined, routeTemplate: (p: string) => p }));
+vi.mock('./productAnalytics', () => ({ startProductAnalytics: () => undefined }));
 const { HostedGate } = await import('./HostedGate');
 afterEach(() => sessionStorage.clear());
 

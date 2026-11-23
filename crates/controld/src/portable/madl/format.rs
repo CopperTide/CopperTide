@@ -109,11 +109,6 @@ pub(in super::super) async fn import_madl(
         let Imported { file, dropped } = read(&req.text)?;
         let (file, warnings) = crate::portable::team::check(&st2, file)?;
         let draft = crate::portable::team::create(&st2, file)?;
-        crate::analytics::emit(
-            &st2,
-            "team.created",
-            serde_json::json!({ "template": "file" }),
-        );
         crate::portable::madl::to_value(&TeamImport {
             team: crate::teams::record(&st2, draft)?,
             dropped,

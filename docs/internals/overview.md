@@ -82,7 +82,7 @@ The Cargo workspace is `crates/*` (`spikes/` is excluded). The hosted gateway an
 | `crates/model` | Shared types: events, provenance, seat ids (`pod.member@rig`), team drafts, workflow, limits, pricing. No I/O. Exported to TypeScript with ts-rs. | Yes: event and draft JSON |
 | `crates/rigspec` | Parses, validates and compiles RigSpec YAML and team drafts into a `CompiledRig`; templates and team exchange formats. No file I/O. | Yes: `sculptured.team/v1` ([Portable formats](portable-formats.md)) |
 | `crates/host-proto` | Messages between controld and a runner, as JSON frames over a WebSocket (`ToHost`, `FromHost`, Hello, Welcome, acks). | Yes: [Host protocol](host-protocol.md) |
-| `crates/controld` | The product server: HTTP API, guard and hosted auth, SQLite event store and projections, launches, handoffs, questions, workflow engine, checks, usage, analytics, the context ceiling ([Protections](protections.md)) knowledge ([Knowledge](knowledge.md)) the team's status page ([Status page](status-page.md)), proposed changes with rule checks ([Proposed changes](changes.md)) and triggers from other systems ([Triggers](triggers.md)). | Yes: `/api/*`, `/host` |
+| `crates/controld` | The product server: HTTP API, guard and hosted auth, SQLite event store and projections, launches, handoffs, questions, workflow engine, checks, usage, the context ceiling ([Protections](protections.md)) knowledge ([Knowledge](knowledge.md)) the team's status page ([Status page](status-page.md)), proposed changes with rule checks ([Proposed changes](changes.md)) and triggers from other systems ([Triggers](triggers.md)). | Yes: `/api/*`, `/host` |
 | `crates/hostd` | The agent runner: supervises agent processes, journals their events, serves seat tools on a local socket, enforces the computer owner's policy. | Client of `/host` |
 | `crates/drivers` | One driver per CLI: `claude` (stream-json), `codex` (app-server JSON-RPC), `stub` (Practice agents, no model). | Internal trait `Driver` ([Drivers](drivers.md)) |
 | `crates/localops` | Folders, git, own copies, checks, CLI sign-in, plan usage, generation, project maps. Called in-process or by a runner. | Yes: `LocalOp` JSON |
@@ -100,7 +100,7 @@ The Cargo workspace is `crates/*` (`spikes/` is excluded). The hosted gateway an
 | `web/src/progress` | Activity and summary sentences from events. | No |
 | `web/src/groups` | Group library, palette, block details and transfer. | No |
 | `web/src/release` | Community pages, sharing, git page, agent copies list, design guide. | No |
-| `web/src/hosted` | Hosted pages: login, join, reset, connect, computers, admin analytics. | No |
+| `web/src/hosted` | Hosted pages: login, join, reset, connect, computers, admin; product analytics in PostHog (`productAnalytics.ts`). | No |
 | `web/src/draft` | Pure edit, history and geometry functions for team drafts. | No |
 | `web/src/api.ts`, `useTeamEvents.ts`, `useRigStream.ts` | The browser's client for `/api/*` and the shared live stream. | Client |
 | `desktop/` | Electron window around a local `serve`. | No |
@@ -129,7 +129,7 @@ The Cargo workspace is `crates/*` (`spikes/` is excluded). The hosted gateway an
 3. [Host protocol](host-protocol.md) and [Drivers](drivers.md): how controld, the runner and the CLIs talk.
 4. [Events and storage](events-and-storage.md): the journal, projections and provenance.
 5. [Workflows](workflows.md), [Limits and usage](limits-and-usage.md), [AI team generator](ai-team-generator.md), [Portable formats](portable-formats.md).
-6. Hosted beta: Gateway (in the private sculptured-cloud repo), [Connected computers](devices.md), [Local operations](local-ops.md), Analytics (in the private sculptured-cloud repo).
+6. Hosted beta: Gateway (in the private sculptured-cloud repo), [Connected computers](devices.md), [Local operations](local-ops.md), Analytics (PostHog; in the private CopperTide-Cloud repo).
 7. Security (in the private sculptured-cloud repo), Deployment (in the private sculptured-cloud repo), [Desktop and installers](desktop-and-installers.md).
 
 ## 7. Glossary

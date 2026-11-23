@@ -1,5 +1,4 @@
 pub mod account;
-pub mod analytics;
 pub mod api;
 pub mod shakedown;
 pub mod auth;

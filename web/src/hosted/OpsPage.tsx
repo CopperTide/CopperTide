@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useHosted } from './HostedGate';
-import { gw } from './session';
+import { signOut } from './session';
 import { BackToApp } from './BackToApp';
 import { AFTER_LOGIN } from './afterLogin';
 
@@ -19,7 +19,7 @@ export function OpsPage() {
   if (admin) return <main className="hosted-page"><p className="muted">Opening the ops tools…</p></main>;
   const switchAccount = async () => {
     try { sessionStorage.setItem(AFTER_LOGIN, `/ops?next=${encodeURIComponent(next)}`); } catch { /* storage off: they land on home */ }
-    await gw('POST', '/logout').catch(() => {});
+    await signOut().catch(() => {});
     window.location.assign('/login');
   };
   return (

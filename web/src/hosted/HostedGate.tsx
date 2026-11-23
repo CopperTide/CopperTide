@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { loadSession, type HostedSession } from './session';
-import { routeTemplate, startAnalytics } from './analytics';
+import { startProductAnalytics } from './productAnalytics';
 import { remember, takeRemembered } from './afterLogin';
 
 const Ctx = createContext<HostedSession>({ kind: 'local' });
@@ -50,9 +50,8 @@ export function HostedGate({ children }: { children: ReactNode }) {
   const [attempt, setAttempt] = useState(0);
   const loc = useLocation();
   useEffect(() => { loadSession().then((x) => { setDown(false); setS(x); }, () => setDown(true)); }, [attempt]);
-  // Hosted beta analytics, while signed in (local mode never starts it). See /what-we-record.
-  const csrf = s?.kind === 'signed-in' ? s.csrf : null;
-  useEffect(() => (csrf ? startAnalytics(csrf, () => routeTemplate(window.location.pathname)) : undefined), [csrf]);
+  // Product analytics, while signed in with a key configured (local mode has neither). See /what-we-record.
+  useEffect(() => { if (s?.kind === 'signed-in') startProductAnalytics(s.user, s.org ?? null, s.posthog ?? null); }, [s]);
   const shakedown = useSignedInHome(s, loc.pathname);
   if (down) return (
     <main className="hosted-page" role="alert">

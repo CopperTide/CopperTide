@@ -1,46 +1,45 @@
 ---
 title: Privacy
-description: Understand the difference between usage analytics, stored run history and data on your computer.
+description: What usage analytics PostHog receives, what is stored to run your teams, and what stays on your computer.
 ---
 
 CopperTide stores team designs and run history so you can run agents and review their work. In the hosted beta, that operational data is stored in your account's CopperTide instance. In local mode, it is stored on your computer.
 
-The hosted beta also collects **usage analytics**: feature use, team structure, run statistics, token totals and errors. Analytics exclude prompts, messages, jobs, agent output, file names and file contents. Self-hosted CopperTide does not collect usage analytics.
+The hosted beta also collects **usage analytics** with [PostHog](https://posthog.com): how people sign in and which pages and features they use. Analytics never include what you type, or the content of your teams, prompts or runs. Self-hosted CopperTide does not collect usage analytics.
 
-<Check>The same list is in the app: open **What we record** from your account. Every event is checked against that list before it is stored; anything else is refused.</Check>
+<Check>The same summary is in the app: open **What we record** from your account.</Check>
 
-## Excluded from analytics
+## What PostHog receives
 
+PostHog Inc. (United States) processes usage analytics for us, on PostHog's US Cloud. It receives:
+
+| What | From | Details |
+| --- | --- | --- |
+| Who you are | The CopperTide site and your browser | Your account id, email and name, and your organization's id (a personal organization is named only "Personal"), so events from one person and one organization can be counted together |
+| What any website sees | Your browser | Your browser, operating system, device type, screen size and IP address. PostHog is set to discard IP addresses (its "Discard client IP data" setting), and the CopperTide site's own events ask it not to look them up (`$geoip_disable`) |
+| Account events | The CopperTide site | `user signed up` and `user signed in`, each with the method (password, Google or GitHub); `org created`; `invite accepted` |
+| Pages and clicks | Your browser, while signed in, in CopperTide and in hosted Shakedown | The pages you open, with names in addresses replaced (for example `/team/:id/structure` or `/sd/worlds/:id`), and the buttons you click, with their text masked |
+| Named actions | Your browser, while signed in | A few actions by name only. In CopperTide: Describe it opened, team file exported or imported, run imported or downloaded, question answered, Community block added. In hosted Shakedown: project, world, scenario, setup or experiment created; run or experiment run started; experiment deployed; fork made; compare opened |
+| Session replay | Your browser, while signed in, outside Europe | The page's layout and your clicks and scrolling, with **all text and every input masked** and names removed from page addresses. Network requests are not recorded |
+
+PostHog keeps this data under its own retention settings for our project.
+
+## Never sent to PostHog
+
+- What you type, in any field
 - Prompts, messages and jobs
-- Agent output and transcripts (for analytics)
+- Agent output and transcripts
 - Team names and agent names
 - Folder names and paths
 - File contents
 - Check commands and their output
+- Passwords, keys and tokens
 
-## Analytics events
+## Opting out
 
-| Event | From | What it says |
-| --- | --- | --- |
-| `auth.signin` | CopperTide site | You signed in, and how (password, Google or GitHub) |
-| `invite.used` | CopperTide site | An invite was used to join |
-| `device.paired` | CopperTide site | A computer was connected, and its operating system |
-| `device.revoked` | CopperTide site | A computer was disconnected |
-| `api` | CopperTide site | A request: its kind, the page or action with names removed (for example `/api/teams/:id/git`), its status and how long it took |
-| `session.start` | Your browser | You opened CopperTide |
-| `session.end` | Your browser | You left |
-| `page.active` | Your browser | Every 15 seconds while the tab is in front: which kind of page (names removed) |
-| `ui.action` | Your browser | You used a feature such as Describe it, Token use or Download run (its name only) |
-| `team.created` | Your CopperTide | A team was made, and from what (a template, a file, a description) |
-| `team.saved` | Your CopperTide | A team's shape (counts only: agents by kind, groups, arrows; whether checks, limits, copies or a workflow are used), at most every 10 minutes |
-| `team.started` | Your CopperTide | A team started: how many agents, which programs, how many models, its shape |
-| `team.stopped` | Your CopperTide | A team stopped |
-| `run.summary` | Your CopperTide | A finished run: duration, tokens in and out, agents, spawned agents, failed agents |
-| `check.ran` | Your CopperTide | A check ran, and whether it passed (never the command or its output) |
-| `copies.enabled` | Your CopperTide | Agents' own copies were turned on |
-| `plan.held` | Your CopperTide | A start waited because a plan was near its limit |
-
-Analytics events are kept for **180 days**. After that, only daily totals remain.
+- **Do Not Track or Global Privacy Control:** turn either on in your browser, and nothing is sent to PostHog: not from your browser, and not about your sign-ups and sign-ins from the CopperTide site.
+- **In Europe:** if your browser's time zone is in the EU or EEA, its outermost regions included, PostHog stores nothing in your browser (no cookie, no local storage) and records no session replay. Page views, clicks and named actions still reach PostHog while the page is open, unless Do Not Track or Global Privacy Control is on.
+- **Run it yourself:** self-hosted CopperTide sends nothing. See [Run it yourself](/operations).
 
 ## Data stored to run your teams
 
@@ -56,11 +55,11 @@ flowchart LR
   subgraph SV["Your CopperTide on the server"]
     T[("Teams, runs, messages, transcripts")]
   end
-  subgraph AN["Analytics"]
-    E[("Events in the table above")]
+  subgraph AN["PostHog"]
+    E[("Sign-ins, pages, clicks, masked replay")]
   end
   A -- "events: replies, tool calls, results" --> T
-  T -- "counts and shapes only" --> E
+  B["Your browser"] -- "never team content" --> E
   F -. "only what you ask to see: folder lists, Git status, diffs" .-> T
 ```
 
@@ -72,8 +71,9 @@ flowchart LR
 | Claude Code and Codex sign-in | Only on your computer | CopperTide never reads or stores them. |
 | Your name, email, sign-in methods, and a password hash if you use a password | The account database | To sign you in. |
 | Your computers: name, operating system, last seen | The account database | For the Computers page. |
+| Account security events: sign-ins and failed sign-ins (method and reason), sign-up, linked sign-in methods, invites, ended sessions, computers connected and disconnected, and each change you make through the app, as its kind of request (for example POST), its address with names replaced (in CopperTide the API route, such as `/api/teams/:id/start`; in hosted Shakedown only its area, such as `/sd/api/runs/:id/:id`) and its result code, never its content, at most 600 an hour | The account database, kept 13 months | To investigate misuse of an account. |
 
-The server's data is backed up every night. Admins can see account details, computers and analytics. They cannot open your teams, runs or files.
+The server's data is backed up every night. Admins can see account details and computers, and the usage analytics in PostHog. They cannot open your teams, runs or files.
 
 ## What your agents send
 

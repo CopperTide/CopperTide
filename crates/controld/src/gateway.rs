@@ -1,7 +1,7 @@
 //! Hosted beta: reading the person's model connections from the gateway, which keeps their keys
-//! sealed. Requests are signed with this instance's gateway secret, as analytics reports are
-//! (`crate::analytics`). What comes back holds a key: it goes into one agent's launch environment
-//! and nowhere else, never into an event, the store, a log or an error. Local mode has no `Gateway`.
+//! sealed. Requests are signed with this instance's gateway secret. What comes back holds a key: it
+//! goes into one agent's launch environment and nowhere else, never into an event, the store, a log
+//! or an error. Local mode has no `Gateway`.
 use serde::Deserialize;
 use std::sync::Arc;
 use std::time::Duration;
