@@ -1,8 +1,8 @@
 # CopperTide internals
 
-These pages explain how CopperTide works for contributors changing its code. Start with the [overview](overview.md) for the architecture and code map, then follow the topic relevant to your change. For instructions on using the app, see the [user documentation](../../docs-site/README.md).
+These pages explain how the CopperTide app works, for contributors changing its code. Start with the [overview](overview.md) for the architecture and code map, then follow the topic relevant to your change. The user guide at [docs.coppertide.ai](https://docs.coppertide.ai) covers Shakedown. The app's own user pages are in [`docs-site/guides/`](../../docs-site/guides/), out of the published navigation for now, and in the [Control guide](../guide/control.md).
 
-This repository contains the app, runner and shared types. The hosted gateway and Community server live in separate private repositories; these pages describe their boundaries where they connect to the core.
+This repository contains the app, the runner and the shared types. The hosted gateway and the Community server live in separate private repositories. These pages describe their boundaries where they connect to the app. The Shakedown engine lives in the [Shakedown repository](https://github.com/CopperTide/Shakedown), with its own developer docs.
 
 ## Start here
 
@@ -25,6 +25,9 @@ Read these pages to understand how a design becomes a running team and how its a
 | What agents know | [Knowledge](knowledge.md) | The generated project map, lessons, history search and the Knowledge view |
 | Agent skills | [Skills and integrations](skills-and-integrations.md) | Skills per agent, how each CLI loads them, and tools on the agent's computer such as Kindex |
 | Work coordination | [Workflows](workflows.md) | Stages, items, reviews, checks, merges, guards and schedules |
+| Business changes | [Proposed changes and rule checks](changes.md) | The `propose_change` agent tool, the team's rules and approvals |
+| Where work stands | [Status page](status-page.md) | The status page one agent writes with `write_status`, and who owns it |
+| Incoming events | [Triggers](triggers.md) | Addresses other systems post events to, and their keys |
 | Files and Git | [Local operations](local-ops.md) | Folder access, working copies, checks, CLI sign-in and operations on connected computers |
 | Import and export | [Portable formats](portable-formats.md) | Team and run schemas, validation, export and imported history |
 | Team generation | [AI team generator](ai-team-generator.md) | How Describe it drafts a team through the user's CLI and converts it into a design |

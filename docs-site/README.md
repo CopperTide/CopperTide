@@ -1,63 +1,66 @@
-# Shakedown documentation
+# Shakedown user guide (docs.coppertide.ai)
 
-This directory contains Shakedown's user guide, published at [docs.coppertide.ai](https://docs.coppertide.ai). Pages are written in MDX, with navigation in `docs.json`. The same sources support a Mintlify preview and the static site built by `build.mjs`.
+The sources of the Shakedown user guide, published at [docs.coppertide.ai](https://docs.coppertide.ai). Pages are MDX, and `docs.json` holds the navigation. The same sources work in a Mintlify preview and in the static site that `build.mjs` produces.
 
-For architecture and implementation details, see [the internals documentation](../docs/internals/README.md).
+The guide documents Shakedown, hosted and open source. The engine's developer docs live in the [Shakedown repository](https://github.com/CopperTide/Shakedown): link to them rather than copy them. For how the CopperTide app is built, see the [internals](../docs/internals/README.md).
 
-## Find the right page
+## What's here
 
-- **Get started:** introduction, quickstart and concepts.
-- **Build worlds, Agents, Run and read results:** the task guides.
-- **Use from code, Self-host, Account:** the SDK, the MCP server, the API, the local engine, sign-in, keys and quotas.
-- **Help:** FAQ and the changelog.
+| Navigation group | Pages |
+|---|---|
+| Get started | `introduction`, `quickstart`, `concepts` |
+| Build worlds | `worlds/` |
+| Agents | `agents/` |
+| Run and read results | `runs/` |
+| Use from code | `code/`: the Python SDK, the MCP server, the HTTP API |
+| Self-host | `self-host` |
+| Account | `account/`: sign-in, keys, quotas |
+| Help | `faq`, `updates` |
 
-The team-of-agents pages (`guides/`, `reference/`, `connect-a-computer`, `operations`, `security`, `privacy`, `troubleshooting`, `changelog`) are out of the navigation and not built. Their files stay.
+The team-of-agents pages (`guides/`, `reference/`, `connect-a-computer`, `operations`, `security`, `privacy`, `troubleshooting`, `changelog`) are out of the navigation and not built. Their files stay in the repository.
 
-Say plainly what is not there yet, and check every claim against the Shakedown code. The engine's developer docs live in the Shakedown repository; link to them rather than copying them.
+## What it needs
 
-Keep the quickstart focused on a first successful run. Put detailed procedures in guides and exact fields, defaults and limits in reference pages. Link to those pages instead of repeating their contents.
+- Node.js 24.
+- No Mintlify login for navigation and content in the preview. Search in the preview needs one.
 
-## Preview locally
+## Preview and build
 
-From this directory:
+From this folder:
 
 ```bash
 npm ci
-npm run dev
+npm run dev      # Mintlify preview on port 4411
+npm run build    # static site in dist/
 ```
 
-The Mintlify preview runs on port 4411. Navigation and page content work without a Mintlify login; development search requires one. The preview may listen on the LAN as well as localhost, and serves only documentation.
+The preview may listen on your network as well as on localhost. It serves only documentation.
 
-## Check a change
+`npm run build` writes HTML, images, a Markdown copy of each page, `llms.txt` and `llms-full.txt` to `dist/`. It also publishes the JSON Schemas from `../web/public/schema/` at `/schema/`. Do not edit `dist/` by hand.
 
-Run these commands from this directory after editing MDX or navigation:
+## Tests
+
+Run all three after editing MDX or navigation:
 
 ```bash
-npm test
-npm run validate
-npm run links
+npm test             # builds every navigation page in a temporary folder and checks the output
+npm run validate     # Mintlify: checks the site configuration
+npm run links        # Mintlify: checks internal links
 ```
 
-`npm test` builds every navigation page in a temporary directory and checks rendered components, navigation, Markdown exports, schemas, images and internal links. `node build.mjs` fails on a link to a missing page or file, or to an anchor (headings get no anchors). Mintlify's commands validate the site configuration and check internal links.
+`npm test` checks rendered components, navigation, Markdown exports, schemas, images and internal links. The build fails on a link to a missing page or file, or to an anchor, because headings get no anchors.
 
-To produce the static site:
+## Writing pages
 
-```bash
-npm run build
-```
+- Check every claim against the Shakedown code. Say plainly what is not there yet.
+- Keep the quickstart on a first successful run. Put procedures in guides, and exact fields, defaults and limits in reference pages. Link instead of repeating.
+- Give each page a descriptive title and a one-line summary. Lead a procedure with its prerequisites, then give the steps in order. Use the app's exact labels.
+- Keep agent reports, captured events, estimates and verified checks distinct.
+- Keep page paths stable. Add new pages to `docs.json` and update links when a page moves.
+- Use recordings or screenshots of the real application only. See the [screenshot workflow](screenshots/README.md).
+- Follow the house style: plain words, short sentences, no hype.
 
-The output is written to `dist/`, including HTML, images, Markdown pages, `llms.txt` and `llms-full.txt`. Generated output should not be edited directly.
+## Limits
 
-## Write and maintain pages
-
-Use a descriptive title and a short summary of what the reader can do or learn. Lead a procedure with its prerequisites, then give steps in the order the reader performs them. Use the app's exact labels for controls.
-
-Keep agent reports, captured events, estimates and verified checks distinct. Describe limits and failure behavior where they affect the reader's next action. Check behavior against the source before changing a factual claim.
-
-Preserve page paths and heading anchors when possible. Update internal links when a heading changes, and add new pages to `docs.json`. Use recordings or screenshots of the real application for UI illustrations; see [the screenshot workflow](screenshots/README.md).
-
-## Publish
-
-The static output can be served as the documentation site. To use Mintlify hosting, configure a documentation project with this directory as its content root and connect the repository and documentation domain there.
-
-Publishing documentation does not deploy the CopperTide app or grant access to an agent runner.
+- Publishing the guide deploys only documentation. docs.coppertide.ai is rebuilt from this folder on `main`.
+- The screenshot script captures images for the team-of-agents pages and the top-level README, not for the Shakedown pages, which have no screenshots yet.

@@ -3,33 +3,28 @@
 <p align="center">
   <a href="LICENSE"><img alt="License: Apache 2.0" src="https://img.shields.io/badge/license-Apache%202.0-2f6f73"></a>
   <a href="https://docs.coppertide.ai"><img alt="Documentation" src="https://img.shields.io/badge/docs-docs.coppertide.ai-2f6f73"></a>
-  <img alt="Rust 1.95 or newer" src="https://img.shields.io/badge/rust-1.95%2B-2f6f73">
-  <img alt="Node.js 24" src="https://img.shields.io/badge/node.js-24-2f6f73">
-  <img alt="Platforms: Linux and Apple silicon macOS" src="https://img.shields.io/badge/platforms-Linux%20%7C%20macOS%20(Apple%20silicon)-2f6f73">
 </p>
 
 # CopperTide
 
-CopperTide is a visual workspace for teams of agents performing complex tasks. Give each agent a job and a folder, connect their handoffs, and follow the work from one board. Open any agent to read its conversation, answer questions or send guidance.
+CopperTide is the app for running teams of coding agents on your own computer. You give each agent a job and a folder, connect who hands work to whom, and follow the team on one board. Open any agent to read its conversation, answer its questions or send it guidance. Agents run through your installed [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Codex](https://github.com/openai/codex) or [OpenCode](https://opencode.ai) CLI, with your own sign-in. It is for developers and researchers who run several agents on one project and need to see who owns each task and what actually happened.
 
-Agents run on your own computer through your installed [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [Codex](https://github.com/openai/codex) CLI, with your existing sign-in. Use the hosted app with a connected computer, or build and run the app locally using the steps below.
+The same app holds the pages for [Shakedown](https://github.com/CopperTide/Shakedown), CopperTide's product for testing agent systems against simulated worlds, when a local `shaked` is running. This repository also holds the sources of [docs.coppertide.ai](https://docs.coppertide.ai), the Shakedown user guide.
 
-![The Run board of an example team: four groups of agents, connected by arrows showing who hands work to whom; two agents are working, one needs you and has an Answer button, and the rest are done](docs/images/board.png)
+![The board of a team in four groups, with arrows showing who hands work to whom. Two agents are working, one needs you and has an Answer button, and the rest report done.](docs/images/board.png)
 
-## Work with a team of agents
+## What you get
 
-When several agents plan, build and review the same project, you need to see who owns each task and what has actually happened. CopperTide provides:
-
-- **A shared board.** Arrange agents and groups, define handoffs and follow their progress. Open a card to inspect its conversation, files and evidence.
-- **Traceable results.** Agent reports, captured tool results and verified checks have distinct labels. A passing check supports only the properties it tests.
-- **Local execution.** Agents use your installed CLIs and work in the folders you choose. In local mode, CopperTide stores its own data, including run history, in `~/.coppertide/`.
-- **Usage you control.** Run budgets keep a run within a share of your plan. Protections keep each agent's context small: no whole reads of large files, capped shell output, and a fresh conversation from the agent's notes once its context grows large.
-- **Agents that know the project.** Each start maps the project's folders, so agents see what exists before building it. They can search what the team already did and record lessons for each other.
-- **Workflows for more involved tasks.** Add stages, review panels, checks and revision limits when the work needs them. Advanced settings include merges, schedules and a decision log.
+- **A shared board.** Arrange agents in groups, draw handoffs and follow progress live. A project opens on Control, a dockable workspace with the board, status, timeline, alarms and approvals.
+- **Honest status.** Planned, in progress, reported complete, verified and blocked stay distinct. An agent saying "done" is labelled as a report, not as proof.
+- **Local execution.** Agents work in the folders you allow, with your CLIs and your plan. Local data, including run history, lives in `~/.coppertide/`.
+- **Usage limits.** Run budgets, token limits per agent, capped shell output and fresh conversations once an agent's context grows large.
+- **Workflows when you need them.** Stages, review panels, checks, merges, schedules and a decision log stay under Advanced.
+- **Portable teams.** Import and export teams as [MADL](https://github.com/CopperTide/Multi-Agent-Descriptor-Language) files, or run one from the terminal with `coppertide run`.
 
 ## Quick start
 
-To build locally, you need [Rust](https://rustup.rs/) 1.95 or newer, [Node.js](https://nodejs.org/) 24 and Git. Install Claude Code or Codex and sign in before running real agents.
+You need Rust (CI and the hosted image build with 1.98), [Node.js](https://nodejs.org/) 24 and Git. To run real agents, install Claude Code, Codex or OpenCode and sign in first.
 
 ```bash
 git clone https://github.com/CopperTide/CopperTide.git
@@ -39,49 +34,73 @@ npm --prefix web run build
 cargo run --release -p coppertide -- serve
 ```
 
-Open http://127.0.0.1:4410 and choose **New project**. Select Claude or Codex, pick **Builder → Reviewer**, then choose a project folder and write each agent's **Job**. When the board shows **Ready**, choose **Start team** and review the confirmation. Agents use your provider account and may incur charges or consume plan usage.
+Open http://127.0.0.1:4410 and choose **New project**. Pick a starting team such as **Builder → Reviewer**, choose a project folder and write each agent's **Job**. When the CLIs show as ready, choose **Start team** and confirm. Agents use your provider account and cost money or plan usage.
 
-The [quickstart](https://docs.coppertide.ai/quickstart) walks through setup, the first run and reviewing the result. It also covers the hosted beta.
+`coppertide serve` takes `--port` (default `4410`), `--data-dir` (or `COPPERTIDE_DATA_DIR`, default `~/.coppertide`) and `--web-dir` (default `web/dist`). Run `cargo run -p coppertide -- --help` for every command.
+
+### Shakedown pages
+
+To use the Shakedown pages locally, start `shaked` from a [Shakedown](https://github.com/CopperTide/Shakedown) checkout (`cd core && cargo run -p shaked`). CopperTide forwards `/api/shakedown/*` to it at `http://127.0.0.1:4510`. Set `COPPERTIDE_SHAKEDOWN_URL` to use another address. The Shakedown repository's own UI and the [self-host guide](https://docs.coppertide.ai/self-host) are the main way to run Shakedown locally.
 
 ## How it works
 
 ```mermaid
 flowchart LR
-  You["You, in the browser"] -- "design, start, steer" --> S["coppertide serve: the board, the journal, workflows"]
-  S -- "start, send, stop" --> R["Runner: hostd"]
-  R --> C["Claude Code CLI"]
-  R --> X["Codex CLI"]
+  You["You, in the browser"] -- "design, start, steer" --> S["coppertide serve: API, journal, board, workflows"]
+  S -- "start, send, stop" --> R["Runner: coppertide hostd"]
+  R --> C["Claude Code, Codex or OpenCode CLI"]
   C -- "read and edit" --> F["Your project folders and Git"]
-  X -- "read and edit" --> F
   R -- "every event" --> S
+  S -. "/api/shakedown" .-> SD["shaked (optional)"]
 ```
 
-`coppertide serve` stores captured events in an append-only journal and uses them to build the app's views. The runner starts each CLI, captures its output and delivers messages. You can also connect a runner on another computer.
+`coppertide serve` keeps every captured event in an append-only journal and builds the app's views from it. It starts the runner, which starts each CLI, captures its output and delivers messages. A runner on another computer connects with `coppertide connect`. The [internals overview](docs/internals/overview.md) has the full picture.
 
-## Documentation
+## What's in this repo
 
-- **Using CopperTide:** [docs site](https://docs.coppertide.ai) (sources in [`docs-site/`](docs-site/)): designing teams, the board, controlling live agents, Git, workflows.
-- **Control, the mission-control page of a project:** [`docs/guide/control.md`](docs/guide/control.md), with screenshots and short videos: the header and team controls, panes and layouts, alarms and approvals, simulated runs and Shakedown control.
-- **How it is built:** [`docs/internals/`](docs/internals/README.md), starting with the [overview](docs/internals/overview.md): architecture, the event journal, drivers, workflows, protections, knowledge, the host protocol, testing.
-- **Example teams:** [`examples/teams/`](examples/teams/) and [`docs/showcase/`](docs/showcase/).
-
-## Project layout
-
-| Path | What it is |
+| Path | Job |
 |---|---|
-| `crates/coppertide` | The `coppertide` binary: `serve`, `hostd`, `connect` |
-| `crates/controld` | The server: HTTP API, event journal, teams, workflows |
-| `crates/hostd`, `crates/drivers` | The runner and the Claude Code and Codex drivers |
-| `crates/localops` | Folders, Git, agents' own copies, checks |
-| `crates/model`, `crates/rigspec` | Shared types and the team design format |
+| `crates/coppertide` | The `coppertide` binary: `serve`, `hostd`, `connect`, `run`, `doctor` and more |
+| `crates/controld` | The server: HTTP API, event journal, teams, workflows, the Shakedown pass-through |
+| `crates/hostd`, `crates/drivers` | The runner and the Claude Code, Codex and OpenCode drivers |
+| `crates/host-proto`, `crates/signing` | The server-runner protocol and request signing shared with the hosted gateway |
+| `crates/localops` | Folders, Git, agents' working copies, checks |
+| `crates/model`, `crates/rigspec` | Shared types, and the team design format with its validation, compiler and templates |
+| `crates/interpreter` | Reads each tool call and says, as a heuristic, what it did |
+| `crates/fixtures`, `crates/e2e-server` | Fake CLIs for tests and the Playwright web server |
 | `web/` | The React and TypeScript app |
-| `desktop/` | The desktop app |
-| `docs-site/` | The user documentation |
+| `desktop/` | The Electron desktop app ([README](desktop/README.md)) |
+| `docs-site/` | The sources of docs.coppertide.ai ([README](docs-site/README.md)) |
+| `docs/` | Contributor docs: [internals](docs/internals/README.md), the [Control guide](docs/guide/control.md), showcases, images and videos |
+| `examples/` | [Example teams](examples/teams/README.md), Community seed teams and the textbook kit |
+| `deploy/` | The runner install scripts and release packaging |
 
-## Contributing
+## How it fits
 
-Contributions are welcome: read [CONTRIBUTING.md](CONTRIBUTING.md) to set up and run the tests, and follow the [Code of Conduct](CODE_OF_CONDUCT.md). Report security problems privately as described in [SECURITY.md](SECURITY.md).
+| Repository | What it holds |
+|---|---|
+| [Shakedown](https://github.com/CopperTide/Shakedown) | The open-source Shakedown engine: the `shaked` service, the `shakedown` Python SDK, integrations and benchmarks |
+| **CopperTide** (this repository) | **The open-source CopperTide app (the `coppertide` binary, web app and desktop app) and the sources of docs.coppertide.ai** |
+| CopperTide-Cloud (private) | The hosted service at app.coppertide.ai: the gateway, accounts, orgs, sign-in and hosted Shakedown |
+| CopperTide-Community (private) | The Community server: published agent groups and components, profiles and moderation |
 
-## License
+The user guide is at [docs.coppertide.ai](https://docs.coppertide.ai). Hosted Shakedown is at [app.coppertide.ai/sd/](https://app.coppertide.ai/sd/): sign in with Google or GitHub.
 
-CopperTide is licensed under the [Apache License 2.0](LICENSE).
+## Development
+
+```bash
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets
+cargo test --workspace
+npm --prefix web test
+npm --prefix web run lint
+npm --prefix web run e2e          # Playwright, against the real binary with Practice agents
+```
+
+Tests never call a real model. They use the fake CLIs in `crates/fixtures` and Practice agents. TypeScript API types in `web/src/generated/` come from Rust: regenerate them with `cargo test --workspace export_bindings`. [Testing](docs/internals/testing.md) lists every suite.
+
+## Contributing, security and license
+
+- Read [CONTRIBUTING.md](CONTRIBUTING.md) to set up and run the checks, and follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+- Report security problems privately, as [SECURITY.md](SECURITY.md) describes.
+- CopperTide is licensed under the [Apache License 2.0](LICENSE).
