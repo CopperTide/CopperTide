@@ -187,7 +187,11 @@ A Shakedown run is a team working in a simulated world. Shakedown saves the worl
 
 ![The fork panel for step 19, with Exact chosen and the restore plan "retail: from its save"](../images/control/shakedown-fork.png)
 
-The fork runs on its own branch. It may start at an earlier step than the one you picked, and its bar says so: an agent's session restarts from that agent's start. **Compare** shows the two branches side by side: outcome, time, tokens, cost and how the world differs.
+The fork runs on its own branch. It may start at an earlier step than the one you picked, and its bar says so: an agent's session restarts from that agent's start. On a stepped clock, a fork at the step where a world alert woke the lead gives the lead that alert again.
+
+**Compare** shows the two branches side by side: outcome, time, tokens, cost and how the world differs. Its outcome rows come from the two runs: the checks they ran, the figures they measured, their KPIs and each agent's cost. A row only one run has shows a dash for the other.
+
+**Rate limits.** When a model provider rate-limits a call, Shakedown waits until the limit resets (as the provider says, or backing off up to 30 s) and tries again, up to six times. The Timeline marks each call that was rate-limited. A call still limited after that fails with "rate-limited by the model provider", not a timeout.
 
 [Video 4](../videos/control-4-shakedown.mp4) starts a run, steps through it, forks it with changed instructions and compares the two branches.
 
