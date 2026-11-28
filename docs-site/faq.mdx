@@ -5,7 +5,7 @@ description: Short answers to the questions people ask first.
 
 <AccordionGroup>
   <Accordion title="Do runs work in hosted Shakedown?">
-    Not yet. Hosted Shakedown builds and edits projects. Pressing Run in the cloud arrives with the sandbox runner, which is in progress. Runs work today on a local engine: see [Self-host](/self-host).
+    Yes. Each run gets a cloud sandbox of its own, one at a time per org, and runs started meanwhile wait their turn. A cloud run lasts at most 55 minutes. Forking a cloud run, installing runtimes, Import from git and deploying a world that starts from uploaded data work only on a local engine for now: see [Self-host](/self-host) and [Quotas and limits](/account/quotas).
   </Accordion>
   <Accordion title="Why does my world need a runtime package?">
     Worlds need a runtime package today: an installed benchmark or a built world supplies the parts, tools, data, tasks and checks. CopperTide plans worlds running from their files alone. See [Runtime package](/worlds/runtime).

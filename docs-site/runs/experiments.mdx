@@ -73,5 +73,5 @@ Only scored runs count in the rates. A run ending without a score (an infrastruc
 Under the setups' columns, **Configuration** is folded: the benchmark, runs per setup, the seed, the world time window, the spend cap per run, when the experiment started and ended, and each setup's runner and agents with their models.
 
 <Note>
-Deploying needs a local engine today. Pressing Run in the cloud arrives with the sandbox runner, which is in progress.
+Hosted Shakedown runs each run in a cloud sandbox of its own, one at a time per org. A run started while another is going waits as **Queued for a cloud slot** and starts by itself, first come first served. A cloud run lasts at most 55 minutes. See [Quotas and limits](/account/quotas).
 </Note>

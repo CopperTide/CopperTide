@@ -17,7 +17,7 @@ The add form takes a kind, a name, the key, and an optional model for **Test**. 
 - A deploy runs a setup file's built-in agent on the key its `key` names.
 - On a local engine the vault key lives in `core/vault.key` (mode 0600), or the file `SHAKEDOWN_VAULT_KEY_FILE` names. A lost vault key makes saved keys unreadable: add them again.
 
-In cloud runs, arriving with the sandbox runner, no provider key enters a sandbox: agents call the model gateway with their agent token, and the gateway adds your org's sealed key.
+In cloud runs no provider key enters a sandbox: agents call the model gateway with their agent token, and the control box adds your org's sealed key to each model call.
 
 ## Credentials stay out of files
 

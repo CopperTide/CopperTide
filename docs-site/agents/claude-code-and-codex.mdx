@@ -44,4 +44,4 @@ These are single runs, an observation and not a benchmark. The runs predate the 
 
 ## In the cloud
 
-Claude Code and Codex in cloud runs arrive with the sandbox runner: the CLI runs inside the run's sandbox, pointed at Shakedown's model gateway with your org's API key, and the sandbox never sees the key. Your own subscription sign-in stays on your own computer. CopperTide plans a way for your own CLI, on your subscription, to join a cloud run.
+In hosted Shakedown, each Claude Code or Codex process runs inside the run's sandbox, in a throwaway container: no capabilities, a read-only root, at most 1 GiB of memory and 256 processes, and a network reaching only the run's MCP endpoint and model gateway. The CLI calls the gateway with its agent token, the control box adds your org's API key, and the sandbox never sees the key. Your own subscription sign-in stays on your own computer. CopperTide plans a way for your own CLI, on your subscription, to join a cloud run.

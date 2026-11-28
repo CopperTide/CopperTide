@@ -53,4 +53,4 @@ Setups of kind `code` and `madl` refuse to deploy from a file today, with the me
 
 ## Where runs happen
 
-A deploy needs an engine running packages on the engine's own machine. Hosted Shakedown runs packages only in sandboxes, and the sandbox runner is in progress, so pressing Run in the cloud arrives with the runner. Hosted Shakedown also refuses for now to deploy a world that starts from uploaded data. Runs work today on a local engine: see [Self-host](/self-host).
+A local engine runs packages on its own machine. Hosted Shakedown runs each run in a cloud sandbox of its own, which holds the packages installed with Shakedown, `retail` among them. A sandbox cannot install a runtime yet, so hosted Shakedown refuses runtime installs and Import from git, and for now refuses to deploy a world that starts from uploaded data. Deploy those worlds on a local engine: see [Self-host](/self-host).

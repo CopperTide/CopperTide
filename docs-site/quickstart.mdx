@@ -6,7 +6,7 @@ description: Sign in, set up a project and a model, add the ready example and de
 You set up a project and a model, add a small, real example with one click, and deploy it. The example is an order desk on the retail benchmark: one agent works a customer ticket against a fresh copy of a store's Postgres database, from tau2-bench retail. The run passes only if the database ends exactly as it should. No model judges it.
 
 <Note>
-Hosted Shakedown builds and edits projects today, the example included. Pressing Run in the cloud arrives with the sandbox runner, which is in progress. To run the example now, start the open-source engine on your computer ([Self-host](/self-host)) and follow the same steps there.
+The steps are the same in hosted Shakedown and on the open-source engine on your computer ([Self-host](/self-host)). Hosted Shakedown runs each run in a cloud sandbox of its own.
 </Note>
 
 <Steps>
@@ -40,7 +40,7 @@ Hosted Shakedown builds and edits projects today, the example included. Pressing
     Nothing is added before you click. Shakedown then opens the experiment.
   </Step>
   <Step title="Deploy">
-    On the experiment's page, click **Deploy** and confirm. A run takes about a minute. Under **Runs**, the deployment shows the setup's passes. Click **Open results** to see the pass rate, the run and its checks. See [Experiments](/runs/experiments).
+    On the experiment's page, click **Deploy** and confirm. A run takes about a minute. In hosted Shakedown, a run waits as **Queued for a cloud slot** while another run of your org is going. Under **Runs**, the deployment shows the setup's passes. Click **Open results** to see the pass rate, the run and its checks. See [Experiments](/runs/experiments).
   </Step>
   <Step title="Read the run">
     On the results page, click the run's square. The run page shows every step: each model call, each tool call with what it read and wrote, and the check at the end. See [Watching a run](/runs/watching).

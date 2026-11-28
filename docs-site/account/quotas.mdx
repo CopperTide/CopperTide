@@ -5,16 +5,22 @@ description: The limits on a hosted org, and the safety caps of every engine.
 
 ## Hosted orgs
 
-Every org starts on the beta plan. These quotas govern cloud runs, which arrive with the sandbox runner.
+Hosted Shakedown runs each run in a cloud sandbox of its own. Every org starts on the beta plan.
 
-| Quota | Beta plan |
+| Limit | Hosted today |
 |---|---|
-| Sandboxes running at once | 2 |
-| Sandbox time | 180,000 seconds (50 hours) a month |
-| Longest branch | 3,600 seconds (1 hour) |
+| Runs at once | One per org. A run started meanwhile waits as **Queued for a cloud slot** and starts by itself, first come first served. |
+| Runs waiting | 50 per org. Beyond that, starting a run answers 429. |
+| Longest run | 55 minutes. A run still going then ends `stopped`. |
 | Saves kept | 20 GiB |
 
-Going over a quota refuses the run and names the quota, for example `over the sandbox_seconds quota: … of 180000 this month`. Model spend on your org's own keys has no limit here: set a spend limit per run instead.
+The beta plan also lists 2 sandboxes at once and 180,000 sandbox seconds (50 hours) a month. Shakedown does not count these yet. Model spend on your org's own keys has no limit here: set a spend limit per run instead.
+
+Hosted Shakedown refuses, for now:
+
+- Forking a cloud run.
+- Installing, checking or removing a runtime, and Import from git.
+- Deploying a world that starts from uploaded data files.
 
 ## Every engine
 
