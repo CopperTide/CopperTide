@@ -14,7 +14,7 @@ Read this page once before you build. Every other page uses these words.
 | Agent setup | A team to test: built-in agents, Claude Code, Codex, your code, an endpoint, or MADL | `setups/<id>.yaml` |
 | Experiment | One scenario against one or more setups, with runs per setup and a budget | `experiments/<id>.yaml` |
 
-A **project** is the folder holding these files, with `shakedown.yaml` at the root. Every file starts with a `format:` line, such as `format: shakedown-world/3`. Shakedown reads each file strictly. An unknown field, a wrong `format:` or a credential written inline counts as a problem, shown next to the item with a pointer to the value. A problem in one file never stops the rest of the project from loading.
+A **project** holds these files. On a local engine the project is a folder, with `shakedown.yaml` at the root. Hosted projects keep the same files in a database. Every file starts with a `format:` line, such as `format: shakedown-world/3`. Shakedown reads each file strictly. An unknown field, a wrong `format:` or a credential written inline counts as a problem, shown next to the item with a pointer to the value. A problem in one file never stops the rest of the project from loading.
 
 Ids are 1 to 64 lowercase letters, digits and dashes, not starting with a dash.
 

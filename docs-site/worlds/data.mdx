@@ -1,38 +1,52 @@
 ---
 title: Data
-description: Describe what every run of a world starts from, as files, databases and connector imports.
+description: Upload the files every run of a world starts from, view and edit them, and describe databases and connector imports.
 ---
 
-The **Data** section lists what the world starts with. Each entry is exactly one of a file, a database or a connector import.
+The **Data** section holds what the world starts with. Upload files there, and every run of the world starts from the files you mark. Each entry of the section is exactly one of a file, a database or a connector import.
+
+## Upload a file
+
+1. Open the world and its **Data** section.
+2. Upload a JSON, CSV, YAML or text file, at most 10 MiB. Shakedown saves it in the world's folder as `data/<name>`.
+3. Leave **Every run starts from this** on, the default, for runs to start from the file.
+
+Each file has **View**, **Replace** and **Delete file**. **View** shows a JSON file of records as tables, with a tab per section of a database, and a search. Click a value to edit it: Shakedown saves the file at once. Other files show as text.
+
+## What runs get
+
+Every file marked **Every run starts from this** reaches every part of each run, and the runtime package's checks score against the same data. So an edit changes what the next run starts from. Runs before the edit, and their forks, keep the data they started on.
+
+The runtime package decides what it does with the files. A package that reads no world data starts from its own data, as before. A world with no marked file runs from its runtime package's own data. Package authors read the files through the kits: see the repository's [protocol](https://github.com/CopperTide/Shakedown/blob/main/docs/protocol.md).
 
 <Note>
-Runs do not read this section yet. Today every run starts from the runtime package's base world: the package seeds its parts once, Shakedown saves the result, and each run starts from a copy of the save. See [Runtime package](/worlds/runtime).
+Hosted Shakedown keeps uploaded files with the project and shows them, but refuses for now to deploy a world that starts from uploaded data. Deploy such a world on a local engine.
 </Note>
 
 ## Fields
 
 | Field | Kind | What the field holds |
 |---|---|---|
-| `file` | File | A file in the world's data folder |
+| `file` | File | A file in the world's folder, such as `data/orders.json` |
 | `seeds` | File | The connector the file seeds |
+| `default_state` | File or database | `true`: every run starts from this source. The upload's **Every run starts from this** sets it. |
 | `database` | Database | A database restored at the start of every run |
 | `engine`, `version` | Database | The database engine and exact server version, such as `postgres` and `"15.6"` |
 | `snapshot` | Database | The snapshot runs restore |
 | `masked` | Database | Shakedown masks personal columns before storing the snapshot |
-| `default_state` | Database | Every scenario starts from this source |
 | `import` | Connector import | A read-only snapshot taken through a connector |
 | `from` | Connector import | The connector the import reads from |
 
-An entry with none, or more than one, of `file`, `database` and `import` is a problem in the file.
+An entry with none, or more than one, of `file`, `database` and `import` is a problem in the file. Runs read only file entries today. Database and connector import entries stay in the file for readers.
 
 ## Example
 
 ```yaml
 data:
+  - {file: data/suppliers.csv, seeds: erp, default_state: true}
   - {database: larkspur-prod, engine: postgres, version: "15.6", snapshot: snap_0412-7f3a, masked: true, default_state: true}
-  - {file: suppliers.csv, seeds: erp}
 ```
 
-## Where run data comes from today
+## From code
 
-A benchmark seeds its parts from its own data files. The retail benchmark, for example, seeds one Postgres database from `data/retail/db.json`. A built world copies the template's data into the world folder. Both paths give every run of a task the same start, made once with a fixed seed.
+The same is the `worlds.data`, `worlds.data_put` and `worlds.data_delete` operations, for the [MCP server](/code/mcp), the assistant and the [HTTP API](/code/http-api). `worlds.data_put` also sets one value of a JSON file at a JSON pointer.

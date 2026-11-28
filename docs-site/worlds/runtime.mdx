@@ -1,9 +1,9 @@
 ---
 title: Runtime package
-description: Name the installed benchmark or built world running a world, and see what a deploy takes from each file.
+description: Name the package running a world, install one from a git URL or an archive, and see what a deploy takes from each file.
 ---
 
-The **Runtime** section names the package running the world. You pick an installed benchmark or a built world under **Runtime package**, and Shakedown writes the package's name to `package` in the world file.
+The **Runtime** section names the package running the world. You pick an installed benchmark or a built world under **Runtime package**, and Shakedown writes the package's name to `package` in the world file. **New world** asks for the runtime first.
 
 ```yaml
 format: shakedown-world/3
@@ -12,8 +12,20 @@ package: retail
 ```
 
 <Note>
-Worlds need a runtime package today. CopperTide plans worlds running from their files alone. Until then, the package supplies the world's parts, tools, seed data, tasks and checks, and the editor marks the Runtime section with a warning while `package` is empty.
+Worlds need a runtime package today. CopperTide plans worlds running from their files alone. Until then, the package supplies the world's parts, tools, tasks and checks, and its own seed data unless the world's [Data](/worlds/data) gives files to start from. The editor marks the Runtime section with a warning while `package` is empty.
 </Note>
+
+## Install a runtime
+
+A runtime is code that runs on the engine's machine, with your access. The app says so before every install. Install only code you trust.
+
+1. Open **Settings → Advanced → Runtimes** and click **Install a runtime**, or click **Install a runtime** in a world's **Runtime** section.
+2. Pick **Git URL** and give the repository, a ref and, if you like, one folder of the repository. Or pick **Archive** and upload a `.zip` or `.tar.gz` of a package folder or of a repository holding packages.
+3. Click **Check** to see the packages Shakedown found, then **Install**.
+
+Shakedown installs each package's Python dependencies with `uv`, registers the packages and runs each package's conformance check. **Runtimes** then lists each install with its source, packages, versions, check and the worlds it runs, with **Check again**, **Update** and **Remove**. Shakedown refuses to remove a runtime while a world uses it, and names the worlds. A failed check is reported, not enforced. The packages installed with Shakedown are listed below the installs. A world's Runtime section links here with **Manage runtimes**.
+
+Installing works on a local engine. Hosted Shakedown refuses to install, check or remove a runtime, because it runs package code only in a run's sandbox.
 
 ## What a deploy takes from your files
 
@@ -21,7 +33,7 @@ When you click **Deploy** on an experiment, Shakedown turns the files into an en
 
 | From | Shakedown takes | Today Shakedown leaves out |
 |---|---|---|
-| The world | `package`, the benchmark or built world to run | Connectors, flows, data, people and observability |
+| The world | `package`, the benchmark or built world to run, and the data files marked **Every run starts from this** | Connectors, flows, database and connector import entries, people and observability |
 | The scenario | `preset`, the package's task to play, and each event's `fault` and `params`, as the package's disruptions | The `task` text (runs get the preset task's ticket), `changes`, `gates`, `checks`, and each event's `at`, `after_calls` and `effects` |
 | Each setup | The team: built-in agents, Claude Code, Codex or an HTTP endpoint, run one after another. A built-in agent's `key` becomes its provider, and an HTTP setup's `auth` is read from your own stored key on each request and sent to the endpoint (`env` works on a local engine only, for `SHAKEDOWN_AGENT_*` names) | Setups of kind `code` and `madl` (below) |
 | The experiment | `repeats.per_setup` and `budget.per_run_usd`, each run's spend limit | `budget.per_deployment_usd`. Seeds stay paired whatever `paired_seeds` says. |
@@ -35,10 +47,10 @@ Setups of kind `code` and `madl` refuse to deploy from a file today, with the me
 | `<world> has no runtime yet: set package: to an installed benchmark or built world` | Pick a package in the world's Runtime section |
 | `<scenario> names no task of <package> to play: set preset:` | Set the scenario's runtime task to one of the package's task ids |
 | `fix <item> before deploying: <problem>` | Open the item and fix the problem the list shows |
-| `<setup>: agent <id> names the key "<name>", which is not stored` | Add the key in **Connections & models**, or change the setup's `key` |
+| `<setup>: agent <id> names the key "<name>", which is not stored` | Add the key in **Settings → Connections & models**, or change the setup's `key` |
 | `<setup>: auth: no key named "<name>" is stored`, `... is shared with you`, `... is a model provider key`, `... is empty` | Store the endpoint's credential as a key of kind **Your server** under your own account, then deploy again |
 | `<setup>: auth: environment variables are not read here`, or `only SHAKEDOWN_AGENT_* variables may be sent to an agent` | Use a stored key; on a local engine, name a variable that starts with `SHAKEDOWN_AGENT_` |
 
 ## Where runs happen
 
-A deploy needs an engine running packages on the engine's own machine. Hosted Shakedown runs packages only in sandboxes, and the sandbox runner is in progress, so pressing Run in the cloud arrives with the runner. Runs work today on a local engine: see [Self-host](/self-host).
+A deploy needs an engine running packages on the engine's own machine. Hosted Shakedown runs packages only in sandboxes, and the sandbox runner is in progress, so pressing Run in the cloud arrives with the runner. Hosted Shakedown also refuses for now to deploy a world that starts from uploaded data. Runs work today on a local engine: see [Self-host](/self-host).

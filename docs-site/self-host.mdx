@@ -47,8 +47,8 @@ The open-source engine, `shaked`, runs everything on your computer: runs with re
     ```
     Or build the UI once and let shaked serve the UI and the API together on `:4510`: run `npm run build` in `ui`, then start shaked from the repository folder with `SHAKEDOWN_UI_DIST=ui/dist`.
   </Step>
-  <Step title="Create the project">
-    Open **Get started**, name the project and click **Create project**. Then follow the [Quickstart](/quickstart) from step 3.
+  <Step title="Set up the project and a model">
+    The UI opens on **Get started**. Name the project and click **Create project**. **Track with git** commits the project's files like code. Then add a model key on the **Connect a model** step, or start shaked with a provider key in its environment. Once both are done, Shakedown opens. Then follow the [Quickstart](/quickstart) from **Add the example**.
   </Step>
 </Steps>
 
@@ -57,7 +57,7 @@ The open-source engine, `shaked`, runs everything on your computer: runs with re
 | Setting | What the setting does |
 |---|---|
 | `SHAKEDOWN_PROJECT` | The project folder the app and the MCP server work in |
-| `SHAKEDOWN_BENCHMARK` | The benchmark new engine runs use when they name none. Default: `retail`, the one benchmark not marked opt-in. |
+| `SHAKEDOWN_BENCHMARK` | The benchmark new engine runs use when they name none. Default: `retail`, the one benchmark not marked opt-in. Each project world names its own runtime. |
 | `SHAKEDOWN_PACKAGES` | Folders of integration and benchmark packages. Default: `integrations` and `benchmarks` |
 | `SHAKEDOWN_WORLDS`, `SHAKEDOWN_TEMPLATES` | Where built worlds go, and more world templates |
 | `SHAKEDOWN_BIND` | Where shaked listens. Default `127.0.0.1:4510`. The open-source engine refuses a bind beyond loopback. |

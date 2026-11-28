@@ -12,7 +12,7 @@ An experiment runs every setup against one scenario, as many times as you ask, a
 3. Click **Create experiment**. Nothing runs yet.
 4. Click **Deploy** on the experiment's page. The dialog says how many runs you start: setups times runs per setup. Every run calls a real model. Deploy refuses a setup whose `key` or `auth` names a key that is not stored or not yours to use, and an `auth.env` variable that may not be sent (hosted: any; local: names not starting with `SHAKEDOWN_AGENT_`).
 
-The **Runs** tab lists each deployment with each setup's passes. Click **Open results** for the full page. On a local engine, **Experiment on a benchmark…** in the **⋯** menu starts an engine experiment straight from a benchmark, with no files.
+The experiment's page leads with its runs. Under **Runs**, each deployment shows each setup's passes. Click **Open results** for the full page. The experiment's settings sit below, folded under **Configuration**: closed, one line such as "3 setups × 5 runs = 15 runs · paired seeds · $1.50 cap a run"; open, the editor for its world, scenario, setups, runs per setup and spend cap. On a local engine, **Experiment on a benchmark…** in the **⋯** menu starts an engine experiment straight from a benchmark, with no files.
 
 ```yaml
 format: shakedown-experiment/1
@@ -37,6 +37,17 @@ parent: supplier-slip-baseline   # optional: the experiment this one branched fr
 
 ## Find and delete an experiment
 
+**Experiments** lists every experiment, sub-experiments under their parent. Each row says whether the experiment ran:
+
+| Status | Meaning |
+|---|---|
+| **Running** | A deployment is running now |
+| **Has results** | At least one run has ended |
+| **Ran, no results** | It was deployed, and no run has ended |
+| **Not run yet** | It was never deployed |
+
+Hover a status for the runs ended and the last deployment. **Any status** narrows the list to one status. The sort is **Grouped**, parents with their sub-experiments, **Has results first** or **Last deployed**. A scenario's page also lists the experiments playing the scenario: see [Scenarios and disruptions](/runs/scenarios).
+
 An experiment's page shows the path to the experiment under its name: the world, then the scenario, each a link to its page. **Worlds** also lists every experiment under its scenario.
 
 **Delete** on the experiment's page, or the bin on the experiment's row in **Experiments**, deletes the experiment's file. Sub-experiments of the experiment become experiments of their own. Past runs of the experiment stay, listed under **Earlier experiments** on the same page. Click **Undo** in the message after the delete, or **Undo last delete** in **Project settings → Deleted files**, to bring the file back with its runs.
@@ -58,6 +69,8 @@ Each setup gets a column:
 - **Cost and time** per run, with the estimate of time in production (measured time minus Shakedown's own overhead).
 
 Only scored runs count in the rates. A run ending without a score (an infrastructure error, a stop) counts as unscored.
+
+Under the setups' columns, **Configuration** is folded: the benchmark, runs per setup, the seed, the world time window, the spend cap per run, when the experiment started and ended, and each setup's runner and agents with their models.
 
 <Note>
 Deploying needs a local engine today. Pressing Run in the cloud arrives with the sandbox runner, which is in progress.

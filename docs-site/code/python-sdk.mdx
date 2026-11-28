@@ -43,7 +43,7 @@ with Shakedown.local(benchmark="retail", bin_dir="core/target/release") as sd:  
 | Export | `branch.export(folder)`, `suite.export(folder)`, format `shakedown-dataset/1` |
 | RL | `shakedown.env.ShakedownParallelEnv`, PettingZoo's parallel API with a fork as "reset to step N" |
 
-Without `token=`, the SDK reads `SHAKEDOWN_TOKEN`. Make a token in **Settings → API tokens** with scope `read`, `run` or `admin`. Each error from the engine is an `ApiError` subclass: `BadRequest`, `NotFound`, `Conflict`, `DiskFull`.
+Without `token=`, the SDK reads `SHAKEDOWN_TOKEN`. Make a token in **Settings → Advanced → API tokens** with scope `read`, `run` or `admin`. Each error from the engine is an `ApiError` subclass: `BadRequest`, `NotFound`, `Conflict`, `DiskFull`.
 
 ## Agents are real models
 

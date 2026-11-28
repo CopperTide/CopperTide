@@ -1,15 +1,28 @@
 ---
 title: Bring your own systems
-description: Put any Docker Compose project in a world through the service integration, saved and restored with its volumes.
+description: Import a repository's packages and project files from git, or put a Docker Compose project in a world through the service integration.
 ---
 
-Bring a system you already run into a world as a Docker Compose project. The `service` integration starts one Compose project per world instance, saves the volumes you list, and restores them exactly on rewind and fork.
+Bring a system you already run into a world. Import a repository that holds Shakedown packages and project files from git, or run a Docker Compose project through the `service` integration.
 
-<Note>
-CopperTide plans import from GitHub: point Shakedown at a repository and get a world. Today you bring a system in as a Docker Compose project through the `service` integration, named in a world template or a benchmark package.
-</Note>
+## Import from git
 
-## How the service integration works
+A repository with a `shakedown.yaml` at its root and `shakedown-package.toml` packages becomes part of your project: its packages run as written, and its worlds, scenarios, setups and experiments become project items.
+
+1. Open **Worlds** and click **Import from git**, beside **New world**.
+2. Give the repository, a git URL or a path on the engine's machine, and a ref. The ref defaults to `HEAD`.
+3. Click **Check**. Shakedown fetches the ref and shows the commit, the packages, each project file with what happens to it, and the repository's Compose files as candidates for the `service` integration. Nothing runs yet.
+4. Click **Import**. Shakedown installs and registers the packages and writes the project files.
+
+Import again to take a new commit. An item the last import wrote and the repository no longer has is removed, to the project's trash, so **Undo** can bring it back. Shakedown keeps the item when you edited it in the project since, when something in the project still uses it, or when another import holds it, and the plan says why. Items you made in the project, and runs, are never removed.
+
+The repository's code runs on the engine's machine. Import from git works on a local engine. Hosted Shakedown refuses it. The same is `project.import_git` for the [MCP server](/code/mcp) and the API, and `shaked import` on the command line.
+
+## The service integration
+
+The `service` integration starts one Compose project per world instance, saves the volumes you list, and restores them exactly on rewind and fork. Name it in a world template or a benchmark package.
+
+### How it works
 
 - Shakedown starts each instance as the Compose project `shakedown_<instance>`.
 - A save stops the project, archives each listed volume (owners, modes and times kept) and starts the project again.
@@ -19,7 +32,7 @@ CopperTide plans import from GitHub: point Shakedown at a repository and get a w
 
 The integration ran live once against a real Redis 6.2 project in Docker (save, change, restore, file owners kept). The README in `integrations/service/` has the details.
 
-## Config
+### Config
 
 | Field | What the field holds |
 |---|---|
@@ -33,7 +46,7 @@ The integration ran live once against a real Redis 6.2 project in Docker (save, 
 
 The `postgres`, `hardlink` and `skip` strategies, `images` and `probes` passed tests against a fake Docker. The `live_service_strategies` test (Postgres, a hard-linked volume and a cache) passed once on Docker 29.1.
 
-## Put a Compose project in a world
+### Put a Compose project in a world
 
 1. Write a world template with a system whose part is `service`, or a benchmark package whose world names a `service` part. A template system looks like this:
 

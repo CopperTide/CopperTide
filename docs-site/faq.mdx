@@ -11,7 +11,13 @@ description: Short answers to the questions people ask first.
     Worlds need a runtime package today: an installed benchmark or a built world supplies the parts, tools, data, tasks and checks. CopperTide plans worlds running from their files alone. See [Runtime package](/worlds/runtime).
   </Accordion>
   <Accordion title="Does Shakedown import my system from GitHub?">
-    CopperTide plans import from GitHub. Today, bring a system in as a Docker Compose project through the `service` integration. See [Bring your own systems](/worlds/your-systems).
+    On a local engine, yes: **Import from git** on the **Worlds** page imports a repository holding Shakedown packages and project files. You can also install one runtime package from a git URL or an archive in **Settings → Advanced → Runtimes**. Hosted Shakedown refuses both for now. A system without packages comes in as a Docker Compose project through the `service` integration. See [Bring your own systems](/worlds/your-systems).
+  </Accordion>
+  <Accordion title="What is the quickest way to see a run?">
+    Finish **Get started**, then click **Add the example** on **Home** and **Deploy** on the experiment it opens. See the [Quickstart](/quickstart).
+  </Accordion>
+  <Accordion title="Where did the Analytics page go?">
+    The app no longer has an Analytics page, Search or Explore. Read results on each experiment's page. The figures across runs, the step search and Explore stay as the `analytics.*` and `explore.*` operations, for the [MCP server](/code/mcp), the assistant and the [HTTP API](/code/http-api).
   </Accordion>
   <Accordion title="Does Shakedown use a model to score runs?">
     No. Deterministic checks on the final state of the world decide pass or fail. The optional AI review explains a run and never changes a score.

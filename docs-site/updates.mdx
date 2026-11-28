@@ -5,6 +5,22 @@ description: What changed in Shakedown, newest first.
 
 Changes you see or use, by date. The open-source engine's full history is on [GitHub](https://github.com/CopperTide/Shakedown/commits/main).
 
+## 28 November 2026
+
+- **Setup is two steps.** **Get started** creates your project, then connects a model: you add the key right there, with OpenRouter picked to start. The key's name is made valid as you type. The page moves on by itself and opens Shakedown once both are done. There is no skipping. You make worlds, agents and scenarios in the app afterwards. Hosted projects live in a database, so hosted Shakedown does not offer **Track with git**. See the [Quickstart](/quickstart).
+- **Start from an example.** While a project has no worlds, **Home** offers **Add the example**: the order-desk world on the built-in `retail` runtime, one customer ticket, a one-agent setup on your own key and a one-run experiment capped at $0.50. Shakedown then opens the experiment, ready for **Deploy**. The same is the `project.example` operation for MCP and the API.
+- **A simpler app.** The sidebar holds Home, Experiments, Build (Worlds, Scenarios, Agent setups), Get started and Settings. Settings has **Connections & models**, **Project settings** and **Advanced**, which holds Runtimes, Observability, API tokens and Connect an agent. **Connect an agent** is also a button on **Agent setups**.
+- **Analytics left the app.** There is no Analytics page, Search or Explore in the app. The same figures, step search and Explore stay as operations for MCP, the assistant and the API.
+- **Experiment pages lead with results.** Runs and results come first, and the configuration (setups, seed, spend cap, world time window) is folded under **Configuration**. **Experiments** shows whether each experiment ran (**Has results**, **Running**, **Ran, no results**, **Not run yet**), with a filter and a sort. A scenario's page lists its experiments. See [Experiments](/runs/experiments).
+- **Reading runs.** **←** and **→** and the step buttons move along the selected agent's steps, and **↑** and **↓** through every step. The event log shows each step's whole text. The step panel renders Markdown and can go full width. A run switcher moves between an experiment's runs, and **Compare** takes three or more runs. See [Watching a run](/runs/watching).
+- **Install a runtime.** Install the package that runs a world from a git URL or an archive, in **Settings → Advanced → Runtimes** or a world's **Runtime** section. This works on a local engine. Hosted Shakedown refuses it. See [Runtime package](/worlds/runtime).
+- **World data.** A world's **Data** section uploads JSON, CSV, YAML or text files of up to 10 MiB. Files marked **Every run starts from this** reach every run, and a table view edits their values in place. Hosted Shakedown refuses for now to deploy a world that starts from uploaded data. See [Data](/worlds/data).
+- **Import from git again.** A re-import removes items the repository dropped, unless you edited them in the project or something still uses them. See [Bring your own systems](/worlds/your-systems).
+- **Hosted projects.** An org holds several projects. The project menu at the top of the sidebar switches between them and makes a **New project**. See [Sign in and organizations](/account/sign-in).
+- **Rate limits.** A model call refused with a rate limit (429) waits for the provider's reset and tries again, up to 6 times, each wait at most 30 seconds. The timeline marks each such try. See [Models and providers](/agents/models).
+- **HTTP agents' costs.** An HTTP agent that reports no figures of its own is costed from its calls through Shakedown's gateway.
+- **Connector logos** in the world catalog show in their brand colours.
+
 ## 22 November 2026
 
 - **Delete from the app.** Worlds, scenarios, agent setups and experiments each have **Delete** on their page and on their row. The dialog lists what uses the item before anything goes, and **Undo** brings a delete back. See [Worlds overview](/worlds/overview).

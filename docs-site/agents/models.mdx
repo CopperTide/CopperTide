@@ -11,10 +11,15 @@ CopperTide has measured Claude Code and Codex live ([Claude Code and Codex](/age
 
 ## Add a key or server
 
-1. Open **Connections & models**.
-2. Under **Add a key or server**, pick the kind: **Your server**, **OpenRouter**, **OpenAI**, **Anthropic** or **Bedrock**.
-3. Give the key a name, paste the key, and for **Your server** the server URL. For Bedrock, give the access key ID, the secret access key and the region.
-4. Click **Test**. Shakedown makes a one-token call and shows **Works**, or the provider's reason.
+You add your first key during setup, on **Get started**'s **Connect a model** step, with **OpenRouter** picked to start. Add more later in **Settings → Connections & models**, under **Add a key or server**. Both show the same form.
+
+1. Pick the kind: **Your server**, **OpenRouter**, **OpenAI**, **Anthropic** or **Bedrock**.
+2. Check the **Name**. A new key is named after its kind until you type a name. The field turns what you type into lowercase letters, digits, `-` and `_`: `OpenRouter Key` becomes `openrouter-key`. Agents name a key of kind **Your server** as `custom:<name>`.
+3. Paste the key, and for **Your server** the server URL. For Bedrock, give the access key ID, the secret access key and the region.
+4. Optionally give a **Model**, used by **Test**. The ready example's agent also runs on it.
+5. Click **Save**.
+
+Under **Your keys** in **Settings → Connections & models**, click **Test** on a key. Shakedown makes a one-token call and shows **Works**, or the provider's reason.
 
 Shakedown seals each key and never shows the key again, only its last four characters. See [Model keys and security](/account/keys-and-security).
 
@@ -35,6 +40,10 @@ A server of your own is any server speaking the OpenAI chat-completions API: Oll
 ## How keys resolve
 
 Your own keys come first. A key of kind OpenRouter, OpenAI or Anthropic replaces the environment's key for the same provider, and the newest key of a kind wins. Without a key of your own, a local engine uses the environment's key (`OPENROUTER_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`). In a shared org, another member's key serves your agent only when your agent names the key as `key:<name>`.
+
+## Rate limits
+
+In an API-mode agent, a model call the provider refuses with a rate limit (429) waits and tries again, up to 6 times. Each wait follows the provider's `retry-after`, else the time until its limit resets, else 1 second doubling, and is at most 30 seconds. A new OpenRouter account, for example, allows 20 requests a minute, which two agents on one model reach quickly. The run's timeline marks each rate-limited try as **Model call rate-limited (429)**. A call that still fails says how many tries it took and over how long, before the provider's message.
 
 ## Costs
 

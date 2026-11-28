@@ -3,7 +3,7 @@ title: Scenarios and disruptions
 description: Write the task a world plays, the disruptions thrown at the agents, the gates and the checks.
 ---
 
-A scenario is one task in one world. You edit a scenario in **Scenarios**, in four sections (Inputs, Events, Gates, Checks), and Shakedown writes the scenario to `scenarios/<id>.yaml`.
+A scenario is one task in one world. You edit a scenario in **Scenarios**, in four sections (Inputs, Events, Gates, Checks), and Shakedown writes the scenario to `scenarios/<id>.yaml`. A fifth section, **Experiments**, lists the experiments playing the scenario.
 
 <Note>
 Today a deploy reads two things from a scenario: `preset`, the runtime package's task to play, and each event's `fault` and `params`, passed to the package as a disruption. The ticket, the record changes, the event timing, the gates and the checks stay in the file for readers. The runtime package supplies a run's ticket, gates and checks. See [Runtime package](/worlds/runtime).
@@ -41,7 +41,7 @@ Disruptions fire inside simulated parts, deterministically. The agents find out 
 
 ## Experiments using the scenario
 
-The scenario's **Overview** lists **Experiments using this scenario**, each a link to the experiment. To delete the scenario, click **Delete** on the scenario's page. The dialog lists the experiments using the scenario first, then deletes the scenario alone when nothing uses the scenario, or with those experiments. See [Worlds overview](/worlds/overview).
+The scenario's **Experiments (N)** section lists every experiment playing the scenario, sub-experiments under their parent. Each is a link, with whether it has run and its setups. The same list, **Experiments using this scenario**, sits at the foot of the scenario's **Overview**. To delete the scenario, click **Delete** on the scenario's page. The dialog lists the experiments using the scenario first, then deletes the scenario alone when nothing uses the scenario, or with those experiments. See [Worlds overview](/worlds/overview).
 
 ## Write the scenario with the assistant
 

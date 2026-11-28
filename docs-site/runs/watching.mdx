@@ -11,10 +11,22 @@ Open a run from an experiment's results, or start one with **Run once** in the *
 |---|---|
 | Header | Time (or time so far), cost, the check result, safety, and refused or failed actions |
 | **Timeline** | A lane per agent, each tool call marked by system and by read or write. Pauses show as bands. |
-| **Event log** | Every recorded event in order |
+| **Event log** | Every recorded event in order, each with its whole text: a tool call's arguments, a model call's reply or its model and tokens, a message in full |
 | **Coordination** | The run's agents and what passed between them: handoff notes, messages, delegations and reports |
-| **Step** panel | The selected step's arguments, result and the state the step read or wrote, as the state stood at the selected step |
+| **Step** panel | The selected step's arguments, result and the state the step read or wrote, as the state stood at the selected step. Messages, reports and other prose render as Markdown; JSON stays JSON. |
 | Deployment estimate | Measured time, Shakedown's overhead per kind, the estimate in production, tokens and cost per agent |
+
+## Move between steps
+
+- **←** and **→**, or the **‹** and **›** buttons in the step panel, go to the selected agent's previous or next step. The buttons say whose steps they move through and where the step sits, such as **‹ Planner · 4 of 37 ›**.
+- **↑** and **↓** move through every step in order, whoever took it.
+- **Full width** gives the step panel the whole page. **Side panel** or Esc puts it back. The process view's step panel has the same toggle.
+
+## Move between runs
+
+A run of an experiment has a folded switcher under its header: **Experiment ·** and the experiment's name, with **‹** and **›** to go to the experiment's previous or next started run, and **Results**. Open it to see a row of squares per setup, the run on screen ringed, and this run's original and reruns. **Pick runs to compare** ticks the run on screen. Tick more and click **Compare N** to open them side by side: see [Compare runs and AI review](/runs/compare-and-review). A run outside an experiment shows only its reruns.
+
+## The run's menu
 
 A run's **⋯** menu opens its other views, **Compare with another run…**, the run's reruns, and under **Advanced**, **Rewind to step N and rerun…**.
 
@@ -34,4 +46,4 @@ The same controls exist for any live branch through the API: `POST /api/branches
 
 ## What Shakedown records
 
-Every tool call with its arguments, result, the part touched and the keys read and written. Every model call through the gateway. Handoff notes and messages. World events, such as a disruption firing. Shakedown times its own work on every event apart from the agents' and the world's, so the estimate in production leaves the overhead out.
+Every tool call with its arguments, result, the part touched and the keys read and written. Every model call through the gateway, with each try the provider refused for a rate limit marked **Model call rate-limited (429)**. Handoff notes and messages. World events, such as a disruption firing. Shakedown times its own work on every event apart from the agents' and the world's, so the estimate in production leaves the overhead out.

@@ -1,6 +1,6 @@
 ---
 title: Sign in and organizations
-description: Sign in to hosted Shakedown, find your personal org and its project, and switch between orgs.
+description: Sign in to hosted Shakedown, find your personal org, switch between its projects, and switch between orgs.
 ---
 
 Sign in at [app.coppertide.ai](https://app.coppertide.ai/). Every signed-in user lands in Shakedown at `/sd/`.
@@ -15,9 +15,13 @@ Sign in at [app.coppertide.ai](https://app.coppertide.ai/). Every signed-in user
 
 A verified email from Google or GitHub matching an existing account signs in to the existing account and links the new sign-in method.
 
-## Your org and its project
+## Your org and its projects
 
-Your account comes with a personal org. Each org has one project: the folder of worlds, scenarios, setups and experiments you edit in the app. Records of one org stay apart from every other org's: every route asks the authorization layer, and every query in the database runs under row-level security for your org.
+Your account comes with a personal org. An org holds one or more projects, each with its own worlds, scenarios, setups and experiments, edited in the app. Hosted projects live in the database, not in a folder, so hosted Shakedown does not offer **Track with git**. Records of one org stay apart from every other org's: every route asks the authorization layer, and every query in the database runs under row-level security for your org.
+
+The project menu at the top of the sidebar shows the current project. Pick another project to switch: Shakedown opens its **Experiments**. Click **New project** in the same menu, give the project a name and click **Create project** to start with an empty project. You can switch back at any time.
+
+A new project has no worlds, so **Home** offers **Start from an example**. See the [Quickstart](/quickstart).
 
 The account menu at the top right lists your orgs, your personal org first and the current one marked. Pick an org to switch. **Sign out** is at the bottom of the menu.
 

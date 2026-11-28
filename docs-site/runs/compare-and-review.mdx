@@ -1,6 +1,6 @@
 ---
 title: Compare runs and AI review
-description: Find where two runs part ways and what differs at the end, and ask a model to explain a run.
+description: Find where runs part ways and what differs at the end, and ask a model to explain a run.
 ---
 
 Compare two runs to find the first step where the runs differ and the state differing in their final worlds. Ask for an AI review to get where a run went wrong, with each claim citing steps.
@@ -11,6 +11,16 @@ Compare two runs to find the first step where the runs differ and the state diff
 2. Pick the second run.
 
 The compare page shows both runs' outcome, time, tokens and cost side by side, the first divergent step with each run's step at the point of divergence, and the **Differing rows** of the two final worlds. A branch restored approximately carries an **Approximate restore** mark.
+
+## Compare three or more runs
+
+1. Open a run of an experiment and open the run switcher under its header.
+2. Click **Pick runs to compare**. The run on screen is ticked. Tick the others.
+3. Click **Compare N**.
+
+The page shows the outcome table with a column per run, A, B, C and on, and the best of each row in bold. **Against A** says where each run first leaves run A and how many final rows differ, with a link to that pair compared in detail.
+
+## Compare experiments and suites
 
 To see the setups of several engine experiments side by side, open `/experiments/compare?ids=<a>,<b>` in the app. For verdicts, compare two setups through the API with `GET /api/suites/compare?a=<suite>&b=<suite>` (in Python, `sd.compare_suites(before, after)`): each check's pass rate, the pass rate, safety, time, tokens and cost get improved, regressed, the same or incomparable. Pass rates count any change. Time, tokens and cost count a change beyond 10% of the first suite's mean.
 

@@ -12,7 +12,7 @@ Your agent stays where the agent runs. Shakedown sends the agent the task and an
 
 ## Connect your agent
 
-1. Click **Connect an agent** at the bottom of the sidebar, or **Connect your agent** in the team picker of Run once or New experiment.
+1. Click **Connect an agent** on **Agent setups**, or in **Settings → Advanced**, or pick **Connect your agent…** in the team picker of Run once or New experiment.
 2. Under **Where your agent runs**, pick **HTTP** or **Bedrock**.
 3. For HTTP, enter the URL and any headers, one `Name: value` per line. For Bedrock, name the model and the region.
 4. Click **Test connection**, then **Use this agent**. On the test, for HTTP, Shakedown sends a `shakedown-agent/1` hello and shows the name your agent answers with. For Bedrock, Shakedown makes one Converse call of one output token.
@@ -49,6 +49,8 @@ Your agent works through `mcp_url`, sending `Authorization: Bearer <token>` on e
 | No answer by the deadline (15 minutes) | `failed` |
 | An error status, or no connection | `infra_error` |
 
+An agent that answers without its own `usage` and `cost_usd` is costed from its calls through `gateway_url`, with each provider's cost as recorded.
+
 The request stays open while the agent works, so a gateway in front of your agent with a shorter timeout needs a direct URL. AWS API Gateway, for example, cuts at 29 seconds.
 
 `sdk/python/examples/agent_server.py` is a complete HTTP agent in about 70 lines. Run the example with `uv run python examples/agent_server.py 8765` from `sdk/python`, then connect `http://127.0.0.1:8765`.
@@ -61,7 +63,7 @@ In hosted Shakedown an agent's URL must be HTTPS on a public address. Shakedown 
 
 ## Bedrock
 
-Shakedown signs each call with your AWS credentials: `AWS_BEARER_TOKEN_BEDROCK`, else `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, else what the AWS CLI resolves. A Bedrock key added in **Connections & models** serves its region. Bedrock costs show as unknown.
+Shakedown signs each call with your AWS credentials: `AWS_BEARER_TOKEN_BEDROCK`, else `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, else what the AWS CLI resolves. A Bedrock key added in **Settings → Connections & models** serves its region. Bedrock costs show as unknown.
 
 ## What has run live
 

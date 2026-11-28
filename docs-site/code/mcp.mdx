@@ -11,7 +11,7 @@ This server is separate from the MCP endpoint an agent under test gets inside a 
 
 **Project settings → Use from an agent** shows the command for your engine.
 
-Hosted Shakedown, with a token from **Settings → API tokens** in `SHAKEDOWN_TOKEN`:
+Hosted Shakedown, with a token from **Settings → Advanced → API tokens** in `SHAKEDOWN_TOKEN`:
 
 ```bash
 claude mcp add --transport http shakedown https://app.coppertide.ai/sd/mcp --header "Authorization: Bearer $SHAKEDOWN_TOKEN"
@@ -40,12 +40,17 @@ claude mcp add shakedown -- "$(command -v shaked)" mcp --project ~/work/my-proje
 |---|---|---|
 | `project_status`, `project_init`, `project_update` | The project's name, settings, counts and problems, creating a project, and changing its settings | Read, edit |
 | `project_import` | Move installed benchmarks and earlier experiments into the project, showing the plan first | Edit |
+| `project_example` | Add the ready example: a world on the built-in `retail` runtime, a scenario, a one-agent setup on your model key and a one-run experiment. Without `confirm`, it answers what it would write. Refused when any of its ids is taken | Edit |
+| `project_import_git` | Import a repository's packages and project files from git, showing the plan first. Local engine only | Edit |
 | `project_deleted`, `project_restore` | The most recent delete, and undoing a delete. Without `confirm`, `project_restore` answers the files and a `trash` name. Pass the `trash` back with `confirm: true` to restore the same delete, whatever came in between | Read, edit |
 | `worlds_list`, `worlds_get`, `worlds_put`, `worlds_delete`, `worlds_dependents` | Worlds, and what uses one. Shakedown refuses a delete while a file uses the world, unless the call sends `cascade: true`. A cascade sent with `expect`, the list a preview returned, fails when the list has changed | Read, edit, delete |
 | `scenarios_*`, `setups_*`, `experiments_*` | The same five for scenarios, setups and experiments | Read, edit, delete |
 | `worlds_rename_group` | Move every world in a group to a new group name, showing the diff first | Edit |
 | `experiments_deploy`, `experiments_runs` | Deploy an experiment, and list its deployments with each setup's results | Spend, read |
 | `setups_madl` | A MADL setup's checks and its graph of agents | Read |
+| `worlds_data`, `worlds_data_put`, `worlds_data_delete` | A world's data files: list and read, upload or set one JSON value, delete | Read, edit |
+| `runtimes_list`, `runtimes_install`, `runtimes_check`, `runtimes_delete` | Runtime packages. Install, check and remove work on a local engine only | Read, edit |
+| `analytics_summary`, `analytics_search`, `explore_*` | Figures across runs, a search of every run's steps, and Explore queries and read-only SQL. The app has no page for these | Read |
 
 Runs, forks and compare are HTTP routes outside this server: see [HTTP API](/code/http-api).
 

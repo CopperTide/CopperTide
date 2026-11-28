@@ -6,7 +6,7 @@ description: What a world file holds, and what runs use from the file today.
 A world is a copy of the systems your agents work in, as the systems stand before any agent acts. You edit a world in **Worlds**, one section at a time, and Shakedown writes the world to `worlds/<id>/world.yaml` in your project.
 
 <Note>
-Worlds need a runtime package today. A world file runs through an installed benchmark or a built world, named in `package` (the **Runtime** section). The world's other sections describe your systems, and runs do not read them yet. CopperTide plans worlds running from their files alone.
+Worlds need a runtime package today. A world file runs through an installed benchmark or a built world, named in `package` (the **Runtime** section). Runs also read the data files you mark **Every run starts from this**. The world's other sections describe your systems, and runs do not read them yet. CopperTide plans worlds running from their files alone.
 </Note>
 
 ## The sections
@@ -15,7 +15,7 @@ Worlds need a runtime package today. A world file runs through an installed benc
 |---|---|---|---|
 | Connectors | `connectors` | The systems agents call: a product, an MCP server or an OpenAPI spec, each real, replayed or a stand-in | No |
 | Software flows | `flows` | Automations already running in production, a trigger and its steps | No |
-| Data | `data` | Files, databases and connector imports every run starts from | No |
+| Data | `data` | Files, databases and connector imports every run starts from | Files marked **Every run starts from this** |
 | People | `people` | Simulated people agents ask | No |
 | Observability & on-call | `observability` | Monitoring tools, alert rules, on-call operators and the moments needing a human | No |
 | Runtime | `package` | The installed benchmark or built world running this world | Yes |
@@ -75,6 +75,9 @@ Deleted files go to the project's trash, the folder `.shakedown/trash/`. Shakedo
 
 ## Ways to make a world
 
+- Add the ready example from **Home** while the project has no worlds: see the [Quickstart](/quickstart).
+- Click **New world** in **Worlds**, pick an installed runtime, and fill in the sections. To install a runtime first, see [Runtime package](/worlds/runtime).
 - Start from a benchmark or a template: [Start from a benchmark or template](/worlds/templates-and-benchmarks).
+- Import a repository holding packages and project files: **Import from git** on the **Worlds** page, see [Bring your own systems](/worlds/your-systems).
 - Put your own Docker Compose project in a world: [Bring your own systems](/worlds/your-systems).
 - Ask the assistant: click **Ask** in the top bar and describe what you run.

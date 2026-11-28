@@ -1,12 +1,12 @@
 ---
 title: Quickstart
-description: Sign in, set up a project, and build your first world, scenario, agent setup and experiment.
+description: Sign in, set up a project and a model, add the ready example and deploy its first run.
 ---
 
-You build four files in this guide: a world, a scenario, an agent setup and an experiment. The example uses the retail benchmark, a customer-service task on one Postgres database, from tau2-bench retail.
+You set up a project and a model, add a small, real example with one click, and deploy it. The example is an order desk on the retail benchmark: one agent works a customer ticket against a fresh copy of a store's Postgres database, from tau2-bench retail. The run passes only if the database ends exactly as it should. No model judges it.
 
 <Note>
-Hosted Shakedown builds and edits these files today. Pressing Run in the cloud arrives with the sandbox runner, which is in progress. To run the experiment now, start the open-source engine on your computer ([Self-host](/self-host)) and follow the same steps there.
+Hosted Shakedown builds and edits projects today, the example included. Pressing Run in the cloud arrives with the sandbox runner, which is in progress. To run the example now, start the open-source engine on your computer ([Self-host](/self-host)) and follow the same steps there.
 </Note>
 
 <Steps>
@@ -15,72 +15,97 @@ Hosted Shakedown builds and edits these files today. Pressing Run in the cloud a
 
     On a local engine there is no sign-in. Open the UI at the address from [Self-host](/self-host).
   </Step>
-  <Step title="Open Get started">
-    Click **Get started** at the bottom of the sidebar. The first step shows your project. On a local engine with no project yet, give the project a name and click **Create project**. A project is a folder of YAML files, one per world, scenario, setup and experiment.
+  <Step title="Create your project">
+    Shakedown opens on **Get started** until setup is done. Setup has two steps, both on this page: **Your project** and **Connect a model**. There is no skipping: until both are done, every page sends you back here.
+
+    Under **Your project**, give the project a name and click **Create project**. On a local engine the project is a folder of YAML files, and **Track with git** commits them like code. Hosted projects live in a database, so hosted Shakedown does not offer git.
   </Step>
   <Step title="Connect a model">
-    Open **Connections & models** in the sidebar and add a key under **Add a key or server**. Every run calls a real model. On a local engine, Claude Code and Codex use your own CLI sign-in instead. See [Models and providers](/agents/models).
-  </Step>
-  <Step title="Make a world">
-    Open **Worlds** and click **New world**. Name the world `Retail store`. Open its **Runtime** section and pick `retail` as the runtime package, then click **Save**.
+    Get started moves on to **Connect a model** by itself. Every run calls a real model, so add a provider key here:
 
-    Today a world runs through an installed benchmark or a built world, named as its runtime package. CopperTide plans worlds running from their files alone. Hosted Shakedown has no runtime packages installed yet, so its list shows **None yet**. See [Runtime package](/worlds/runtime).
+    1. Under **Add a key**, keep **OpenRouter**, or pick another kind.
+    2. The key's **Name** starts as the kind. Type your own if you like. The field turns what you type into lowercase letters, digits, `-` and `_`, so `OpenRouter Key` becomes `openrouter-key`.
+    3. Paste the key and click **Save**.
+
+    Once both steps are done, Shakedown opens. On a local engine, a key set as an environment variable before you start the engine also counts. See [Models and providers](/agents/models).
   </Step>
-  <Step title="Write a scenario">
-    Open **Scenarios** and click **New scenario**. In **Inputs**, pick the world, enter `27` as the runtime task, and write the ticket. Save.
-  </Step>
-  <Step title="Describe an agent setup">
-    Open **Agent setups** and click **New agent setup**. Under **How it runs**, pick **Claude Code**. Save.
-  </Step>
-  <Step title="Create the experiment">
-    Open **Experiments** and click **New experiment**. Name the experiment, pick the world, the scenario and the setup, and set **Runs per setup** to 3. Click **Create experiment**.
+  <Step title="Add the example">
+    While your project has no worlds, **Home** shows **Start from an example**. Click **Add the example**. Shakedown adds four items to your project:
+
+    - **Order desk (example)**, a world on the built-in `retail` runtime, in the group **Examples**.
+    - **Bookshelf swap, or cancel the order**, a scenario with one customer ticket.
+    - **Order desk agent**, a one-agent setup on the model key you connected.
+    - **Order desk: first run**, an experiment with one run, capped at $0.50.
+
+    Nothing is added before you click. Shakedown then opens the experiment.
   </Step>
   <Step title="Deploy">
-    On the experiment's page, click **Deploy** and confirm. The **Runs** tab lists each deployment. Click **Open results** to see the pass rate, every run and its checks. See [Experiments](/runs/experiments).
+    On the experiment's page, click **Deploy** and confirm. A run takes about a minute. Under **Runs**, the deployment shows the setup's passes. Click **Open results** to see the pass rate, the run and its checks. See [Experiments](/runs/experiments).
+  </Step>
+  <Step title="Read the run">
+    On the results page, click the run's square. The run page shows every step: each model call, each tool call with what it read and wrote, and the check at the end. See [Watching a run](/runs/watching).
   </Step>
 </Steps>
 
-## The files you made
+## The files the example adds
 
-The editors write these files into the project folder. You edit them in the app, through the [MCP server](/code/mcp), or with any text editor on a local engine.
+The example is ordinary project items. Edit or delete any of them afterwards. On a local engine they are files in the project folder.
 
 ```yaml
-# worlds/retail-store/world.yaml
+# worlds/order-desk/world.yaml
 format: shakedown-world/3
-label: Retail store
+label: Order desk (example)
+group: Examples
 package: retail
+connectors:
+- id: retail
+  label: The store's customers, orders and products (a Postgres copy, restored for every run)
+  mode: stand-in
 ```
 
 ```yaml
-# scenarios/return-and-exchange.yaml
+# scenarios/order-desk-ticket.yaml
 format: shakedown-scenario/1
-label: Return and exchange
-world: retail-store
-preset: "27"
-task: The customer wants to return two items and exchange the boots.
+label: Bookshelf swap, or cancel the order
+world: order-desk
+task: >-
+  Daiki Silva (daiki.silva6295@example.com) wants the bookshelf in a pending order changed to the
+  4-foot one in the same material and colour. ...
+preset: '88'
 ```
 
 ```yaml
-# setups/claude-code.yaml
+# setups/order-desk-agent.yaml (key and model come from the key you connected)
 format: shakedown-setup/1
-label: Claude Code
+label: Order desk agent
 team:
-  kind: claude-code
+  kind: builtin
+  agents:
+  - id: agent
+    key: openrouter
+    model: deepseek/deepseek-chat-v3.1
+    max_tokens: 4000
+    tools: ['*']
+    role: You are the order desk agent of an online store. ...
 ```
 
 ```yaml
-# experiments/first-try.yaml
+# experiments/order-desk-first-run.yaml
 format: shakedown-experiment/1
-label: First try
-world: retail-store
-scenario: return-and-exchange
-setups: [claude-code]
-repeats: {per_setup: 3}
+label: 'Order desk: first run'
+world: order-desk
+scenario: order-desk-ticket
+setups: [order-desk-agent]
+repeats: {per_setup: 1, paired_seeds: true}
+budget: {per_run_usd: 0.5}
 ```
 
-Today each run gets the ticket of the preset task from the runtime package. The ticket you write in `task` stays in the file for readers. See [Scenarios and disruptions](/runs/scenarios).
+The agent runs on your newest key that has not failed its test, and on the model that key names. A key without a model gets the example's model for its kind: `deepseek/deepseek-chat-v3.1` on OpenRouter, `claude-haiku-5-5` on Anthropic, `gpt-4.1-mini` on OpenAI. For a key of kind **Your server** or **Bedrock**, give the key a model first.
+
+The card shows only while the project has no worlds. Adding the example again is refused when any of its ids is taken, and nothing is overwritten. The same is the `project.example` operation for the [MCP server](/code/mcp) and the [HTTP API](/code/http-api).
 
 ## Next
 
-- Add a second setup and compare the two: [Agent setups](/agents/setups).
+- Add a second setup to the experiment and compare the two: [Agent setups](/agents/setups).
+- Make your own world in **Worlds**, then a scenario and an experiment: [Worlds overview](/worlds/overview).
 - Open a run, rewind to a step and rerun with a change: [Rewind and fork](/runs/rewind-and-fork).
